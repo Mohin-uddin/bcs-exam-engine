@@ -1,0 +1,367 @@
+// Prisma Schema for "BCS & BD Competitive Exam Prep Engine"
+// Production-grade architecture with PostgreSQL & Redis integration
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// -----------------------------------------------------------------------------
+// ENUMS
+// -----------------------------------------------------------------------------
+
+enum UserRole {
+  CANDIDATE
+  INSTRUCTOR
+  ADMIN
+  REVIEWER
+}
+
+enum ExamCategory {
+  BCS_PRELI                  // 200 Marks, 200 Questions, 2 Hours, -0.50 per wrong
+  PRIMARY_ASSISTANT_TEACHER  // 80/75 Marks, -0.25 per wrong
+  BANK_OFFICER_CASH          // 100 Marks, negative 0.25
+  BJS_JUDICIARY              // 100 Marks
+  CUSTOM_MODEL_TEST
+}
+
+enum ExamStatus {
+  DRAFT
+  SCHEDULED
+  LIVE
+  ARCHIVED
+}
+
+enum DifficultyLevel {
+  STANDARD  // 60% of official BPSC papers
+  TRICKY    // 25% of official BPSC papers (deep recall or ambiguous distractors)
+  HIGH      // 15% of official BPSC papers (analytical, multi-statement)
+}
+
+enum MistakeTag {
+  SILLY_MISTAKE      // জানা প্রশ্ন ভুল বা বৃত্ত ভরাট অসাবধানতা
+  CONCEPT_GAP        // মৌলিক তথ্যের ঘাটতি
+  TIME_PRESSURE      // সময়ের অভাবে ভুল
+  UNREAD_STEM        // "নয়/কোনটি সঠিক নয়" খেয়াল না করা
+  CALCULATION_ERROR  // গাণিতিক ভুলে
+  GUESS_WORK         // অযৌক্তিক আন্দাজে দাগানো
+}
+
+enum MistakeResolutionStatus {
+  OPEN
+  IN_REVIEW
+  RESOLVED
+  MASTERED
+}
+
+enum SubmissionType {
+  DIGITAL_WEB
+  OMR_SCAN
+  HYBRID
+}
+
+enum CurrentAffairsStatus {
+  RAW_INCOMING
+  AI_SYNTHESIZED
+  EXPERT_VERIFIED
+  PUBLISHED
+  REJECTED
+}
+
+// -----------------------------------------------------------------------------
+// USER & AUTHENTICATION
+// -----------------------------------------------------------------------------
+
+model User {
+  id               String            @id @default(uuid())
+  email            String            @unique
+  phone            String?           @unique
+  name             String
+  passwordHash     String
+  avatarUrl        String?
+  targetExam       ExamCategory      @default(BCS_PRELI)
+  role             UserRole          @default(CANDIDATE)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  submissions      ExamSubmission[]
+  mistakes         UserMistakeVault[]
+  spacedReviews    UserSpacedReview[]
+  omrScans         OMRScanLog[]
+  createdQuestions Question[]        @relation("QuestionAuthor")
+
+  @@index([targetExam])
+  @@index([role])
+}
+
+// -----------------------------------------------------------------------------
+// SUBJECTS & TOPICS (Aligned with BPSC 200-Mark Distribution)
+// -----------------------------------------------------------------------------
+
+model Subject {
+  id           String      @id @default(uuid())
+  code         String      @unique // e.g. "BANGLA", "ENGLISH", "BANGLADESH_AFFAIRS", "INT_AFFAIRS", "MATH", "MENTAL_ABILITY", "GENERAL_SCIENCE", "COMPUTER_ICT", "GEOGRAPHY", "ETHICS"
+  nameBn       String      // e.g. "বাংলা ভাষা ও সাহিত্য"
+  nameEn       String      // e.g. "Bangla Language & Literature"
+  bcsWeightage Int         // Official marks (e.g. Bangla: 35, English: 35, BD: 30, Math: 15)
+  topics       Topic[]
+  questions    Question[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Topic {
+  id          String      @id @default(uuid())
+  subjectId   String
+  subject     Subject     @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  code        String      @unique // e.g. "BANGLA_LIT_MODERN", "MATH_PERMUTATION"
+  nameBn      String      // e.g. "আধুনিক যুগ ও মুক্তিযুদ্ধভিত্তিক সাহিত্য"
+  nameEn      String      // e.g. "Modern Age & Liberation War Literature"
+  questions   Question[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([subjectId])
+}
+
+// -----------------------------------------------------------------------------
+// QUESTION BANK WITH MNEMONICS & SHORTCUTS
+// -----------------------------------------------------------------------------
+
+model Question {
+  id              String            @id @default(uuid())
+  subjectId       String
+  subject         Subject           @relation(fields: [subjectId], references: [id])
+  topicId         String
+  topic           Topic             @relation(fields: [topicId], references: [id])
+
+  stemBn          String            // Question text in Bengali (authentic BPSC style)
+  stemEn          String?           // Question text in English (optional)
+
+  optionA         String            // ক
+  optionB         String            // খ
+  optionC         String            // গ
+  optionD         String            // ঘ
+  correctOption   String            // "A", "B", "C", or "D"
+
+  // Evidence-based learning aids (Accordions)
+  explanation     String            // সাধারণ ব্যাখ্যা (Detailed textbook analysis)
+  shortcutFormula String?           // গাণিতিক শর্টকাট সূত্র (Math / Mental Ability)
+  mnemonicBn      String?           // ছন্দ ও টেকনিক (Bengali Mnemonic memory anchor)
+
+  difficulty      DifficultyLevel   @default(STANDARD)
+  previousExams   String[]          // e.g. ["45th BCS Preli", "Primary 2023", "PKB Officer 2022"]
+  isVerified      Boolean           @default(true)
+  authorId        String?
+  author          User?             @relation("QuestionAuthor", fields: [authorId], references: [id])
+
+  // Relations
+  examQuestions   ExamQuestion[]
+  mistakeEntries  UserMistakeVault[]
+  spacedReviews   UserSpacedReview[]
+
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([subjectId, topicId])
+  @@index([difficulty])
+}
+
+// -----------------------------------------------------------------------------
+// EXAM ARCHITECTURE & LEADERBOARDS
+// -----------------------------------------------------------------------------
+
+model Exam {
+  id               String            @id @default(uuid())
+  title            String            // e.g. "47th BCS Special Model Test - 01"
+  category         ExamCategory      @default(BCS_PRELI)
+  totalMarks       Float             @default(200.0)
+  totalDurationMin Int               @default(120)     // 120 mins for BCS, 60 or 90 mins for others
+  negativeMark     Float             @default(0.50)    // 0.50 for BCS, 0.25 for Primary
+  passMark         Float?            @default(100.0)
+  status           ExamStatus        @default(SCHEDULED)
+  startTime        DateTime?
+  endTime          DateTime?
+
+  questions        ExamQuestion[]
+  submissions      ExamSubmission[]
+  omrScans         OMRScanLog[]
+
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([category, status])
+  @@index([startTime, endTime])
+}
+
+model ExamQuestion {
+  id         String   @id @default(uuid())
+  examId     String
+  exam       Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  serialNo   Int      // 1 to 200
+
+  @@unique([examId, questionId])
+  @@unique([examId, serialNo])
+  @@index([examId])
+}
+
+// -----------------------------------------------------------------------------
+// EXAM SUBMISSION & RANKING ENGINE
+// -----------------------------------------------------------------------------
+
+model ExamSubmission {
+  id                 String         @id @default(uuid())
+  examId             String
+  exam               Exam           @relation(fields: [examId], references: [id], onDelete: Cascade)
+  userId             String
+  user               User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type               SubmissionType @default(DIGITAL_WEB)
+
+  // Scores
+  totalQuestions     Int            @default(200)
+  attemptedCount     Int            @default(0)
+  correctCount       Int            @default(0)
+  wrongCount         Int            @default(0)
+  blankCount         Int            @default(0)
+
+  rawScore           Float          @default(0.0)
+  penalty            Float          @default(0.0)
+  netScore           Float          @default(0.0) // rawScore - penalty
+
+  timeTakenSec       Int            // Duration spent in seconds
+  tieBreakerRankScore Float         // netScore + (1 - (timeTakenSec / totalExamSec))
+  finalRank          Int?           // Calculated via Redis Sorted Set
+
+  answers            Json           // Map of { questionId: "A" | "B" | "C" | "D" }
+
+  submittedAt        DateTime       @default(now())
+
+  @@index([examId, tieBreakerRankScore(sort: Desc)])
+  @@index([userId, examId])
+}
+
+// -----------------------------------------------------------------------------
+// SCIENCE-BACKED LEARNING: MISTAKE VAULT (ভুল খাতা / Cuotiben)
+// -----------------------------------------------------------------------------
+
+model UserMistakeVault {
+  id              String                  @id @default(uuid())
+  userId          String
+  user            User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId      String
+  question        Question                @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  sourceExamId    String?                 // Exam where error occurred
+  selectedOption  String                  // The wrong answer chosen by the candidate
+  correctOption   String                  // Actual correct option
+
+  tag             MistakeTag              @default(SILLY_MISTAKE)
+  notes           String?                 // Personal reflection notes by student
+  status          MistakeResolutionStatus @default(OPEN)
+
+  errorCount      Int                     @default(1) // Repeat error frequency
+  lastErrorDate   DateTime                @default(now())
+  resolvedAt      DateTime?
+
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+
+  @@unique([userId, questionId])
+  @@index([userId, status])
+  @@index([userId, tag])
+}
+
+// -----------------------------------------------------------------------------
+// SCIENCE-BACKED LEARNING: SUPERMEMO SM-2 SPACED REPETITION
+// -----------------------------------------------------------------------------
+
+model UserSpacedReview {
+  id             String    @id @default(uuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId     String
+  question       Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  // SuperMemo SM-2 Parameters
+  repetition     Int       @default(0)     // n: consecutive successful reviews
+  easinessFactor Float     @default(2.5)   // EF: default 2.5, min 1.3
+  intervalDays   Int       @default(1)     // I(n): days until next review
+  quality        Int       @default(0)     // q: 0 to 5 score from last review
+
+  lastReviewedAt DateTime  @default(now())
+  nextReviewDate DateTime                  // Computed: lastReviewedAt + intervalDays
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([userId, questionId])
+  @@index([userId, nextReviewDate])
+}
+
+// -----------------------------------------------------------------------------
+// AI-DRIVEN CURRENT AFFAIRS SYNTHESIZER (Gemini API Pipeline)
+// -----------------------------------------------------------------------------
+
+model CurrentAffairsMCQ {
+  id              String               @id @default(uuid())
+  headline        String               // Real world event title
+  sourceUrl       String?              // Verified news portal or government gazette
+  eventDate       DateTime
+
+  // Gemini synthesized MCQ in BPSC style
+  questionBn      String
+  optionA         String
+  optionB         String
+  optionC         String
+  optionD         String
+  correctOption   String               // "A", "B", "C", "D"
+
+  explanationBn   String               // Authentic BPSC context & historical connection
+  mnemonicBn      String?              // AI-generated catchy rhythm/mnemonic for memorization
+  suggestedTopic  String               // e.g. "BANGLADESH_AFFAIRS_CONSTITUTION"
+
+  aiPromptTokens  Int?
+  aiResponseTokens Int?
+  status          CurrentAffairsStatus @default(AI_SYNTHESIZED)
+
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  @@index([status, eventDate])
+}
+
+// -----------------------------------------------------------------------------
+// COMPUTER VISION & OMR PROCESSING LOGS
+// -----------------------------------------------------------------------------
+
+model OMRScanLog {
+  id              String         @id @default(uuid())
+  examId          String
+  exam            Exam           @relation(fields: [examId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  rawImageUrl     String         // S3/GCS uploaded mobile photo URL
+  processedImageUrl String?      // Image with recognized bubbles marked (Green/Red)
+
+  detectedBubbles Json           // Array of { questionNo: 1, chosen: "B", confidence: 0.94 }
+  detectedRollNo  String?        // Read from Roll Number bubble grid
+  detectedSetCode String?        // "SET_A", "SET_B", "SET_C", "SET_D"
+
+  confidenceScore Float          // Overall perspective & alignment confidence (0.0 - 1.0)
+  netScore        Float
+  wrongQuestions  Int[]          // List of question serials for automated Mistake Vault ingestion
+  processingMs    Int            // Latency in milliseconds
+
+  createdAt       DateTime       @default(now())
+
+  @@index([examId, userId])
+  @@index([detectedRollNo])
+}

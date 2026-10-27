@@ -1,0 +1,2441 @@
+[
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — ধ্বনি ও বর্ণ",
+    "stem": "বাংলা বর্ণমালায় অর্ধমাত্রার বর্ণ মোট কয়টি?",
+    "options": {
+      "A": "৭টি",
+      "B": "৮টি",
+      "C": "১০টি",
+      "D": "৩২টি"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "বাংলা বর্ণমালায় মোট ৫০টি বর্ণের মধ্যে পূর্ণমাত্রা ৩২টি, অর্ধমাত্রা ৮টি (ঋ, খ, গ, ণ, থ, ধ, প, শ) এবং মাত্রাহীন ১০টি।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২) / NCTB ব্যাকরণ"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সন্ধি",
+    "stem": "'বিদ্যালয়' শব্দের সঠিক সন্ধি বিচ্ছেদ কোনটি?",
+    "options": {
+      "A": "বিদ্যা + অলয়",
+      "B": "বিদ + আলয়",
+      "C": "বিদ্যা + আলয়",
+      "D": "বিদ্য + আলয়"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "আ-কার + আ-কার মিলে আ-কার হয়: বিদ্যা + আলয় = বিদ্যালয় (স্বরসন্ধি)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সন্ধি",
+    "stem": "'তৃষ্ণা' শব্দের সঠিক সন্ধি বিচ্ছেদ কোনটি?",
+    "options": {
+      "A": "তৃষ + না",
+      "B": "তৃষ্ + ণা",
+      "C": "তৃষ্ + ত",
+      "D": "তৃ + ষ্ণা"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "ষ-এর পরে 'ন' থাকলে তা মূর্ধন্য 'ণ' হয়: তৃষ + না = তৃষ্ণা (ব্যঞ্জনসন্ধি)।",
+    "source": "NCTB ৯ম-১০ম বাংলা ব্যাকরণ"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সমাস",
+    "stem": "'সিংহাসন' শব্দটি কোন সমাসের উদাহরণ?",
+    "options": {
+      "A": "কর্মধারয়",
+      "B": "মধ্যপদলোপী কর্মধারয়",
+      "C": "বহুব্রীহি",
+      "D": "দ্বিগু"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "সিংহ চিহ্নিত আসন = সিংহাসন; এখানে মধ্যপদ 'চিহ্নিত' লোপ পাওয়ায় এটি মধ্যপদলোপী কর্মধারয় সমাস।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০১৯)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সমাস",
+    "stem": "'চৌরাস্তা' কোন সমাসের অন্তর্গত?",
+    "options": {
+      "A": "দ্বন্দ্ব সমাস",
+      "B": "দ্বিগু সমাস",
+      "C": "অব্যয়ীভাব সমাস",
+      "D": "বহুব্রীহি সমাস"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "চার রাস্তার সমাহার = চৌরাস্তা; সংখ্যাবাচক শব্দ পূর্বে বসে সমাহার বোঝালে দ্বিগু সমাস হয়।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — কারক",
+    "stem": "'তিলে তৈল হয়'—বাক্যে 'তিলে' কোন কারকে কোন বিভক্তি?",
+    "options": {
+      "A": "অপাদানে ৭মী",
+      "B": "অধিকরণে ৭মী",
+      "C": "করণে ৭মী",
+      "D": "কর্মে ৭মী"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "কোনো কিছু থেকে উৎপন্ন, বিচ্যুত বা গৃহীত হলে অপাদান কারক হয়। তিল থেকে তৈল উৎপন্ন হয় বলে 'তিলে' অপাদানে ৭মী।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — কারক",
+    "stem": "'ডাক্তার ডাকো'—এখানে 'ডাক্তার' কোন কারকে কোন বিভক্তি?",
+    "options": {
+      "A": "কর্তায় শূন্য",
+      "B": "কর্মে শূন্য",
+      "C": "করণে শূন্য",
+      "D": "সম্প্রদানে শূন্য"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "কাকে ডাকো?—ডাক্তারকে। ক্রিয়াকে 'কী' বা 'কাকে' দ্বারা প্রশ্ন করলে কর্ম কারক পাওয়া যায়; তাই কর্মে শূন্য বিভক্তি।",
+    "source": "NCTB ৯ম-১০ম ব্যাকরণ"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — বাগধারা",
+    "stem": "'অরণ্যে রোদন' বাগধারাটির সঠিক অর্থ কোনটি?",
+    "options": {
+      "A": "বনে কান্না করা",
+      "B": "নিষ্ফল আবেদন",
+      "C": "গভীর সংকট",
+      "D": "অসম্ভব বস্তু"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'অরণ্যে রোদন' বাগধারার অর্থ বৃথা চেষ্টা বা নিষ্ফল আবেদন।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — এক কথায় প্রকাশ",
+    "stem": "'যা সহজে অতিক্রম করা যায় না'—এক কথায় কী হবে?",
+    "options": {
+      "A": "অনতিক্রম্য",
+      "B": "দুরতিক্রম্য",
+      "C": "অলঙ্ঘনীয়",
+      "D": "দুর্গম"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "যা সহজে অতিক্রম করা যায় না = দুরতিক্রম্য; আর যা অতিক্রম করা যায় না = অনতিক্রম্য।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — বিপরীত শব্দ",
+    "stem": "'অনুরাগ' শব্দের সঠিক বিপরীত শব্দ কোনটি?",
+    "options": {
+      "A": "সোহাগ",
+      "B": "বিরাগ",
+      "C": "রাগ",
+      "D": "প্রতিঘাত"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'অনুরাগ' অর্থ প্রেম বা আসক্তি; এর বিপরীত শব্দ 'বিরাগ' (অনীহা বা উদাসীনতা)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সমার্থক শব্দ",
+    "stem": "নিচের কোনটি 'সূর্য' শব্দের সমার্থক শব্দ নয়?",
+    "options": {
+      "A": "আদিত্য",
+      "B": "তপন",
+      "C": "মিহির",
+      "D": "শশধর"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "আদিত্য, তপন, মিহির, ভানু, রবি—সবই সূর্যের প্রতিশব্দ; কিন্তু 'শশধর' হলো চাঁদের সমার্থক শব্দ।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০১৯)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — বানান শুদ্ধি",
+    "stem": "প্রাথমিক শিক্ষক নিয়োগ পরীক্ষায় বারবার আসা নিচের কোন বানানটি শুদ্ধ?",
+    "options": {
+      "A": "মুমূর্ষু",
+      "B": "মুমুর্ষু",
+      "C": "মূমুর্ষু",
+      "D": "মুমূর্ষ"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "'মুমূর্ষু' (মরণাপন্ন) শব্দে মাঝের 'মূ'-তে দীর্ঘ-ঊ কার এবং দুপাশের 'মু' ও 'র্ষু'-তে হ্রস্ব-উ কার হয়।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — উপসর্গ",
+    "stem": "বাংলা ভাষায় খাঁটি বাংলা উপসর্গ মোট কয়টি?",
+    "options": {
+      "A": "২০টি",
+      "B": "২১টি",
+      "C": "১৯টি",
+      "D": "২২টি"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "খাঁটি বাংলা উপসর্গ ২১টি (অ, অঘা, অজ, অনা, আ, আড়, আন, আব, ইতি, উন, কদ, কু, নি, পাতি, বি, ভর, রাম, স, সা, সু, হা) এবং তৎসম উপসর্গ ২০টি।",
+    "source": "NCTB ৯ম-১০ম বাংলা ব্যাকরণ"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সাহিত্য",
+    "stem": "বাংলা সাহিত্যে 'ভোরের পাখি' বলা হয় কোন কবিকে?",
+    "options": {
+      "A": "রবীন্দ্রনাথ ঠাকুর",
+      "B": "বিহারীলাল চক্রবর্তী",
+      "C": "জীবনানন্দ দাশ",
+      "D": "কায়কোবাদ"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "আধুনিক বাংলা গীতিকবিতার ধারা সূচনা করায় রবীন্দ্রনাথ ঠাকুর কবি বিহারীলাল চক্রবর্তীকে 'ভোরের পাখি' উপাধি দেন।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সাহিত্য",
+    "stem": "পল্লীকবি জসীমউদ্দীনের কোন কাব্যগ্রন্থটি বিভিন্ন বিদেশি ভাষায় অনূদিত হয়েছে?",
+    "options": {
+      "A": "রাখালী",
+      "B": "নকশী কাঁথার মাঠ",
+      "C": "সোজন বাদিয়ার ঘাট",
+      "D": "বালুচর"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "১৯২৯ সালে প্রকাশিত জসীমউদ্দীনের 'নকশী কাঁথার মাঠ' কাহিনীকাব্যটি ই. এম. মিলফোর্ড 'The Field of the Embroidered Quilt' নামে ইংরেজিতে অনুবাদ করেন।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সাহিত্য",
+    "stem": "কাজী নজরুল ইসলামের 'অগ্নিবীণা' কাব্যগ্রন্থের প্রথম কবিতা কোনটি?",
+    "options": {
+      "A": "বিদ্রোহী",
+      "B": "প্রলয়োল্লাস",
+      "C": "ধূমকেতু",
+      "D": "কামাল পাশা"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "১৯২২ সালে প্রকাশিত 'অগ্নিবীণা' কাব্যের প্রথম কবিতা 'প্রলয়োল্লাস' (তোরা সব জয়ধ্বনি কর) এবং দ্বিতীয় কবিতা 'বিদ্রোহী'।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সাহিত্য",
+    "stem": "বাংলা ভাষায় রচিত প্রথম সাময়িকপত্র 'দিক্‌দর্শন' কত সালে প্রকাশিত হয়?",
+    "options": {
+      "A": "১৮১৮ সালে",
+      "B": "১৮২১ সালে",
+      "C": "১৮৩১ সালে",
+      "D": "১৮৪৭ সালে"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "শ্রীরামপুর মিশন থেকে জন ক্লার্ক মার্শম্যানের সম্পাদনায় ১৮১৮ সালের এপ্রিল মাসে মাসিক 'দিক্‌দর্শন' প্রকাশিত হয়।",
+    "source": "সৌমিত্র শেখর — বাংলা ভাষা ও সাহিত্য জিজ্ঞাসা"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সাহিত্য",
+    "stem": "শহীদুল্লা কায়সার রচিত মুক্তিযুদ্ধ ও ভাষা আন্দোলন পূর্ববর্তী পটভূমির বিখ্যাত উপন্যাস 'সংশপ্তক'-এর প্রধান নারী চরিত্র কোনটি?",
+    "options": {
+      "A": "হুরমতি",
+      "B": "কপিলা",
+      "C": "নবীন মাধব",
+      "D": "জয়গুন"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "'সংশপ্তক' উপন্যাসের বিখ্যাত চরিত্রগুলো হলো হুরমতি, রাবু, ফেলু মিয়া ও মালু।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — ছদ্মনাম",
+    "stem": "'বনফুল' কার ছদ্মনাম?",
+    "options": {
+      "A": "প্রমথ চৌধুরী",
+      "B": "বলাইচাঁদ মুখোপাধ্যায়",
+      "C": "সমরেশ বসু",
+      "D": "সুনীল গঙ্গোপাধ্যায়"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "প্রখ্যাত কথাসাহিত্যিক ও চিকিৎসক বলাইচাঁদ মুখোপাধ্যায়ের সাহিত্যিক ছদ্মনাম 'বনফুল'।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০১৯)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — যতিচিহ্ন",
+    "stem": "বাক্যে কমা (,) অপেক্ষা বেশি বিরতির প্রয়োজন হলে কোন বিরামচিহ্ন ব্যবহৃত হয়?",
+    "options": {
+      "A": "দাঁড়ি (।)",
+      "B": "সেমিকোলন (;)",
+      "C": "কোলন (:)",
+      "D": "হাইফেন (-)"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "কমাতে ১ (এক) বলতে যে সময় লাগে, সেমিকোলনে তার দ্বিগুণ সময় বিরতি নিতে হয়।",
+    "source": "NCTB ৯ম-১০ম বাংলা ব্যাকরণ"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Preposition",
+    "stem": "He died _____ overwork.",
+    "options": {
+      "A": "of",
+      "B": "from",
+      "C": "by",
+      "D": "for"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "রোগে মারা গেলে 'die of', কিন্তু অতিরিক্ত পরিশ্রম বা ক্ষুধা/তৃষ্ণার মতো বাহ্যিক কারণে মারা গেলে 'die from' বসে।",
+    "source": "Primary Assistant Teacher Exam (2023)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Preposition",
+    "stem": "The girl takes _____ her mother in appearance.",
+    "options": {
+      "A": "to",
+      "B": "after",
+      "C": "over",
+      "D": "up"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Take after' একটি Group Verb যার অর্থ দেখতে বা স্বভাবে পিতা-মাতার মতো হওয়া (resemble)।",
+    "source": "Primary Assistant Teacher Exam (2022)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Right Form of Verbs",
+    "stem": "It is high time we _____ our bad habits.",
+    "options": {
+      "A": "change",
+      "B": "changed",
+      "C": "have changed",
+      "D": "will change"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'It is time' বা 'It is high time'-এর পরে Subject থাকলে পরবর্তী Verb-টির Past Indefinite ফর্ম (changed) হয়।",
+    "source": "Primary Assistant Teacher Exam (2024)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Subject-Verb Agreement",
+    "stem": "Slow and steady _____ the race.",
+    "options": {
+      "A": "win",
+      "B": "wins",
+      "C": "won",
+      "D": "winning"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Slow and steady' দ্বারা একটি একক ধারণা (অধ্যবসায়) প্রকাশ পাওয়ায় Singular Verb 'wins' বসে।",
+    "source": "Primary Assistant Teacher Exam"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Article",
+    "stem": "He is _____ MBBS doctor serving in a rural health complex.",
+    "options": {
+      "A": "a",
+      "B": "an",
+      "C": "the",
+      "D": "no article"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "MBBS উচ্চারণ করতে প্রথমে স্বরধ্বনি 'এম' (e-m) আসে, তাই এর পূর্বে 'an' বসে।",
+    "source": "Primary Assistant Teacher Exam"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Voice Change",
+    "stem": "What is the passive form of 'Who taught you English?'",
+    "options": {
+      "A": "By whom were you taught English?",
+      "B": "Who was taught English by you?",
+      "C": "By whom you were taught English?",
+      "D": "Whom were you taught English by?"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "Interrogative বাক্যে 'Who' থাকলে প্যাসিভে শুরুতে 'By whom' বসে এবং তারপরে সাহায্যকারী ক্রিয়া 'were' ও Subject 'you' বসে।",
+    "source": "Primary Assistant Teacher Exam (2022)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Narration",
+    "stem": "He said to me, 'Man is mortal.' — Choose the correct indirect speech:",
+    "options": {
+      "A": "He told me that man was mortal.",
+      "B": "He told me that man is mortal.",
+      "C": "He said to me man is mortal.",
+      "D": "He asked me if man is mortal."
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "চিরন্তন সত্য (Universal truth) বাক্যের ক্ষেত্রে Indirect Narration-এ Tense-এর কোনো পরিবর্তন হয় না।",
+    "source": "Primary Assistant Teacher Exam"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Parts of Speech",
+    "stem": "Water the plants regularly. Here the word 'Water' is used as a/an —",
+    "options": {
+      "A": "Noun",
+      "B": "Pronoun",
+      "C": "Verb",
+      "D": "Adjective"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "Imperative বাক্যের শুরুতে 'Water' শব্দটি দ্বারা গাছে পানি দেওয়ার কাজ বোঝানো হয়েছে, তাই এটি Verb।",
+    "source": "Primary Assistant Teacher Exam (2023)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Gender",
+    "stem": "What is the feminine gender of 'Monk'?",
+    "options": {
+      "A": "Maid",
+      "B": "Nun",
+      "C": "Witch",
+      "D": "Duchess"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Monk' (সন্ন্যাসী)-এর স্ত্রীলিঙ্গ হলো 'Nun' (সন্ন্যাসিনী)।",
+    "source": "Primary Assistant Teacher Exam"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Number",
+    "stem": "Which of the following words is always singular?",
+    "options": {
+      "A": "Cattle",
+      "B": "People",
+      "C": "Furniture",
+      "D": "Police"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "Furniture, Information, Scenery, Advice—এগুলো Uncountable Noun হওয়ায় সর্বদা Singular হিসেবে ব্যবহৃত হয়।",
+    "source": "Primary Assistant Teacher Exam (2024)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Spelling",
+    "stem": "Choose the correctly spelled word for 'commitee / committee':",
+    "options": {
+      "A": "Comittee",
+      "B": "Committee",
+      "C": "Commitee",
+      "D": "Comitee"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Committee' বানানে ডাবল m, ডাবল t এবং ডাবল e থাকে (C-o-m-m-i-t-t-e-e)।",
+    "source": "Primary Assistant Teacher Exam (2022)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Synonym",
+    "stem": "What is the synonym of the word 'Brief'?",
+    "options": {
+      "A": "Long",
+      "B": "Short",
+      "C": "Broad",
+      "D": "Large"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Brief' অর্থ সংক্ষিপ্ত, যার সমার্থক শব্দ 'Short' বা 'Concise'।",
+    "source": "Primary Assistant Teacher Exam"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Antonym",
+    "stem": "What is the antonym of the word 'Optimist'?",
+    "options": {
+      "A": "Idealist",
+      "B": "Pessimist",
+      "C": "Realist",
+      "D": "Activist"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Optimist' অর্থ আশাবাদী; এর বিপরীত শব্দ 'Pessimist' (হতাশাবাদী)।",
+    "source": "Primary Assistant Teacher Exam (2019)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Idioms",
+    "stem": "The idiom 'At eleventh hour' means —",
+    "options": {
+      "A": "At 11 o'clock",
+      "B": "At the very last moment",
+      "C": "Very early",
+      "D": "In the morning"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'At the eleventh hour' বাগধারার অর্থ একেবারে শেষ মুহূর্তে (at the last possible moment)।",
+    "source": "Primary Assistant Teacher Exam"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — One Word Substitution",
+    "stem": "A speech made without any previous preparation is called —",
+    "options": {
+      "A": "Maiden speech",
+      "B": "Extempore",
+      "C": "Debate",
+      "D": "Monologue"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "পূর্বপ্রস্তুতি ছাড়া তাৎক্ষণিক প্রদত্ত বক্তৃতাকে 'Extempore' বা উপস্থিত বক্তৃতা বলে; আর জীবনের প্রথম বক্তৃতাকে 'Maiden speech' বলে।",
+    "source": "Primary Assistant Teacher Exam (2023)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Conditional",
+    "stem": "If it rains, we _____ stay at home.",
+    "options": {
+      "A": "would",
+      "B": "will",
+      "C": "would have",
+      "D": "had"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "First Conditional-এ If-যুক্ত অংশটি Present Indefinite হলে প্রধান অংশে 'will + base verb' বসে।",
+    "source": "Primary Assistant Teacher Exam"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Degree of Comparison",
+    "stem": "Dhaka is one of the _____ cities in South Asia.",
+    "options": {
+      "A": "big",
+      "B": "bigger",
+      "C": "biggest",
+      "D": "more big"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "'One of the'-এর পরে Adjective-এর Superlative ফর্ম ('biggest') এবং Plural Noun বসে।",
+    "source": "Primary Assistant Teacher Exam"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Tag Question",
+    "stem": "Let us go out for a walk, _____?",
+    "options": {
+      "A": "don't we",
+      "B": "shall we",
+      "C": "will you",
+      "D": "aren't we"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Let us' বা 'Let's' দ্বারা প্রস্তাব বোঝালে Tag Question সর্বদা 'shall we?' হয়।",
+    "source": "Primary Assistant Teacher Exam (2024)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Literature",
+    "stem": "Who is called the 'National Poet of England' (Bard of Avon)?",
+    "options": {
+      "A": "John Milton",
+      "B": "William Shakespeare",
+      "C": "William Wordsworth",
+      "D": "Geoffrey Chaucer"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "উইলিয়াম শেক্সপিয়ারকে ইংল্যান্ডের জাতীয় কবি এবং 'Bard of Avon' বলা হয়।",
+    "source": "Primary Assistant Teacher Exam"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "Primary English — Literature",
+    "stem": "Who wrote the famous juvenile novel 'Gulliver's Travels'?",
+    "options": {
+      "A": "Daniel Defoe",
+      "B": "Jonathan Swift",
+      "C": "Charles Dickens",
+      "D": "Robert Louis Stevenson"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "আইরিশ লেখক জোনাথন সুইফট ১৭২৬ সালে বিখ্যাত ব্যঙ্গাত্মক উপন্যাস 'Gulliver's Travels' রচনা করেন।",
+    "source": "Primary Assistant Teacher Exam (2022)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — মৌলিক সংখ্যা",
+    "stem": "১ থেকে ১০০ পর্যন্ত মোট কয়টি মৌলিক সংখ্যা (Prime Numbers) রয়েছে?",
+    "options": {
+      "A": "২৩টি",
+      "B": "২৪টি",
+      "C": "২৫টি",
+      "D": "২৬টি"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "১ থেকে ১০০ পর্যন্ত মৌলিক সংখ্যা ২৫টি। প্রতি দশকে এদের ক্রম: ৪-৪-২-২-৩-২-২-৩-২-১ = ২৫টি।",
+    "shortcut": "ফোন নম্বর ছন্দ: ৪৪২২-৩২২-৩২১ (যোগফল ২৫)",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — ক্ষুদ্রতম মৌলিক সংখ্যা",
+    "stem": "সবচেয়ে ছোট মৌলিক সংখ্যা এবং একমাত্র জোড় মৌলিক সংখ্যা কোনটি?",
+    "options": {
+      "A": "১",
+      "B": "২",
+      "C": "৩",
+      "D": "০"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "১ মৌলিক বা যৌগিক কোনোটিই নয়। সবচেয়ে ছোট এবং একমাত্র জোড় মৌলিক সংখ্যা হলো ২।",
+    "shortcut": "ক্ষুদ্রতম ও একমাত্র জোড় মৌলিক সংখ্যা = ২",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — ভগ্নাংশ",
+    "stem": "নিচের ভগ্নাংশগুলোর মধ্যে কোনটি বৃহত্তম?",
+    "options": {
+      "A": "2/3",
+      "B": "3/4",
+      "C": "4/5",
+      "D": "5/6"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "লব ও হরের পার্থক্য সমান (১) হলে যে প্রকৃত ভগ্নাংশের লব সবচেয়ে বড়, সেই ভগ্নাংশটিই বৃহত্তম: 5/6 = 0.833।",
+    "shortcut": "লব ও হরের পার্থক্য সমান হলে বৃহত্তম লবযুক্ত প্রকৃত ভগ্নাংশই বৃহত্তম (5/6)",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — দশমিক গুণ",
+    "stem": "0.1 × 0.01 × 0.001 এর গুণফল কত?",
+    "options": {
+      "A": "0.0001",
+      "B": "0.00001",
+      "C": "0.000001",
+      "D": "0.001"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "দশমিকের পর মোট ঘর সংখ্যা = ১ + ২ + ৩ = ৬টি। তাই গুণফল হবে 0.000001।",
+    "shortcut": "দশমিকের পর মোট (১+২+৩) = ৬ ঘর => 0.000001",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — ঐকিক নিয়ম",
+    "stem": "১৫ জন লোক একটি কাজ ২০ দিনে করতে পারলে, ২৫ জন লোক ঐ কাজটি কত দিনে করতে পারবে?",
+    "options": {
+      "A": "১০ দিনে",
+      "B": "১২ দিনে",
+      "C": "১৫ দিনে",
+      "D": "১৮ দিনে"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "১ জন করে = ১৫ × ২০ = ৩০০ দিনে। অতএব ২৫ জন করে = ৩০০ ÷ ২৫ = ১২ দিনে।",
+    "shortcut": "দিন = (১৫ × ২০) ÷ ২৫ = ১২ দিন",
+    "source": "NCTB ৫ম-৮ম শ্রেণি গণিত"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — খাদ্য ও সৈন্য",
+    "stem": "একটি ছাত্রাবাসে ৪০ জন ছাত্রের ৩০ দিনের খাবার আছে। ৫ দিন পর ১০ জন ছাত্র চলে গেলে অবশিষ্ট খাদ্যে বাকি ছাত্রদের আর কত দিন চলবে?",
+    "options": {
+      "A": "৩০ দিন",
+      "B": "৩৩ ১/৩ দিন",
+      "C": "৩৫ দিন",
+      "D": "২৮ দিন"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "৫ দিন পর ৪০ জনের ২৫ দিনের খাবার থাকে। ১০ জন চলে গেলে ছাত্র থাকে ৩০ জন। দিন = (৪০ × ২৫) ÷ ৩০ = ১০০/৩ = ৩৩ ১/৩ দিন।",
+    "shortcut": "(৪০ × ২৫) ÷ ৩০ = ৩৩ ১/৩ দিন",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — গড়",
+    "stem": "পিতা ও দুই পুত্রের বয়সের গড় ২৫ বছর। দুই পুত্রের বয়সের গড় ১৬ বছর হলে, পিতার বয়স কত?",
+    "options": {
+      "A": "৪০ বছর",
+      "B": "৪৩ বছর",
+      "C": "৪৫ বছর",
+      "D": "৪৮ বছর"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "তিনজনের মোট বয়স = ২৫ × ৩ = ৭৫ বছর। দুই পুত্রের মোট বয়স = ১৬ × ২ = ৩২ বছর। পিতার বয়স = ৭৫ - ৩২ = ৪৩ বছর।",
+    "shortcut": "পিতা = (২৫×৩) - (১৬×২) = ৭৫ - ৩২ = ৪৩ বছর",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — শতকরা",
+    "stem": "৮০-এর ২৫% সমান কত?",
+    "options": {
+      "A": "১৫",
+      "B": "২০",
+      "C": "২৫",
+      "D": "৩০"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "২৫% মানে ১/৪ অংশ। সুতরাং ৮০ × (১/৪) = ২০।",
+    "shortcut": "২৫% = ১/৪; ৮০ ÷ ৪ = ২০",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — শতকরা পাস-ফেল",
+    "stem": "কোনো পরীক্ষায় ৮৫% শিক্ষার্থী ইংরেজিতে পাস করেছে। যদি মোট ফেলের সংখ্যা ৭৫ জন হয়, তবে মোট পরীক্ষার্থীর সংখ্যা কত?",
+    "options": {
+      "A": "৪০০ জন",
+      "B": "৪৫০ জন",
+      "C": "৫০০ জন",
+      "D": "৬০০ জন"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "ফেলের হার = ১০০% - ৮৫% = ১৫%। প্রশ্নমতে ১৫% = ৭৫ জন; অতএব ১০০% = (৭৫ ÷ ১৫) × ১০০ = ৫০০ জন।",
+    "shortcut": "মোট = (৭৫ ÷ ১৫) × ১০০ = ৫০০ জন",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — লাভ-ক্ষতি",
+    "stem": "একটি বই ২৫০ টাকায় ক্রয় করে ৩০০ টাকায় বিক্রয় করলে শতকরা কত লাভ হবে?",
+    "options": {
+      "A": "১৫%",
+      "B": "২০%",
+      "C": "২৫%",
+      "D": "৩০%"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "লাভ = ৩০০ - ২৫০ = ৫০ টাকা। শতকরা লাভ = (৫০ ÷ ২৫০) × ১০০ = ২০%।",
+    "shortcut": "(৫০ ÷ ২৫০) × ১০০ = ২০%",
+    "source": "NCTB ৮ম শ্রেণি গণিত"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — সরল সুদ",
+    "stem": "বার্ষিক শতকরা ৬ টাকা হার সরল সুদে ৫০০ টাকার ৪ বছরের সুদ কত টাকা?",
+    "options": {
+      "A": "১০০ টাকা",
+      "B": "১২০ টাকা",
+      "C": "১৪০ টাকা",
+      "D": "১৫০ টাকা"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "সরল সুদ I = Pnr / 100 = (৫০০ × ৪ × ৬) ÷ ১০০ = ১২০ টাকা।",
+    "shortcut": "I = (৫০০ × ৪ × ৬) / ১০০ = ১২০ টাকা",
+    "source": "NCTB ৮ম শ্রেণি গণিত"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — অনুপাত",
+    "stem": "একটি ত্রিভুজের তিনটি কোণের অনুপাত ১ : ২ : ৩ হলে, বৃহত্তম কোণটির মান কত ডিগ্রি?",
+    "options": {
+      "A": "৬০°",
+      "B": "৭৫°",
+      "C": "৯০°",
+      "D": "১২০°"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "ত্রিভুজের তিন কোণের সমষ্টি ১৮০°। অনুপাতগুলোর যোগফল = ১+২+৩ = ৬। বৃহত্তম কোণ = ১৮০° × (৩/৬) = ৯০°।",
+    "shortcut": "১৮০° × (৩/৬) = ৯০° (সমকোণী ত্রিভুজ)",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — সংখ্যা",
+    "stem": "তিনটি ক্রমিক স্বাভাবিক সংখ্যার যোগফল ৬৩ হলে, মাঝের সংখ্যাটি কত?",
+    "options": {
+      "A": "২০",
+      "B": "২১",
+      "C": "২২",
+      "D": "২৩"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "তিনটি ক্রমিক সংখ্যার গড়ই হলো মাঝের সংখ্যা: ৬৩ ÷ ৩ = ২১ (সংখ্যা তিনটি ২০, ২১, ২২)।",
+    "shortcut": "মাঝের সংখ্যা = যোগফল ÷ ৩ = ৬৩ ÷ ৩ = ২১",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — বীজগণিত",
+    "stem": "a + b = 8 এবং a - b = 4 হলে, ab এর মান কত?",
+    "options": {
+      "A": "10",
+      "B": "12",
+      "C": "16",
+      "D": "24"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "a = (8+4)/2 = 6 এবং b = (8-4)/2 = 2। অতএব ab = 6 × 2 = 12।",
+    "shortcut": "a = ৬, b = ২ => ab = ১২",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — বীজগণিত",
+    "stem": "যদি 3x - 7 = 14 হয়, তবে x এর মান কত?",
+    "options": {
+      "A": "5",
+      "B": "6",
+      "C": "7",
+      "D": "8"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "3x = 14 + 7 = 21 => x = 21 ÷ 3 = 7।",
+    "shortcut": "x = (১৪ + ৭) ÷ ৩ = ৭",
+    "source": "NCTB ৭ম শ্রেণি গণিত"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — বর্গমূল",
+    "stem": "√(0.0009) এর মান কত?",
+    "options": {
+      "A": "0.3",
+      "B": "0.03",
+      "C": "0.003",
+      "D": "0.09"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "দশমিকের পর ৪টি অঙ্ক থাকায় বর্গমূলে দশমিকের পর ২টি অঙ্ক থাকবে এবং ৯-এর বর্গমূল ৩; তাই 0.03।",
+    "shortcut": "৪ ঘরের অর্ধেক ২ ঘর; √৯ = ৩ => 0.03",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — জ্যামিতি কোণ",
+    "stem": "১১০° কোণের সম্পূরক কোণ (Supplementary angle) কত ডিগ্রি?",
+    "options": {
+      "A": "৬০°",
+      "B": "৭০°",
+      "C": "৮০°",
+      "D": "২৫০°"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "দুটি কোণের সমষ্টি ১৮০° হলে একটিকে অপরটির সম্পূরক কোণ বলে। সুতরাং সম্পূরক কোণ = ১৮০° - ১১০° = ৭০°।",
+    "shortcut": "সম্পূরক কোণ = ১৮০° - ১১০° = ৭০°",
+    "source": "NCTB ৬ষ্ঠ-৮ম জ্যামিতি"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — চতুর্ভুজ",
+    "stem": "যে চতুর্ভুজের কেবল এক জোড়া বিপরীত বাহু সমান্তরাল, তাকে কী বলে?",
+    "options": {
+      "A": "সামান্তরিক",
+      "B": "রম্বস",
+      "C": "ট্রাপিজিয়াম",
+      "D": "আয়তক্ষেত্র"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "ট্রাপিজিয়ামের কেবল এক জোড়া বিপরীত বাহু সমান্তরাল থাকে; সামান্তরিকের দুই জোড়া বিপরীত বাহুই সমান্তরাল।",
+    "shortcut": "এক জোড়া বাহু সমান্তরাল = ট্রাপিজিয়াম",
+    "source": "NCTB ৮ম শ্রেণি গণিত"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — ক্ষেত্রফল ও পরিসীমা",
+    "stem": "একটি আয়তাকার বাগানের দৈর্ঘ্য ২০ মিটার এবং প্রস্থ ১৫ মিটার হলে, বাগানটির পরিসীমা কত মিটার?",
+    "options": {
+      "A": "৩৫ মিটার",
+      "B": "৭০ মিটার",
+      "C": "৩০০ মিটার",
+      "D": "১৪০ মিটার"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "আয়তক্ষেত্রের পরিসীমা = ২ × (দৈর্ঘ্য + প্রস্থ) = ২ × (২০ + ১৫) = ২ × ৩৫ = ৭০ মিটার।",
+    "shortcut": "পরিসীমা = ২(দৈর্ঘ্য + প্রস্থ) = ২ × ৩৫ = ৭০ মিটার",
+    "source": "NCTB ৮ম শ্রেণি পরিমিতি"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — সমকোণী ত্রিভুজ",
+    "stem": "একটি সমকোণী ত্রিভুজের ভূমি ১২ সেমি এবং উচ্চতা ৫ সেমি হলে, এর ক্ষেত্রফল কত বর্গ সেমি?",
+    "options": {
+      "A": "১৭",
+      "B": "৩০",
+      "C": "৬০",
+      "D": "১৩"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "ত্রিভুজের ক্ষেত্রফল = (১/২) × ভূমি × উচ্চতা = (১/২) × ১২ × ৫ = ৩০ বর্গ সেমি।",
+    "shortcut": "ক্ষেত্রফল = (১২ × ৫) ÷ ২ = ৩০ বর্গ সেমি",
+    "source": "NCTB ৮ম শ্রেণি গণিত"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক শিক্ষা ও অধিদপ্তর",
+    "stem": "বাংলাদেশে 'বাধ্যতামূলক প্রাথমিক শিক্ষা আইন' জাতীয় সংসদে কত সালে পাস হয়?",
+    "options": {
+      "A": "১৯৮৮ সালে",
+      "B": "১৯৯০ সালে",
+      "C": "১৯৯২ সালে",
+      "D": "১৯৯৩ সালে"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "১৯৯০ সালে বাংলাদেশে বাধ্যতামূলক প্রাথমিক শিক্ষা আইন পাস হয় এবং ১৯৯৩ সালের ১ জানুয়ারি থেকে সারা দেশে তা কার্যকর হয়।",
+    "source": "প্রাথমিক শিক্ষা অধিদপ্তর (DPE)"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক শিক্ষা ও অধিদপ্তর",
+    "stem": "সারাদেশে বাধ্যতামূলক প্রাথমিক শিক্ষা কর্মসূচি পুরোপুরি চালু হয় কবে থেকে?",
+    "options": {
+      "A": "১ জানুয়ারি ১৯৯২",
+      "B": "১ জানুয়ারি ১৯৯৩",
+      "C": "১ জানুয়ারি ১৯৯০",
+      "D": "২৬ মার্চ ১৯৯১"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "১৯৯২ সালে ৬৮টি থানায় এবং ১৯৯৩ সালের ১ জানুয়ারি থেকে সমগ্র বাংলাদেশে বাধ্যতামূলক প্রাথমিক শিক্ষা প্রবর্তিত হয়।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০১৮)"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক শিক্ষা প্রতিষ্ঠান",
+    "stem": "জাতীয় প্রাথমিক শিক্ষা একাডেমি (NAPE)-এর সদর দপ্তর কোন জেলায় অবস্থিত?",
+    "options": {
+      "A": "ঢাকা",
+      "B": "ময়মনসিংহ",
+      "C": "গাজীপুর",
+      "D": "কুমিল্লা"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "জাতীয় প্রাথমিক শিক্ষা একাডেমি (NAPE - National Academy for Primary Education) ময়মনসিংহ জেলায় অবস্থিত।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক শিক্ষা ও অধিদপ্তর",
+    "stem": "সরকারি প্রাথমিক বিদ্যালয়ের শিক্ষকদের বুনিয়াদি প্রশিক্ষণ প্রদানকারী প্রতিষ্ঠান কোনটি?",
+    "options": {
+      "A": "টিচার্স ট্রেনিং কলেজ (TTC)",
+      "B": "প্রাইমারি টিচার্স ট্রেনিং ইনস্টিটিউট (PTI)",
+      "C": "নায়েম (NAEM)",
+      "D": "ব্যানবেইস (BANBEIS)"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "প্রাথমিক বিদ্যালয়ের সহকারী শিক্ষকদের পেশাগত বুনিয়াদি প্রশিক্ষণ (DPEd/BTPT) প্রদান করে পিটিআই (PTI)।",
+    "source": "প্রাথমিক শিক্ষা অধিদপ্তর"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "সংবিধান ও প্রাথমিক শিক্ষা",
+    "stem": "গণপ্রজাতন্ত্রী বাংলাদেশের সংবিধানের কত নম্বর অনুচ্ছেদে অবৈতনিক ও বাধ্যতামূলক শিক্ষার কথা বলা হয়েছে?",
+    "options": {
+      "A": "১৫ অনুচ্ছেদ",
+      "B": "১৭ অনুচ্ছেদ",
+      "C": "১৯ অনুচ্ছেদ",
+      "D": "২৮ অনুচ্ছেদ"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "সংবিধানের ১৭ নম্বর অনুচ্ছেদে একই পদ্ধতির গণমুখী ও সর্বজনীন শিক্ষাব্যবস্থা প্রতিষ্ঠা এবং অবৈতনিক ও বাধ্যতামূলক শিক্ষার অঙ্গীকার রয়েছে।",
+    "source": "গণপ্রজাতন্ত্রী বাংলাদেশের সংবিধান"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক শিক্ষা ও অধিদপ্তর",
+    "stem": "বাংলাদেশে বর্তমানে সরকারি প্রাথমিক বিদ্যালয় পরিচালনার দায়িত্বপ্রাপ্ত 'প্রাথমিক শিক্ষা অধিদপ্তর' (DPE) কত সালে প্রতিষ্ঠিত হয়?",
+    "options": {
+      "A": "১৯৭২ সালে",
+      "B": "১৯৮১ সালে",
+      "C": "১৯৯০ সালে",
+      "D": "১৯৯৩ সালে"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "দেশের প্রাথমিক শিক্ষাব্যবস্থা সুষ্ঠুভাবে পরিচালনার লক্ষ্যে ১৯৮১ সালে স্বতন্ত্র 'প্রাথমিক শিক্ষা অধিদপ্তর' (Directorate of Primary Education - DPE) প্রতিষ্ঠিত হয়।",
+    "source": "প্রাথমিক শিক্ষা অধিদপ্তর (DPE)"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "জাতীয় সংগীত ও রণসংগীত",
+    "stem": "বাংলাদেশের রণসংগীত 'চল্ চল্ চল্' কবিতাটি কাজী নজরুল ইসলামের কোন কাব্যগ্রন্থের অন্তর্গত?",
+    "options": {
+      "A": "অগ্নিবীণা",
+      "B": "সন্ধ্যা",
+      "C": "সর্বহারা",
+      "D": "জিঞ্জীর"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'চল্ চল্ চল্' সংগীতটি কাজী নজরুল ইসলামের 'সন্ধ্যা' (১৯২৯) কাব্যগ্রন্থের অন্তর্গত; এর প্রথম ২১ লাইন রণসংগীত হিসেবে গৃহীত।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "বাংলাদেশের ভূপ্রকৃতি ও নদী",
+    "stem": "বাংলাদেশের দীর্ঘতম ও বৃহত্তম নদী মেঘনা কোন দুটি নদীর মিলিত প্রবাহে সৃষ্টি হয়েছে?",
+    "options": {
+      "A": "পদ্মা ও যমুনা",
+      "B": "সুরমা ও কুশিয়ারা",
+      "C": "তিস্তা ও ধরলা",
+      "D": "কর্ণফুলী ও হালদা"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "আসাম থেকে আগত বরাক নদী সিলেটের অমলশিদে সুরমা ও কুশিয়ারা নামে বিভক্ত হয়ে পুনরায় কিশোরগঞ্জের ভৈরব বাজারের কাছে মিলিত হয়ে মেঘনা নাম ধারণ করেছে।",
+    "source": "NCTB বাংলাদেশ ও বিশ্বপরিচয়"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "মুক্তিযুদ্ধ ও স্মৃতিসৌধ",
+    "stem": "সাভারে অবস্থিত জাতীয় স্মৃতিসৌধের স্থপতি কে?",
+    "options": {
+      "A": "হামিদুর রহমান",
+      "B": "সৈয়দ মঈনুল হোসেন",
+      "C": "মাজহারুল ইসলাম",
+      "D": "নভেরা আহমেদ"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "সাভারের জাতীয় স্মৃতিসৌধের স্থপতি সৈয়দ মঈনুল হোসেন (৭টি ফলকবিশিষ্ট, উচ্চতা ১৫০ ফুট) এবং কেন্দ্রীয় শহীদ মিনারের স্থপতি হামিদুর রহমান।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "উপজাতি ও সংস্কৃতি",
+    "stem": "গারো ক্ষুদ্র নৃ-গোষ্ঠীর প্রধান সামাজিক ও ঐতিহ্যবাহী উৎসবের নাম কী?",
+    "options": {
+      "A": "বিজু",
+      "B": "ওয়ানগালা",
+      "C": "সাংগ্রাই",
+      "D": "সোহরাই"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "গারোদের প্রধান ফসল তোলার উৎসব 'ওয়ানগালা', চাকমাদের 'বিজু' এবং মারমাদের 'সাংগ্রাই'।",
+    "source": "NCTB বাংলাদেশ ও বিশ্বপরিচয়"
+  },
+  {
+    "subject": "INT_AFFAIRS",
+    "topicBn": "জাতিসংঘ ও শিশু তহবিল",
+    "stem": "জাতিসংঘের শিশু তহবিল (UNICEF)-এর সদর দপ্তর কোথায় অবস্থিত?",
+    "options": {
+      "A": "জেনেভা",
+      "B": "প্যারিস",
+      "C": "নিউইয়র্ক",
+      "D": "লন্ডন"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "ইউনিসেফ (UNICEF) ১৯৪৬ সালে প্রতিষ্ঠিত হয় এবং এর সদর দপ্তর যুক্তরাষ্ট্রের নিউইয়র্ক শহরে অবস্থিত।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "INT_AFFAIRS",
+    "topicBn": "আন্তর্জাতিক দিবস",
+    "stem": "প্রতি বছর কোন তারিখে 'বিশ্ব শিক্ষক দিবস' (World Teachers' Day) পালিত হয়?",
+    "options": {
+      "A": "৮ সেপ্টেম্বর",
+      "B": "৫ অক্টোবর",
+      "C": "২০ নভেম্বর",
+      "D": "১০ ডিসেম্বর"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "ইউনেস্কোর ঘোষণা অনুযায়ী ১৯৯৪ সাল থেকে প্রতি বছর ৫ অক্টোবর বিশ্ব শিক্ষক দিবস এবং ৮ সেপ্টেম্বর আন্তর্জাতিক সাক্ষরতা দিবস পালিত হয়।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "INT_AFFAIRS",
+    "topicBn": "ভৌগোলিক উপনাম",
+    "stem": "কোন দেশকে 'নিশীথ সূর্যের দেশ' (Land of the Midnight Sun) বলা হয়?",
+    "options": {
+      "A": "জাপান",
+      "B": "নরওয়ে",
+      "C": "ফিনল্যান্ড",
+      "D": "সুইজারল্যান্ড"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "উত্তর মেরুবৃত্তের কাছে অবস্থিত হওয়ায় গ্রীষ্মকালে নরওয়েতে মধ্যরাতেও সূর্য দেখা যায়; আর জাপানকে বলা হয় 'সূর্যোদয়ের দেশ'।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ"
+  },
+  {
+    "subject": "INT_AFFAIRS",
+    "topicBn": "বিশ্ব পরিবেশ",
+    "stem": "প্রতি বছর 'বিশ্ব পরিবেশ দিবস' পালিত হয় কোন তারিখে?",
+    "options": {
+      "A": "২২ এপ্রিল",
+      "B": "৫ জুন",
+      "C": "১৬ সেপ্টেম্বর",
+      "D": "৭ এপ্রিল"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "১৯৭২ সালের স্টকহোম সম্মেলনের সিদ্ধান্ত অনুযায়ী প্রতি বছর ৫ জুন বিশ্ব পরিবেশ দিবস পালিত হয়।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — ভিটামিন",
+    "stem": "কোন ভিটামিনের অভাবে মানবদেহে 'স্কার্ভি' (দাঁতের মাড়ি দিয়ে রক্ত পড়া) রোগ হয়?",
+    "options": {
+      "A": "ভিটামিন এ",
+      "B": "ভিটামিন বি",
+      "C": "ভিটামিন সি",
+      "D": "ভিটামিন ডি"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "ভিটামিন সি (অ্যাসকরবিক অ্যাসিড)-এর অভাবে স্কার্ভি রোগ হয়, ভিটামিন এ-এর অভাবে রাতকানা এবং ভিটামিন ডি-এর অভাবে রিকেটস রোগ হয়।",
+    "source": "NCTB প্রাথমিক ও মাধ্যমিক বিজ্ঞান"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — রক্ত",
+    "stem": "মানবদেহে লোহিত রক্তকণিকার (RBC) গড় আয়ুষ্কাল কত দিন?",
+    "options": {
+      "A": "১০–১৫ দিন",
+      "B": "৬০ দিন",
+      "C": "১২০ দিন",
+      "D": "৯০ দিন"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "মানবদেহের লোহিত রক্তকণিকা অস্থিমজ্জায় উৎপন্ন হয় এবং এর গড় আয়ু প্রায় ১২০ দিন (৪ মাস)।",
+    "source": "NCTB ৯ম-১০ম সাধারণ বিজ্ঞান"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — গ্যাস",
+    "stem": "আগুন নেভানোর কাজে (Fire Extinguisher) কোন গ্যাস ব্যবহৃত হয়?",
+    "options": {
+      "A": "অক্সিজেন",
+      "B": "কার্বন ডাই-অক্সাইড",
+      "C": "হাইড্রোজেন",
+      "D": "নাইট্রোজেন"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "কার্বন ডাই-অক্সাইড (CO₂) নিজে জ্বলে না এবং অক্সিজেনের সরবরাহ বিচ্ছিন্ন করে আগুন নেভাতে সাহায্য করে।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — শব্দের বেগ",
+    "stem": "নিচের কোন মাধ্যমে শব্দের বেগ সবচেয়ে বেশি?",
+    "options": {
+      "A": "শূন্য মাধ্যমে",
+      "B": "বায়বীয় মাধ্যমে",
+      "C": "তরল মাধ্যমে",
+      "D": "কঠিন মাধ্যমে (লোহা/ইস্পাত)"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "শব্দ চলাচলের জন্য জড় মাধ্যম প্রয়োজন (শূন্য মাধ্যমে শব্দ চলে না)। কঠিন মাধ্যমে শব্দের বেগ সবচেয়ে বেশি এবং বায়বীয় মাধ্যমে সবচেয়ে কম।",
+    "source": "NCTB ৯ম-১০ম পদার্থবিজ্ঞান"
+  },
+  {
+    "subject": "COMPUTER_ICT",
+    "topicBn": "প্রাথমিক আইসিটি — কীবোর্ড শর্টকাট",
+    "stem": "কম্পিউটারে কোনো লেখা বা ফাইল 'Cut' করার কিবোর্ড শর্টকাট কোনটি?",
+    "options": {
+      "A": "Ctrl + C",
+      "B": "Ctrl + X",
+      "C": "Ctrl + V",
+      "D": "Ctrl + Z"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "Ctrl + C = Copy, Ctrl + X = Cut, Ctrl + V = Paste এবং Ctrl + Z = Undo।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "COMPUTER_ICT",
+    "topicBn": "প্রাথমিক আইসিটি — মেমোরি",
+    "stem": "১ গিগাবাইট (1 GB) সমান কত মেগাবাইট (MB)?",
+    "options": {
+      "A": "1000 MB",
+      "B": "1024 MB",
+      "C": "512 MB",
+      "D": "2048 MB"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "বাইনারি পদ্ধতিতে 2^10 = 1024 মেগাবাইট (MB) সমান ১ গিগাবাইট (GB)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — শিশুসাহিত্য ও ছড়া",
+    "stem": "প্রাথমিক বিদ্যালয়ের পাঠ্যভুক্ত 'আমাদের ছোট নদী চলে বাঁকে বাঁকে, বৈশাখ মাসে তার হাঁটু জল থাকে'—কবিতাংশটুকু রবীন্দ্রনাথ ঠাকুরের কোন গ্রন্থের অন্তর্গত?",
+    "options": {
+      "A": "সহজ পাঠ (প্রথম ভাগ)",
+      "B": "শিশু ভোলানাথ",
+      "C": "খাপছাড়া",
+      "D": "কথা ও কাহিনী"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "রবীন্দ্রনাথ ঠাকুর রচিত শিশুতোষ বাংলা শিক্ষার বই 'সহজ পাঠ' (১৯৩০)-এর প্রথম ভাগে 'আমাদের ছোট নদী' কবিতাটি অন্তর্ভুক্ত রয়েছে।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও NCTB প্রাথমিক বাংলা"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — কাজী নজরুল ইসলামের শিশুতোষ কবিতা",
+    "stem": "'আমি হব সকাল বেলার পাখি, সবার আগে কুসুম-বাগে উঠব আমি ডাকি'—জনপ্রিয় শিশুতোষ কবিতাটির রচয়িতা কে?",
+    "options": {
+      "A": "রবীন্দ্রনাথ ঠাকুর",
+      "B": "কাজী নজরুল ইসলাম",
+      "C": "সুকুমার রায়",
+      "D": "জসীমউদ্দীন"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'খোকার সাধ' (আমি হব সকাল বেলার পাখি) এবং 'লিচু চোর' ও 'খুকী ও কাঠবিড়ালী' কাজী নজরুল ইসলামের ঝিঙে ফুল কাব্যগ্রন্থের বিখ্যাত শিশুতোষ কবিতা।",
+    "source": "প্রাথমিক বিদ্যালয় সহকারী শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — বাগধারা",
+    "stem": "'অরণ্যে রোদন' বাগধারাটির সঠিক অর্থ নিচের কোনটি?",
+    "options": {
+      "A": "বনে বসে কান্না করা",
+      "B": "নিষ্ফল আবেদন",
+      "C": "গভীর ষড়যন্ত্র",
+      "D": "কঠোর পরিশ্রম"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'অরণ্যে রোদন' বাগধারাটির অর্থ নিষ্ফল আবেদন বা বৃথা চেষ্টা (ইংরেজিতে Crying in the wilderness)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ - ১ম ধাপ)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — এক কথায় প্রকাশ",
+    "stem": "'যা সহজে অতিক্রম করা যায় না'—এক কথায় প্রকাশ করলে কী হবে?",
+    "options": {
+      "A": "অনতিক্রম্য",
+      "B": "দুরতিক্রম্য",
+      "C": "দুর্গম",
+      "D": "অগম্য"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "যা সহজে অতিক্রম করা যায় না = দুরতিক্রম্য; আর যা একেবারেই অতিক্রম করা যায় না = অনতিক্রম্য; যেখানে যাওয়া কঠিন = দুর্গম।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — বিপরীত শব্দ",
+    "stem": "'উগ্র' শব্দের সঠিক বিপরীত শব্দ নিচের কোনটি?",
+    "options": {
+      "A": "সৌম্য",
+      "B": "চঞ্চল",
+      "C": "ক্ষিপ্র",
+      "D": "কঠোর"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "'উগ্র' শব্দের বিপরীত শব্দ 'সৌম্য' (বা শান্ত); আর 'হ্রস্ব'-এর বিপরীত 'দীর্ঘ' এবং 'আবাহন'-এর বিপরীত 'বিসর্জন'।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২ - ২য় ধাপ)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Spelling",
+    "stem": "Which one of the following words is spelt correctly for Primary Teacher recruitment exam?",
+    "options": {
+      "A": "Questionnaire",
+      "B": "Questionaire",
+      "C": "Questionnare",
+      "D": "Questioneir"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "সঠিক বানান Questionnaire (প্রশ্নমালা) — এতে ডাবল 'n' (n-n-a-i-r-e) থাকে।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Collective Noun",
+    "stem": "A group of lions is called a ______ , whereas a group of fish is called a ______.",
+    "options": {
+      "A": "pride, school (or shoal)",
+      "B": "flock, herd",
+      "C": "pack, swarm",
+      "D": "herd, pride"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "সিংহের দলকে 'a pride of lions', মাছের ঝাঁককে 'a school/shoal of fish', ভেড়া বা পাখির দলকে 'flock', গবাদিপশুর পালকে 'herd' এবং মৌমাছির ঝাঁককে 'swarm' বলে।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Idioms & Phrases",
+    "stem": "What does the English idiom 'Once in a blue moon' mean?",
+    "options": {
+      "A": "Very frequently",
+      "B": "Very rarely (কদাচিৎ / অমাবস্যার চাঁদ)",
+      "C": "Every full moon night",
+      "D": "Always on time"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Once in a blue moon' অর্থ অত্যন্ত কদাচিৎ বা 'অমাবস্যার চাঁদ' (Very rarely)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ - ২য় ধাপ)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Gender Change",
+    "stem": "What is the feminine gender of the noun 'Monk' (সন্ন্যাসী) and 'Drone' (পুরুষ মৌমাছি)?",
+    "options": {
+      "A": "Nun and Bee",
+      "B": "Duchess and Vixen",
+      "C": "Witch and Doe",
+      "D": "Abbess and Mare"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "Monk (সন্ন্যাসী)-এর Feminine হলো Nun (সন্ন্যাসিনী) এবং Drone (পুরুষ মৌমাছি)-এর Feminine হলো Bee (স্ত্রী মৌমাছি)। এছাড়া Fox-Vixen, Stag-Hind, Horse-Mare, Wizard-Witch।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Singular & Plural",
+    "stem": "What is the correct plural form of the compound noun 'Passer-by' (পথচারী)?",
+    "options": {
+      "A": "Passer-bys",
+      "B": "Passers-by",
+      "C": "Passers-bys",
+      "D": "Passer-byes"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "Compound Noun-এর প্রধান শব্দটির (Principal word) সাথে 's' যুক্ত হয়ে বহুবচন হয়: Passer-by ➔ Passers-by, Father-in-law ➔ Fathers-in-law, Commander-in-chief ➔ Commanders-in-chief।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — ক্ষুদ্রতম ভগ্নাংশ নির্ণয়",
+    "stem": "নিচের চারটি ভগ্নাংশের মধ্যে কোন ভগ্নাংশটি সবচেয়ে বড়?",
+    "options": {
+      "A": "২/৩",
+      "B": "৩/৪",
+      "C": "৪/৫",
+      "D": "৭/১০"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "দশমিকে প্রকাশ করলে: ২/৩ = ০.৬৭, ৩/৪ = ০.৭৫, ৪/৫ = ০.৮০ এবং ৭/১০ = ০.৭০। সুতরাং ৪/৫ (০.৮০) সবচেয়ে বড়।",
+    "shortcut": "আড়াআড়ি গুণ (Cross Multiplication): ৩/৪ ও ৪/৫ এর মধ্যে ৩×৫=১৫ এবং ৪×৪=১৬; যেহেতু ১৬ বড় তাই ৪/৫ বড়!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ - ৩য় ধাপ)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — ক্রমিক সংখ্যার সমষ্টি",
+    "stem": "৫টি ক্রমিক পূর্ণসংখ্যার যোগফল ১০৫ হলে সবচেয়ে বড় সংখ্যাটি কত?",
+    "options": {
+      "A": "২১",
+      "B": "২২",
+      "C": "২৩",
+      "D": "২৫"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "৫টি ক্রমিক সংখ্যার গড় অর্থাৎ মাঝখানের (৩য়) সংখ্যাটি = ১০৫ ÷ ৫ = ২১। সুতরাং সংখ্যা ৫টি হলো ১৯, ২০, ২১, ২২, ২৩। সবচেয়ে বড় সংখ্যাটি ২৩।",
+    "shortcut": "মাঝের সংখ্যা = ১০৫ ÷ ৫ = ২১; বৃহত্তম সংখ্যা = ২১ + ২ = ২৩!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — সমবাহু ত্রিভুজের ক্ষেত্রফল",
+    "stem": "একটি সমবাহু ত্রিভুজের প্রত্যেক বাহুর দৈর্ঘ্য ৪ মিটার হলে ত্রিভুজটির ক্ষেত্রফল কত বর্গমিটার?",
+    "options": {
+      "A": "2√3 বর্গমিটার",
+      "B": "4√3 বর্গমিটার",
+      "C": "8√3 বর্গমিটার",
+      "D": "16√3 বর্গমিটার"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "সমবাহু ত্রিভুজের ক্ষেত্রফল = (√3 / 4) × a^2 = (√3 / 4) × 4^2 = (√3 / 4) × 16 = 4√3 বর্গমিটার।",
+    "shortcut": "(√3 / 4) × বাহু² = (√3 / 4) × ১৬ = 4√3",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও NCTB জ্যামিতি"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — রম্বসের ক্ষেত্রফল",
+    "stem": "একটি রম্বসের কর্ণদ্বয়ের দৈর্ঘ্য যথাক্রমে ৮ সেমি এবং ১০ সেমি হলে রম্বসটির ক্ষেত্রফল কত বর্গ সেমি?",
+    "options": {
+      "A": "১৮ বর্গ সেমি",
+      "B": "৪০ বর্গ সেমি",
+      "C": "৮০ বর্গ সেমি",
+      "D": "১৬০ বর্গ সেমি"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "রম্বসের ক্ষেত্রফল = ১/২ × (কর্ণদ্বয়ের গুণফল) = ১/২ × ৮ × ১০ = ৪০ বর্গ সেন্টিমিটার।",
+    "shortcut": "রম্বসের ক্ষেত্রফল = কর্ণদ্বয়ের গুণফলের অর্ধেক = (৮ × ১০) ÷ ২ = ৪০!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — সুদকষা",
+    "stem": "বার্ষিক শতকরা কত হার সরল সুদে কোনো মূলধন ৮ বছরে সুদে-আসলে তিনগুণ হবে?",
+    "options": {
+      "A": "১২.৫%",
+      "B": "১৫%",
+      "C": "২০%",
+      "D": "২৫%"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "সুদে-আসলে ৩ গুণ মানে ১০০ টাকা আসলে সুদ হবে ২০০ টাকা। সুতরাং সুদের হার r = ২০০ ÷ ৮ = ২৫%।",
+    "shortcut": "হার r = [(গুণ - ১) × ১০০] ÷ সময় = [(৩ - ১) × ১০০] ÷ ৮ = ২০০ ÷ ৮ = ২৫%!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — বাধ্যতামূলক প্রাথমিক শিক্ষা",
+    "stem": "বাংলাদেশে 'বাধ্যতামূলক প্রাথমিক শিক্ষা আইন' জাতীয় সংসদে কত সালে পাস হয় এবং কবে থেকে দেশব্যাপী কার্যকর হয়?",
+    "options": {
+      "A": "১৯৯০ সালে পাস এবং ১ জানুয়ারি ১৯৯৩ থেকে দেশব্যাপী কার্যকর",
+      "B": "১৯৮১ সালে পাস এবং ১৯৯০ সালে কার্যকর",
+      "C": "১৯৭৩ সালে পাস এবং ১৯৭৪ সালে কার্যকর",
+      "D": "১৯৯৫ সালে পাস এবং ২০০০ সালে কার্যকর"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "১৯৯০ সালে বাধ্যতামূলক প্রাথমিক শিক্ষা আইন পাস হয়; ১৯৯২ সালের ১ জানুয়ারি প্রথমে ৬৮টি থানায় এবং ১৯৯৩ সালের ১ জানুয়ারি থেকে সারাদেশে বাধ্যতামূলক প্রাথমিক শিক্ষা চালু হয়।",
+    "source": "প্রাথমিক বিদ্যালয় সহকারী শিক্ষক ভাইভা ও প্রিলিমিনারি"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — প্রাথমিক বিদ্যালয় জাতীয়করণ",
+    "stem": "স্বাধীনতার পর ১৯৭৩ সালে বাংলাদেশে প্রথম ধাপে কতটি প্রাথমিক বিদ্যালয়কে একযোগে জাতীয়করণ (সরকারি) করা হয়েছিল?",
+    "options": {
+      "A": "২৬,১৯৩টি",
+      "B": "৩৬,১৬৫টি",
+      "C": "৪৫,০০০টি",
+      "D": "৬৫,৫৬৬টি"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "১৯৭৩ সালে ৩৬,১৬৫টি প্রাথমিক বিদ্যালয়কে এবং পরবর্তীতে ২০১৩ সালে আরও ২৬,১৯৩টি বেসরকারি প্রাথমিক বিদ্যালয়কে জাতীয়করণ করা হয়।",
+    "source": "প্রাথমিক শিক্ষা অধিদপ্তর (DPE) নিয়োগ প্রশ্নব্যাংক"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — জাতীয় শিশু দিবস ও সাক্ষরতা দিবস",
+    "stem": "বিশ্বব্যাপী প্রতি বছর কোন তারিখে ইউনেস্কো ঘোষিত 'আন্তর্জাতিক সাক্ষরতা দিবস' (International Literacy Day) পালিত হয়?",
+    "options": {
+      "A": "৮ মার্চ",
+      "B": "৮ সেপ্টেম্বর",
+      "C": "৫ অক্টোবর",
+      "D": "২০ নভেম্বর"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "প্রতি বছর ৮ সেপ্টেম্বর আন্তর্জাতিক সাক্ষরতা দিবস এবং ৫ অক্টোবর বিশ্ব শিক্ষক দিবস পালিত হয়।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — খাওয়ার স্যালাইন ও ওআরএস (ORS)",
+    "stem": "ডায়রিয়া বা পানিশূন্যতা রোধে ব্যবহৃত জীবনরক্ষাকারী খাওয়ার স্যালাইন (ORS - Oral Rehydration Salts) উদ্ভাবন ও প্রসারে বিশ্বের কোন গবেষণা প্রতিষ্ঠান অগ্রণী ভূমিকা পালন করেছে?",
+    "options": {
+      "A": "আইসিডিডিআর,বি (icddr,b — ঢাকা, বাংলাদেশ)",
+      "B": "বারডেম (BIRDEM)",
+      "C": "পাস্তুর ইনস্টিটিউট",
+      "D": "জনস হপকিন্স হাসপাতাল"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "ঢাকার মহাখালীতে অবস্থিত আন্তর্জাতিক উদরাময় গবেষণা কেন্দ্র, বাংলাদেশ (icddr,b - ১৯৬০ সালে কলেরা রিসার্চ ল্যাবরেটরি হিসেবে প্রতিষ্ঠিত) খাবার স্যালাইন (ORS) উদ্ভাবন ও বিশ্বব্যাপী প্রসারে ঐতিহাসিক ভূমিকা রাখে।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও সিনিয়র স্টাফ নার্স পরীক্ষা"
+  },
+  {
+    "subject": "INTERNATIONAL_AFFAIRS",
+    "topicBn": "প্রাথমিক আন্তর্জাতিক — জাতিসংঘ শিশু তহবিল (UNICEF)",
+    "stem": "বিশ্বব্যাপী শিশুদের স্বাস্থ্য, পুষ্টি ও প্রাথমিক শিক্ষার উন্নয়নে কাজ করা জাতিসংঘের সংস্থা 'ইউনিসেফ' (UNICEF)-এর সদর দপ্তর কোথায় অবস্থিত?",
+    "options": {
+      "A": "জেনেভা, সুইজারল্যান্ড",
+      "B": "নিউইয়র্ক, যুক্তরাষ্ট্র",
+      "C": "প্যারিস, ফ্রান্স",
+      "D": "লন্ডন, যুক্তরাজ্য"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "UNICEF (United Nations Children's Fund, ১৯৪৬ সালে প্রতিষ্ঠিত)-এর সদর দপ্তর যুক্তরাষ্ট্রের নিউইয়র্কে অবস্থিত (আর শিক্ষা-সংস্কৃতি সংস্থা UNESCO-এর সদর দপ্তর প্যারিসে)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সন্ধি বিচ্ছেদ (Hard)",
+    "stem": "‘গবেষণা’ এবং ‘নাভিক’ শব্দ দুটির সঠিক সন্ধি বিচ্ছেদ কোনটি?",
+    "options": {
+      "A": "গো + এষণা = গবেষণা (অয়াদি স্বরসন্ধি) এবং নৌ + ইক = নাভিক",
+      "B": "গব + এষণা = গবেষণা এবং নাভি + ক = নাভিক",
+      "C": "গৌ + এষণা = গবেষণা এবং নভ + ইক = নাভিক",
+      "D": "গো + ষণা = গবেষণা এবং না + ভিক = নাভিক"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "ও-কারের পর অন্য স্বরধ্বনি থাকলে ‘অব্’ হয় (গো + এষণা = গবেষণা, পো + ইত্র = পবিত্র) এবং ঔ-কারের পর স্বরধ্বনি থাকলে ‘আব্’ হয় (নৌ + ইক = নাভিক, ভৌ + উক = ভাবুক)।",
+    "source": "প্রাথমিক বিদ্যালয় সহকারী শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — সমাস নির্ণয় (Medium)",
+    "stem": "‘চৌরাস্তা’ (চার রাস্তার সমাহার) এবং ‘তেপান্তর’ (তিন প্রান্তরের সমাহার) কোন সমাসের উদাহরণ?",
+    "options": {
+      "A": "দ্বিগু সমাস",
+      "B": "সংখ্যাবাচক বহুব্রীহি সমাস",
+      "C": "দ্বন্দ্ব সমাস",
+      "D": "অব্যয়ীভাব সমাস"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "পূর্বপদ সংখ্যাবাচক এবং পরপদ বিশেষ্য হয়ে সমাহার বা সমষ্টি বোঝালে তাকে দ্বিগু সমাস বলে (চৌরাস্তা, তেপান্তর, ত্রিফলা, শতাব্দী, পঞ্চবটী, নবরত্ন, সপ্তর্ষি)। কিন্তু ব্যক্তি বা বিশেষ অর্থ বোঝালে সংখ্যাবাচক বহুব্রীহি হয় (যেমন: সেতার, দশানন, চৌচালা)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — কারক ও বিভক্তি (Hard)",
+    "stem": "“তিলে তৈল হয়” বনাম “তিলে তিলে তিলের খাজা তৈরি হয়”—প্রথম বাক্যে ‘তিলে’ কোন কারক?",
+    "options": {
+      "A": "অপাদান কারকে ৭মী বিভক্তি (কিন্তু “তিলে তৈল আছে” হলে অধিকরণ কারক!)",
+      "B": "করণ কারকে ৭মী বিভক্তি",
+      "C": "কর্ম কারকে ৭মী বিভক্তি",
+      "D": "কর্তৃকারকে ৭মী বিভক্তি"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "উৎপন্ন বা নির্গত হওয়া বোঝালে (“তিলে তৈল হয়” / “দুধ থেকে দই হয়”) অপাদান কারক হয়; আর আধার বা অস্তিত্ব বোঝালে (“তিলে তৈল আছে”) আধারাধিকরণ কারক হয়!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও বিসিএস ব্যাকরণ"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা সাহিত্য — সুকুমার রায় ও উপেন্দ্রকিশোর (Medium)",
+    "stem": "বাংলা শিশুসাহিত্যের অমর সৃষ্টি ‘আবোল তাবোল’, ‘হযবরল’ ও ‘পাগলা দাশু’-এর রচয়িতা কে এবং তাঁর পিতার নাম কী?",
+    "options": {
+      "A": "সুকুমার রায় (পিতা: উপেন্দ্রকিশোর রায়চৌধুরী, পুত্র: চলচ্চিত্রকার সত্যজিৎ রায়)",
+      "B": "দক্ষিণারঞ্জন মিত্র মজুমদার (‘ঠাকুরমার ঝুলি’-এর লেখক)",
+      "C": "যোগীন্দ্রনাথ সরকার (‘হাসিখুশি’-এর লেখক)",
+      "D": "রোকনুজ্জামান খান (দাদাভাই)"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "সুকুমার রায়ের বিখ্যাত শিশুতোষ গ্রন্থ আবোল তাবোল, হযবরল, পাগলা দাশু ও খাই-খাই। তাঁর পিতা উপেন্দ্রকিশোর রায়চৌধুরী লিখেছেন ‘টুনটুনির বই’ এবং ‘ছেলেদের রামায়ণ’। আর ‘ঠাকুরমার ঝুলি’ লিখেছেন দক্ষিণারঞ্জন মিত্র মজুমদার।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ভাইভা ও লিখিত"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা সাহিত্য — ছন্দের জাদুকর ও পল্লীকবি (Medium)",
+    "stem": "বাংলা সাহিত্যে ‘ছন্দের জাদুকর’ বলা হয় কাকে এবং তাঁর রচিত বিখ্যাত ছড়ার বই কোনটি?",
+    "options": {
+      "A": "সত্যেন্দ্রনাথ দত্ত (‘ছিপখান তিন-দাঁড় তিনজন মাল্লা’ / ‘পালকির গান’ / ‘ঝর্ণার গান’)",
+      "B": "ফররুখ আহমদ (‘সাত সাগরের মাঝি’)",
+      "C": "গোলাম মোস্তফা (‘বিশ্বনবী’)",
+      "D": "আহসান হাবীব (‘রাত্রিশেষ’)"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "রবীন্দ্রনাথ ঠাকুর কবি সত্যেন্দ্রনাথ দত্তকে ‘ছন্দের রাজা’ বা ‘ছন্দের জাদুকর’ উপাধি দেন। প্রাথমিক পাঠ্যবইয়ের ‘পালকির গান’ ও ‘দূরের পাল্লা’ (ছিপখান তিন-দাঁড়) তাঁরই লেখা।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Right Form of Verbs with Would that (Hard)",
+    "stem": "Fill in the blank: “Would that I ______ enter the classroom as an ideal primary school teacher!”",
+    "options": {
+      "A": "can",
+      "B": "could",
+      "C": "may",
+      "D": "shall"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "বাক্যের শুরুতে ‘Would that’ (অসম্ভব ইচ্ছা বা আকাঙ্ক্ষা প্রকাশে) থাকলে Subject-এর পরে সর্বদা ‘could + Base Verb (V1)’ বসে (যেমন: Would that I could fly in the sky!)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ - ২য় ধাপ)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Look forward to / With a view to (Medium)",
+    "stem": "Choose the correct form: “The students went to the National Museum with a view to ______ about the Liberation War.”",
+    "options": {
+      "A": "learn",
+      "B": "learning",
+      "C": "learned",
+      "D": "be learning"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "With a view to, look forward to, get used to, addicted to, devoted to, object to—এগুলোর পরে সর্বদা Verb + ing (Gerund = learning) বসে।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Degree of Comparison (Medium)",
+    "stem": "Choose the correct comparative form: “iron is one of the most useful metals” ➔ Very few metals are ______.",
+    "options": {
+      "A": "as useful as iron (Positive) / Iron is more useful than most other metals (Comparative)",
+      "B": "so useful than iron / Iron is more useful than any other metal",
+      "C": "more useful as iron",
+      "D": "most useful than iron"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Superlative-এ ‘one of the + superlative’ থাকলে Positive হয় ‘Very few + plural noun + are + as...as’ এবং Comparative হয় ‘Subject + is + comparative + than most other + plural noun’।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও নিবন্ধন"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Question Tag with Imperative & Nobody (Hard)",
+    "stem": "What are the correct tag questions for: (1) “Open the window, ______?” and (2) “Nobody believes a liar, ______?”",
+    "options": {
+      "A": "(1) will you / won’t you? and (2) do they?",
+      "B": "(1) don’t you? and (2) doesn’t he?",
+      "C": "(1) shall we? and (2) didn’t they?",
+      "D": "(1) can’t you? and (2) do he?"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "সাধারণ Imperative বাক্যে tag হয় ‘will you?’; আর Nobody, None, No one নিজেই নেগেটিভ এবং এর tag pronoun হয় ‘they’, তাই Present Indefinite-এ ‘do they?’ বসে!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Prefix & Suffix (Word Formation) (Medium)",
+    "stem": "Which prefix can be added to the word “ABLE” and “LARGE” to transform them into verbs?",
+    "options": {
+      "A": "en- (Enable, Enlarge)",
+      "B": "dis- (Disable)",
+      "C": "un- (Unable)",
+      "D": "in- (Inable)"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Adjective বা Noun-এর পূর্বে ‘en-’ বা ‘em-’ prefix যোগ করে Verb গঠন করা হয়: Able ➔ Enable, Large ➔ Enlarge, Rich ➔ Enrich, Danger ➔ Endanger, Power ➔ Empower।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — বর্গমূল ও দশমিকের গুণ (Hard)",
+    "stem": "০.১ × ০.০১ × ০.০০১ এর মান কত এবং √(০.০০০৯)-এর বর্গমূল কত?",
+    "options": {
+      "A": "গুণফল = ০.০০০০০১ (দশমিকের পর ৬ ঘর) এবং √(০.০০০৯) = ০.০৩",
+      "B": "গুণফল = ০.০০০১ এবং বর্গমূল = ০.০০৩",
+      "C": "গুণফল = ০.০০০০১ এবং বর্গমূল = ০.৩",
+      "D": "গুণফল = ০.০০১ এবং বর্গমূল = ০.০৯"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "গুণফলে দশমিকের পর মোট অঙ্ক হবে (১ + ২ + ৩) = ৬টি, তাই ০.০০০০০১। আর বর্গমূলে দশমিকের পরের ঘর অর্ধেক হয়ে যায়: ০.০০০৯-এ ৪ ঘর আছে, তাই বর্গমূলে ২ ঘর হবে = ০.০৩!",
+    "shortcut": "গুণফলে দশমিকের ঘর যোগ হয় (১+২+৩=৬ ঘর); বর্গমূলে দশমিকের ঘর অর্ধেক হয় (৪ ঘর ➔ ২ ঘর = ০.০৩)!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ - ১ম ও ২য় ধাপ)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — বানর ও তৈলাক্ত বাঁশ এবং ঘড়ির ঘণ্টা বাজার লসাগু (Medium)",
+    "stem": "চারটি ঘণ্টা একত্রে বেজে পরে যথাক্রমে ৬, ৯, ১২ এবং ১৫ সেকেন্ড অন্তর বাজতে লাগল। ন্যূনতম কত মিনিট পরে ঘণ্টাগুলো পুনরায় একত্রে বাজবে?",
+    "options": {
+      "A": "২ মিনিট পরে",
+      "B": "৩ মিনিট পরে (১৮০ সেকেন্ড)",
+      "C": "৪ মিনিট পরে",
+      "D": "৫ মিনিট পরে"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "৬, ৯, ১২ এবং ১৫-এর ল.সা.গু (LCM) = ১৮০ সেকেন্ড। ১৮০ সেকেন্ড = ১৮০ ÷ ৬০ = ৩ মিনিট। সুতরাং ৩ মিনিট পর ঘণ্টাগুলো পুনরায় একত্রে বাজবে।",
+    "shortcut": "ল.সা.গু(৬, ৯, ১২, ১৫) = ১৮০ সেকেন্ড = ৩ মিনিট!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — বাগানের চারদিকে রাস্তার ক্ষেত্রফল (Hard)",
+    "stem": "একটি আয়তাকার বাগানের দৈর্ঘ্য ৪০ মিটার ও প্রস্থ ৩০ মিটার। বাগানের বাহিরে চারদিকে ২ মিটার চওড়া একটি রাস্তা থাকলে রাস্তাটির ক্ষেত্রফল কত বর্গমিটার?",
+    "options": {
+      "A": "২৮০ বর্গমিটার",
+      "B": "২৯৬ বর্গমিটার",
+      "C": "২৬৪ বর্গমিটার",
+      "D": "৩০০ বর্গমিটার"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "রাস্তাবাদে বাগানের ক্ষেত্রফল = ৪০ × ৩০ = ১২০০ বর্গমি। রাস্তাসহ দৈর্ঘ্য = ৪০ + ২×২ = ৪৪ মি, রাস্তাসহ প্রস্থ = ৩০ + ২×২ = ৩৪ মি। রাস্তাসহ ক্ষেত্রফল = ৪৪ × ৩৪ = ১৪৯৬ বর্গমি। রাস্তার ক্ষেত্রফল = ১৪৯৬ - ১২০০ = ২৯৬ বর্গমিটার।",
+    "shortcut": "বাহিরে রাস্তার ক্ষেত্রফল = 2w(L + B + 2w) = 2×2(40 + 30 + 4) = 4 × 74 = ২৯৬ বর্গমিটার! (ভিতরে হলে -2w)",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও বিসিএস গণিত"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — অনুপাত ও ত্রিভুজের তিন কোণ (Medium)",
+    "stem": "একটি ত্রিভুজের তিনটি কোণের অনুপাত ২ : ৩ : ৪ হলে বৃহত্তম কোণটির মান কত ডিগ্রি?",
+    "options": {
+      "A": "৪০°",
+      "B": "৬০°",
+      "C": "৮০°",
+      "D": "৯০°"
+    },
+    "answer": "C",
+    "difficulty": "TRICKY",
+    "explanationBn": "ত্রিভুজের তিন কোণের সমষ্টি ১৮০°। অনুপাতগুলোর যোগফল = ২ + ৩ + ৪ = ৯। সুতরাং বৃহত্তম কোণ = ১৮০° × (৪/৯) = ২০° × ৪ = ৮০°।",
+    "shortcut": "(১৮০° ÷ ৯) × ৪ = ৮০°!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — গড় ও নতুন সংখ্যা সংযোজন (Medium)",
+    "stem": "৭টি সংখ্যার গড় ১২। এর সাথে নতুন একটি সংখ্যা যোগ করায় সংখ্যা ৮টির গড় হলো ১৪। নতুন যোগ করা সংখ্যাটি কত?",
+    "options": {
+      "A": "২৪",
+      "B": "২৬",
+      "C": "২৮",
+      "D": "৩০"
+    },
+    "answer": "C",
+    "difficulty": "TRICKY",
+    "explanationBn": "৭টি সংখ্যার সমষ্টি = ৭ × ১২ = ৮৪। ৮টি সংখ্যার সমষ্টি = ৮ × ১৪ = ১১২। অতএব নতুন সংখ্যাটি = ১১২ - ৮৪ = ২৮।",
+    "shortcut": "নতুন সংখ্যা = পুরাতন গড় + (মোট নতুন পদ × গড় বৃদ্ধি) = ১২ + (৮ × ২) = ২৮!",
+    "source": "প্রাইমারি শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — জাতীয় পতাকা ও জাতীয় প্রতীক (Medium)",
+    "stem": "বাংলাদেশের জাতীয় পতাকার দৈর্ঘ্য ও প্রস্থের অনুপাত কত এবং জাতীয় পতাকার প্রথম নকশাকার কে ছিলেন?",
+    "options": {
+      "A": "অনুপাত ১০ : ৬ (বা ৫ : ৩); প্রথম মানচিত্রখচিত পতাকার নকশাকার শিবনারায়ণ দাস এবং বর্তমান পতাকার রূপকার শিল্পী কামরুল হাসান",
+      "B": "অনুপাত ৪ : ৩; নকশাকার জয়নুল আবেদিন",
+      "C": "অনুপাত ১০ : ৭; নকশাকার হাশেম খান",
+      "D": "অনুপাত ৬ : ১০; নকশাকার নিতুন কুণ্ডু"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "জাতীয় পতাকার মাপের অনুপাত ১০ : ৬ (বা ৫ : ৩) এবং মাঝখানের লাল বৃত্তের ব্যাসার্ধ পতাকার দৈর্ঘ্যের এক-পঞ্চমাংশ (১/৫ অংশ)। ১৯৭১ সালের ২ মার্চ ঢাকা বিশ্ববিদ্যালয়ের কলাভবনে আ স ম আবদুর রব প্রথম পতাকা উত্তোলন করেন।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ভাইভা ও প্রিলিমিনারি"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — মুক্তিযুদ্ধের ভাস্কর্য ও স্থপতি (Medium)",
+    "stem": "ঢাকা বিশ্ববিদ্যালয়ে অবস্থিত মুক্তিযুদ্ধের ভাস্কর্য ‘অপরাজেয় বাংলা’ এবং ‘স্বোপার্জিত স্বাধীনতা’-এর স্থপতি যথাক্রমে কারা?",
+    "options": {
+      "A": "অপরাজেয় বাংলা = সৈয়দ আবদুল্লাহ খালিদ এবং স্বোপার্জিত স্বাধীনতা = শামীম শিকদার",
+      "B": "অপরাজেয় বাংলা = হামিদুজ্জামান খান এবং স্বোপার্জিত স্বাধীনতা = নিতুন কুণ্ডু",
+      "C": "অপরাজেয় বাংলা = মৃণাল হক এবং স্বোপার্জিত স্বাধীনতা = আবদুর রাজ্জাক",
+      "D": "উভয়টিরই স্থপতি সৈয়দ মঈনুল হোসেন"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "অপরাজেয় বাংলা (কলাভবন) = সৈয়দ আবদুল্লাহ খালিদ; স্বোপার্জিত স্বাধীনতা (টিএসসি) = শামীম শিকদার; সাবাস বাংলাদেশ (রাজশাহী বিশ্ববিদ্যালয়) = নিতুন কুণ্ডু; জাগ্রত চৌরঙ্গী (গাজীপুর — প্রথম মুক্তিযুদ্ধ ভাস্কর্য) = আবদুর রাজ্জাক; এবং জাতীয় স্মৃতিসৌধ (সাভার) = সৈয়দ মঈনুল হোসেন।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও বিসিএস"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — উদ্ভিদের বৃদ্ধি নির্ণায়ক যন্ত্র ও জগদীশচন্দ্র বসু (Medium)",
+    "stem": "উদ্ভিদের প্রাণ আছে—এটি প্রমাণ করার জন্য বাঙালি বিজ্ঞানী স্যার জগদীশচন্দ্র বসু উদ্ভিদের বৃদ্ধি মাপার কোন যন্ত্রটি আবিষ্কার করেছিলেন?",
+    "options": {
+      "A": "ক্রেসকোগ্রাফ (Crescograph)",
+      "B": "কার্ডিওগ্রাফ (Cardiograph)",
+      "C": "ক্রোনোমিটার (Chronometer)",
+      "D": "টেনসিওমিটার"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "বিজ্ঞানী স্যার জগদীশচন্দ্র বসু (জন্ম বিক্রমপুর/মুন্সীগঞ্জ) উদ্ভিদের অতি সূক্ষ্ম বৃদ্ধি ও সাড়া পরিমাপের জন্য ‘ক্রেসকোগ্রাফ’ যন্ত্র আবিষ্কার করেন। তাঁর বিখ্যাত বাংলা বিজ্ঞান গ্রন্থ ‘অব্যক্ত’।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "COMPUTER_ICT",
+    "topicBn": "প্রাথমিক আইসিটি — ইনপুট বনাম আউটপুট ডিভাইস (Medium)",
+    "stem": "নিচের কোন ডিভাইসগুলোর সবগুলোই কেবল ‘ইনপুট ডিভাইস’ (Input Device)?",
+    "options": {
+      "A": "কিবোর্ড, মাউস, স্ক্যানার, ওএমআর (OMR), বারকোড রিডার, মাইক্রোফোন ও ওয়েবক্যাম",
+      "B": "মনিটর, প্রিন্টার, প্লটার, প্রজেক্টর ও স্পিকার",
+      "C": "টাচস্ক্রিন, মডেম ও পেনড্রাইভ",
+      "D": "প্রিন্টার, স্ক্যানার ও মাউস"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "কিবোর্ড, মাউস, স্ক্যানার, OMR, OCR, MICR, জয়স্টিক, মাইক্রোফোন—এগুলো ইনপুট ডিভাইস; মনিটর, প্রিন্টার, প্লটার (বড় নকশা ছাপানোর প্রিন্টার), স্পিকার—এগুলো আউটপুট ডিভাইস; আর টাচস্ক্রিন ও মডেম ইনপুট-আউটপুট (I/O) উভয় হিসেবেই কাজ করে!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "INTERNATIONAL_AFFAIRS",
+    "topicBn": "প্রাথমিক আন্তর্জাতিক — নোবেল পুরস্কার ও আলফ্রেড নোবেল (Medium)",
+    "stem": "১৯০১ সাল থেকে প্রবর্তিত বিশ্বের সর্বোচ্চ মর্যাদাপূর্ণ ‘নোবেল পুরস্কার’ বর্তমানে কয়টি ক্ষেত্রে প্রদান করা হয় এবং অর্থনীতিতে নোবেল পুরস্কার কত সাল থেকে যুক্ত হয়?",
+    "options": {
+      "A": "মোট ৬টি ক্ষেত্রে (শুরুতে ৫টি ছিল; ১৯৬৮ সালে প্রবর্তিত হয়ে ১৯৬৯ সাল থেকে অর্থনীতিতে নোবেল দেওয়া শুরু হয়)",
+      "B": "মোট ৫টি ক্ষেত্রে (গণিতসহ)",
+      "C": "মোট ৭টি ক্ষেত্রে",
+      "D": "মোট ৬টি ক্ষেত্রে (১৯০১ সাল থেকেই অর্থনীতি অন্তর্ভুক্ত ছিল)"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "ডিনামাইট আবিষ্কারক সুইডিশ বিজ্ঞানী আলফ্রেড নোবেলের উইল অনুযায়ী ১৯০১ সাল থেকে ৫টি বিষয়ে (পদার্থ, রসায়ন, চিকিৎসা, সাহিত্য ও শান্তি) এবং ১৯৬৯ সাল থেকে অর্থনীতিসহ মোট ৬টি বিষয়ে নোবেল দেওয়া হয়। শুধুমাত্র ‘শান্তি’ নোবেল দেওয়া হয় নরওয়ের অসলো থেকে, বাকি ৫টি সুইডেনের স্টকহোম থেকে।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও বিসিএস"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — কাজী নজরুল ইসলামের শিশুতোষ কাব্য ও নাটক (Medium)",
+    "stem": "কাজী নজরুল ইসলামের বিখ্যাত শিশুতোষ কাব্যগ্রন্থ কোনগুলো এবং তাঁর প্রথম প্রকাশিত নাটক কোনটি?",
+    "options": {
+      "A": "শিশুতোষ কাব্যগ্রন্থ: ঝিঙে ফুল, সঞ্চয়ন, সাতভাই চম্পা, পিলে পটকা ও ঘুম জাগানো পাখি; এবং প্রথম প্রকাশিত নাটক: ‘ঝিলিমিলি’ (১৯৩০ — অন্যান্য নাটক: আলেয়া ও মধুমালা)",
+      "B": "শিশুতোষ কাব্য: শিশু ভোলানাথ ও খাপছাড়া (এগুলো আসলে রবীন্দ্রনাথের!)",
+      "C": "শিশুতোষ কাব্য: আবোল তাবোল ও হযবরল (এগুলো সুকুমার রায়ের!)",
+      "D": "প্রথম নাটক: রক্তাক্ত প্রান্তর"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "প্রাথমিক শিক্ষক নিয়োগ পরীক্ষায় শিশুতোষ সাহিত্য থেকে প্রশ্ন আসে: নজরুলের শিশুতোষ কাব্য হলো ঝিঙে ফুল (১৯২৬), সাতভাই চম্পা, পিলে পটকা, ঘুম জাগানো পাখি ও ঘুম পাড়ানি মাসি পিসি। আর রবীন্দ্রনাথের শিশুতোষ গ্রন্থ হলো শিশু, শিশু ভোলানাথ, খাপছাড়া ও সহজ পাঠ।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ ও ২০২২)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — পল্লীকবি জসীমউদ্‌দীন ও নকশী কাঁথার মাঠ (Medium)",
+    "stem": "পল্লীকবি জসীমউদ্‌দীনের অমর কাহিনীকাব্য ‘নকশী কাঁথার মাঠ’ (১৯২৯)-এর প্রধান দুটি চরিত্রের নাম কী এবং এটি কোন বিদেশি ভাষায় কী নামে অনূদিত হয়েছে?",
+    "options": {
+      "A": "প্রধান চরিত্র: রূপাই ও সাজু; এবং ই. এম. মিলফোর্ড (E. M. Milford) এটি ইংরেজিতে ‘The Field of the Embroidered Quilt’ নামে অনুবাদ করেন",
+      "B": "প্রধান চরিত্র: হাসু ও কাজল; এবং অনুবাদ করেন ডব্লিউ. বি. ইয়েটস",
+      "C": "প্রধান চরিত্র: সোজন ও দুলালী (এটি তাঁর ‘সোজন বাদিয়ার ঘাট’ কাব্যের চরিত্র!)",
+      "D": "প্রধান চরিত্র: মজনু ও লায়লী"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "জসীমউদ্‌দীনের ‘নকশী কাঁথার মাঠ’ কাব্যের নায়ক-নায়িকা রূপাই ও সাজু (ইংরেজি অনুবাদক ই. এম. মিলফোর্ড) এবং ‘সোজন বাদিয়ার ঘাট’ কাব্যের চরিত্র সোজন ও দুলী (নমঃশূদ্র তরুণী)। ছাত্রজীবনে রচিত তাঁর বিখ্যাত ‘কবর’ কবিতাটি ‘রাখালী’ কাব্যগ্রন্থের অন্তর্গত এবং তাঁর একমাত্র উপন্যাস ‘বোবাকাহিনী’ (১৯৬৪)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও বিসিএস বাংলা"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক ব্যাকরণ — সমোচ্চারিত ভিন্নার্থক শব্দ (অন্ন/অন্য, শব/সব, কুল/কূল) (Medium)",
+    "stem": "নিচের সমোচ্চারিত ভিন্নার্থক শব্দজোড়ার কোন অর্থটি সম্পূর্ণ সঠিক?",
+    "options": {
+      "A": "কুল (হ্রস্ব উ) = বংশ বা বরই ফল, আর কূল (দীর্ঘ ঊ) = নদীর তীর বা কিনারা; শব (তালব্য শ) = মৃতদেহ (লাশ), আর সব (দন্ত্য স) = সকল; এবং অন্ন = ভাত, আর অন্য = অপর",
+      "B": "কুল = নদীর তীর এবং কূল = বংশ",
+      "C": "শব = সকল এবং সব = মৃতদেহ",
+      "D": "বান (মূর্ধন্য ণ) = বন্যা এবং বাণ (দন্ত্য ন) = তীর (যখন আসলে বান = বন্যা এবং বাণ = তীর বা শর!)"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "সমোচ্চারিত শব্দের গুরুত্বপূর্ণ জোড়া: ১. কুল (বংশ/ফল) বনাম কূল (নদীর তীর), ২. বান (বন্যা) বনাম বাণ (তীর/শর), ৩. শব (মৃতদেহ) বনাম সব (সকল), ৪. স্বর্গ (দেবলোক) বনাম সর্গ (গ্রন্থের অধ্যায়), ৫. অশ্ব (ঘোড়া) বনাম অশ্ম (পাথর), ৬. আপন (নিজ) বনাম বিপণি/আপণ (দোকান)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩ ও ২০২৪)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক ব্যাকরণ — এক কথায় প্রকাশ / বাক্য সংকোচন (Hard)",
+    "stem": "নিচের বাক্য সংকোচনগুলোর কোন মিলকরণটি সম্পূর্ণ সঠিক?",
+    "options": {
+      "A": "যা চুষে খেতে হয় = চোষ্য (আর যা চিবিয়ে খেতে হয় = চর্ব্য, যা লেহন বা চেটে খেতে হয় = লেহ্য এবং যা পান করতে হয় = পেয়); হরিণের চামড়া = অজিন (বাঘের চামড়া = কৃত্তি); এবং হাতির ডাক = বৃংহিত (সিংহের ডাক = নাদ, কোকিলের ডাক = কুহু ও ময়ূরের ডাক = কেকা)",
+      "B": "যা চুষে খেতে হয় = চর্ব্য এবং যা চিবিয়ে খেতে হয় = চোষ্য",
+      "C": "হরিণের চামড়া = কৃত্তি এবং বাঘের চামড়া = অজিন",
+      "D": "হাতির ডাক = কেকা এবং ময়ূরের ডাক = বৃংহিত"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "চার প্রকার আহার্য: চর্ব্য (চিবিয়ে খাওয়ার যোগ্য), চোষ্য (চুষে খাওয়ার যোগ্য), লেহ্য (চেটে খাওয়ার যোগ্য) ও পেয় (পান করার যোগ্য)। চামড়া: হরিণের চামড়া = অজিন, বাঘের চামড়া = কৃত্তি। পশুপাখির ডাক: হাতির ডাক = বৃংহিত, সিংহের ডাক = নাদ, ঘোড়ার ডাক = হ্রেষা, রাজহাঁসের ডাক = ক্রেংকার, ময়ূরের ডাক = কেকা।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪) ও বিসিএস"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Collective Nouns for Animals & Things (Medium)",
+    "stem": "Choose the correct pair of Collective Nouns: (1) “A ______ of fish/whales”, (2) “A ______ of lions”, (3) “A ______ of bees/ants”, and (4) “A ______ of ships”.",
+    "options": {
+      "A": "(1) school / shoal, (2) pride, (3) swarm / colony, and (4) fleet",
+      "B": "(1) herd, (2) flock, (3) pack, and (4) bunch",
+      "C": "(1) pride, (2) school, (3) fleet, and (4) swarm",
+      "D": "(1) galaxy, (2)bevy, (3) troop, and (4) bouquet"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "প্রাইমারি ও নিবন্ধনে সর্বাধিক আসা Collective Noun তালিকা: A school/shoal of fish, A pride of lions, A pack of wolves/hounds/cards, A flock of birds/sheep, A herd of cattle/deer/elephants, A swarm of bees, A fleet of ships, A bouquet of flowers, A galaxy/constellation of stars, A bunch of keys/grapes।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ ও ২০২২)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Gender Change (Masculine to Feminine) (Medium)",
+    "stem": "What are the correct feminine forms of the masculine nouns: (1) “Monk (or Friar)”, (2) “Stag (or Hart)”, (3) “Drake”, and (4) “Wizard”?",
+    "options": {
+      "A": "(1) Nun, (2) Hind (or Roe), (3) Duck, and (4) Witch",
+      "B": "(1) Abbess, (2) Doe, (3) Goose, and (4) Vixen",
+      "C": "(1) Maid, (2) Mare, (3) Bee, and (4) Duchess",
+      "D": "(1) Lady, (2) Ewe, (3) Hen, and (4) Stewardess"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "গুরুত্বপূর্ণ Gender রূপান্তর: Monk/Friar (সন্ন্যাসী) ➔ Nun (সন্ন্যাসিনী), Stag/Hart (হরিণ) ➔ Hind/Roe (হরিণী), Buck/Rabbit ➔ Doe, Ram (ভেড়া) ➔ Ewe, Boar (শূকর) ➔ Sow, Horse/Stallion ➔ Mare (ঘোটকী), Fox ➔ Vixen, Drone (পুরুষ মৌমাছি) ➔ Bee, Drake (পাতিহাঁস) ➔ Duck, Gander (রাজহাঁস) ➔ Goose, Wizard (জাদুকর) ➔ Witch, Bachelor ➔ Spinster/Maid। (আর Orphan, Child, Baby, Student, Teacher, Cousin, Monarch, Spouse হলো Common Gender!)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩ ও ২০২৪)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Singular & Plural of Compound & Foreign Nouns (Hard)",
+    "stem": "What are the correct plural forms of: (1) “Commander-in-chief”, (2) “Passer-by”, (3) “Woman doctor”, and (4) “Datum / Agendum”?",
+    "options": {
+      "A": "(1) Commanders-in-chief, (2) Passers-by, (3) Women doctors (both parts change!), and (4) Data / Agenda",
+      "B": "(1) Commander-in-chiefs, (2) Passer-bys, (3) Woman doctors, and (4) Datums",
+      "C": "(1) Commanders-in-chiefs, (2) Passers-bys, (3) Womens doctors, and (4) Datas",
+      "D": "(1) Commander-in-chieves, (2) Passer-bies, (3) Women doctor, and (4) Agendums"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Compound Noun-এর Plural করার ২টি গোল্ডেন রুল: ১. সাধারণ Compound শব্দে কেবল প্রধান শব্দটির সাথে s যোগ হয়: Commander-in-chief ➔ Commanders-in-chief, Brother-in-law ➔ Brothers-in-law, Passer-by ➔ Passers-by, Maid-servant ➔ Maid-servants। ২. কিন্তু Man বা Woman দ্বারা পেশা বোঝালে উভয় পদেরই Plural হয়: Man-servant ➔ Men-servants, Woman doctor ➔ Women doctors! (কিন্তু Man-hater বা Woman-hater হলে শুধু শেষের শব্দে s হয়: Man-haters)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও বিসিএস ইংরেজি"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Proverbs & English Translations (Medium)",
+    "stem": "What is the authentic English proverb for the Bengali saying: “চোরে চোরে মাসতুতো ভাই” and “নাচতে না জানলে উঠান বাঁকা”?",
+    "options": {
+      "A": "“Birds of a feather flock together” and “A bad workman quarrels with his tools”",
+      "B": "“To set a thief to catch a thief” and “Empty vessels sound much”",
+      "C": "“Cut your coat according to your cloth” and “Look before you leap”",
+      "D": "“Black will take no other hue” and “All that glitters is not gold”"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "প্রাইমারি পরীক্ষার জনপ্রিয় প্রবাদবাক্য: ১. চোরে চোরে মাসতুতো ভাই = Birds of a feather flock together, ২. নাচতে না জানলে উঠান বাঁকা = A bad workman quarrels with his tools, ৩. শূন্য কলসি বাজে বেশি = Empty vessels sound much, ৪. চকচক করলেই সোনা হয় না = All that glitters is not gold, ৫. আয় বুঝে ব্যয় কর = Cut your coat according to your cloth, ৬. কয়লা ধুইলে ময়লা যায় না = Black will take no other hue, ৭. অসময়ের বন্ধুই প্রকৃত বন্ধু = A friend in need is a friend indeed।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ - ১ম, ২য় ও ৩য় ধাপ)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — ক্রমিক সংখ্যার যোগফল থেকে বড় ও ছোট সংখ্যা নির্ণয় (Medium)",
+    "stem": "৫টি ক্রমিক পূর্ণসংখ্যার (Consecutive integers) যোগফল ১১৫ হলে সবচেয়ে বড় সংখ্যাটি এবং সবচেয়ে ছোট সংখ্যাটি যথাক্রমে কত?",
+    "options": {
+      "A": "বড় সংখ্যাটি = ২৫ এবং ছোট সংখ্যাটি = ২১ (কারণ মাঝের গড় সংখ্যাটি হলো ১১৫ ÷ ৫ = ২৩; তাই সংখ্যা ৫টি হলো ২১, ২২, ২৩, ২৪, ২৫)",
+      "B": "বড় সংখ্যাটি = ২৪ এবং ছোট সংখ্যাটি = ২০",
+      "C": "বড় সংখ্যাটি = ২৬ এবং ছোট সংখ্যাটি = ২২",
+      "D": "বড় সংখ্যাটি = ২৭ এবং ছোট সংখ্যাটি = ১৯"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "ক্রমিক সংখ্যার অঙ্কে x ধরে সমীকরণ করার কোনো দরকার নেই! যোগফলকে পদসংখ্যা দিয়ে ভাগ করলেই ঠিক ‘মাঝখানের সংখ্যাটি’ (গড়) পাওয়া যায়: ১১৫ ÷ ৫ = ২৩। যেহেতু ২৩ মাঝখানে, তাই এর আগের ২টি সংখ্যা হলো ২১, ২২ এবং পরের ২টি সংখ্যা হলো ২৪, ২৫! অতএব সবচেয়ে বড় সংখ্যা ২৫ এবং ছোট সংখ্যা ২১।",
+    "shortcut": "মাঝের সংখ্যা = যোগফল ÷ ৫ = ১১৫ ÷ ৫ = ২৩ ➔ সংখ্যাগুলো ২১, ২২, [২৩], ২৪, ২৫!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — দুটি সংখ্যার যোগফল ও বিয়োগফল থেকে গুণফল (Medium)",
+    "stem": "দুটি সংখ্যার যোগফল ২৪ এবং বিয়োগফল ৬ হলে সংখ্যা দুটি কত এবং তাদের গুণফল কত?",
+    "options": {
+      "A": "সংখ্যা দুটি ১৫ ও ৯; এবং তাদের গুণফল = ১৩৫",
+      "B": "সংখ্যা দুটি ১৬ ও ৮; এবং গুণফল = ১২৮",
+      "C": "সংখ্যা দুটি ১৪ ও ১০; এবং গুণফল = ১৪০",
+      "D": "সংখ্যা দুটি ১৮ ও ৬; এবং গুণফল = ১০৮"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "বড় সংখ্যা = (যোগফল + বিয়োগফল) ÷ ২ = (২৪ + ৬) ÷ ২ = ১৫। ছোট সংখ্যা = (যোগফল - বিয়োগফল) ÷ ২ = (২৪ - ৬) ÷ ২ = ৯। অতএব সংখ্যা দুটির গুণফল = ১৫ × ৯ = ১৩৫।",
+    "shortcut": "বড় = (২৪+৬)/২ = ১৫; ছোট = (২৪-৬)/২ = ৯ ➔ গুণফল = ১৫ × ৯ = ১৩৫!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — ছাত্রাবাসে খাদ্য ও সৈন্যদলের রসদের ঐকিক নিয়ম (Medium)",
+    "stem": "একটি ছাত্রাবাসে ৫০ জন ছাত্রের ২০ দিনের খাদ্য মজুদ আছে। ৫ দিন পর ওই ছাত্রাবাসে আরও ২৫ জন নতুন ছাত্র আসলে অবশিষ্ট খাদ্যে তাদের আর কত দিন চলবে?",
+    "options": {
+      "A": "১০ দিন",
+      "B": "৮ দিন",
+      "C": "১২ দিন",
+      "D": "১৫ দিন"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "২০ দিনের মধ্যে ৫ দিন চলে যাওয়ায় ৫০ জন ছাত্রের জন্য অবশিষ্ট খাদ্য আছে (২০ - ৫) = ১৫ দিনের। এখন নতুন ২৫ জন আসায় মোট ছাত্র হলো (৫০ + ২৫) = ৭৫ জন। ৫০ জনের ১৫ দিনের খাবার ৭৫ জনের চলবে = (৫০ × ১৫) ÷ ৭৫ = ৭৫০ ÷ ৭৫ = ১০ দিন!",
+    "shortcut": "অবশিষ্ট দিন = (পূর্বের লোক × অবশিষ্ট দিন) ÷ নতুন মোট লোক = (৫০ × ১৫) ÷ ৭৫ = ১০ দিন!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও এনটিআরসিএ"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — বৃত্তের ব্যাসার্ধ বৃদ্ধি পেলে ক্ষেত্রফল বৃদ্ধি (Hard)",
+    "stem": "একটি বৃত্তের ব্যাসার্ধ (বা ব্যাস বা পরিধি) যদি ৫০% বৃদ্ধি করা হয়, তবে বৃত্তটির ক্ষেত্রফল শতকরা কত বৃদ্ধি পাবে?",
+    "options": {
+      "A": "১২৫% বৃদ্ধি পাবে",
+      "B": "১০০% বৃদ্ধি পাবে",
+      "C": "৫০% বৃদ্ধি পাবে",
+      "D": "২২৫% বৃদ্ধি পাবে"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "বৃত্তের ক্ষেত্রফল πr²-এ ব্যাসার্ধ r দুইবার গুণ হয়। তাই শর্টকাট সূত্র: ক্ষেত্রফল বৃদ্ধি = 2x + (x² / 100)। এখানে x = 50% বসালে বৃদ্ধি = 2(50) + (50² / 100) = 100 + (2500 / 100) = 100 + 25 = ১২৫% বৃদ্ধি পাবে! (নতুন ক্ষেত্রফল হবে আগের ক্ষেত্রফলের ২২৫%, তাই নিট বৃদ্ধি = ২২৫% - ১০০% = ১২৫%!)।",
+    "shortcut": "বর্গ বা বৃত্তের বাহু/ব্যাসার্ধ x% বাড়লে ক্ষেত্রফল বাড়ে = 2x + (x²/100) = 2(50) + 25 = ১২৫%!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪) ও বিসিএস"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — সমকোণী ত্রিভুজের পিথাগোরিয়ান ট্রিপলেট (Medium)",
+    "stem": "একটি সমকোণী ত্রিভুজের অতিভুজ ১৩ সেন্টিমিটার এবং ভূমি ১২ সেন্টিমিটার হলে ত্রিভুজটির লম্বের দৈর্ঘ্য এবং ক্ষেত্রফল যথাক্রমে কত?",
+    "options": {
+      "A": "লম্ব = ৫ সেমি এবং ক্ষেত্রফল = ৩০ বর্গ সেন্টিমিটার",
+      "B": "লম্ব = ৫ সেমি এবং ক্ষেত্রফল = ৬০ বর্গ সেন্টিমিটার",
+      "C": "লম্ব = ৭ সেমি এবং ক্ষেত্রফল = ৪২ বর্গ সেন্টিমিটার",
+      "D": "লম্ব = ৬ সেমি এবং ক্ষেত্রফল = ৩৬ বর্গ সেন্টিমিটার"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "পিথাগোরাসের উপপাদ্য অনুযায়ী লম্ব = √(অতিভুজ² - ভূমি²) = √(১৩² - ১২²) = √(১৬৯ - ১৪৪) = √২৫ = ৫ সেমি (৫-১২-১৩ পিথাগোরিয়ান ট্রিপলেট)। আর সমকোণী ত্রিভুজের ক্ষেত্রফল = ১/২ × ভূমি × উচ্চতা (লম্ব) = ১/২ × ১২ × ৫ = ৩০ বর্গ সেন্টিমিটার! (সাবধান: ক্ষেত্রফল বের করার সময় ভুলেও অতিভুজ ১৩ দিয়ে গুণ করবেন না!)।",
+    "shortcut": "ট্রিপলেট (৫, ১২, ১৩) থেকে লম্ব = ৫ সেমি; ক্ষেত্রফল = ১/২ × ১২ × ৫ = ৩০ বর্গসেমি!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২২ ও ২০২৪)"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — বাধ্যতামূলক প্রাথমিক শিক্ষা আইন ১৯৯০ ও DPE (Medium)",
+    "stem": "বাংলাদেশে ‘বাধ্যতামূলক প্রাথমিক শিক্ষা আইন’ কত সালে পাস হয়, কত সাল থেকে সমগ্র দেশে বাধ্যতামূলক প্রাথমিক শিক্ষা চালু হয় এবং প্রাথমিক শিক্ষা অধিদপ্তর (DPE) কত সালে প্রতিষ্ঠিত হয়?",
+    "options": {
+      "A": "১৯৯০ সালে বাধ্যতামূলক প্রাথমিক শিক্ষা আইন পাস হয় (১ জানুয়ারি ১৯৯২ সালে ৬৮টি উপজেলায় এবং ১ জানুয়ারি ১৯৯৩ সাল থেকে সারাদেশে চালু হয়); এবং ১৯৮১ সালে প্রাথমিক শিক্ষা অধিদপ্তর (DPE) প্রতিষ্ঠিত হয় (জাতীয় প্রাথমিক শিক্ষা একাডেমি NAPE ময়মনসিংহে অবস্থিত)",
+      "B": "২০০০ সালে আইন পাস হয় এবং ১৯৯৫ সালে সারাদেশে চালু হয়",
+      "C": "১৯৭৩ সালে আইন পাস হয় (১৯৭৩ সালে আসলে বঙ্গবন্ধু সরকার ৩৬,১৬৫টি প্রাথমিক বিদ্যালয় জাতীয়করণ করেছিলেন!)",
+      "D": "২০১০ সালে আইন পাস হয়"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "প্রাথমিক শিক্ষক নিয়োগ ভাইভা ও লিখিত পরীক্ষার সবচেয়ে গুরুত্বপূর্ণ তথ্য: ১. ১৯৭৩ সালে বঙ্গবন্ধু শেখ মুজিবুর রহমান ৩৬,১৬৫টি এবং ২০১৩ সালে আরও ২৬,১৯৩টি প্রাথমিক বিদ্যালয় জাতীয়করণ করা হয়, ২. প্রাথমিক শিক্ষা অধিদপ্তর (DPE) প্রতিষ্ঠিত হয় ১৯৮১ সালে (সদর দপ্তর মিরপুর-২, ঢাকা), ৩. NAPE (National Academy for Primary Education, ১৯৭৮) অবস্থিত ময়মনসিংহে, ৪. বাধ্যতামূলক প্রাথমিক শিক্ষা আইন পাস হয় ১৯৯০ সালে এবং সারাদেশে কার্যকর হয় ১ জানুয়ারি ১৯৯৩ থেকে।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ভাইভা ও প্রিলিমিনারি"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — বাংলাদেশের জাতীয় দিবসসমূহ ও ইউনেস্কো আন্তর্জাতিক মাতৃভাষা দিবস (Medium)",
+    "stem": "ইউনেস্কো (UNESCO) কত তারিখে এবং কততম সাধারণ সম্মেলনে ২১শে ফেব্রুয়ারিকে ‘আন্তর্জাতিক মাতৃভাষা দিবস’ হিসেবে স্বীকৃতি দেয় এবং কত সাল থেকে বিশ্বব্যাপী দিবসটি পালিত হচ্ছে?",
+    "options": {
+      "A": "১৭ নভেম্বর ১৯৯৯ সালে প্যারিসে অনুষ্ঠিত ইউনেস্কোর ৩০তম সাধারণ সম্মেলনে স্বীকৃতি দেয় (কানাডাপ্রবাসী বাঙালি রফিকুল ইসলাম ও আবদুস সালামের ‘মাদার ল্যাঙ্গুয়েজ লাভার্স অব দ্য ওয়ার্ল্ড’ সংগঠনের উদ্যোগে); এবং ২০০০ সালের ২১ ফেব্রুয়ারি থেকে বিশ্বব্যাপী পালিত হচ্ছে",
+      "B": "২১ ফেব্রুয়ারি ১৯৯৮ সালে জাতিসংঘ সাধারণ পরিষদে স্বীকৃতি পায়",
+      "C": "১৭ নভেম্বর ২০০১ সালে ইউনেস্কো স্বীকৃতি দেয়",
+      "D": "১৬ ডিসেম্বর ১৯৯৯ সালে স্বীকৃতি দেয়"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "ভাষা আন্দোলনের ৩টি আন্তর্জাতিক স্বীকৃতির তারিখ: ১. ১৭ নভেম্বর ১৯৯৯ = ইউনেস্কোর ৩০তম সম্মেলনে ২১শে ফেব্রুয়ারিকে ‘আন্তর্জাতিক মাতৃভাষা দিবস’ ঘোষণা, ২. ২১ ফেব্রুয়ারি ২০০০ = প্রথমবারের মতো বিশ্বব্যাপী দিবসটি উদযাপন, এবং ৩. ৩০ অক্টোবর ২০১৭ = ইউনেস্কো কর্তৃক বঙ্গবন্ধুর ৭ই মার্চের ঐতিহাসিক ভাষণকে ‘Memory of the World International Register’ (বিশ্ব প্রামাণ্য ঐতিহ্য) হিসেবে স্বীকৃতি প্রদান।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও বিসিএস বাংলাদেশ"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — রাষ্ট্রীয় মনোগ্রাম, জাতীয় সংগীত ও রণসংগীত (Medium)",
+    "stem": "বাংলাদেশের ‘জাতীয় সংগীত’ (আমার সোনার বাংলা — প্রথম ১০ লাইন), ‘রণসংগীত’ (চল্ চল্ চল্ — প্রথম ২১ লাইন) এবং ‘ক্রীড়া সংগীত’ (বাংলার মাটি বাংলার জল)-এর রচয়িতা এবং কোন অনুষ্ঠানে জাতীয় সংগীতের কতটুকু বাজানো হয়?",
+    "options": {
+      "A": "জাতীয় সংগীত ও ক্রীড়া সংগীতের রচয়িতা রবীন্দ্রনাথ ঠাকুর (১৯০৫ সালে বঙ্গভঙ্গের প্রেক্ষাপটে রচিত, গগন হরকরার বাউল সুরের আদলে) এবং রণসংগীতের রচয়িতা কাজী নজরুল ইসলাম (‘সন্ধ্যা’ কাব্যগ্রন্থের অন্তর্গত); রাষ্ট্রীয় অনুষ্ঠানে বা বিদেশি রাষ্ট্রপ্রধানের সম্মানে যন্ত্রসংগীতে জাতীয় সংগীতের কেবল ‘প্রথম ৪ লাইন’ বাজানো হয় (এবং কণ্ঠসংগীতে প্রথম ১০ লাইন গাওয়া হয়)",
+      "B": "যন্ত্রসংগীতে পুরো ২৫ লাইন বাজানো হয়",
+      "C": "রণসংগীতটি নজরুলের ‘অগ্নিবীণা’ কাব্যগ্রন্থের অন্তর্গত",
+      "D": "জাতীয় সংগীত ১৯১১ সালে রচিত হয়"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "১৯০৫ সালের ৭ আগস্ট কলকাতার টাউন হলের স্বদেশী সভায় প্রথম গাওয়া ২৫ চরণের ‘আমার সোনার বাংলা’ গানের প্রথম ১০ চরণ বাংলাদেশের জাতীয় সংগীত (যন্ত্রসংগীতে প্রথম ৪ চরণ বাজানো হয়)। আর ১৯২৮ সালে ঢাকায় মুসলিম সাহিত্য সমাজের অধিবেশনে নজরুল রচনা করেন ‘চল্ চল্ চল্’ (নজরুলের ‘সন্ধ্যা’ কাব্যগ্রন্থের অন্তর্গত), যার প্রথম ২১ চরণ বাংলাদেশের রণসংগীত।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ভাইভা ও প্রিলিমিনারি"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — নবায়নযোগ্য বনাম অনবায়নযোগ্য শক্তির উৎস (Medium)",
+    "stem": "নিচের কোন শক্তি-উৎসগুলোর সবগুলোই ‘নবায়নযোগ্য জ্বালানি’ (Renewable Energy / Green Energy)-এর উদাহরণ?",
+    "options": {
+      "A": "সৌরশক্তি (Solar Energy), বায়ুশক্তি (Wind), জলবিদ্যুৎ (Hydroelectricity — কাপ্তাই বাঁধ), বায়োগ্যাস (Biogas), জোয়ার-ভাটা শক্তি ও ভূ-তাপীয় শক্তি (Geothermal)",
+      "B": "কয়লা, প্রাকৃতিক গ্যাস, পেট্রোলিয়াম (খনিজ তেল) ও ইউরেনিয়াম (এগুলো আসলে অনবায়নযোগ্য বা জীবাশ্ম/পারমাণবিক জ্বালানি!)",
+      "C": "ডিজেল, অকটেন ও সিএনজি (CNG)",
+      "D": "প্রাকৃতিক গ্যাস ও এলপিজি (LPG)"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "কয়লা, খনিজ তেল (পেট্রোল, ডিজেল, কেরোসিন) ও প্রাকৃতিক গ্যাস (প্রধান উপাদান মিথেন CH4; সিএনজি = Compressed Natural Gas; কিন্তু এলপিজি সিলিন্ডার গ্যাস = প্রোপেন ও বিউটেনের মিশ্রণ!) হলো জীবাশ্ম জ্বালানি (Fossil Fuel) যা একবার ফুরিয়ে গেলে আর ফিরে পাওয়া যায় না (অনবায়নযোগ্য)। বিপরীতে সৌর, বায়ু, বায়োগ্যাস ও জলবিদ্যুৎ হলো নবায়নযোগ্য পরিবেশবান্ধব শক্তি। (বাংলাদেশের একমাত্র জলবিদ্যুৎ কেন্দ্র রাঙামাটির কাপ্তাইয়ে কর্ণফুলী নদীর ওপর ১৯৬২ সালে স্থাপিত, উৎপাদন ক্ষমতা ২৩০ মেগাওয়াট)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩ ও ২০২৪)"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — পরিমাপের যন্ত্রসমূহ (ব্যারোমিটার, হাইগ্রোমিটার, ল্যাকটোমিটার, সিসমোগ্রাফ) (Medium)",
+    "stem": "বিভিন্ন ভৌত রাশি পরিমাপের বৈজ্ঞানিক যন্ত্রগুলোর নিচের কোন মিলকরণটি সম্পূর্ণ সঠিক?",
+    "options": {
+      "A": "বায়ুমণ্ডলের চাপ = ব্যারোমিটার (আবিষ্কারক টরিসেলি); বায়ুর আর্দ্রতা = হাইগ্রোমিটার; দুধের বিশুদ্ধতা/ঘনত্ব = ল্যাকটোমিটার; সমুদ্রের গভীরতা = ফ্যাদোমিটার; ভূমিকম্পের তীব্রতা = সিসমোগ্রাফ / রিখটার স্কেল; রক্তচাপ (Blood Pressure) = স্ফিগমোম্যানোমিটার; এবং উড়োজাহাজের উচ্চতা = অল্টিমিটার",
+      "B": "বায়ুর চাপ = হাইগ্রোমিটার এবং বায়ুর আর্দ্রতা = ব্যারোমিটার",
+      "C": "দুধের বিশুদ্ধতা = ফ্যাদোমিটার এবং সমুদ্রের গভীরতা = ল্যাকটোমিটার",
+      "D": "রক্তচাপ মাপার যন্ত্র = স্টেথোস্কোপ (স্টেথোস্কোপ দিয়ে আসলে হৃদপিণ্ড ও ফুসফুসের শব্দ শোনা হয়!)"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "হাইগ্রোমিটার বনাম হাইড্রোমিটার প্যাঁচ এড়ানোর ট্রিক: ‘হাইগ্রোমিটার’ (Hygrometer) = বায়ুর আর্দ্রতা (Humidity); আর ‘হাইড্রোমিটার’ (Hydrometer — Hydro অর্থ পানি/তরল) = তরলের আপেক্ষিক গুরুত্ব বা ঘনত্ব! এছাড়া বৈদ্যুতিক প্রবাহ মাপার যন্ত্র ‘অ্যামিটার’ (Ammeter), দুই বিন্দুর বিভব পার্থক্য বা ভোল্টেজ মাপার যন্ত্র ‘ভোল্টমিটার’ এবং বাতাসের গতিবেগ মাপার যন্ত্র ‘অ্যানিমোমিটার’ (Anemometer)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ, নিবন্ধন ও বিসিএস"
+  },
+  {
+    "subject": "COMPUTER_ICT",
+    "topicBn": "প্রাথমিক আইসিটি — এমএস ওয়ার্ড, এক্সেল ও পাওয়ারপয়েন্ট ফাইল এক্সটেনশন ও শর্টকাট (Medium)",
+    "stem": "মাইক্রোসফট অফিস (MS Office 2007 ও পরবর্তী সংস্করণে) এমএস ওয়ার্ড, এমএস এক্সেল ও এমএস পাওয়ারপয়েন্ট ফাইলের ডিফল্ট এক্সটেনশন কী এবং পাওয়ারপয়েন্টে স্লাইড শো (Slide Show) শুরু করার কিবোর্ড শর্টকাট কোনটি?",
+    "options": {
+      "A": "MS Word = .docx, MS Excel = .xlsx, MS PowerPoint = .pptx; এবং পাওয়ারপয়েন্টে প্রথম স্লাইড থেকে Slide Show শুরু করার শর্টকাট হলো ‘F5’ (আর বর্তমান স্লাইড থেকে শুরু করতে ‘Shift + F5’ এবং বানান চেক বা Spell Check করতে ‘F7’)",
+      "B": "MS Word = .xlsx এবং MS Excel = .docx",
+      "C": "পাওয়ারপয়েন্টে স্লাইড শো শুরু করার শর্টকাট হলো F1 (যা আসলে Help কি!)",
+      "D": "এমএস এক্সেলে যেকোনো সূত্র (Formula) লেখার শুরুতে হ্যাশ (#) চিহ্ন দিতে হয় (যখন আসলে এক্সেলে সব সূত্রের শুরুতে সমান চিহ্ন ‘=’ দিতে হয়!)"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "প্রাইমারি ও মন্ত্রণালয় পরীক্ষায় অফিস অ্যাপ্লিকেশনের ৩টি প্রশ্ন নিশ্চিত আসে: ১. ফাংশন কি: F1 = Help, F2 = ফাইল বা ফোল্ডার Rename করা, F5 = Refresh / PowerPoint Slide Show শুরু, F7 = MS Word-এ Spelling & Grammar Check, F12 = Save As ডায়ালগ বক্স খোলা। ২. এমএস এক্সেলে যেকোনো ফর্মুলা বা ফাংশন (যেমন =SUM(A1:A10) বা =AVERAGE(B1:B5)) লেখার আগে অবশ্যই সমান চিহ্ন (=) দিতে হয়!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪) ও কম্পিউটার অপারেটর"
+  },
+  {
+    "subject": "INTERNATIONAL_AFFAIRS",
+    "topicBn": "প্রাথমিক আন্তর্জাতিক — জাতিসংঘের টেকসই উন্নয়ন অভীষ্ট (SDG: ২০১৬–২০৩০) (Medium)",
+    "stem": "জাতিসংঘ ঘোষিত ‘টেকসই উন্নয়ন অভীষ্ট’ (SDG — Sustainable Development Goals)-এর মেয়াদকাল কত, এতে মোট কয়টি অভীষ্ট (Goals) ও লক্ষ্যমাত্রা (Targets) রয়েছে এবং এর ৪ নম্বর অভীষ্ট (Goal 4) কোন বিষয়ের সাথে সম্পর্কিত?",
+    "options": {
+      "A": "মেয়াদকাল: ২০১৬–২০৩০ (১৫ বছর — পূর্ববর্তী MDG ছিল ২০০০–২০১৫ যার গোল ছিল ৮টি); SDG-তে মোট ১৭টি অভীষ্ট (Goals) ও ১৬৯টি লক্ষ্যমাত্রা (Targets) রয়েছে; এবং SDG Goal-1 = দারিদ্র্য বিলোপ, Goal-2 = ক্ষুধা মুক্তি, Goal-3 = সুস্বাস্থ্য, Goal-4 = গুণগত শিক্ষা (Quality Education) ও Goal-5 = জেন্ডার সমতা",
+      "B": "SDG-এর মেয়াদকাল ২০০০–২০১৫ এবং মোট গোল ৮টি",
+      "C": "SDG-তে মোট ২০টি গোল ও ২০০টি টার্গেট রয়েছে",
+      "D": "SDG Goal-4 হলো জলবায়ু পরিবর্তন রোধ (যা আসলে Goal-13!)"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "প্রাথমিক শিক্ষক ও বিসিএস উভয় পরীক্ষার জন্যই SDG-এর ১৭টি গোলের মধ্যে প্রধান গোলগুলো মুখস্থ রাখা অপরিহার্য: Goal 1 = No Poverty (দারিদ্র্য বিলোপ), Goal 2 = Zero Hunger (ক্ষুধা মুক্তি), Goal 3 = Good Health (সুস্বাস্থ্য), Goal 4 = Quality Education (গুণগত শিক্ষা), Goal 5 = Gender Equality (লিঙ্গ সমতা), Goal 6 = Clean Water & Sanitation (নিরাপদ পানি), Goal 8 = Decent Work & Economic Growth, Goal 13 = Climate Action (জলবায়ু কার্যক্রম), Goal 14 = Life Below Water (ব্লু-ইকোনমি), Goal 16 = Peace, Justice & Strong Institutions (সুশাসন) এবং Goal 17 = Partnerships for the Goals।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ, বিসিএস ও এনটিআরসিএ"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — রবীন্দ্রনাথ ঠাকুরের শিশুতোষ সাহিত্য ও ‘সহজ পাঠ’ (Critical)",
+    "stem": "রবীন্দ্রনাথ ঠাকুরের রচিত শিশুতোষ কবিতা সংকলন ‘শিশু’ ও ‘শিশু ভোলানাথ’ এবং যুক্তবর্ণহীন প্রাতিষ্ঠানিক বর্ণশিক্ষার কালজয়ী গ্রন্থ ‘সহজ পাঠ’ কত সালে প্রকাশিত হয়েছিল?",
+    "options": {
+      "A": "১৯১৩ সালে",
+      "B": "‘শিশু’ প্রকাশিত হয় ১৯০৩ সালে, ‘শিশু ভোলানাথ’ ১৯২২ সালে এবং দুই ভাগে নন্দলাল বসুর অলংকরণে রচিত ‘সহজ পাঠ’ প্রকাশিত হয় ১৯৩০ সালে",
+      "C": "১৯৪১ সালে",
+      "D": "১৯০৫ সালে"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "প্রাথমিক শিক্ষক নিয়োগে শিশুতোষ সাহিত্য থেকে প্রশ্ন বারবার আসে। ‘সহজ পাঠ’ (প্রথম ও দ্বিতীয় ভাগ — ১৯৩০) শান্তিনিকেতনের শিশুদের প্রাথমিক বর্ণ ও ভাষা শিক্ষার জন্য রচিত যাতে নন্দলাল বসুর বিখ্যাত লিনোকাট ছবি ছিল। আর নজরুলের প্রথম শিশুতোষ কাব্য ‘ঝিঙেফুল’ (১৯২৬)।",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ (২০২৪ ৩য় ধাপ)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — রোকেয়া সাখাওয়াত হোসেনের ‘অবরোধ-বাসিনী’ ও ‘সুলতানার স্বপ্ন’ (Critical)",
+    "stem": "নারী জাগরণের অগ্রদূত বেগম রোকেয়া সাখাওয়াত হোসেনের মেয়েদের পর্দা প্রথার চরম নির্মমতাকে ব্যঙ্গ করে রচিত গ্রন্থ ‘অবরোধ-বাসিনী’ এবং তাঁর কল্পবিজ্ঞান নারীরাজ্যভিত্তিক উপন্যাসিকা ‘Sultana's Dream’ কত সালে প্রকাশিত হয়?",
+    "options": {
+      "A": "১৯৪৭ সালে",
+      "B": "‘সুলতানার স্বপ্ন’ (Sultana's Dream) ১৯০৫ সালে মাদ্রাজ থেকে দ্য ইন্ডিয়ান লেডিজ ম্যাগাজিনে ইংরেজিতে প্রকাশিত হয় (বাংলা অনুবাদ ১৯০৮); এবং ‘অবরোধ-বাসিনী’ প্রকাশিত হয় ১৯৩১ সালে (৪৭টি সত্য ঘটনার সংকলন)",
+      "C": "১৯৫২ সালে",
+      "D": "১৯২১ সালে"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "বেগম রোকেয়া (১৮৮০–১৯৩২) ৯ ডিসেম্বর জন্মগ্রহণ ও মৃত্যুবরণ করেন (রোকেয়া দিবস ৯ ডিসেম্বর)। ১৯০৯ সালে তিনি ভাগলপুরে সাখাওয়াত মেমোরিয়াল গার্লস স্কুল প্রতিষ্ঠা করেন এবং ১৯১১ সালে তা কলকাতায় স্থানান্তর করেন। তাঁর অন্যান্য গ্রন্থ: মতিচূর (১ম ও ২য় খণ্ড) এবং পদ্মরাগ (উপন্যাস)।",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ (২০২৪ ১ম ধাপ)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — প্রমিত বানান ও ণ-ত্ব ষ-ত্ব (Critical DPE)",
+    "stem": "বাংলা একাডেমি প্রমিত বানানরীতি অনুসারে নিচের কোন শব্দটি সম্পূর্ণ শুদ্ধ?",
+    "options": {
+      "A": "মুহূর্মুহু ও শারিরীক",
+      "B": "মুহূর্মুহু ও শারীরিক",
+      "C": "মুহুর্মুহু ও শারিরীক",
+      "D": "মুহুর্মুহু ও শারীরিক (মুহুর্মুহু: ম-এ হ্রস্ব উ, হ-এ দীর্ঘ ঊ, ম-এ হ্রস্ব উ, হ-এ হ্রস্ব উ; শারীরিক: শ-এ আকার, র-এ দীর্ঘ ঈ, র-এ হ্রস্ব ই, ক)"
+    },
+    "answer": "D",
+    "difficulty": "HIGH",
+    "explanationBn": "প্রাইমারি পরীক্ষার অত্যন্ত প্রিয় বানান ‘মুহুর্মুহু’ (উ-ঊ-উ-উ)! আর শারীরিক (র-এ দীর্ঘ ঈ, র-এ হ্রস্ব ই); মরিচিকা (র-এ দীর্ঘ ঈ, চ-এ হ্রস্ব ই); পিপীলিকা (প-এ হ্রস্ব ই, প-এ দীর্ঘ ঈ, ল-এ হ্রস্ব ই); সস্ত্রীক (স-এ কোনো ব-ফলা নেই, র-এ দীর্ঘ ঈ); ইতিপূর্বে ভুল ➔ সঠিক হলো ‘ইতোপূর্বে’।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩ ও ২০২৪)"
+  },
+  {
+    "subject": "BANGLA",
+    "topicBn": "প্রাথমিক বাংলা — বাক্য সংকোচন (এককথায় প্রকাশ) (Critical)",
+    "stem": "‘যা পূর্বে দেখা যায়নি’ এবং ‘যা পূর্বে শোনা যায়নি’ — এককথায় প্রকাশে এই দুটির শুদ্ধ রূপ যথাক্রমে কোনটি?",
+    "options": {
+      "A": "অদৃষ্টপূর্ব ও অশ্রুতপূর্ব",
+      "B": "অদৃষ্টপূর্ব (যা পূর্বে দেখা যায়নি) এবং অশ্রুতপূর্ব (যা পূর্বে শোনা যায়নি; আর ‘যার কোনো তুলনা নেই’ = অতুলনীয়, ‘যা কষ্টে জয় করা যায়’ = দুর্জয়)",
+      "C": "অভূতপূর্ব ও অশ্রুতপূর্ব",
+      "D": "দৃষ্টপূর্ব ও শ্রুতপূর্ব"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "সূক্ষ্ম পার্থক্য: যা পূর্বে দেখা যায়নি = অদৃষ্টপূর্ব; যা পূর্বে ঘটেনি = অভূতপূর্ব; যা পূর্বে শোনা যায়নি = অশ্রুতপূর্ব; যা পূর্বে ছিল কিন্তু এখন নেই = ভূতপূর্ব।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ ২য় ধাপ)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Subject-Verb Agreement: Collective Nouns (Critical)",
+    "stem": "Complete the sentence: 'The jury _____ divided in their opinions regarding the verdict.'",
+    "options": {
+      "A": "was",
+      "B": "were (because the collective noun 'jury' acts as a Noun of Multitude here, showing internal disagreement among individual members)",
+      "C": "is",
+      "D": "has"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "Collective noun (jury, committee, audience, team) একমত থাকলে singular verb (The jury WAS unanimous), কিন্তু মতভেদ থাকলে Noun of Multitude হয়ে plural verb এবং plural pronoun নেয় (The jury WERE divided in THEIR opinions)!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ ৩য় ধাপ)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Preposition Traps: Die of vs Die from vs Die for (Critical)",
+    "stem": "Fill in the blanks: 'The valiant patriot died _____ his country, but the miser died _____ starvation and his brother died _____ cholera.'",
+    "options": {
+      "A": "for, from, of (Die for = দেশের জন্য আত্মত্যাগ; Die from = অনাহার বা অতিরিক্ত কাজের মতো পরোক্ষ কারণে; Die of = কলেরা বা কোনো নির্দিষ্ট রোগে মারা যাওয়া)",
+      "B": "of, of, of",
+      "C": "by, for, from",
+      "D": "for, of, from"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Die-এর প্রিপজিশন ম্যাট্রিক্স: Die of = রোগে মারা যাওয়া (cholera, cancer); Die from = বাহ্যিক কারণে (overeating, starvation, wound); Die for = দেশের ত্যাগে (country, noble cause); Die by = বিষ বা সহিংসতায় (suicide, poison); Die in = শান্তিতে বা যুদ্ধে (peace, battle).",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Parts of Speech: 'Fast' & 'Hard' (Critical)",
+    "stem": "In the sentence 'He worked hard and ran fast to catch the early train', the words 'hard' and 'fast' function as:",
+    "options": {
+      "A": "Adjectives",
+      "B": "Adverbs (modifying the verbs 'worked' and 'ran' respectively)",
+      "C": "Nouns",
+      "D": "Conjunctions"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "'Hard' এবং 'Fast' শব্দ দুটি Adjective ও Adverb উভয় হিসেবেই ব্যবহৃত হয় ('Hardly' অর্থ কদাচিৎ এবং 'Fastly' বলে ইংরেজিতে কোনো শব্দ নেই!)। যেহেতু এখানে 'worked' (কীভাবে কাজ করল -> hard) এবং 'ran' (কীভাবে দৌড়াল -> fast) ক্রিয়াকে মডিফাই করেছে, তাই উভয়ই Adverb of Manner।",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ (২০২৪ ২য় ধাপ)"
+  },
+  {
+    "subject": "ENGLISH",
+    "topicBn": "প্রাথমিক ইংরেজি — Voice Change of Imperative Sentences (Critical)",
+    "stem": "What is the passive form of 'Do not laugh at the lame man'?",
+    "options": {
+      "A": "Let not the lame man be laughed at.",
+      "B": "Let the lame man not laughed at.",
+      "C": "The lame man should not be laughed.",
+      "D": "You are forbidden to laugh."
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Negative imperative বাক্যে Passive নিয়ম: 'Let not + Object + be + V3 + preposition'। এখানে 'laugh at'-এর গ্রুপ প্রিপজিশন 'at' অবশ্যই শেষে বহাল থাকবে: 'Let not the lame man be laughed at.'",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ ১ম ধাপ)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — নৌকার অনুকূল ও প্রতিকূল বেগ এবং স্রোত (Critical)",
+    "stem": "নৌকা ও স্রোতের বেগ ঘণ্টায় যথাক্রমে ১০ কিমি ও ৫ কিমি। নদীপথে ৩০ কিমি গিয়ে আবার পূর্বের স্থানে ফিরে আসতে মোট কত সময় লাগবে?",
+    "options": {
+      "A": "৪ ঘণ্টা",
+      "B": "৬ ঘণ্টা (অনুকূলে বেগ = ১০ + ৫ = ১৫ কিমি/ঘণ্টা; যাওয়ার সময় = ৩০ ÷ ১৫ = ২ ঘণ্টা। প্রতিকূলে বেগ = ১০ - ৫ = ৫ কিমি/ঘণ্টা; ফেরার সময় = ৩০ ÷ ৫ = ৬ ঘণ্টা। মোট সময় = ২ + ৬ = ৮ ঘণ্টা! Wait: প্রশ্নে ৩০ কিমি গেলে ২+৬=৮ ঘণ্টা; অপশনে ৮ ঘণ্টা সঠিক)",
+      "C": "৮ ঘণ্টা",
+      "D": "১০ ঘণ্টা"
+    },
+    "answer": "C",
+    "difficulty": "HIGH",
+    "explanationBn": "অনুকূলে বেগ = ১০ + ৫ = ১৫ কিমি/ঘণ্টা ➔ অনুকূলে ৩০ কিমি যেতে সময় = ৩০/১৫ = ২ ঘণ্টা। প্রতিকূলে বেগ = ১০ - ৫ = ৫ কিমি/ঘণ্টা ➔ প্রতিকূলে ৩০ কিমি ফিরতে সময় = ৩০/৫ = ৬ ঘণ্টা। অতএব যাওয়া ও আসায় মোট সময় = ২ + ৬ = ৮ ঘণ্টা!",
+    "shortcut": "মোট সময় = (দূরত্ব/অনুকূল বেগ) + (দূরত্ব/প্রতিকূল বেগ) = (৩০/১৫) + (৩০/৫) = ২ + ৬ = ৮ ঘণ্টা!",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ (২০২৪ ৩য় ধাপ)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — শতকরায় মূল্যহ্রাস ও বিক্রয় বৃদ্ধি (Critical)",
+    "stem": "একটি কাপড়ের দোকানের টিকিটের মূল্য ২০% হ্রাস করায় দর্শকের সংখ্যা ৩০% বৃদ্ধি পেল। এতে ওই দোকানের সার্বিক আয়ের শতকরা কী পরিবর্তন হলো?",
+    "options": {
+      "A": "১০% বৃদ্ধি পেল",
+      "B": "৪% বৃদ্ধি পেল (কারণ শতকরা পরিবর্তনের সূত্র: a + b + ab/১০০ = -২০ + ৩০ + [(-২০)×৩০]/১০০ = ১০ - ৬ = +৪% বৃদ্ধি)",
+      "C": "৪% হ্রাস পেল",
+      "D": "অপরিবর্তিত থাকল"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "গোল্ডেন শর্টকাট সূত্র: নিট পরিবর্তন = a + b + (ab / 100)। এখানে a = -20 (হ্রাস) এবং b = +30 (বৃদ্ধি)। মান বসালে: -20 + 30 + [(-20)(30) / 100] = 10 - 6 = +4%। যেহেতু ধনাত্মক চিহ্ন এসেছে, তাই মোট আয় ৪% বৃদ্ধি পাবে!",
+    "shortcut": "-২০ + ৩০ - (২০×৩০)/১০০ = ১০ - ৬ = ৪% বৃদ্ধি!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৩ ও ২০২৪)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — পিতা ও পুত্রের বয়সের অনুপাত (Critical)",
+    "stem": "পিতা ও পুত্রের বর্তমান বয়সের অনুপাত ৭ : ২ এবং ৫ বছর পর তাদের বয়সের অনুপাত হবে ৮ : ৩। পিতার বর্তমান বয়স কত বছর?",
+    "options": {
+      "A": "২৮ বছর",
+      "B": "৩৫ বছর (ধরি ৭x ও ২x; ৫ বছর পর: (৭x + ৫)/(২x + ৫) = ৮/৩ ⇒ ৩(৭x + ৫) = ৮(২x + ৫) ⇒ ২১x + ১৫ = ১৬x + ৪০ ⇒ ৫x = ২৫ ⇒ x = ৫। পিতার বয়স = ৭ × ৫ = ৩৫ বছর)",
+      "C": "৪২ বছর",
+      "D": "৪৫ বছর"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "অনুপাত দুটির মধ্যে পার্থক্য লক্ষ্য করুন: পিতার অনুপাত ৭ থেকে ৮ হয়েছে (বৃদ্ধি ১ একক) এবং পুত্রের ২ থেকে ৩ হয়েছে (বৃদ্ধি ১ একক)। এই ১ এককের ব্যবধান সমান ৫ বছর। অতএব পিতার বর্তমান বয়স = ৭ একক = ৭ × ৫ = ৩৫ বছর (আর পুত্রের বয়স ২ × ৫ = ১০ বছর)!",
+    "shortcut": "অনুপাতের বৃদ্ধি ১ একক = ৫ বছর ➔ পিতার বয়স = ৭ × ৫ = ৩৫ বছর!",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ (২০২৪ ১ম ধাপ)"
+  },
+  {
+    "subject": "MATH",
+    "topicBn": "প্রাথমিক গণিত — ত্রিভুজের ক্ষেত্রফল ও হেরনের সূত্র (Critical)",
+    "stem": "একটি ত্রিভুজের তিনটি বাহুর দৈর্ঘ্য যথাক্রমে ৫ সেমি, ৬ সেমি এবং ৭ সেমি হলে ত্রিভুজটির ক্ষেত্রফল কত বর্গ সেন্টিমিটার?",
+    "options": {
+      "A": "১৪.৭ বর্গ সেমি",
+      "B": "৬√৬ বর্গ সেন্টিমিটার (বা প্রায় ১৪.৬৯ বর্গ সেমি; কারণ অর্ধ-পরিসীমা s = (৫+৬+৭)/২ = ৯ সেমি; ক্ষেত্রফল = √[৯(৯-৫)(৯-৬)(৯-৭)] = √[৯ × ৪ × ৩ × ২] = √২১৬ = ৬√৬)",
+      "C": "১৮ বর্গ সেমি",
+      "D": "২১ বর্গ সেমি"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "বিষমবাহু ত্রিভুজের ক্ষেত্রফল বের করার হেরনের সূত্র: Δ = √[s(s - a)(s - b)(s - c)]। এখানে অর্ধপরিসীমা s = (5 + 6 + 7)/2 = 9 সেমি। অতএব ক্ষেত্রফল = √[9(9 - 5)(9 - 6)(9 - 7)] = √[9 × 4 × 3 × 2] = √216 = √(36 × 6) = 6√6 বর্গ সেন্টিমিটার।",
+    "shortcut": "s = ৯ ➔ √[৯ × ৪ × ৩ × ২] = √২১৬ = ৬√৬ বর্গসেমি!",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — বাংলাদেশের জাতীয় প্রতীক ও চার তারকা (Critical)",
+    "stem": "বাংলাদেশের রাষ্ট্রীয় প্রতীকে (National Emblem) উভচর ভাসমান জাতীয় ফুল শাপলার দুই পাশে দুটি ধানের শীষ এবং চূড়ায় পাটগাছের তিনটি পাতা ও তার দুই পাশে মোট ৪টি তারকা চিহ্ন কীসের প্রতীক?",
+    "options": {
+      "A": "চারটি প্রশাসনিক বিভাগ",
+      "B": "সংবিধানের ৪টি মূল রাষ্ট্র পরিচালনা নীতি (জাতীয়তাবাদ, সমাজতন্ত্র, গণতন্ত্র ও ধর্মনিরপেক্ষতা — অনুচ্ছেদ ৮)",
+      "C": "চারটি প্রধান রাজনৈতিক দল",
+      "D": "চারজন জাতীয় নেতা"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "বাংলাদেশের জাতীয় প্রতীকের ডিজাইনার এ এন সাহা। মাঝখানে পানিতে ভাসমান শাপলা, দুই পাশে ধানের শীষ, উপরে ৩টি পাটপাতা এবং ৪টি তারকা—যা সংবিধানের ৪টি মূল রাষ্ট্রীয় নীতিকে নির্দেশ করে। আর জাতীয় পতাকার নকশাকার কামরুল হাসান (অনুপাত ১০:৬ বা ৫:৩; লাল বৃত্তটি বাম দিকে সামান্য চেপে থাকে ২০ ভাগের ৯ ভাগে)।",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ ভাইভা ও প্রিলিমিনারি"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — বাংলাদেশের জিআই (GI) পণ্যসমূহ (Critical)",
+    "stem": "আন্তর্জাতিক ভৌগোলিক নির্দেশক (GI) সনদপ্রাপ্ত বাংলাদেশের পণ্যগুলোর মধ্যে ‘প্রথম জিআই পণ্য’ কোনটি এবং ‘টাঙ্গাইল শাড়ি’ কততম জিআই পণ্য হিসেবে স্বীকৃতি পেয়েছে?",
+    "options": {
+      "A": "প্রথম জামদানি শাড়ি (২০১৬); এবং টাঙ্গাইল শাড়ি ২১তম জিআই পণ্য (২০২৪)",
+      "B": "প্রথম ইলিশ মাছ এবং টাঙ্গাইল শাড়ি ১০ম",
+      "C": "প্রথম ক্ষীরশাপাত আম এবং টাঙ্গাইল শাড়ি ৫ম",
+      "D": "প্রথম মসলিন তুলা এবং টাঙ্গাইল শাড়ি ১৫তম"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "বাংলাদেশের প্রথম জিআই সনদ পায় জামদানি শাড়ি (১৭ নভেম্বর ২০১৬)। দ্বিতীয় পণ্য ইলিশ মাছ (২০১৭)। ২০২৪ সালে ভারত কর্তৃক টাঙ্গাইল শাড়ির জিআই দাবি করার পর বাংলাদেশ দ্রুত আবেদন করে ২০২৪ সালের ফেব্রুয়ারি মাসে ২১তম জিআই পণ্য হিসেবে টাঙ্গাইল শাড়ির স্বীকৃতি অর্জন করে।",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ (২০২৪ ২য় ধাপ)"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — সৌরজগৎ ও পৃথিবীর গতি (Critical)",
+    "stem": "সৌরজগতের কোন গ্রহকে ‘লাল গ্রহ’ (Red Planet) বলা হয় এবং পৃথিবীর উত্তর গোলার্ধে দীর্ঘতম দিন ও ক্ষুদ্রতম রাত কোন তারিখে সংঘটিত হয়?",
+    "options": {
+      "A": "শুক্র গ্রহ; ২২ ডিসেম্বর",
+      "B": "মঙ্গল গ্রহ (আয়রন অক্সাইডের প্রাচুর্যের কারণে লাল দেখায়); এবং উত্তর গোলার্ধে দীর্ঘতম দিন হলো ‘২১শে জুন’ (কর্কটক্রান্তি দিবসে সূর্য কর্কটক্রান্তি রেখার ওপর লম্বভাবে কিরণ দেয়)",
+      "C": "বৃহস্পতি গ্রহ; ২৩ সেপ্টেম্বর",
+      "D": "শনি গ্রহ; ২১ মার্চ"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "সৌরজগতের সবচেয়ে বড় গ্রহ বৃহস্পতি, উজ্জ্বলতম গ্রহ শুক্র (সন্ধ্যাতারা/শুকতারা), শীতলতম ইউরেনাস। ২১ জুন = উত্তর গোলার্ধে দীর্ঘতম দিন ও ক্ষুদ্রতম রাত; ২২ ডিসেম্বর = উত্তর গোলার্ধে ক্ষুদ্রতম দিন ও দীর্ঘতম রাত; ২১ মার্চ ও ২৩ সেপ্টেম্বর = পৃথিবীর সর্বত্র দিন-রাত সমান (Equinox বা বিষুব)।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ ৩য় ধাপ)"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — খাদ্য ও পুষ্টি: প্রোটিনের গঠন একক (Critical)",
+    "stem": "আমিষ বা প্রোটিন জাতীয় খাদ্যের পরিপাক শেষে এটি কোন সরলতম উপাদানে রূপান্তরিত হয় এবং মুখে কোন খাদ্যের পরিপাক শুরু হয়?",
+    "options": {
+      "A": "গ্লুকোজ; প্রোটিনের পরিপাক",
+      "B": "অ্যামিনো এসিড (Amino Acid); এবং মুখে লালারসের টায়ালিন (Ptyalin) ও মল্টেজ এনজাইম দ্বারা ‘শর্করা বা কার্বোহাইড্রেট’ খাদ্যের পরিপাক শুরু হয় (মুখে প্রোটিনের কোনো পরিপাক হয় না)",
+      "C": "ফ্যাটি এসিড ও গ্লিসারল; চর্বির পরিপাক",
+      "D": "ভিটামিন; খনিজ লবণের পরিপাক"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "পরিপাকের মূল তিন রূপান্তর: ১. শর্করা (Carbohydrate) ➔ গ্লুকোজ (মুখে টায়ালিন দিয়ে শুরু); ২. আমিষ (Protein) ➔ অ্যামিনো এসিড (পাকস্থলীতে পেপসিন ও ক্ষুদ্রান্ত্রে ট্রিপসিন দিয়ে পরিপাক); ৩. স্নেহ (Fat/Lipid) ➔ ফ্যাটি এসিড ও গ্লিসারল (পিত্তরস ইমালসিফাই করে এবং লাইপেজ পরিপাক করে)।",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ (২০২৩)"
+  },
+  {
+    "subject": "COMPUTER_ICT",
+    "topicBn": "প্রাথমিক আইসিটি — ইনপুট বনাম আউটপুট ডিভাইস ও ওএমআর (Critical)",
+    "stem": "নিচের কোন ডিভাইসটি একই সাথে ‘ইনপুট এবং আউটপুট’ (Both Input and Output Device) হিসেবে কাজ করে?",
+    "options": {
+      "A": "বারকোড রিডার ও মাউস",
+      "B": "টাচস্ক্রিন (Touchscreen), মডেম (Modem) এবং নেটওয়ার্ক ইন্টারফেস কার্ড (NIC)",
+      "C": "প্লটার ও প্রিন্টার",
+      "D": "স্ক্যানার ও ওএমআর"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "ইনপুট-আউটপুট উভয় হিসেবে কাজ করে এমন ডিভাইস: টাচস্ক্রিন (Touchscreen), মডেম (Modem), নেটওয়ার্ক কার্ড (NIC), হেডসেট (মাইক্রোফোনসহ), ডিজিটাল ক্যামেরা। কেবল ইনপুট: কিবোর্ড, মাউস, স্ক্যানার, ওএমআর (OMR), ওসিআর (OCR), এমআইসিআর (MICR)। কেবল আউটপুট: মনিটর, প্রিন্টার, প্লটার, স্পিকার, প্রজেক্টর।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ ১ম ধাপ)"
+  },
+  {
+    "subject": "INTERNATIONAL_AFFAIRS",
+    "topicBn": "প্রাথমিক আন্তর্জাতিক — ইউনিসেফ (UNICEF) ও ইউনেস্কো (UNESCO) (Critical)",
+    "stem": "বিশ্বের শিশুদের শিক্ষা, স্বাস্থ্য ও পুষ্টি নিয়ে কাজ করা জাতিসংঘের বিশেষায়িত সংস্থা ‘ইউনিসেফ’ (UNICEF) এবং শিক্ষা, বিজ্ঞান ও সংস্কৃতি বিষয়ক সংস্থা ‘ইউনেস্কো’ (UNESCO)-এর সদর দপ্তর যথাক্রমে কোথায় অবস্থিত?",
+    "options": {
+      "A": "জেনেভা ও রোম",
+      "B": "ইউনিসেফ (UNICEF - প্রতিষ্ঠা ১১ ডিসেম্বর ১৯৪৬) = নিউইয়র্ক, যুক্তরাষ্ট্র; এবং ইউনেস্কো (UNESCO - প্রতিষ্ঠা ১৬ নভেম্বর ১৯৪৫) = প্যারিস, ফ্রান্স",
+      "C": "লন্ডন ও ওয়াশিংটন",
+      "D": "ভিয়েনা ও হেগ"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "জাতিসংঘ সংস্থার সদর দপ্তর প্যাঁচ: UNICEF ও UNDP = নিউইয়র্ক; UNESCO = প্যারিস; WHO, ILO, WTO, UNHCR, WIPO = জেনেভা; FAO ও WFP = রোম (ইতালি — খাদ্য সংস্থা রোমে); IAEA ও UNODC = ভিয়েনা (অস্ট্রিয়া); IMO = লন্ডন।",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ (২০২৪ ২য় ধাপ)"
+  },
+  {
+    "subject": "GENERAL_SCIENCE",
+    "topicBn": "প্রাথমিক বিজ্ঞান — উদ্ভিদের পানিশোষণ ও পরিবহন (জাইলেম বনাম ফ্লোয়েম) (Critical)",
+    "stem": "উদ্ভিদ মূলরোমের মাধ্যমে মাটি থেকে পানি ও খনিজ লবণ পাতায় পৌঁছে দেয় কোন কলার মাধ্যমে এবং পাতায় তৈরি খাদ্য সমগ্র উদ্ভিদে পরিবহন করে কোনটি?",
+    "options": {
+      "A": "প্যারেনকাইমা ও স্ক্লেরেনকাইমা",
+      "B": "পানি ও খনিজ লবণ পরিবহন করে ‘জাইলেম কলা’ (Xylem tissue — জাইলেম দিয়ে জল); এবং পাতায় প্রস্তুত খাদ্য সারা দেহে পরিবহন করে ‘ফ্লোয়েম কলা’ (Phloem tissue — ফ্লোয়েম দিয়ে ফুড)",
+      "C": "কোলেনকাইমা ও ভাজক কলা",
+      "D": "এপিব্লেমা ও ত্বক"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "সহজ মনে রাখার টেকনিক: ‘জ’-তে জাইলেম, ‘জ’-তে জল/পানি (মাটি থেকে পাতা অভিমুখে ঊর্ধ্বমুখী পরিবহন); আর ‘ফ’-তে ফ্লোয়েম, ‘ফ’-তে ফুড/খাদ্য (পাতা থেকে শাখা-প্রশাখা ও মূল অভিমুখে দ্বিমুখী পরিবহন)!",
+    "source": "প্রাথমিক শিক্ষক নিয়োগ ও এনটিআরসিএ"
+  },
+  {
+    "subject": "BANGLADESH_AFFAIRS",
+    "topicBn": "প্রাথমিক বাংলাদেশ — বাংলাদেশের জাতীয় সংসদ ও নির্বাচন ব্যবস্থা (Critical)",
+    "stem": "বাংলাদেশের জাতীয় সংসদের মোট ৩৫০টি আসনের মধ্যে সংরক্ষিত নারী আসন কয়টি এবং সংবিধানের কততম সংশোধনীর মাধ্যমে সংরক্ষিত নারী আসনের মেয়াদ আরও ২৫ বছর বৃদ্ধি করা হয়?",
+    "options": {
+      "A": "৩০টি আসন; ১২তম সংশোধনী",
+      "B": "৫০টি সংরক্ষিত নারী আসন (মোট ৩০০ + ৫০ = ৩৫০ আসন); এবং ২০১৮ সালে গৃহীত সংবিধানের ‘১৭তম সংশোধনী’র মাধ্যমে সংরক্ষিত নারী আসনের মেয়াদ আরও ২৫ বছর বৃদ্ধি করা হয়",
+      "C": "৪৫টি আসন; ১৪তম সংশোধনী",
+      "D": "৪০টি আসন; ১৫তম সংশোধনী"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "সংবিধানের ৬৫(৩) অনুচ্ছেদে সংরক্ষিত নারী আসনের বিধান রয়েছে। ১৯৭২ সালের মূল সংবিধানে নারী আসন ছিল ১৫টি (১০ বছরের জন্য)। পরবর্তীতে ৫ম সংসদে ৩০টি, ৮ম সংসদে ৪৫টি এবং পঞ্চদশ সংশোধনীতে ৫০টিতে উন্নীত করা হয়। ২০১৮ সালে ১৭তম সংশোধনীর মাধ্যমে ৫০টি নারী আসনের মেয়াদ আরও ২৫ বছর বাড়ানো হয়েছে।",
+    "source": "প্রাথমিক সহকারী শিক্ষক নিয়োগ (২০২৪ ৩য় ধাপ)"
+  }
+]

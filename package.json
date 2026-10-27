@@ -1,0 +1,38 @@
+{
+  "name": "bcs-bd-exam-engine",
+  "version": "1.0.0",
+  "description": "Production-grade BCS & BD Competitive Exam Prep Engine with SM-2 Spaced Repetition, Mistake Vault, OMR Computer Vision & Gemini AI",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node src/web/server.js",
+    "dev": "node src/web/server.js",
+    "test": "node tests/test-suite.js",
+    "omr:test": "python3 omr-service/omr_scanner.py",
+    "omr:generate": "python3 omr-service/generate_test_omr.py",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.18.0",
+    "ioredis": "^5.4.1",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "prisma": "^5.18.0",
+    "typescript": "^5.5.0"
+  },
+  "keywords": [
+    "bcs",
+    "edtech",
+    "spaced-repetition",
+    "sm-2",
+    "cuotiben",
+    "mistake-vault",
+    "omr",
+    "gemini-ai",
+    "redis-leaderboard"
+  ],
+  "author": "Antigravity Engineering",
+  "license": "MIT"
+}

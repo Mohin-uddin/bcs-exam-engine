@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>অ্যাডমিন — লাইভ পরীক্ষা ব্যবস্থাপনা</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/live.css">
+</head>
+<body>
+  <header class="toolbar">
+    <div class="tb-left">
+      <a href="/" class="btn light sm">← হোম</a>
+      <div class="tb-title">অ্যাডমিন • লাইভ পরীক্ষা ব্যবস্থাপনা</div>
+    </div>
+    <a href="/live" class="btn light sm">শিক্ষার্থীদের পেজ দেখুন →</a>
+  </header>
+
+  <main class="wrap">
+    <section class="panel" id="loginPanel">
+      <h2>অ্যাডমিন লগইন</h2>
+      <form id="loginForm" class="row2">
+        <label class="field">অ্যাডমিন কী
+          <input id="adminKey" type="password" required autocomplete="current-password">
+          <small>সার্ভারের ADMIN_KEY এনভায়রনমেন্ট ভেরিয়েবল (ডিফল্ট: admin123)।</small>
+        </label>
+        <div class="field" style="justify-content:flex-end"><button class="btn primary" type="submit">প্রবেশ করুন</button></div>
+      </form>
+      <div class="error" id="loginError"></div>
+    </section>
+
+    <div id="adminArea" hidden>
+      <section class="panel">
+        <h2>📢 নতুন পরীক্ষা ঘোষণা করুন</h2>
+        <form id="createForm">
+          <div class="row2">
+            <label class="field">পরীক্ষার ধরন
+              <select id="cTrack"></select>
+            </label>
+            <label class="field">প্রশ্নসেট
+              <select id="cSet" required></select>
+            </label>
+          </div>
+          <label class="field">পরীক্ষার নাম (শিক্ষার্থীরা এটি দেখবে)
+            <input id="cTitle" required maxlength="200">
+          </label>
+          <div class="row2">
+            <label class="field">শুরুর তারিখ ও সময়
+              <input id="cStart" type="datetime-local" required>
+            </label>
+            <label class="field">সময়সীমা (মিনিট)
+              <input id="cDuration" type="number" min="1" max="600" required>
+            </label>
+          </div>
+          <div class="row2">
+            <label class="field">প্রতি ভুলে কাটা নম্বর
+              <select id="cNegative">
+                <option value="0.5">০.৫০ (বিসিএস / পিএসসি)</option>
+                <option value="0.25">০.২৫ (প্রাথমিক / অন্যান্য)</option>
+                <option value="0">নেগেটিভ মার্ক নেই</option>
+              </select>
+            </label>
+            <div class="field">প্রশ্ন সংখ্যা<div id="cCount" style="padding:9px 0;font-weight:700"></div></div>
+          </div>
+          <label class="field">নোটিশ (ঐচ্ছিক)
+            <textarea id="cNotice" maxlength="1000" placeholder="যেমন: পরীক্ষা শুরুর ১০ মিনিট আগে নিবন্ধন করে রাখুন।"></textarea>
+          </label>
+          <div class="error" id="createError"></div>
+          <button class="btn primary" type="submit" id="cSubmit">পরীক্ষা ঘোষণা করুন</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>🗂️ ঘোষিত পরীক্ষাসমূহ</h2>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>পরীক্ষা</th><th>সময়</th><th>অবস্থা</th><th>নিবন্ধিত / জমা</th><th></th></tr></thead>
+            <tbody id="examRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Exam detail: candidates + merit list -->
+  <div class="overlay" id="detailOverlay" hidden>
+    <div class="modal wide">
+      <div class="modal-head">
+        <div>
+          <h2 id="dTitle"></h2>
+          <div class="sub" id="dSub"></div>
+        </div>
+        <button type="button" class="x no-print" data-close>✕</button>
+      </div>
+      <h3 style="font-size:15px;margin-bottom:8px">মেধা তালিকা</h3>
+      <div class="table-wrap" style="margin-bottom:16px">
+        <table class="merit">
+          <thead><tr><th>মেধাক্রম</th><th>রোল</th><th>নাম</th><th>মোবাইল</th><th class="num">সঠিক</th><th class="num">ভুল</th><th class="num">নিট নম্বর</th><th class="num">সময়</th></tr></thead>
+          <tbody id="dMerit"></tbody>
+        </table>
+      </div>
+      <h3 style="font-size:15px;margin-bottom:8px">নিবন্ধিত পরীক্ষার্থী</h3>
+      <div class="table-wrap">
+        <table class="merit">
+          <thead><tr><th>রোল</th><th>নাম</th><th>মোবাইল</th><th>নিবন্ধন</th><th>অবস্থা</th></tr></thead>
+          <tbody id="dCandidates"></tbody>
+        </table>
+      </div>
+      <div class="actions no-print" style="margin-top:14px">
+        <button class="btn ghost" type="button" id="dCsv">⬇️ মেধা তালিকা CSV</button>
+        <button class="btn ghost" type="button" onclick="window.print()">🖨️ প্রিন্ট</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+  <script src="/admin.js"></script>
+</body>
+</html>

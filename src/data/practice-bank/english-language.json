@@ -1,0 +1,1682 @@
+[
+  {
+    "topicBn": "Parts of Speech",
+    "stem": "In 'He ran fast', the word 'fast' is a/an —",
+    "options": {
+      "A": "Adjective",
+      "B": "Adverb",
+      "C": "Noun",
+      "D": "Verb"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'fast' এখানে verb 'ran'-কে modify করছে, তাই এটি adverb।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Parts of Speech",
+    "stem": "In 'He is old enough to vote', 'enough' is a/an —",
+    "options": {
+      "A": "Adjective",
+      "B": "Noun",
+      "C": "Adverb",
+      "D": "Pronoun"
+    },
+    "answer": "C",
+    "difficulty": "HIGH",
+    "explanationBn": "'enough' এখানে adjective 'old'-কে modify করছে, তাই এটি adverb (adjective-এর পরে বসে)।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Subject-Verb Agreement",
+    "stem": "Neither the teacher nor the students ___ present.",
+    "options": {
+      "A": "was",
+      "B": "is",
+      "C": "has been",
+      "D": "were"
+    },
+    "answer": "D",
+    "difficulty": "TRICKY",
+    "explanationBn": "Neither...nor-এ verb নিকটবর্তী subject অনুযায়ী হয়; 'students' plural, তাই 'were'।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Subject-Verb Agreement",
+    "stem": "Each of the boys ___ a prize.",
+    "options": {
+      "A": "have got",
+      "B": "were given",
+      "C": "has got",
+      "D": "are getting"
+    },
+    "answer": "C",
+    "difficulty": "TRICKY",
+    "explanationBn": "'Each of + plural noun' singular subject হিসেবে গণ্য, তাই singular verb 'has got'।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Subject-Verb Agreement",
+    "stem": "The cattle ___ grazing in the field.",
+    "options": {
+      "A": "is",
+      "B": "was",
+      "C": "has",
+      "D": "are"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Cattle' সবসময় plural অর্থে ব্যবহৃত হয়, তাই 'are'।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Tense",
+    "stem": "I ___ in Dhaka since 2015.",
+    "options": {
+      "A": "live",
+      "B": "am living",
+      "C": "lived",
+      "D": "have been living"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "'since' দ্বারা অতীত থেকে এখনও চলমান কাজ বোঝালে present perfect continuous হয়।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Tense",
+    "stem": "The patient ___ before the doctor came.",
+    "options": {
+      "A": "had died",
+      "B": "died",
+      "C": "has died",
+      "D": "dies"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "অতীতের দুটি কাজের মধ্যে আগেরটি past perfect হয়; তাই 'had died'।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Right Form of Verbs",
+    "stem": "It is high time we ___ the work.",
+    "options": {
+      "A": "start",
+      "B": "will start",
+      "C": "started",
+      "D": "have started"
+    },
+    "answer": "C",
+    "difficulty": "TRICKY",
+    "explanationBn": "'It is high time' + subject-এর পর past simple বসে, তাই 'started'।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Conditionals",
+    "stem": "If I had known the truth, I ___ you.",
+    "options": {
+      "A": "would have told",
+      "B": "would tell",
+      "C": "will tell",
+      "D": "had told"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "Third conditional: If + past perfect, subject + would have + V3।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Subjunctive",
+    "stem": "I wish I ___ a bird.",
+    "options": {
+      "A": "am",
+      "B": "were",
+      "C": "be",
+      "D": "will be"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "বর্তমানের অবাস্তব ইচ্ছা প্রকাশে 'wish'-এর পর subjunctive 'were' বসে।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Subjunctive",
+    "stem": "The principal insisted that every student ___ present.",
+    "options": {
+      "A": "be",
+      "B": "will be",
+      "C": "is being",
+      "D": "has been"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "insist/demand/suggest-এর পর that-clause-এ mandative subjunctive (base form 'be') বসে।",
+    "source": "Oxford Practical English Usage (Swan)"
+  },
+  {
+    "topicBn": "Preposition",
+    "stem": "He is senior ___ me by two years.",
+    "options": {
+      "A": "than",
+      "B": "from",
+      "C": "of",
+      "D": "to"
+    },
+    "answer": "D",
+    "difficulty": "TRICKY",
+    "explanationBn": "senior, junior, superior, inferior ইত্যাদি Latin comparative-এর পর 'than' নয়, 'to' বসে।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Appropriate Preposition",
+    "stem": "She is good ___ mathematics.",
+    "options": {
+      "A": "at",
+      "B": "in",
+      "C": "on",
+      "D": "with"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "কোনো বিষয়ে দক্ষতা বোঝাতে 'good at' ব্যবহৃত হয়।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Appropriate Preposition",
+    "stem": "He was accused ___ theft.",
+    "options": {
+      "A": "of",
+      "B": "for",
+      "C": "with",
+      "D": "on"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "'accuse someone of something' — accuse-এর পর 'of' বসে।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Appropriate Preposition",
+    "stem": "I congratulated him ___ his success.",
+    "options": {
+      "A": "for",
+      "B": "on",
+      "C": "at",
+      "D": "with"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'congratulate someone on something' — সঠিক preposition 'on'।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Group Verb",
+    "stem": "'Put up with' means —",
+    "options": {
+      "A": "postpone",
+      "B": "extinguish",
+      "C": "delay",
+      "D": "tolerate"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "'put up with' অর্থ সহ্য করা (tolerate)।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Group Verb",
+    "stem": "'Look into' means —",
+    "options": {
+      "A": "admire",
+      "B": "despise",
+      "C": "investigate",
+      "D": "visit"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "'look into' অর্থ তদন্ত করা বা খতিয়ে দেখা (investigate)।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Article",
+    "stem": "He is ___ honest man.",
+    "options": {
+      "A": "a",
+      "B": "the",
+      "C": "no article",
+      "D": "an"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "'honest'-এর 'h' উচ্চারিত হয় না, শুরু vowel sound দিয়ে, তাই 'an'।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Article",
+    "stem": "He is ___ European.",
+    "options": {
+      "A": "an",
+      "B": "a",
+      "C": "the",
+      "D": "no article"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "'European'-এর উচ্চারণ 'ইউ' (consonant sound /j/) দিয়ে শুরু, তাই 'a'।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Article",
+    "stem": "___ Padma is a mighty river.",
+    "options": {
+      "A": "A",
+      "B": "An",
+      "C": "The",
+      "D": "No article"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "নদী, সাগর, মহাসাগরের নামের আগে 'the' বসে।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Voice",
+    "stem": "Passive form of 'Who wrote this letter?' is —",
+    "options": {
+      "A": "By whom was this letter written?",
+      "B": "Who was this letter written by him?",
+      "C": "By whom this letter was written?",
+      "D": "Whom was this letter written?"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Who' প্রশ্নের passive-এ 'By whom' + auxiliary + object + V3 হয়।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Voice",
+    "stem": "Passive form of 'Let me do it' is —",
+    "options": {
+      "A": "Let it done by me.",
+      "B": "Let it be done by me.",
+      "C": "It is let done by me.",
+      "D": "Let me be done it."
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "Let-যুক্ত বাক্যের passive: Let + object + be + V3 + by + agent।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Voice",
+    "stem": "Passive form of 'Shut the door' is —",
+    "options": {
+      "A": "The door be shut.",
+      "B": "The door is shut.",
+      "C": "Let the door is shut.",
+      "D": "Let the door be shut."
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "Imperative বাক্যের passive: Let + object + be + V3।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Narration",
+    "stem": "He said, \"I am ill.\" — Indirect form:",
+    "options": {
+      "A": "He said that he was ill.",
+      "B": "He said that he is ill.",
+      "C": "He said that I was ill.",
+      "D": "He said that he had been ill."
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "Reporting verb past হলে present tense past-এ যায় এবং 'I' subject অনুযায়ী 'he' হয়।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Narration",
+    "stem": "He said to me, \"Where are you going?\" — Indirect form:",
+    "options": {
+      "A": "He asked me where was I going.",
+      "B": "He asked me where I am going.",
+      "C": "He asked me where I was going.",
+      "D": "He asked me where I had gone."
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "Wh-প্রশ্ন indirect-এ assertive ক্রমে (subject + verb) যায় এবং tense পিছিয়ে past continuous হয়।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Narration",
+    "stem": "The teacher said, \"The earth moves round the sun.\" — Indirect form: The teacher said that the earth ___ round the sun.",
+    "options": {
+      "A": "moved",
+      "B": "moves",
+      "C": "had moved",
+      "D": "was moving"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "চিরন্তন সত্য (universal truth) হলে indirect speech-এ tense পরিবর্তন হয় না।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Transformation",
+    "stem": "Comparative form of 'No other boy in the class is as tall as Rahim':",
+    "options": {
+      "A": "Rahim is taller than any boy in the class.",
+      "B": "Rahim is the tallest boy of all.",
+      "C": "Rahim is as tall as other boys.",
+      "D": "Rahim is taller than any other boy in the class."
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "একই দলের মধ্যে তুলনায় comparative-এ 'than any other' ব্যবহার করতে হয়।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Transformation",
+    "stem": "'As soon as he came, I left.' can be written as —",
+    "options": {
+      "A": "No sooner did he come when I left.",
+      "B": "No sooner had he come than I left.",
+      "C": "No sooner he had come than I left.",
+      "D": "Hardly had he come than I left."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "'No sooner' + inverted past perfect + 'than' — এটিই সঠিক গঠন; Hardly-এর সাথে 'when' বসে।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Correct Sentence",
+    "stem": "Which sentence is correct?",
+    "options": {
+      "A": "He is one of the best boy.",
+      "B": "I have been knowing him for years.",
+      "C": "The furniture is expensive.",
+      "D": "He gave me many advices."
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "'furniture' uncountable noun, তাই singular verb 'is' সঠিক; advice-ও uncountable, know continuous হয় না।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Gerund",
+    "stem": "Which sentence is correct (regarding \"I\")?",
+    "options": {
+      "A": "I look forward to meet you.",
+      "B": "I look forward to meeting you.",
+      "C": "I am looking forward to meet you.",
+      "D": "I look forward meeting you."
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "'look forward to'-এর 'to' preposition, তাই এর পর gerund (V-ing) বসে।",
+    "source": "Oxford Practical English Usage (Swan)"
+  },
+  {
+    "topicBn": "Synonym",
+    "stem": "Synonym of 'Candid' is —",
+    "options": {
+      "A": "Frank",
+      "B": "Shrewd",
+      "C": "Timid",
+      "D": "Rude"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Candid' অর্থ অকপট বা স্পষ্টবাদী, যা 'frank'-এর সমার্থক।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Synonym",
+    "stem": "Synonym of 'Ephemeral' is —",
+    "options": {
+      "A": "Eternal",
+      "B": "Short-lived",
+      "C": "Ethereal",
+      "D": "Enormous"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "'Ephemeral' অর্থ ক্ষণস্থায়ী (short-lived)।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Synonym",
+    "stem": "Synonym of 'Abate' is —",
+    "options": {
+      "A": "Increase",
+      "B": "Abandon",
+      "C": "Accuse",
+      "D": "Lessen"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Abate' অর্থ হ্রাস পাওয়া বা কমে যাওয়া (lessen)।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Synonym",
+    "stem": "Synonym of 'Ubiquitous' is —",
+    "options": {
+      "A": "Rare",
+      "B": "Unique",
+      "C": "Omnipresent",
+      "D": "Ambiguous"
+    },
+    "answer": "C",
+    "difficulty": "HIGH",
+    "explanationBn": "'Ubiquitous' অর্থ সর্বত্র বিরাজমান (omnipresent)।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Antonym",
+    "stem": "Antonym of 'Benevolent' is —",
+    "options": {
+      "A": "Malevolent",
+      "B": "Generous",
+      "C": "Benign",
+      "D": "Kind"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Benevolent' অর্থ পরোপকারী; বিপরীত 'malevolent' অর্থ বিদ্বেষপরায়ণ।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Antonym",
+    "stem": "Antonym of 'Frugal' is —",
+    "options": {
+      "A": "Thrifty",
+      "B": "Careful",
+      "C": "Simple",
+      "D": "Extravagant"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Frugal' অর্থ মিতব্যয়ী; বিপরীত 'extravagant' অর্থ অমিতব্যয়ী।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Antonym",
+    "stem": "Antonym of 'Verbose' is —",
+    "options": {
+      "A": "Wordy",
+      "B": "Loud",
+      "C": "Concise",
+      "D": "Vague"
+    },
+    "answer": "C",
+    "difficulty": "TRICKY",
+    "explanationBn": "'Verbose' অর্থ বাগাড়ম্বরপূর্ণ; বিপরীত 'concise' অর্থ সংক্ষিপ্ত।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Antonym",
+    "stem": "Antonym of 'Obscure' is —",
+    "options": {
+      "A": "Vague",
+      "B": "Hidden",
+      "C": "Dim",
+      "D": "Lucid"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Obscure' অর্থ অস্পষ্ট; বিপরীত 'lucid' অর্থ স্পষ্ট ও সহজবোধ্য।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "One-word Substitution",
+    "stem": "One who knows everything —",
+    "options": {
+      "A": "Omnipotent",
+      "B": "Omnipresent",
+      "C": "Omniscient",
+      "D": "Omnivorous"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "সর্বজ্ঞ = omniscient; omnipotent = সর্বশক্তিমান, omnipresent = সর্বব্যাপী।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "One-word Substitution",
+    "stem": "A person who cannot be corrected —",
+    "options": {
+      "A": "Incorrigible",
+      "B": "Invincible",
+      "C": "Infallible",
+      "D": "Indelible"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "সংশোধনের অযোগ্য ব্যক্তি = incorrigible; invincible = অজেয়, infallible = অভ্রান্ত।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "One-word Substitution",
+    "stem": "Morbid fear of water —",
+    "options": {
+      "A": "Acrophobia",
+      "B": "Claustrophobia",
+      "C": "Xenophobia",
+      "D": "Hydrophobia"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "জলাতঙ্ক = hydrophobia; acrophobia = উচ্চতাভীতি, xenophobia = বিদেশিভীতি।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "One-word Substitution",
+    "stem": "Killing of one's own father —",
+    "options": {
+      "A": "Matricide",
+      "B": "Fratricide",
+      "C": "Patricide",
+      "D": "Regicide"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "পিতৃহত্যা = patricide; matricide = মাতৃহত্যা, fratricide = ভ্রাতৃহত্যা, regicide = রাজহত্যা।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Idioms & Phrases",
+    "stem": "'A bolt from the blue' means —",
+    "options": {
+      "A": "A bright idea",
+      "B": "An unexpected event",
+      "C": "A happy occasion",
+      "D": "A lightning storm"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "'A bolt from the blue' অর্থ বিনা মেঘে বজ্রপাত, অর্থাৎ সম্পূর্ণ অপ্রত্যাশিত ঘটনা।",
+    "source": "Oxford Dictionary of Idioms"
+  },
+  {
+    "topicBn": "Idioms & Phrases",
+    "stem": "'To bell the cat' means —",
+    "options": {
+      "A": "To undertake a risky task",
+      "B": "To tame a cat",
+      "C": "To make a loud noise",
+      "D": "To betray a friend"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "'To bell the cat' অর্থ অন্যের জন্য বিপজ্জনক দায়িত্ব নিজের কাঁধে নেওয়া।",
+    "source": "Oxford Dictionary of Idioms"
+  },
+  {
+    "topicBn": "Idioms & Phrases",
+    "stem": "'A red-letter day' means —",
+    "options": {
+      "A": "A day of mourning",
+      "B": "A day of danger",
+      "C": "A memorable day",
+      "D": "A day of rest"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "'Red-letter day' অর্থ স্মরণীয় বা আনন্দময় বিশেষ দিন।",
+    "source": "Oxford Dictionary of Idioms"
+  },
+  {
+    "topicBn": "Idioms & Phrases",
+    "stem": "'At sixes and sevens' means —",
+    "options": {
+      "A": "In a great hurry",
+      "B": "In a happy mood",
+      "C": "Very late",
+      "D": "In confusion"
+    },
+    "answer": "D",
+    "difficulty": "TRICKY",
+    "explanationBn": "'At sixes and sevens' অর্থ বিশৃঙ্খল বা এলোমেলো অবস্থায়।",
+    "source": "Oxford Dictionary of Idioms"
+  },
+  {
+    "topicBn": "Idioms & Phrases",
+    "stem": "'To cry wolf' means —",
+    "options": {
+      "A": "To raise a false alarm",
+      "B": "To weep loudly",
+      "C": "To hunt wild animals",
+      "D": "To behave cowardly"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "'To cry wolf' অর্থ মিথ্যা বিপদসংকেত দেওয়া (রাখাল বালক ও বাঘের গল্প থেকে)।",
+    "source": "Oxford Dictionary of Idioms"
+  },
+  {
+    "topicBn": "Spelling",
+    "stem": "Which spelling is correct?",
+    "options": {
+      "A": "Accomodation",
+      "B": "Accommodation",
+      "C": "Acommodation",
+      "D": "Acomodation"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "সঠিক বানান Accommodation — দুটি 'c' ও দুটি 'm'।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Spelling",
+    "stem": "Which spelling is correct (regarding \"Millennium\")?",
+    "options": {
+      "A": "Millennium",
+      "B": "Millenium",
+      "C": "Milennium",
+      "D": "Milenium"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "সঠিক বানান Millennium — দুটি 'l' ও দুটি 'n'।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Spelling",
+    "stem": "Which spelling is correct (regarding \"Embarrass\")?",
+    "options": {
+      "A": "Embarass",
+      "B": "Embarras",
+      "C": "Emberrass",
+      "D": "Embarrass"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "সঠিক বানান Embarrass — দুটি 'r' ও দুটি 's'।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Analogy",
+    "stem": "Doctor : Patient :: Lawyer : ?",
+    "options": {
+      "A": "Client",
+      "B": "Judge",
+      "C": "Court",
+      "D": "Case"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "ডাক্তার রোগীকে সেবা দেন, তেমনি আইনজীবী মক্কেলকে (client) সেবা দেন।",
+    "source": "BCS-style analogy practice"
+  },
+  {
+    "topicBn": "Analogy",
+    "stem": "Pen : Write :: Knife : ?",
+    "options": {
+      "A": "Sharp",
+      "B": "Cut",
+      "C": "Steel",
+      "D": "Kitchen"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "কলমের কাজ লেখা, ছুরির কাজ কাটা — বস্তু ও তার ব্যবহারের সম্পর্ক।",
+    "source": "BCS-style analogy practice"
+  },
+  {
+    "topicBn": "Analogy",
+    "stem": "Bird : Flock :: Fish : ?",
+    "options": {
+      "A": "Herd",
+      "B": "Pack",
+      "C": "School",
+      "D": "Swarm"
+    },
+    "answer": "C",
+    "difficulty": "TRICKY",
+    "explanationBn": "পাখির ঝাঁক = flock, মাছের ঝাঁক = school (বা shoal)।",
+    "source": "Oxford Advanced Learner's Dictionary"
+  },
+  {
+    "topicBn": "Clause",
+    "stem": "In 'I know that he is honest', the clause 'that he is honest' is a/an —",
+    "options": {
+      "A": "Adjective clause",
+      "B": "Noun clause",
+      "C": "Adverb clause",
+      "D": "Principal clause"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "Clause-টি verb 'know'-এর object হিসেবে কাজ করছে, তাই এটি noun clause।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Clause",
+    "stem": "In 'This is the house where I was born', 'where I was born' is a/an —",
+    "options": {
+      "A": "Noun clause",
+      "B": "Adverb clause",
+      "C": "Adjective clause",
+      "D": "Principal clause"
+    },
+    "answer": "C",
+    "difficulty": "HIGH",
+    "explanationBn": "Clause-টি noun 'house'-কে বিশেষিত করছে, তাই 'where' থাকলেও এটি adjective clause।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Gerund",
+    "stem": "In 'Swimming is a good exercise', 'Swimming' is a/an —",
+    "options": {
+      "A": "Gerund",
+      "B": "Participle",
+      "C": "Infinitive",
+      "D": "Adjective"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "V-ing শব্দটি বাক্যের subject (noun-এর কাজ) হিসেবে বসেছে, তাই gerund।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Participle",
+    "stem": "In 'Do not get on a running train', 'running' is a/an —",
+    "options": {
+      "A": "Gerund",
+      "B": "Present participle",
+      "C": "Infinitive",
+      "D": "Verbal noun"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "V-ing শব্দটি noun 'train'-কে বিশেষিত করছে (adjective-এর কাজ), তাই present participle।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Gerund",
+    "stem": "He avoided ___ the question.",
+    "options": {
+      "A": "to answer",
+      "B": "answer",
+      "C": "to answering",
+      "D": "answering"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "'avoid'-এর পরে সর্বদা gerund (V-ing) বসে, infinitive নয়।",
+    "source": "Oxford Practical English Usage (Swan)"
+  },
+  {
+    "topicBn": "Infinitive",
+    "stem": "You had better ___ now.",
+    "options": {
+      "A": "to go",
+      "B": "going",
+      "C": "go",
+      "D": "gone"
+    },
+    "answer": "C",
+    "difficulty": "TRICKY",
+    "explanationBn": "'had better'-এর পরে 'to' ছাড়া bare infinitive বসে।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Subjunctive (Inversion)",
+    "stem": "___ I a bird, I would fly to you.",
+    "options": {
+      "A": "Was",
+      "B": "Were",
+      "C": "Am",
+      "D": "Had"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "'If I were a bird'-এর inversion রূপ 'Were I a bird' — অবাস্তব শর্তে subjunctive 'were'।",
+    "source": "Wren & Martin — High School English Grammar"
+  },
+  {
+    "topicBn": "Inversion of Verb with Negative Adverbs (Hard)",
+    "stem": "Choose the grammatically correct sentence using negative adverbial inversion:",
+    "options": {
+      "A": "Rarely I have seen such a dedicated civil servant.",
+      "B": "Rarely have I seen such a dedicated civil servant.",
+      "C": "Rarely I saw such a dedicated civil servant.",
+      "D": "Rarely had I saw such a dedicated civil servant."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "বাক্যের শুরুতে Rarely, Seldom, Never, Hardly, Scarcely, Not only থাকলে Inversion হয় অর্থাৎ Subject-এর আগে Auxiliary Verb (have I seen) বসে।",
+    "source": "৪৫তম বিসিএস ও বাংলাদেশ ব্যাংক AD"
+  },
+  {
+    "topicBn": "Causative Verbs — Make, Have, Get (Hard)",
+    "stem": "Complete the sentence with the correct causative form: “The supervisor had the technician ______ the server before midnight.”",
+    "options": {
+      "A": "to repair",
+      "B": "repair",
+      "C": "repaired",
+      "D": "repairing"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "Causative verb নিয়ম: Have + ব্যক্তি (Doer) + Base Verb (V1 = repair); কিন্তু Get + ব্যক্তি + to + V1 (to repair); এবং Have/Get + বস্তু (Receiver) + V3 (repaired)।",
+    "source": "বিসিএস ও ব্যাংক অফিসার পরীক্ষা"
+  },
+  {
+    "topicBn": "Causative Passive — Get/Have + Thing + V3 (Medium)",
+    "stem": "Fill in the blank: “I need to get my official documents ______ by a First Class Gazette Officer.”",
+    "options": {
+      "A": "attest",
+      "B": "attested",
+      "C": "to attest",
+      "D": "attesting"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "Get বা Have-এর পরে বস্তুবাচক কর্ম (my official documents) থাকলে Past Participle (V3 = attested) বসে।",
+    "source": "৪৪তম বিসিএস ও এনটিআরসিএ"
+  },
+  {
+    "topicBn": "Dangling / Misplaced Modifier (Hard)",
+    "stem": "Identify the sentence that is free from a dangling modifier:",
+    "options": {
+      "A": "Walking through the Sundarbans, a royal Bengal tiger was seen by the tourists.",
+      "B": "While walking through the Sundarbans, the tourists saw a royal Bengal tiger.",
+      "C": "Walking through the Sundarbans, the trees looked very dense.",
+      "D": "Having finished the exam, the OMR sheet was submitted."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "Participle phrase (While walking through the Sundarbans) যাকে নির্দেশ করে, কমা-এর ঠিক পরেই সেই কর্তা (the tourists) বসতে হয়; অন্যথায় Dangling Modifier ভুল হয়।",
+    "source": "বাংলাদেশ ব্যাংক AD ও ৪৩তম বিসিএস"
+  },
+  {
+    "topicBn": "Parallelism in Structure (Hard)",
+    "stem": "Which sentence maintains correct grammatical parallelism?",
+    "options": {
+      "A": "A good administrator must be honest, diligent, and possess patience.",
+      "B": "A good administrator must be honest, diligent, and patient.",
+      "C": "A good administrator must have honesty, diligent, and patience.",
+      "D": "A good administrator is honest, diligence, and working hard."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "And দ্বারা যুক্ত সমজাতীয় শব্দগুলো একই Parts of Speech হতে হয়—এখানে honest, diligent এবং patient তিনটিই Adjective।",
+    "source": "সমন্বিত ব্যাংক সিনিয়র অফিসার ও বিসিএস"
+  },
+  {
+    "topicBn": "Subjunctive Mood after It is high time (Medium)",
+    "stem": "Choose the right form of verb: “It is high time we ______ our preparation for the 47th BCS Preliminary exam.”",
+    "options": {
+      "A": "start",
+      "B": "started",
+      "C": "should start",
+      "D": "have started"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "It is time / It is high time + Subject থাকলে পরের Verb টি সর্বদা Past Indefinite (V2 = started) হয় (আর Subject না থাকলে to + V1 হয়)।",
+    "source": "৪৬তম বিসিএস, প্রাইমারি ও নিবন্ধন"
+  },
+  {
+    "topicBn": "As if / As though Unreal Past Rule (Medium)",
+    "stem": "Complete the sentence: “He talks as if he ______ everything about constitutional law.”",
+    "options": {
+      "A": "knows",
+      "B": "knew",
+      "C": "had known",
+      "D": "will know"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "As if / As though-এর পূর্বের অংশ Present Indefinite (talks) হলে পরের অংশ Past Indefinite (V2 = knew / were) হয়; আর পূর্বের অংশ Past Indefinite (talked) হলে পরের অংশ Past Perfect (had known) হয়।",
+    "source": "৪৫তম ও ৩৯তম বিসিএস"
+  },
+  {
+    "topicBn": "Clause Identification — Noun Clause vs Adjective Clause (Hard)",
+    "stem": "Identify the underlined clause type in: “I know the place WHERE HE WAS BORN” vs “I know WHERE HE WAS BORN.”",
+    "options": {
+      "A": "First is an Adjective Clause; second is a Noun Clause.",
+      "B": "First is a Noun Clause; second is an Adverbial Clause.",
+      "C": "Both are Adverbial Clauses of place.",
+      "D": "First is an Adverbial Clause; second is an Adjective Clause."
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "প্রথম বাক্যে পূর্ববর্তী Noun (the place)-কে বিশেষিত করায় এটি Adjective Clause; দ্বিতীয় বাক্যে পূর্ববর্তী কোনো Antecedent না থেকে সরাসরি ‘know’ ক্রিয়ার Object হওয়ায় এটি Noun Clause!",
+    "source": "৪৪তম ও ৩৮তম বিসিএস"
+  },
+  {
+    "topicBn": "Participle vs Gerund Identification (Hard)",
+    "stem": "In the sentence “A rolling stone gathers no moss”, what part of speech is the word “rolling”?",
+    "options": {
+      "A": "Gerund",
+      "B": "Present Participle (functioning as an Adjective)",
+      "C": "Verbal Noun",
+      "D": "Infinitive"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "এখানে ‘rolling’ শব্দটি ‘stone’ (Noun)-এর পূর্বে বসে কেমন পাথর (ঘূর্ণায়মান পাথর) তা বিশেষিত করছে, তাই এটি Present Participle বা Adjective (আর ‘Reading is a good habit’-এ Reading হলো Gerund/Noun)।",
+    "source": "৪৩তম বিসিএস ও প্রাইমারি শিক্ষক নিয়োগ"
+  },
+  {
+    "topicBn": "Verbal Noun — The + V-ing + of (Hard)",
+    "stem": "In the sentence “The reading of history is fascinating”, the phrase “The reading of” is an example of—",
+    "options": {
+      "A": "Present Participle",
+      "B": "Verbal Noun",
+      "C": "Bare Infinitive",
+      "D": "Adverbial Phrase"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "‘The + Verb+ing + of’ গঠনে ব্যবহৃত কৃদন্ত পদকে Verbal Noun বলা হয় (যেমন: The reading of history)।",
+    "source": "৩৮তম বিসিএস ও এনটিআরসিএ"
+  },
+  {
+    "topicBn": "Uncountable Nouns & Determiners (Medium)",
+    "stem": "Which of the following sentences is grammatically correct regarding uncountable nouns?",
+    "options": {
+      "A": "He gave me many good advices before the viva.",
+      "B": "He gave me a piece of good advice (or much good advice) before the viva.",
+      "C": "The furnitures of this room are very old.",
+      "D": "I need some informations about the circular."
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "Advice, Information, Furniture, Scenery, Bread, Equipment, Machinery, Poetry—এগুলো Uncountable Noun; এদের সাথে কখনোই s/es বা a/an বসে না (গণনাবাচক করতে a piece of / pieces of বসে)।",
+    "source": "৪২তম ও ৪১তম বিসিএস"
+  },
+  {
+    "topicBn": "Fraction & Percentage Subject-Verb Agreement (Hard)",
+    "stem": "Choose the correct verb pair: “Three-fourths of the work ______ finished, and three-fourths of the candidates ______ present.”",
+    "options": {
+      "A": "is, are",
+      "B": "are, is",
+      "C": "is, is",
+      "D": "are, are"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "ভগ্নাংশ বা শতকরার পরে Uncountable/Singular Noun (the work) থাকলে Singular Verb (is) হয়; আর Plural Countable Noun (the candidates) থাকলে Plural Verb (are) হয়।",
+    "source": "৪০তম বিসিএস ও ব্যাংক পরীক্ষা"
+  },
+  {
+    "topicBn": "Appropriate Preposition — Die, Entrust, Consist (Hard)",
+    "stem": "Choose the correct pair of prepositions: “Happiness consists ______ contentment, whereas our parliament consists ______ 350 members.”",
+    "options": {
+      "A": "in, of",
+      "B": "of, in",
+      "C": "with, by",
+      "D": "for, from"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Consist in = নিহিত থাকা (Happiness consists in contentment); আর Consist of = গঠিত হওয়া (The committee consists of five members)।",
+    "source": "৪৫তম ও ৩৭তম বিসিএস"
+  },
+  {
+    "topicBn": "Appropriate Preposition — Compare with vs Compare to (Hard)",
+    "stem": "Fill in the blanks: “Compare your answers ______ the official key; poets often compare human life ______ a flowing river.”",
+    "options": {
+      "A": "with, to",
+      "B": "to, with",
+      "C": "by, for",
+      "D": "into, with"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "একই জাতীয় দুটি জিনিসের তুলনা করলে ‘Compare with’ বসে; আর দুটি ভিন্ন জাতীয় জিনিসের (যেমন জীবন ও নদী, বা রাগ ও আগুন) সাদৃশ্য তুলনা করলে ‘Compare to’ বসে।",
+    "source": "বিসিএস ও পিএসসি নন-ক্যাডার"
+  },
+  {
+    "topicBn": "Idioms & Phrases — Achilles heel & Swan song (Medium)",
+    "stem": "What do the idioms “Achilles’ heel” and “Maiden speech” mean respectively?",
+    "options": {
+      "A": "A fatal weakness (দুর্বলতম স্থান) and First speech (প্রথম বক্তৃতা)",
+      "B": "Strongest point and Final speech",
+      "C": "Fast runner and Female speaker",
+      "D": "Secret weapon and Melodious song"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Achilles’ heel = দুর্বলতম স্থান (A weak or vulnerable point); Maiden speech = প্রথম বক্তৃতা (First speech); আর Swan song = শেষ রচনা বা কাজ (Last work)।",
+    "source": "৪৪তম বিসিএস ও প্রাইমারি নিয়োগ"
+  },
+  {
+    "topicBn": "One Word Substitution — Omnipresent, Omniscient, Philanthropist (Medium)",
+    "stem": "One who knows everything is called ______ , whereas one who loves and works for mankind is called a ______.",
+    "options": {
+      "A": "Omniscient (সর্বজ্ঞ), Philanthropist (মানবহিতৈষী)",
+      "B": "Omnipotent (সর্বশক্তিমান), Misanthrope (মানববিদ্বেষী)",
+      "C": "Omnipresent (সর্বব্যাপী), Optimist (আশাবাদী)",
+      "D": "Infallible, Altruist"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Omniscient = সর্বজ্ঞ (knows everything), Omnipotent = সর্বশক্তিমান, Omnipresent = সর্বত্র বিরাজমান, Philanthropist = মানবহিতৈষী, আর Misanthrope = মানববিদ্বেষী।",
+    "source": "৪৩তম বিসিএস ও ব্যাংক পরীক্ষা"
+  },
+  {
+    "topicBn": "High-Frequency BCS Vocabulary — Ephemeral & Ubiquitous (Hard)",
+    "stem": "The word “EPHEMERAL” (ক্ষণস্থায়ী) is closest in meaning to ______, and opposite in meaning to ______.",
+    "options": {
+      "A": "Transient / Short-lived; Perennial / Eternal",
+      "B": "Permanent; Temporary",
+      "C": "Ubiquitous; Scarce",
+      "D": "Lucid; Ambiguous"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Ephemeral বা Transient অর্থ ক্ষণস্থায়ী (lasting for a very short time); এর বিপরীত শব্দ Eternal, Perpetual বা Perennial (চিরস্থায়ী)।",
+    "source": "৪৬তম বিসিএস ও বাংলাদেশ ব্যাংক AD"
+  },
+  {
+    "topicBn": "Voice Change — Quasi-Passive & Reflexive (Medium)",
+    "stem": "What is the correct passive voice of “Honey tastes sweet” and “Who taught you English?”",
+    "options": {
+      "A": "Honey is sweet when it is tasted; By whom were you taught English?",
+      "B": "Sweet is tasted by honey; Who was taught English by you?",
+      "C": "Honey was sweet when tasted; By whom you were taught English?",
+      "D": "Honey is tasted sweet; Whom were you taught English?"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Quasi-passive verb-এর ক্ষেত্রে ‘Honey is sweet when it is tasted’ এবং Interrogative Who যুক্ত বাক্যে ‘By whom + auxiliary verb (were) + subject (you) + V3’ বসে।",
+    "source": "প্রাইমারি, নিবন্ধন ও বিসিএস"
+  },
+  {
+    "topicBn": "Narration / Indirect Speech — Optative & Exclamatory (Medium)",
+    "stem": "Change into indirect speech: The teacher said to me, “May you pass the BCS exam with flying colours!”",
+    "options": {
+      "A": "The teacher wished/prayed that I might pass the BCS exam with flying colours.",
+      "B": "The teacher said that may I pass the BCS exam with flying colours.",
+      "C": "The teacher asked if I might pass the BCS exam.",
+      "D": "The teacher ordered me to pass the BCS exam."
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Optative sentence (May দ্বারা শুরু আশীর্বাদ বা প্রার্থনা)-কে Indirect করার সময় wished বা prayed বসে এবং Subject-এর পরে might + V1 হয়।",
+    "source": "১৭তম নিবন্ধন ও বিসিএস ব্যাকরণ"
+  },
+  {
+    "topicBn": "Foreign Phrases in English — Sine die & Modus operandi (Hard)",
+    "stem": "The Latin phrase “Sine die” means ______ and “Prima facie” means ______.",
+    "options": {
+      "A": "Indefinitely (অনির্দিষ্টকালের জন্য); At first sight (প্রথম দর্শনে)",
+      "B": "Every day; Final verdict",
+      "C": "In secret; Good faith",
+      "D": "Without condition; Way of working"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Sine die = অনির্দিষ্টকালের জন্য (The meeting was adjourned sine die); Prima facie = প্রথম দর্শনে; Bona fide = খাঁটি/সৎ বিশ্বাসে; De facto = কার্যত; Lingua franca = সাধারণ যোগাযোগের ভাষা।",
+    "source": "৪৪তম, ৪০তম বিসিএস ও ব্যাংক পরীক্ষা"
+  },
+  {
+    "topicBn": "Mixed Conditional — Past Condition with Present Result (Hard)",
+    "stem": "Choose the correct verb form for this mixed conditional sentence: “If he had listened to the doctor’s advice last year, he ______ healthy today.”",
+    "options": {
+      "A": "would be",
+      "B": "would have been",
+      "C": "will be",
+      "D": "had been"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "সাধারণত If + Past Perfect থাকলে পরের অংশে would have + V3 হয়; কিন্তু যদি বর্তমান ফলাফল নির্দেশক শব্দ ‘today / now’ উল্লেখ থাকে (Mixed Conditional), তবে অতীতের শর্তের বর্তমান ফলাফল বোঝাতে ‘would + V1 (would be)’ বসে!",
+    "source": "বাংলাদেশ ব্যাংক AD ও বিসিএস ইংলিশ"
+  },
+  {
+    "topicBn": "Inverted First Conditional with “Should” (Medium)",
+    "stem": "Which sentence is grammatically equivalent to “If you should need any further assistance, please contact the helpdesk”?",
+    "options": {
+      "A": "Should you need any further assistance, please contact the helpdesk.",
+      "B": "Had you needed any further assistance, please contact the helpdesk.",
+      "C": "Were you to needed any assistance, contact the helpdesk.",
+      "D": "Need you should any assistance, contact the helpdesk."
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "১ম শর্তমূলক বাক্যে (1st Conditional) ‘If’ তুলে দিয়ে বাক্যের শুরুতে ‘Should + Subject + Base Verb (V1)’ বসিয়ে আনুষ্ঠানিক Inversion করা যায়: Should you need... = If you should need...।",
+    "source": "৪৪তম বিসিএস ও সমন্বিত ব্যাংক অফিসার"
+  },
+  {
+    "topicBn": "Subject-Verb Agreement — Many a / More than one (Medium)",
+    "stem": "Fill in the blanks with the right verbs: (1) “Many a candidate ______ made this common mistake” and (2) “More than one officer ______ present at the audit meeting.”",
+    "options": {
+      "A": "(1) has and (2) was (both take singular noun and singular verb)",
+      "B": "(1) have and (2) were",
+      "C": "(1) has and (2) were",
+      "D": "(1) have and (2) was"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "অর্থ বহুবচন হলেও গঠনগত কারণে ‘Many a + Singular Noun’ এবং ‘More than one + Singular Noun’-এর পরে সর্বদা Singular Verb (has / was / is) বসে!",
+    "source": "৪৩তম বিসিএস, প্রাইমারি ও এনটিআরসিএ"
+  },
+  {
+    "topicBn": "Subject-Verb Agreement — Fractional Expressions & Percentages (Hard)",
+    "stem": "Choose the correct pair of verbs: (1) “Two-thirds of the work ______ been completed” and (2) “Two-thirds of the candidates ______ passed the preliminary test.”",
+    "options": {
+      "A": "(1) has (uncountable noun “work”) and (2) have (plural countable noun “candidates”)",
+      "B": "(1) have and (2) has",
+      "C": "(1) has and (2) has",
+      "D": "(1) have and (2) have"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "ভগ্নাংশ (Two-thirds, Three-fourths) বা শতকরা (50% of, Most of, Half of)-এর পরে Uncountable/Singular Noun থাকলে Singular Verb (has) এবং Plural Countable Noun থাকলে Plural Verb (have) বসে!",
+    "source": "৪৫তম বিসিএস ও বাংলাদেশ ব্যাংক AD"
+  },
+  {
+    "topicBn": "Verb Followed by Gerund — Cannot help vs Cannot but (Medium)",
+    "stem": "Select the correct pair to complete: (1) “I could not help ______ at his absurd excuse” and (2) “I could not but ______ at his absurd excuse.”",
+    "options": {
+      "A": "(1) laughing (cannot help + V-ing) and (2) laugh (cannot but + V1)",
+      "B": "(1) laugh and (2) laughing",
+      "C": "(1) to laugh and (2) laughed",
+      "D": "(1) laughing and (2) laughing"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "নিয়ম: Can not help / Could not help + Gerund (V+ing = laughing); কিন্তু Can not but / Could not but + Bare Infinitive (V1 = laugh)!",
+    "source": "৪১তম বিসিএস, প্রাইমারি ও নিবন্ধন"
+  },
+  {
+    "topicBn": "Gerund vs Infinitive — Used to vs Be/Get used to (Medium)",
+    "stem": "Complete the sentence: “Previously he used to ______ late at night, but now he is used to ______ early in the morning.”",
+    "options": {
+      "A": "study (used to + V1), rising (be/get used to + V-ing)",
+      "B": "studying, rise",
+      "C": "study, rise",
+      "D": "studied, rising"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Subject + used to + V1 (অতীতের অভ্যাস বোঝায়); কিন্তু Subject + am/is/are/was/were/get/become + used to + V-ing (কোনো কিছুতে অভ্যস্ত থাকা বোঝায়)!",
+    "source": "৪৬তম ও ৩৮তম বিসিএস"
+  },
+  {
+    "topicBn": "Participle Adjective — Boring vs Bored / Interesting vs Interested (Medium)",
+    "stem": "Choose the correct participial adjectives: “The lecture on macroeconomics was so ______ that half of the audience became ______.”",
+    "options": {
+      "A": "boring (causes the feeling), bored (experiences the feeling)",
+      "B": "bored, boring",
+      "C": "bore, boringly",
+      "D": "bored, bore"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "যা অনুভূতির সৃষ্টি করে (বস্তু/বিষয়) তার ক্ষেত্রে Present Participle (-ing: boring, interesting, confusing, exhausting) এবং যে ব্যক্তি অনুভূতিটি অনুভব করে তার ক্ষেত্রে Past Participle (-ed: bored, interested, confused, exhausted) বসে।",
+    "source": "প্রাইমারি শিক্ষক নিয়োগ ও বিসিএস"
+  },
+  {
+    "topicBn": "Sequence of Tenses — Lest + Should/Might (Medium)",
+    "stem": "Fill in the blank: “Walk carefully on the wet floor lest you ______ fall and injure yourself.”",
+    "options": {
+      "A": "should (or might)",
+      "B": "will",
+      "C": "would not",
+      "D": "can"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "‘Lest’ (পাছে ভয় হয় যে / যাতে না)-এর পরে সর্বদা Subject + should / might + Base Verb (V1) বসে এবং এর পরে কখনোই not বসে না (কারণ lest নিজেই নেগেটিভ)।",
+    "source": "৪০তম ও ৩৭তম বিসিএস"
+  },
+  {
+    "topicBn": "Conjunctions — Despite / In spite of vs Although / Even though (Medium)",
+    "stem": "Choose the grammatically accurate sentence:",
+    "options": {
+      "A": "Despite having limited resources, Bangladesh achieved remarkable progress in poverty reduction.",
+      "B": "Despite of having limited resources, Bangladesh achieved remarkable progress.",
+      "C": "Although having limited resources, Bangladesh achieved remarkable progress.",
+      "D": "In spite having limited resources, Bangladesh achieved remarkable progress."
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "‘Despite’-এর পরে কখনোই ‘of’ বসে না (Despite = In spite of + Noun/Gerund phrase)। আর ‘Although / Though / Even though’-এর পরে পূর্ণাঙ্গ Clause (Subject + Verb) বসে।",
+    "source": "৪৪তম বিসিএস ও সমন্বিত ব্যাংক"
+  },
+  {
+    "topicBn": "Comparison of Adjectives — Illogical Comparison Trap (Hard)",
+    "stem": "Identify the sentence that avoids an illogical comparison error:",
+    "options": {
+      "A": "The climate of Sylhet is cooler than that of Dhaka.",
+      "B": "The climate of Sylhet is cooler than Dhaka.",
+      "C": "The climate of Sylhet is cooler than those of Dhaka.",
+      "D": "The climate of Sylhet is more cooler than Dhaka."
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "সিলেটের জলবায়ুর (The climate of Sylhet) সাথে ঢাকার জলবায়ুর (that of Dhaka) তুলনা করতে হবে—সরাসরি ‘Dhaka’ শহরের সাথে জলবায়ুর তুলনা করা অযৌক্তিক (Illogical comparison)। একবচনে ‘that of’ এবং বহুবচনে ‘those of’ বসে (যেমন: The roads of Dhaka are wider than those of Rajshahi)।",
+    "source": "বাংলাদেশ ব্যাংক AD ও ৪৩তম বিসিএস"
+  },
+  {
+    "topicBn": "Double Comparative — The more..., the more... (Medium)",
+    "stem": "Complete the proportional comparative structure: “The higher you climb up a mountain, ______ it becomes to breathe.”",
+    "options": {
+      "A": "the harder (or the more difficult)",
+      "B": "harder",
+      "C": "the hardest",
+      "D": "more harder"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "সমানুপাতিক হ্রাস-বৃদ্ধি বোঝাতে Double Comparative-এর উভয় অংশেই ‘The + Comparative Degree’ বসে: The higher you climb, the harder/cooler it becomes।",
+    "source": "৪২তম ও ৩৮তম বিসিএস"
+  },
+  {
+    "topicBn": "Latin Comparatives — Senior, Junior, Superior, Prefer (Medium)",
+    "stem": "Which preposition correctly completes the sentence: “Although he is junior ______ me by three years, his analytical skill is superior ______ mine.”",
+    "options": {
+      "A": "to, to",
+      "B": "than, than",
+      "C": "from, to",
+      "D": "to, than"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "ল্যাটিন তুলনামূলক শব্দ—Senior, Junior, Superior, Inferior, Prior, Anterior, Posterior এবং Prefer/Preferable-এর পরে ‘than’ না বসে সর্বদা ‘to’ বসে!",
+    "source": "প্রাইমারি, নিবন্ধন ও বিসিএস ইংরেজি"
+  },
+  {
+    "topicBn": "Appropriate Preposition — Die of vs Die from vs Die for (Medium)",
+    "stem": "Choose the right sequence of prepositions: (1) “He died ______ cholera”, (2) “He died ______ overeating/overwork”, and (3) “The freedom fighters died ______ their motherland.”",
+    "options": {
+      "A": "(1) of (disease), (2) from (external cause/overwork), (3) for (noble cause/country)",
+      "B": "(1) from, (2) of, (3) by",
+      "C": "(1) of, (2) of, (3) in",
+      "D": "(1) by, (2) from, (3) for"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "রোগে মারা গেলে ‘die of’ (die of cancer/cholera); অতিরিক্ত পরিশ্রম, আঘাত বা বাহ্যিক কারণে মারা গেলে ‘die from’ (die from overwork/wound/food poisoning); দেশের বা আদর্শের জন্য জীবন দিলে ‘die for’; এবং দুর্ঘটনা বা আত্মহত্যায় মারা গেলে ‘die by’ বসে।",
+    "source": "৪৫তম, ৩৭তম বিসিএস ও প্রাইমারি"
+  },
+  {
+    "topicBn": "Appropriate Preposition — Deal in vs Deal with (Medium)",
+    "stem": "Distinguish between the phrasal prepositions: (1) “His uncle deals ______ garments and jute products” and (2) “A magistrate must deal fairly ______ all citizens.”",
+    "options": {
+      "A": "(1) in (conduct trade/business in) and (2) with (behave towards / handle)",
+      "B": "(1) with and (2) in",
+      "C": "(1) on and (2) at",
+      "D": "(1) by and (2) with"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "‘Deal in’ অর্থ কোনো পণ্যের ব্যবসা করা (deal in rice/books/clothes); আর ‘Deal with’ অর্থ কারো সাথে আচরণ করা বা কোনো বিষয়/সমস্যা সামলানো (deal with a problem / deal politely with clients)।",
+    "source": "বিসিএস, ব্যাংক ও খাদ্য অধিদপ্তর"
+  },
+  {
+    "topicBn": "Voice Change — Quasi-Passive Verbs (Honey tastes sweet) (Medium)",
+    "stem": "What is the correct passive form of the quasi-passive sentence: “Green mangoes taste sour”?",
+    "options": {
+      "A": "Green mangoes are sour when they are tasted (or Green mangoes are tasted sour).",
+      "B": "Sour is tasted by green mangoes.",
+      "C": "Green mangoes were sour when tasted.",
+      "D": "Taste of green mangoes is sour."
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Complement যুক্ত Quasi-passive verb (taste, feel, smell, read)-এর Passive গঠন: Subject + be verb + adjective + when it is/they are + V3 (Green mangoes are sour when they are tasted)।",
+    "source": "প্রাইমারি শিক্ষক নিয়োগ ও এনটিআরসিএ"
+  },
+  {
+    "topicBn": "Voice Change — Reflexive Object & Factitive Object (Hard)",
+    "stem": "Choose the correct passive voice of: “The committee elected him Chairman” and “She fanned herself.”",
+    "options": {
+      "A": "“He was elected Chairman by the committee” and “She was fanned by herself.”",
+      "B": "“Chairman was elected him by the committee” and “Herself was fanned by her.”",
+      "C": "“He was elected to Chairman” and “She fanned by herself.”",
+      "D": "Both sentences cannot be made passive."
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "১. Factitive object (Chairman, Captain, President) কখনোই Passive বাক্যের Subject হতে পারে না; ব্যক্তিবাচক কর্মটি (He) Subject হয়। ২. Reflexive pronoun (herself, himself) কখনোই Passive-এর Subject হয় না, অপরিবর্তিত থাকে (She was fanned by herself)।",
+    "source": "৪৩তম বিসিএস ও পিএসসি নন-ক্যাডার"
+  },
+  {
+    "topicBn": "Narration — Indirect Speech of “Let us” vs “Let him/me” (Hard)",
+    "stem": "Compare the indirect forms of: (1) He said to me, “Let us organize a book fair” and (2) He said to the guard, “Let the visitor come in.”",
+    "options": {
+      "A": "(1) He proposed to me that we should organize a book fair; (2) He ordered/told the guard to let the visitor come in (or that the visitor might be allowed to come in).",
+      "B": "Both use “proposed that we should”",
+      "C": "Both use “requested to let”",
+      "D": "(1) He told me to let us organize; (2) He proposed the guard that visitor should come."
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "‘Let us (Let’s)’ দ্বারা প্রস্তাব বোঝায়, তাই ‘proposed to / suggested + that + we/they should + V1’ হয়। কিন্তু ‘Let me / Let him / Let the visitor’ দ্বারা প্রস্তাব বোঝায় না (অনুমতি বা আদেশ বোঝায়), তাই ‘told/requested/wished + to let...’ বা ‘might be allowed to’ হয়!",
+    "source": "৪৪তম বিসিএস ও ব্যাংক নিয়োগ"
+  },
+  {
+    "topicBn": "Spelling — High-Frequency Confusing Words (Hard)",
+    "stem": "Which of the following groups contains ONLY correctly spelled English words?",
+    "options": {
+      "A": "Questionnaire, Surveillance, Liaison, Entrepreneur, Bureaucracy, Maintenance",
+      "B": "Questionaire, Surveilance, Liason, Entreprenuer, Bureacracy, Maintainance",
+      "C": "Accomodation, Millenium, Embarassment, Occassion, Seperate",
+      "D": "Supercede, Priviledge, Consciencious, Harrassment"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "সঠিক বানানগুলো লক্ষ্য করুন: Questionnaire (ডাবল n), Surveillance (e-i-ll), Liaison (l-i-a-i-s-o-n), Entrepreneur, Bureaucracy, Maintenance (Main-ten-ance, maintain নয়!), Accommodation (২টি c, ২টি m), Millennium (২টি l, ২টি n), Supersede (s-e-d-e)।",
+    "source": "৪৬তম, ৪৫তম ও ৪১তম বিসিএস"
+  },
+  {
+    "topicBn": "One-Word Substitution — Governance & Philosophy (Hard)",
+    "stem": "What is the one-word substitution for: (1) “A person who is indifferent to pleasure and pain” and (2) “A government run by the richest/wealthy class”?",
+    "options": {
+      "A": "(1) Stoic (স্থিতধী/নির্লিপ্ত) and (2) Plutocracy (ধনিকতন্ত্র)",
+      "B": "(1) Epicurean and (2) Aristocracy",
+      "C": "(1) Cynic and (2) Theocracy",
+      "D": "(1) Altruist and (2) Oligarchy"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "সুখ-দুঃখে নির্লিপ্ত ব্যক্তি = Stoic; ধনিক শ্রেণির শাসন = Plutocracy; অভিজাতদের শাসন = Aristocracy; ধর্মগুরুদের শাসন = Theocracy; অল্প কয়েকজনের শাসন = Oligarchy; এবং সরকারি কর্মকর্তাদের শাসন = Bureaucracy।",
+    "source": "৪৪তম বিসিএস ও বাংলাদেশ ব্যাংক AD"
+  },
+  {
+    "topicBn": "Idioms & Phrases — Achilles’ heel vs Swan song vs Maiden speech (Medium)",
+    "stem": "Match the following three classic idioms with their accurate meanings: (1) “Achilles’ heel”, (2) “Maiden speech”, and (3) “Swan song”.",
+    "options": {
+      "A": "(1) A small but fatal weakness/vulnerable point, (2) First speech in parliament/public, (3) Last work or final performance before death/retirement",
+      "B": "(1) Strongest weapon, (2) Speech of a bride, (3) Sweet music of a bird",
+      "C": "(1) Foot injury, (2) Last speech, (3) First poem",
+      "D": "(1) Secret plan, (2) Angry speech, (3) Victory song"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Achilles’ heel = মর্মস্থল বা মারাত্মক দুর্বল দিক; Maiden speech = প্রথম বক্তৃতা; এবং Swan song = কোনো কবি, শিল্পী বা ব্যক্তির জীবনের শেষ কর্ম বা বিদায়ী রচনা।",
+    "source": "৪৫তম, ৪০তম ও ৩৫তম বিসিএস"
+  },
+  {
+    "topicBn": "Grammar — Subjunctive Mood (Critical BCS Cadre)",
+    "stem": "Choose the correct sentence using the Subjunctive Mood:",
+    "options": {
+      "A": "The magistrate ordered that the accused pays a fine immediately.",
+      "B": "The magistrate ordered that the accused pay a fine immediately.",
+      "C": "The magistrate ordered that the accused will pay a fine immediately.",
+      "D": "The magistrate ordered that the accused paid a fine immediately."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "Subjunctive mood verbs (order, insist, recommend, suggest, demand, require) followed by 'that' take the base form of the verb (Bare Infinitive = pay), without 's/es', modal auxiliary, or tense change regardless of the subject.",
+    "source": "45th & 41st BCS Cadre Critical English"
+  },
+  {
+    "topicBn": "Grammar — Negative Inversion (Critical BCS Cadre)",
+    "stem": "Identify the grammatically correct inverted structure:",
+    "options": {
+      "A": "Seldom we have witnessed such an extraordinary administrative courage.",
+      "B": "Seldom have we witnessed such an extraordinary administrative courage.",
+      "C": "Seldom we did witness such an extraordinary administrative courage.",
+      "D": "Seldom had witnessed we such an extraordinary administrative courage."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "When negative or restrictive adverbs (Seldom, Rarely, Scarcely, Never, Hardley, Barely, Little) begin a sentence, inversion occurs: Adverb + Auxiliary Verb + Subject + Main Verb.",
+    "source": "44th & 40th BCS Cadre English"
+  },
+  {
+    "topicBn": "Grammar — Dangling / Misplaced Modifiers (Critical)",
+    "stem": "Which of the following sentences does NOT contain a dangling modifier?",
+    "options": {
+      "A": "Walking through the secretariat corridor, a bundle of confidential files fell from his hands.",
+      "B": "While walking through the secretariat corridor, the deputy secretary dropped a bundle of confidential files.",
+      "C": "Having completed the audit report, the computer was shut down by the officer.",
+      "D": "To qualify for the civil service, rigorous preparation must be taken by the candidate."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "In option B, the introductory participial phrase 'While walking through...' logically modifies the subject that immediately follows ('the deputy secretary'). In other options, inanimate objects (files, computer, preparation) appear as illogical doers.",
+    "source": "43rd & 38th BCS Cadre English"
+  },
+  {
+    "topicBn": "Grammar — Parallelism in Complex Structures (Critical)",
+    "stem": "Choose the sentence that correctly observes the rule of Parallel Structure:",
+    "options": {
+      "A": "An ideal civil servant ought to be honest, dedicated, and show promptness in taking decisions.",
+      "B": "An ideal civil servant ought to be honest, dedicated, and prompt in taking decisions.",
+      "C": "An ideal civil servant ought to possess honesty, dedicated, and acting with promptness.",
+      "D": "An ideal civil servant ought to be honest, with dedication, and prompt."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "All elements connected in the series must share the exact grammatical form: adjective ('honest'), adjective ('dedicated'), and adjective ('prompt').",
+    "source": "46th & 42nd BCS Cadre English"
+  },
+  {
+    "topicBn": "Grammar — Preposition with Noun Clauses & Verbs (Critical)",
+    "stem": "Fill in the blank: 'The public administration committee congratulated him _____ his exemplary integrity in procurement.'",
+    "options": {
+      "A": "for",
+      "B": "on",
+      "C": "at",
+      "D": "with"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "The standard collocation is 'congratulate someone ON something' (not 'for'). Compare: 'praise someone FOR something', but 'congratulate ON'.",
+    "source": "44th & 37th BCS English"
+  },
+  {
+    "topicBn": "Grammar — Conditionals: Inverted Third Conditional (Critical)",
+    "stem": "Complete the sentence: '_____ timely intelligence reports, the authorities could have averted the catastrophic unrest.'",
+    "options": {
+      "A": "Had they received",
+      "B": "If they received",
+      "C": "Unless they had received",
+      "D": "Did they receive"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Inverted 3rd conditional replaces 'If they had received' with 'Had they received'. Structure: Had + Subject + V3, Subject + could/would/might + have + V3.",
+    "source": "45th & 39th BCS English"
+  },
+  {
+    "topicBn": "Vocabulary — High-Frequency GRE / BCS Cadre Words (Critical)",
+    "stem": "The word 'OBSEQUIOUS' is closest in meaning to:",
+    "options": {
+      "A": "Rebellious and confrontational",
+      "B": "Servile, excessively submissive, and sycophantic",
+      "C": "Arrogant and patronizing",
+      "D": "Candid and straightforward"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "'Obsequious' means obedient or attentive to an excessive or servile degree (sycophantic, flattering, fawning).",
+    "source": "45th & 41st BCS English Vocabulary"
+  },
+  {
+    "topicBn": "Vocabulary — Antonym Trap (Critical BCS Cadre)",
+    "stem": "What is the antonym of the word 'EPHEMERAL'?",
+    "options": {
+      "A": "Transient",
+      "B": "Evanescent",
+      "C": "Perennial / Eternal",
+      "D": "Fleeting"
+    },
+    "answer": "C",
+    "difficulty": "HIGH",
+    "explanationBn": "'Ephemeral' means lasting for a very short time (transient, fleeting, evanescent). Therefore, its antonym is 'perennial', 'eternal', or 'everlasting'.",
+    "source": "43rd & 38th BCS English"
+  },
+  {
+    "topicBn": "Grammar — Gerund vs Participle Trap (Critical)",
+    "stem": "In the sentence 'The singing of birds enchanted the exhausted travelers', the word 'singing' functions as a:",
+    "options": {
+      "A": "Present Participle",
+      "B": "Verbal Noun",
+      "C": "Participle Adjective",
+      "D": "Infinitive"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "When an -ing form is preceded by 'the' and immediately followed by 'of' ('the + verb-ing + of'), it behaves purely as a Verbal Noun (distinct from a standard Gerund that takes a direct object).",
+    "source": "44th & 35th BCS English"
+  },
+  {
+    "topicBn": "Grammar — Pronoun Case with 'Than' & 'As' (Critical)",
+    "stem": "Choose the correct sentence according to formal English grammar:",
+    "options": {
+      "A": "He is senior to me, but I am more meticulous than him.",
+      "B": "He is senior to me, but I am more meticulous than he.",
+      "C": "He is senior than me, but I am more meticulous than him.",
+      "D": "He is more senior to me, but I am meticulous than he."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "Two key rules: 1. Latin comparative adjectives (senior, junior, prior, superior, inferior) take 'to' (never 'than'). 2. In formal English, 'than' introduces an elliptical clause where subjective pronoun is required: 'more meticulous than he [is]'.",
+    "source": "46th & 40th BCS English"
+  },
+  {
+    "topicBn": "Grammar — Subject-Verb Agreement: Neither/Nor with Proximity (Critical)",
+    "stem": "Select the sentence with correct subject-verb agreement:",
+    "options": {
+      "A": "Neither the secretary nor the joint secretaries was present at the bilateral summit.",
+      "B": "Neither the secretary nor the joint secretaries were present at the bilateral summit.",
+      "C": "Neither the joint secretaries nor the secretary were present at the bilateral summit.",
+      "D": "Neither of the two candidates have met the prerequisite criteria."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "When subjects are joined by 'either...or' or 'neither...nor', the verb agrees with the closer subject. Since 'joint secretaries' is plural and closest to the verb, 'were' is correct.",
+    "source": "45th & 37th BCS English"
+  },
+  {
+    "topicBn": "Phrasal Verbs — Subtle Distinction (Critical)",
+    "stem": "When the Finance Ministry decides to cancel or discontinue a tax rebate regulation, they effectively _____ it.",
+    "options": {
+      "A": "do away with",
+      "B": "look down upon",
+      "C": "put up with",
+      "D": "make up for"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "'Do away with' means to abolish, cancel, or eliminate. 'Put up with' = tolerate, 'make up for' = compensate, 'look down upon' = despise.",
+    "source": "44th & 38th BCS English"
+  },
+  {
+    "topicBn": "Idioms & Phrases — Administrative & Legal English (Critical)",
+    "stem": "The phrase 'ULTRA VIRES' in constitutional and administrative law denotes:",
+    "options": {
+      "A": "Acts done in utmost good faith",
+      "B": "Beyond the legal powers or authority of a person or corporate body",
+      "C": "A matter already decided by a competent court",
+      "D": "An interim injunction issued without notice"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "'Ultra vires' is a Latin legal phrase meaning 'beyond the powers'. An action taken by a public authority outside the statutory scope is ultra vires and void. (Contrast: 'Intra vires' = within legal powers).",
+    "source": "45th & 41st BCS English & Law"
+  },
+  {
+    "topicBn": "Vocabulary — One Word Substitution (Critical)",
+    "stem": "A person who is indifferent or insensitive to both pleasure and pain, enduring hardship without complaint, is termed a:",
+    "options": {
+      "A": "Hedonist",
+      "B": "Stoic",
+      "C": "Epicurean",
+      "D": "Misanthrope"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "'Stoic' refers to a person who can endure pain or hardship without showing feelings or complaining. 'Hedonist' seeks pleasure, 'Misanthrope' hates humankind.",
+    "source": "43rd & 36th BCS English"
+  },
+  {
+    "topicBn": "Grammar — Voice Change of Cognate & Factitive Verbs (Critical)",
+    "stem": "What is the passive form of 'The cabinet elected him Prime Minister'?",
+    "options": {
+      "A": "He was elected Prime Minister by the cabinet.",
+      "B": "Prime Minister was elected him by the cabinet.",
+      "C": "He had been elected Prime Minister by the cabinet.",
+      "D": "The cabinet was elected Prime Minister by him."
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "In factitive verbs (elect, select, name, call, appoint), the objective complement ('Prime Minister') cannot become the subject of the passive voice; only the personal direct object ('him' -> 'He') becomes the subject.",
+    "source": "45th & 40th BCS English"
+  },
+  {
+    "topicBn": "Grammar — Adjective vs Adverb: Linking Verbs (Critical)",
+    "stem": "Choose the correct sentence containing a linking verb:",
+    "options": {
+      "A": "The newly renovated auditorium looks beautifully tonight.",
+      "B": "The newly renovated auditorium looks beautiful tonight.",
+      "C": "The newly renovated auditorium looks much beautifully tonight.",
+      "D": "The newly renovated auditorium looks more beautifully tonight."
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "Linking verbs (look, seem, appear, smell, taste, feel, sound, remain) are modified by predicate adjectives (beautiful), not adverbs of manner (beautifully).",
+    "source": "44th & 37th BCS English"
+  },
+  {
+    "topicBn": "Spelling — Classical BPSC Traps (Critical)",
+    "stem": "Select the correctly spelt administrative word:",
+    "options": {
+      "A": "Surveillance",
+      "B": "Surveilance",
+      "C": "Survailance",
+      "D": "Surveillence"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Correct spelling is S-U-R-V-E-I-L-L-A-N-C-E (double 'l', ends in '-ance').",
+    "source": "46th & 38th BCS English"
+  },
+  {
+    "topicBn": "Grammar — Relative Pronoun 'Whom' vs 'Who' in Embedded Clauses (Critical)",
+    "stem": "Choose the correct sentence:",
+    "options": {
+      "A": "The commissioner invited the investigator whom he believed was most impartial.",
+      "B": "The commissioner invited the investigator who he believed was most impartial.",
+      "C": "The commissioner invited the investigator which he believed was most impartial.",
+      "D": "The commissioner invited the investigator whose he believed was most impartial."
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "When an interrupting parenthetical clause like 'he believed' is omitted, we see: 'who [he believed] WAS most impartial'. Since it is the subject of the verb 'was', 'who' is required, not 'whom'.",
+    "source": "45th & 41st BCS English"
+  },
+  {
+    "topicBn": "Grammar — No Sooner / Scarcely Inversion Correlatives (Critical)",
+    "stem": "Fill in the blank: 'Scarcely had the president concluded his address _____ the assembly erupted in spontaneous applause.'",
+    "options": {
+      "A": "than",
+      "B": "when",
+      "C": "then",
+      "D": "that"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "The pair correlatives are: 'No sooner had ... THAN', but 'Hardly / Scarcely had ... WHEN / BEFORE'.",
+    "source": "43rd & 39th BCS English"
+  },
+  {
+    "topicBn": "Vocabulary — Synonyms with Administrative Connotation (Critical)",
+    "stem": "The word 'PRAGMATIC' in policymaking means:",
+    "options": {
+      "A": "Idealistic and visionary without empirical basis",
+      "B": "Dealing with problems sensibly and realistically based on practical considerations",
+      "C": "Rigid and dogmatic in ideological stance",
+      "D": "Procrastinating and hesitant"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "'Pragmatic' means guided by practical experience and actual conditions rather than abstract dogma or theory.",
+    "source": "46th & 44th BCS English"
+  }
+]
