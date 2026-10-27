@@ -8,6 +8,8 @@ Play Store title: *Sonar Horin: BCS, Bank, Primary Prep*.
 **Mark:** green tile (flag field), red sun (flag disc), a golden deer standing on an open book:
 the government job goal, reached through study.
 
+Deer silhouette: "deer" from [game-icons.net](https://game-icons.net) ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)), recolored and composed into the mark. Keep this credit (for example on an About page).
+
 ## Palette (same tokens as the web redesign)
 
 | Token | Hex | Use |
