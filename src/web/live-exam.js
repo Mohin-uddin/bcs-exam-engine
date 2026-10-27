@@ -6,7 +6,8 @@
  * - Candidates register, enter the hall only while the exam is live, submit once
  * - Answer key never leaves the server until the exam has ended
  * - Merit list: Net Score first, then the tie-breaker (1 - Time_Taken / Total_Duration)
- * - State is persisted to a JSON file so a server restart keeps exams & results
+ * - State is persisted to a JSON file (or Postgres via `store` when DATABASE_URL is set)
+ *   so a server restart keeps exams & results
  */
 
 const fs = require('node:fs');
@@ -27,7 +28,9 @@ const TRACK_META = {
   NURSING: { labelBn: 'নার্সিং নিয়োগ', orgBn: 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার', negativeMark: 0.25 }
 };
 
-function createLiveExamEngine({ availableExams, sampleQuestions }) {
+const STORE_KEY = 'live-exams';
+
+function createLiveExamEngine({ availableExams, sampleQuestions, store = null }) {
   const questionById = new Map((sampleQuestions || []).map(q => [q.id, q]));
   const catalog = (availableExams || []).filter(e => Array.isArray(e.questionIds) && e.questionIds.length > 0);
   const catalogById = new Map(catalog.map(e => [e.id, e]));
@@ -39,6 +42,7 @@ function createLiveExamEngine({ availableExams, sampleQuestions }) {
   // Persistence
   // ---------------------------------------------------------------------------
   function load() {
+    if (store) return; // loaded asynchronously in ready()
     try {
       if (fs.existsSync(DATA_FILE)) {
         state = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -52,6 +56,9 @@ function createLiveExamEngine({ availableExams, sampleQuestions }) {
   function saveNow() {
     clearTimeout(saveTimer);
     saveTimer = null;
+    if (store) {
+      return store.set(STORE_KEY, state).catch(e => console.error(`[live-exam] Could not save to database: ${e.message}`));
+    }
     fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
     const tmp = `${DATA_FILE}.tmp`;
     fs.writeFileSync(tmp, JSON.stringify(state));
@@ -63,7 +70,22 @@ function createLiveExamEngine({ availableExams, sampleQuestions }) {
   }
 
   load();
-  process.on('exit', () => { if (saveTimer) saveNow(); });
+  if (!store) process.on('exit', () => { if (saveTimer) saveNow(); });
+
+  // Call once before the server starts listening (no-op without a database)
+  async function ready() {
+    if (!store) return;
+    const saved = await store.get(STORE_KEY);
+    if (saved) {
+      state = saved;
+      if (!Array.isArray(state.exams)) state.exams = [];
+    }
+  }
+
+  // Write any pending change now (used on shutdown)
+  async function flush() {
+    if (saveTimer) await saveNow();
+  }
 
   // ---------------------------------------------------------------------------
   // Helpers
@@ -458,7 +480,7 @@ function createLiveExamEngine({ availableExams, sampleQuestions }) {
     return fail(res, 404, 'NOT_FOUND', 'রুট পাওয়া যায়নি।'), true;
   }
 
-  return { handle, buildMerit, scoreAnswers, phaseOf, _state: () => state, _saveNow: saveNow };
+  return { handle, buildMerit, scoreAnswers, phaseOf, ready, flush, _state: () => state, _saveNow: saveNow };
 }
 
 module.exports = { createLiveExamEngine, TRACK_META };

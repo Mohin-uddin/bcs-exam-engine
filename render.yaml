@@ -1,0 +1,22 @@
+# Render Blueprint: New > Blueprint > pick this repo. Free web service in Singapore
+# (closest Render region to Bangladesh). Data lives in DATABASE_URL (e.g. Neon Postgres, Singapore).
+services:
+  - type: web
+    name: medha
+    runtime: node
+    region: singapore
+    plan: free
+    buildCommand: npm install --omit=dev
+    startCommand: node src/web/server.js
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_KEY
+        sync: false
+      - key: CONTACT_EMAIL
+        sync: false

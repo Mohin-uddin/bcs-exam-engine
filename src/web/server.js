@@ -28,6 +28,7 @@ const {
   nursingExamsArchive
 } = require('./seed-data');
 const { createLiveExamEngine } = require('./live-exam');
+const { createStateStore } = require('./state-store');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
@@ -35,7 +36,8 @@ const PUBLIC_DIR = path.join(__dirname, 'public');
 // Live scheduled exams & merit list (admin announces, candidates join at the set time)
 const liveExams = createLiveExamEngine({
   availableExams: require('./seed-data').availableExams,
-  sampleQuestions
+  sampleQuestions,
+  store: createStateStore()
 });
 
 // In-Memory Leaderboard simulating Redis ZSET
@@ -408,6 +410,24 @@ const server = http.createServer(async (req, res) => {
     return serveStatic(res, path.join(PUBLIC_DIR, 'app.js'), 'application/javascript; charset=utf-8');
   }
 
+  // Privacy policy (needed for the Play Store listing). Contact email comes from CONTACT_EMAIL.
+  if (pathname === '/privacy') {
+    return fs.readFile(path.join(PUBLIC_DIR, 'privacy.html'), 'utf8', (err, html) => {
+      if (err) return sendJson(res, 500, { status: 'ERROR', message: 'Privacy page missing' });
+      const email = (process.env.CONTACT_EMAIL || 'support@example.com').replace(/[<>"&]/g, '');
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(html.replaceAll('{{CONTACT_EMAIL}}', email));
+    });
+  }
+
+  if (pathname === '/logo.svg') {
+    return serveStatic(res, path.join(PUBLIC_DIR, 'logo.svg'), 'image/svg+xml');
+  }
+
+  if (pathname === '/native-app.js') {
+    return serveStatic(res, path.join(PUBLIC_DIR, 'native-app.js'), 'application/javascript; charset=utf-8');
+  }
+
   if (pathname === '/seed-data.js') {
     return serveStatic(res, path.join(__dirname, 'seed-data.js'), 'application/javascript; charset=utf-8');
   }
@@ -417,12 +437,23 @@ const server = http.createServer(async (req, res) => {
   res.end('Route Not Found');
 });
 
-// Start Server
-server.listen(PORT, () => {
+// Start Server (after saved live-exam data is loaded from the database, if any)
+liveExams.ready().then(() => server.listen(PORT, () => {
   console.log(`================================================================`);
   console.log(`BCS & BD Competitive Exam Prep Engine (Web Platform)`);
   console.log(`Web App running locally at: http://localhost:${PORT}`);
   console.log(`Printable 2-Column Booklet & OMR: http://localhost:${PORT}/omr-printable`);
   console.log(`Live Exams & Merit List: http://localhost:${PORT}/live  (Admin: /admin)`);
   console.log(`================================================================`);
+}), err => {
+  console.error(`Could not load saved data from the database: ${err.message}`);
+  process.exit(1);
 });
+
+// Render/hosting stops the server with SIGTERM on every deploy: save pending data first
+for (const sig of ['SIGTERM', 'SIGINT']) {
+  process.on(sig, () => {
+    liveExams.flush().finally(() => process.exit(0));
+  });
+}
+

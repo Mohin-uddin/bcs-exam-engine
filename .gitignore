@@ -9,3 +9,17 @@ _backup_*/
 scripts/*.tmp.js
 # Generated copy; server.js serves src/web/seed-data.js
 src/web/public/seed-data.js
+
+# Secrets (Android signing keys)
+*.jks
+*.keystore
+.env.local
+
+# Local live-exam data (production uses DATABASE_URL)
+data/
+
+# Android build output
+*.apk
+*.aab
+_android_import.tgz
+_sync_for_github.tgz
