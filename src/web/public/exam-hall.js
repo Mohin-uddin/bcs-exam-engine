@@ -286,6 +286,7 @@
 
   function startExam() {
     examRunning = true;
+    document.body.classList.add('exam-running');
     document.getElementById('btnSubmit').disabled = false;
     if (timerId) clearInterval(timerId);
     timerId = setInterval(() => {
@@ -415,6 +416,7 @@
   }
 
   function submitExam() {
+    document.body.classList.remove('exam-running');
     if (liveExamId) return submitLive(true);
     showLocalResult();
   }
