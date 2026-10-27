@@ -346,6 +346,7 @@
     .chip:hover { border-color: var(--green); color: var(--green); }
     .chip.chip-active { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
     .chip .chip-meta { font-size: 12px; opacity: .75; font-weight: 400; }
+    @media (max-width: 480px) { .chip { white-space: normal; max-width: 100%; text-align: left; } }
     .chip-hot::after { content: "🔥"; font-size: 12px; }
 
     .section-label { font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: 8px; display: block; }

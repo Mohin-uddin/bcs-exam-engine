@@ -241,6 +241,26 @@ body {
 
 .answer-key, .print-omr { display: none; }
 
+/* Phones: keep everything inside the screen width, and keep the sticky
+   toolbar short so the question paper gets the space */
+@media screen and (max-width: 720px) {
+  .toolbar { padding: 8px 12px; gap: 8px; }
+  .tb-left, .tb-mid, .tb-right { width: 100%; min-width: 0; gap: 6px; }
+  .tb-mid label { flex: 1 1 100%; min-width: 0; }
+  .tb-mid label:has(#selCode), .tb-mid label.chk { flex: 1 1 auto; }
+  .tb-mid select { flex: 1 1 auto; min-width: 0; max-width: 100%; text-overflow: ellipsis; }
+  .tb-right { justify-content: space-between; }
+  .tb-right .tb-btn { padding: 6px 10px; }
+  /* during the exam only the timer and buttons stay pinned */
+  body.exam-running .tb-mid { display: none; }
+  body.exam-running .tb-left { width: auto; }
+  body.exam-running .tb-right { width: auto; flex: 1; justify-content: flex-end; }
+  .paper { padding-left: 14px; padding-right: 14px; }
+  .q-opts { grid-template-columns: 1fr; }
+  .form { grid-template-columns: 1fr; }
+  .form input, .form select { min-width: 0; width: 100%; box-sizing: border-box; }
+}
+
 @media print {
   body { background: #fff; }
   .no-print { display: none !important; }

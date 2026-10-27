@@ -142,6 +142,14 @@
     .omr-line { flex: 1; border-bottom: 1px solid #000; }
     @media print { .omr-sheet-a4 { margin: 0; box-shadow: none; } }
 
+    /* Phones: shrink the A4 pages to the screen width (printing is unaffected) */
+    @media screen and (max-width: 820px) {
+      .top-toolbar { padding: 8px 12px; position: static; }
+      .top-toolbar > div { width: 100%; min-width: 0; }
+      .top-toolbar select { max-width: 100%; min-width: 0; flex: 1 1 100%; }
+      .page-container, .omr-sheet-a4 { zoom: var(--page-fit, 1); margin: 10px auto; }
+    }
+
     .signature-box {
       border: 1px solid #000; padding: 6px; text-align: center; font-size: 7.5pt; height: 38px;
       display: flex; flex-direction: column; justify-content: flex-end;
@@ -461,5 +469,16 @@
       svg.innerHTML = out;
     }
   </script>
+<script>
+  // A4 pages are 210mm (~794px) wide; scale them to fit narrow screens
+  (function () {
+    function fit() {
+      var w = document.documentElement.clientWidth;
+      document.documentElement.style.setProperty('--page-fit', Math.min(1, (w - 16) / 800).toFixed(3));
+    }
+    fit();
+    window.addEventListener('resize', fit);
+  })();
+</script>
 </body>
 </html>
