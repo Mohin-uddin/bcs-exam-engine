@@ -247,6 +247,7 @@
   </div>
 
   <script src="/seed-data.js"></script>
+  <script src="/account.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       switchBookletTrack();
@@ -306,6 +307,13 @@
       const track = trackSel ? trackSel.value : 'BCS';
       const selectExam = document.getElementById('selectBookletExam');
       const examId = selectExam ? selectExam.value : 'PRACTICE_SET_1';
+      if (window.Account && Account.isLocked(examId)) {
+        Account.allow(examId);
+        const back = Account.firstAllowedOption(selectExam);
+        if (!back) return;
+        selectExam.value = back;
+        return updateBookletExam();
+      }
       const pool = (typeof window !== 'undefined' && window.sampleQuestions) ? window.sampleQuestions : [];
       const byId = new Map(pool.map(q => [q.id, q]));
 

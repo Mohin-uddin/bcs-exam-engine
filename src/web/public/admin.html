@@ -14,7 +14,7 @@
   <header class="toolbar">
     <div class="tb-left">
       <a href="/" class="btn light sm">← হোম</a>
-      <div class="tb-title">অ্যাডমিন • লাইভ পরীক্ষা ব্যবস্থাপনা</div>
+      <div class="tb-title">অ্যাডমিন • পেমেন্ট ও লাইভ পরীক্ষা</div>
     </div>
     <a href="/live" class="btn light sm">শিক্ষার্থীদের পেজ দেখুন →</a>
   </header>
@@ -33,6 +33,67 @@
     </section>
 
     <div id="adminArea" hidden>
+      <section class="panel" id="paymentArea">
+        <h2>💳 পেমেন্ট (অনলাইন ও বিকাশ / নগদ / রকেট) <span class="badge UPCOMING" id="payPendingBadge"></span></h2>
+        <p style="color:#475569;font-size:14px;margin-bottom:10px">অনলাইন গেটওয়ে (SSLCommerz / aamarPay) দিয়ে পেমেন্ট হলে গেটওয়ে থেকে যাচাই করে নিজে থেকেই প্রিমিয়াম চালু হয়, কিছু করতে হবে না। শুধু "নিজে Send Money + TrxID" পেমেন্টগুলো আপনার বিকাশ / নগদ / রকেট স্টেটমেন্টে মিলিয়ে অনুমোদন দিন।</p>
+        <div class="actions" style="margin-bottom:10px">
+          <button class="btn primary sm" type="button" data-pstatus="PENDING">যাচাই বাকি</button>
+          <button class="btn ghost sm" type="button" data-pstatus="APPROVED">অনুমোদিত</button>
+          <button class="btn ghost sm" type="button" data-pstatus="REJECTED">বাতিল</button>
+          <button class="btn ghost sm" type="button" data-pstatus="ALL">সব</button>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>সময়</th><th>ইউজার</th><th>মাধ্যম</th><th>TrxID</th><th>টাকা / প্যাকেজ</th><th></th></tr></thead>
+            <tbody id="payRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>👥 ইউজার ও প্রিমিয়াম</h2>
+        <form id="userSearchForm" class="row2">
+          <label class="field">নাম বা মোবাইল নম্বর দিয়ে খুঁজুন
+            <input id="userSearch" placeholder="যেমন 017...">
+          </label>
+          <div class="field" style="justify-content:flex-end"><button class="btn ghost" type="submit">খুঁজুন</button></div>
+        </form>
+        <div id="userStats" style="color:#475569;font-size:14px;margin:6px 0 10px"></div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>ইউজার</th><th>অ্যাকাউন্ট খোলা</th><th>অবস্থা</th><th></th></tr></thead>
+            <tbody id="userRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>⚙️ পেমেন্ট সেটিংস</h2>
+        <div class="error" id="setWarn" hidden style="margin-bottom:10px">⚠️ পেমেন্ট নম্বর এখনো বসানো হয়নি (01XXXXXXXXX)। আপনার আসল বিকাশ / নগদ / রকেট নম্বর দিয়ে সংরক্ষণ করুন, না হলে ইউজার ভুল নম্বর দেখবে।</div>
+        <form id="settingsForm">
+          <div id="setGateway" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:14px"></div>
+          <div class="row2">
+            <label class="field">নিজে Send Money + TrxID অপশন (অনলাইনের পাশাপাশি)
+              <select id="setManual"><option value="1">চালু</option><option value="0">বন্ধ</option></select>
+            </label>
+          </div>
+          <h3 style="font-size:15px;margin:4px 0 8px">TrxID অপশনের জন্য টাকা নেওয়ার নম্বর</h3>
+          <div id="setMethods"></div>
+          <h3 style="font-size:15px;margin:12px 0 8px">প্যাকেজ ও দাম</h3>
+          <div id="setPlans"></div>
+          <div class="row2">
+            <label class="field">প্রতিটি পরীক্ষার ধরনে কয়টি সেট ফ্রি
+              <input id="setFree" type="number" min="0" max="20" required>
+              <small id="setLockInfo"></small>
+            </label>
+          </div>
+          <label class="field">পেমেন্ট পেজের নোটিশ
+            <textarea id="setNotice" maxlength="500"></textarea>
+          </label>
+          <button class="btn primary" type="submit" id="setSave">সংরক্ষণ করুন</button>
+        </form>
+      </section>
+
       <section class="panel">
         <h2>📢 নতুন পরীক্ষা ঘোষণা করুন</h2>
         <form id="createForm">
@@ -118,5 +179,6 @@
 
   <div class="toast" id="toast" hidden></div>
   <script src="/admin.js"></script>
+  <script src="/admin-payments.js"></script>
 </body>
 </html>

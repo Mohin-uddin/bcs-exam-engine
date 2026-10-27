@@ -157,3 +157,18 @@ docker compose up -d
 - Time taken is measured on the server from the official start time. Ranking: Net Score first, then the tie-breaker `1 - Time_Taken / Total_Duration` among equal net scores (equal score and time share a rank).
 - Re-registering with the same mobile number returns the same candidate, so a student can continue on another device.
 - API lives in `src/web/live-exam.js` (`/api/live/...`).
+
+## Premium lock & bKash / Nagad / Rocket payment (manual TrxID)
+
+- Users sign up with phone + password (website and Android app share the same account).
+- Free: in every exam type the first 2 model sets, 2 past papers and 2 subject sets. Everything else (and the Super-Hot sets) is premium. Change the count in `/admin` → পেমেন্ট সেটিংস.
+- Locked questions never reach the browser: `/seed-data.js` is built per request (free users get only the free sets' questions).
+- **Online payment (main):** SSLCommerz or aamarPay checkout (bKash, Nagad, Rocket, Upay, Visa, Mastercard). Flow: `POST /api/payment/initiate` → gateway page → success / IPN callback (`/api/payment/gw/<gateway>/success|fail|cancel|ipn`) → our server calls the gateway's validation API and checks status, amount, currency and tran_id → premium starts automatically. A faked callback without a real payment never unlocks anything.
+  - Setup: get a sandbox store from SSLCommerz (developer.sslcommerz.com) or aamarPay, then set `PAYMENT_GATEWAY`, the store id / password (or signature key), `PUBLIC_URL` and `PAYMENT_SANDBOX=true`. Test, then put the live credentials and `PAYMENT_SANDBOX=false`. See `.env.example`.
+  - IPN needs a public URL (Render). On localhost the success redirect still verifies and unlocks.
+  - In `/admin`, an unfinished online payment has a "গেটওয়েতে আবার যাচাই" button that asks the gateway again.
+- **Manual fallback:** user sends money to your number and submits sender number + TrxID; you approve in `/admin`. Can be switched off in `/admin` → পেমেন্ট সেটিংস. A TrxID can be used only once.
+- Set your real payment numbers and prices in `/admin` → পেমেন্ট সেটিংস (defaults are placeholders `01XXXXXXXXX`).
+- The Android app never shows the payment form and the server refuses payments from it (Play policy); users unlock on the website.
+- Data: `data/accounts.json` locally, or the `app_state` table when `DATABASE_URL` is set. Set a strong `ADMIN_KEY` in production.
+- Code: `src/web/accounts.js` (API), `src/web/public/account.js` (login/unlock UI), `src/web/public/admin-payments.js` (admin). `src/web/payment-gateways.js` (SSLCommerz / aamarPay).
