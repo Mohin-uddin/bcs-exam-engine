@@ -1,4 +1,4 @@
-# মেধা (Medha) Android App: APK build guide (Banglish)
+# সোনার হরিণ (Sonar Horin) Android App: APK build guide (Banglish)
 
 Ei Android app ta **Capacitor** diye banano. App er vitore amader web app (`src/web`) load hoy,
 tai practice, model test, live exam, OMR scanner, merit list sob kichu web er motoi kaj kore,
@@ -69,10 +69,10 @@ pathiye install korte parben ("Install unknown apps" allow korte hobe).
 
 1. Ekbar ekta signing key banan (eta **kokhono haraben na**, backup rakhun):
    ```bash
-   keytool -genkey -v -keystore medha-release.jks -alias medha -keyalg RSA -keysize 2048 -validity 10000
+   keytool -genkey -v -keystore sonarhorin-release.jks -alias sonarhorin -keyalg RSA -keysize 2048 -validity 10000
    ```
 2. Android Studio te **Build > Generate Signed App Bundle / APK > Android App Bundle**,
-   `medha-release.jks` select korun, password din, **release** choose korun.
+   `sonarhorin-release.jks` select korun, password din, **release** choose korun.
 3. Output: `android/app/release/app-release.aab`. Play Console e eta upload korben.
 4. Notun version dile `android/app/build.gradle` e `versionCode` 1 barate hobe
    (ar `versionName` jemon "1.0.1").
@@ -85,7 +85,7 @@ Play Store listing er jonno chobi `branding/` folder e ache:
 | Ki | Kothay |
 |---|---|
 | App er naam (icon er niche) | `android/app/src/main/res/values/strings.xml` (`app_name`) |
-| Package id (`com.medha.prep`) | `capacitor.config.json` `appId` + `android/app/build.gradle` (Play Store e upload er por ar change kora jay na) |
+| Package id (`com.sonarhorin.app`) | `capacitor.config.json` `appId` + `android/app/build.gradle` (Play Store e upload er por ar change kora jay na) |
 | Splash kotokkhon thakbe | `capacitor.config.json` > `plugins.SplashScreen.launchShowDuration` (ms) |
 | Splash chobi (Android 7–11) | `android/app/src/main/res/drawable*/splash.png` |
 | Splash icon (Android 12+) | `android/app/src/main/res/drawable-*/splash_icon.png`, background color `values/colors.xml` er `brandPaper` |

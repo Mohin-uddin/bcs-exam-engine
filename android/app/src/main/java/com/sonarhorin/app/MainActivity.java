@@ -1,4 +1,4 @@
-package com.medha.prep;
+package com.sonarhorin.app;
 
 import com.getcapacitor.BridgeActivity;
 

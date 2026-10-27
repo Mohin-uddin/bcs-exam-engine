@@ -20,6 +20,6 @@ fs.writeFileSync(cfgPath, JSON.stringify(cfg, null, 2) + '\n');
 
 fs.writeFileSync(
   path.join(root, 'mobile/www/config.js'),
-  `// Set by: npm run app:url -- https://your-domain.com\nwindow.MEDHA_APP_URL = ${JSON.stringify(url)};\n`
+  `// Set by: npm run app:url -- https://your-domain.com\nwindow.APP_URL = ${JSON.stringify(url)};\n`
 );
 console.log(`App URL set to ${url}. Now run: npx cap sync android`);

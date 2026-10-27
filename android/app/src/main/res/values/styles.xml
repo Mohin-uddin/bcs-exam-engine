@@ -17,7 +17,7 @@
 
     <!-- Launch / splash theme.
          Android 12+: system splash = paper background + round logo (splash_icon).
-         Android 7-11: full-screen @drawable/splash (logo + মেধা wordmark). -->
+         Android 7-11: full-screen @drawable/splash (logo + সোনার হরিণ wordmark). -->
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
         <item name="android:background">@drawable/splash</item>
         <item name="windowSplashScreenBackground">@color/brandPaper</item>

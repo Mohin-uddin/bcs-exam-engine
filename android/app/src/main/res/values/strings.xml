@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">মেধা</string>
-    <string name="title_activity_main">মেধা</string>
-    <string name="package_name">com.medha.prep</string>
-    <string name="custom_url_scheme">com.medha.prep</string>
+    <string name="app_name">সোনার হরিণ</string>
+    <string name="title_activity_main">সোনার হরিণ</string>
+    <string name="package_name">com.sonarhorin.app</string>
+    <string name="custom_url_scheme">com.sonarhorin.app</string>
 </resources>

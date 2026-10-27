@@ -1,6 +1,6 @@
 {
-  "appId": "com.medha.prep",
-  "appName": "মেধা",
+  "appId": "com.sonarhorin.app",
+  "appName": "সোনার হরিণ",
   "webDir": "mobile/www",
   "server": {
     "url": "http://192.168.110.6:3000",
@@ -9,7 +9,7 @@
     "cleartext": true
   },
   "android": {
-    "appendUserAgent": "MedhaApp/Android",
+    "appendUserAgent": "SonarHorinApp/Android",
     "allowMixedContent": false
   },
   "plugins": {
