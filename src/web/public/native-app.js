@@ -7,8 +7,8 @@
 (function () {
   var ua = navigator.userAgent || '';
   var cap = window.Capacitor;
-  var isApp = /MedhaApp\//.test(ua) || !!(cap && cap.isNativePlatform && cap.isNativePlatform());
-  window.MEDHA_NATIVE_APP = isApp;
+  var isApp = /SonarHorinApp\//.test(ua) || !!(cap && cap.isNativePlatform && cap.isNativePlatform());
+  window.IS_NATIVE_APP = isApp;
   if (!isApp) return;
 
   document.documentElement.classList.add('is-native-app');

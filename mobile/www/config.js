@@ -1,2 +1,2 @@
 // Set by: npm run app:url -- https://your-domain.com
-window.MEDHA_APP_URL = "http://192.168.110.6:3000";
+window.APP_URL = "https://medha-pgi6.onrender.com";

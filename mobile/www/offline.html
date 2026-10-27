@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>মেধা</title>
+  <title>সোনার হরিণ</title>
   <style>
     :root { --paper:#f6f5f0; --ink:#1f2933; --ink-soft:#5b6670; --green:#006a4e; --green-dark:#00523c; }
     html, body { margin:0; height:100%; background:var(--paper); color:var(--ink);
@@ -20,14 +20,14 @@
 </head>
 <body>
   <main>
-    <img src="logo.svg" alt="মেধা">
+    <img src="logo.svg" alt="সোনার হরিণ">
     <h1>ইন্টারনেট সংযোগ নেই</h1>
     <p>প্র্যাকটিস ও পরীক্ষা চালাতে ইন্টারনেট লাগবে। সংযোগ চালু করে আবার চেষ্টা করুন।</p>
     <button id="retry" type="button">আবার চেষ্টা করুন</button>
   </main>
   <script src="config.js"></script>
   <script>
-    function go() { window.location.replace(window.MEDHA_APP_URL); }
+    function go() { window.location.replace(window.APP_URL); }
     document.getElementById('retry').addEventListener('click', go);
     window.addEventListener('online', go);
   </script>
