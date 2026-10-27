@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand palette (matches the web redesign) -->
+    <color name="colorPrimary">#006A4E</color>
+    <color name="colorPrimaryDark">#00523C</color>
+    <color name="colorAccent">#F2B705</color>
+    <color name="brandPaper">#F6F5F0</color>
+    <color name="brandRed">#D6334A</color>
+</resources>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>মেধা</title>
+  <style>
+    :root { --paper:#f6f5f0; --ink:#1f2933; --ink-soft:#5b6670; --green:#006a4e; --green-dark:#00523c; }
+    html, body { margin:0; height:100%; background:var(--paper); color:var(--ink);
+      font-family:'Noto Sans Bengali','Kalpurush',sans-serif; }
+    main { min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:12px; padding:24px; box-sizing:border-box; text-align:center; }
+    img { width:96px; height:96px; }
+    h1 { font-size:22px; margin:12px 0 0; }
+    p { color:var(--ink-soft); margin:0; line-height:1.6; max-width:320px; }
+    button { margin-top:16px; background:var(--green); color:#fff; border:0; border-radius:10px;
+      padding:12px 28px; font:inherit; font-size:16px; font-weight:600; }
+    button:active { background:var(--green-dark); }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="logo.svg" alt="মেধা">
+    <h1>ইন্টারনেট সংযোগ নেই</h1>
+    <p>প্র্যাকটিস ও পরীক্ষা চালাতে ইন্টারনেট লাগবে। সংযোগ চালু করে আবার চেষ্টা করুন।</p>
+    <button id="retry" type="button">আবার চেষ্টা করুন</button>
+  </main>
+  <script src="config.js"></script>
+  <script>
+    function go() { window.location.replace(window.MEDHA_APP_URL); }
+    document.getElementById('retry').addEventListener('click', go);
+    window.addEventListener('online', go);
+  </script>
+</body>
+</html>

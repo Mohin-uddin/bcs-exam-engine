@@ -1,0 +1,32 @@
+{
+  "appId": "com.medha.prep",
+  "appName": "মেধা",
+  "webDir": "mobile/www",
+  "server": {
+    "url": "http://192.168.110.6:3000",
+    "androidScheme": "https",
+    "errorPath": "offline.html",
+    "cleartext": true
+  },
+  "android": {
+    "appendUserAgent": "MedhaApp/Android",
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1800,
+      "launchAutoHide": true,
+      "launchFadeOutDuration": 300,
+      "backgroundColor": "#f6f5f0",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false,
+      "splashFullScreen": false,
+      "splashImmersive": false
+    },
+    "StatusBar": {
+      "backgroundColor": "#006a4e",
+      "style": "DARK",
+      "overlaysWebView": false
+    }
+  }
+}

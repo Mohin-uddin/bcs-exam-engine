@@ -10,14 +10,25 @@
     "omr:test": "python3 omr-service/omr_scanner.py",
     "omr:generate": "python3 omr-service/generate_test_omr.py",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+    "app:url": "node scripts/set-app-url.js",
+    "android:sync": "npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:apk": "npx cap sync android && cd android && ./gradlew assembleDebug"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
+    "dotenv": "^16.4.5",
     "ioredis": "^5.4.1",
-    "dotenv": "^16.4.5"
+    "pg": "^8.13.1"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4",
     "@types/node": "^20.14.0",
     "prisma": "^5.18.0",
     "typescript": "^5.5.0"
@@ -34,5 +45,8 @@
     "redis-leaderboard"
   ],
   "author": "Antigravity Engineering",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  }
 }
