@@ -20,3 +20,17 @@ services:
         sync: false
       - key: CONTACT_EMAIL
         sync: false
+      - key: PAYMENT_GATEWAY
+        sync: false
+      - key: PAYMENT_SANDBOX
+        value: "true"
+      - key: SSLCOMMERZ_STORE_ID
+        sync: false
+      - key: SSLCOMMERZ_STORE_PASSWORD
+        sync: false
+      - key: AAMARPAY_STORE_ID
+        sync: false
+      - key: AAMARPAY_SIGNATURE_KEY
+        sync: false
+      - key: PUBLIC_URL
+        sync: false

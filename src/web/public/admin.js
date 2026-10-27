@@ -47,6 +47,7 @@
       document.getElementById('adminArea').hidden = false;
       setupCreateForm();
       loadExams();
+      document.dispatchEvent(new CustomEvent('admin:login', { detail: { key } }));
     } catch (e) {
       document.getElementById('loginError').textContent = e.message;
     }

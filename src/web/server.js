@@ -29,15 +29,24 @@ const {
 } = require('./seed-data');
 const { createLiveExamEngine } = require('./live-exam');
 const { createStateStore } = require('./state-store');
+const { createAccountsEngine } = require('./accounts');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
 
 // Live scheduled exams & merit list (admin announces, candidates join at the set time)
+const stateStore = createStateStore();
 const liveExams = createLiveExamEngine({
   availableExams: require('./seed-data').availableExams,
   sampleQuestions,
-  store: createStateStore()
+  store: stateStore
+});
+
+// Accounts, premium lock & manual bKash / Nagad / Rocket payments (admin approves in /admin)
+const accounts = createAccountsEngine({
+  store: stateStore,
+  seed: require('./seed-data'),
+  seedFile: path.join(__dirname, 'seed-data.js')
 });
 
 // In-Memory Leaderboard simulating Redis ZSET
@@ -123,12 +132,23 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // 1. Get Exam Questions
+  // 0b. Accounts, premium access & payments (/api/auth/..., /api/payment/..., /api/admin/accounts/...)
+  if (/^\/api\/(auth|payment|admin\/accounts)\//.test(pathname)) {
+    try {
+      if (await accounts.handle(req, res, pathname, parsedUrl.searchParams)) return;
+    } catch (e) {
+      console.error('[accounts]', e);
+      return sendJson(res, 500, { status: 'ERROR', messageBn: 'সার্ভারে সমস্যা হয়েছে, আবার চেষ্টা করুন।' });
+    }
+  }
+
+  // 1. Get Exam Questions (free accounts get only the free sets' questions)
   if (pathname === '/api/exam/questions' && method === 'GET') {
+    const visible = accounts.visibleQuestions(req, sampleQuestions);
     return sendJson(res, 200, {
       status: 'SUCCESS',
-      totalQuestions: sampleQuestions.length,
-      questions: sampleQuestions
+      totalQuestions: visible.length,
+      questions: visible
     });
   }
 
@@ -397,7 +417,7 @@ const server = http.createServer(async (req, res) => {
     return serveStatic(res, path.join(PUBLIC_DIR, 'admin.html'), 'text/html; charset=utf-8');
   }
 
-  if (['/live.js', '/live.css', '/admin.js'].includes(pathname)) {
+  if (['/live.js', '/live.css', '/admin.js', '/account.js', '/admin-payments.js'].includes(pathname)) {
     const type = pathname.endsWith('.css') ? 'text/css; charset=utf-8' : 'application/javascript; charset=utf-8';
     return serveStatic(res, path.join(PUBLIC_DIR, pathname.slice(1)), type);
   }
@@ -428,8 +448,9 @@ const server = http.createServer(async (req, res) => {
     return serveStatic(res, path.join(PUBLIC_DIR, 'native-app.js'), 'application/javascript; charset=utf-8');
   }
 
+  // Question data: full for premium accounts, free sets only for everyone else
   if (pathname === '/seed-data.js') {
-    return serveStatic(res, path.join(__dirname, 'seed-data.js'), 'application/javascript; charset=utf-8');
+    return accounts.serveSeedBundle(req, res);
   }
 
   // Fallback 404
@@ -438,7 +459,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 // Start Server (after saved live-exam data is loaded from the database, if any)
-liveExams.ready().then(() => server.listen(PORT, () => {
+Promise.all([liveExams.ready(), accounts.ready()]).then(() => server.listen(PORT, () => {
   console.log(`================================================================`);
   console.log(`BCS & BD Competitive Exam Prep Engine (Web Platform)`);
   console.log(`Web App running locally at: http://localhost:${PORT}`);
@@ -453,7 +474,7 @@ liveExams.ready().then(() => server.listen(PORT, () => {
 // Render/hosting stops the server with SIGTERM on every deploy: save pending data first
 for (const sig of ['SIGTERM', 'SIGINT']) {
   process.on(sig, () => {
-    liveExams.flush().finally(() => process.exit(0));
+    Promise.all([liveExams.flush(), accounts.flush()]).finally(() => process.exit(0));
   });
 }
 

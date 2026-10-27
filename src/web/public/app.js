@@ -525,6 +525,16 @@ let guess5050Ids = new Set();
 function changeExamCategory() {
   const sel = document.getElementById('examCategorySelect');
   const selectedExamId = sel ? sel.value : 'PRACTICE_SET_1';
+  // Premium set: show the unlock dialog and stay on (or open) the nearest free set
+  if (window.Account && Account.isLocked(selectedExamId)) {
+    const back = Account.firstAllowedOption(sel, changeExamCategory.lastId);
+    if (changeExamCategory.lastId || !back) Account.allow(selectedExamId);
+    if (!back) return;
+    sel.value = back;
+    if (back === changeExamCategory.lastId) return;
+    return changeExamCategory();
+  }
+  changeExamCategory.lastId = selectedExamId;
   userAnswers = {};
   guess5050Ids = new Set();
 
@@ -1267,6 +1277,7 @@ function setPastBankTrack(track) {
 }
 
 function launchExamFromPastBank(track, examSetId) {
+  if (window.Account && !Account.allow(examSetId)) return;
   selectExamTrack(track);
   const sel = document.getElementById('examCategorySelect');
   if (sel) sel.value = examSetId;
@@ -1424,6 +1435,13 @@ function filterPastBank(val) {
 function renderPastBank() {
   const feed = document.getElementById('pastBankFeed');
   if (!feed) return;
+
+  // Premium paper: its questions are not in the free data, show the unlock card
+  const lockedPastId = window.Account && Account.pastBankExamId(pastBankTrack, pastBankMode, pastBankFilterValue);
+  if (lockedPastId && Account.isLocked(lockedPastId)) {
+    feed.innerHTML = Account.lockedCardHtml(lockedPastId);
+    return;
+  }
 
   const allPool = (typeof window !== 'undefined' && window.sampleQuestions && window.sampleQuestions.length > 0)
     ? window.sampleQuestions
@@ -2546,6 +2564,7 @@ async function omrScanSubmit() {
   }
   const track = document.getElementById('omrScanTrack').value;
   const examId = document.getElementById('omrScanExam').value;
+  if (window.Account && !Account.allow(examId)) return;
   const examQs = omrScanExamQuestions(track, examId || '');
   if (!examQs.length) {
     omrShowError('এই প্রশ্নপত্রের উত্তরমালা পাওয়া যায়নি। অন্য একটি প্রশ্নপত্র বেছে নিন।');

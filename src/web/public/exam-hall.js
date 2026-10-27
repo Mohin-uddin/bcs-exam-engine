@@ -201,6 +201,16 @@
   }
 
   function loadSet(setId) {
+    // Premium set: show the unlock dialog and open the nearest free set instead
+    if (window.Account && Account.isLocked(setId || 'PRACTICE_SET_1')) {
+      const sel = document.getElementById('selSet');
+      const back = Account.firstAllowedOption(sel, loadSet.lastId);
+      Account.allow(setId);
+      if (!back) return;
+      if (sel) sel.value = back;
+      setId = back;
+    }
+    loadSet.lastId = setId;
     currentSetId = setId || 'PRACTICE_SET_1';
     const all = window.sampleQuestions || [];
     const byId = new Map(all.map(q => [q.id, q]));
