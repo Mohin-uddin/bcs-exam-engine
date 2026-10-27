@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPSC Official 2-Column Question Booklet & OMR Sheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Tiro Bangla', 'SolaimanLipi', 'Kalpurush', 'Noto Serif Bengali', serif;
+      font-feature-settings: "kern" 1, "liga" 1, "clig" 1;
+      text-rendering: optimizeLegibility;
+      background-color: #0f172a;
+      color: #0f172a;
+      line-height: 1.5;
+    }
+    
+    /* Toolbar (No Print) */
+    .top-toolbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: #1e293b; border-bottom: 1px solid #334155;
+      padding: 10px 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+      color: #f8fafc; font-family: sans-serif; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .top-toolbar select, .top-toolbar button {
+      padding: 7px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;
+    }
+    .top-toolbar select {
+      background: #0f172a; color: #f8fafc; border: 1px solid #475569;
+    }
+    .btn-print {
+      background: #16a34a; color: #ffffff; border: none; cursor: pointer; transition: 0.2s;
+    }
+    .btn-print:hover { background: #15803d; }
+    .btn-back {
+      background: #334155; color: #f8fafc; border: 1px solid #475569; text-decoration: none; display: inline-block;
+      padding: 7px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;
+    }
+    .btn-back:hover { background: #475569; }
+
+    /* Page Container (A4 Simulation) */
+    .page-container {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      background: #ffffff;
+      padding: 12mm 15mm;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.4);
+      position: relative;
+    }
+
+    @media print {
+      body { background: #ffffff; }
+      .no-print { display: none !important; }
+      .page-container {
+        margin: 0; box-shadow: none; width: 100%; min-height: 297mm;
+        padding: 10mm 12mm; page-break-after: always;
+      }
+    }
+
+    /* BPSC Authentic Header */
+    .bpsc-emblem {
+      font-size: 11pt; font-weight: bold; letter-spacing: 0.5px;
+      text-transform: uppercase; color: #1e293b;
+    }
+    .header-box {
+      text-align: center; border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 6px;
+    }
+    .header-box h1 { font-size: 15pt; font-weight: 700; color: #000; margin-top: 1px; }
+    .header-box h2 { font-size: 12pt; font-weight: 600; color: #0f172a; }
+
+    .meta-bar {
+      display: flex; justify-content: space-between; align-items: center; font-size: 9pt; font-weight: bold;
+      border-bottom: 1.5px solid #000; padding: 3px 0 4px 0; margin-bottom: 6px;
+    }
+
+    .instructions {
+      font-size: 7.8pt; background: #fafafa; border: 1px solid #333; padding: 4px 8px; margin-bottom: 8px; border-radius: 3px;
+    }
+    .instructions ol { margin-left: 14px; }
+
+    /* 2-Column BPSC Question Booklet Layout */
+    .two-columns {
+      column-count: 2;
+      column-gap: 16px;
+      column-rule: 1px solid #94a3b8;
+    }
+    .q-item {
+      break-inside: avoid;
+      margin-bottom: 8px;
+      font-size: 8.5pt;
+    }
+    .q-stem { font-weight: 600; margin-bottom: 2px; color: #000; }
+    .options-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px 4px; font-size: 8pt; padding-left: 4px;
+    }
+    .opt-label { font-weight: bold; display: inline-block; width: 16px; color: #000; }
+
+    /* OMR Alignment Markers (Computer Vision Targets) */
+    .corner-marker {
+      position: absolute; width: 12mm; height: 12mm; background-color: #000000;
+    }
+    .marker-tl { top: 7mm; left: 7mm; }
+    .marker-tr { top: 7mm; right: 7mm; }
+    .marker-bl { bottom: 7mm; left: 7mm; }
+    .marker-br { bottom: 7mm; right: 7mm; }
+
+    .omr-bubble {
+      display: inline-flex; width: 14px; height: 14px; border: 1.2px solid #000; border-radius: 50%;
+      align-items: center; justify-content: center; font-size: 6.5pt; font-family: 'JetBrains Mono', monospace;
+      font-weight: bold; margin: 0 1px;
+    }
+    .omr-grid-4col {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px;
+    }
+    .omr-row {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.8px;
+      font-size: 7.2pt; font-family: 'JetBrains Mono', monospace;
+    }
+    .roll-table {
+      border-collapse: collapse; text-align: center; font-size: 6.8pt; font-family: 'JetBrains Mono', monospace;
+    }
+    .roll-table td, .roll-table th { border: 1px solid #000; padding: 1px 2.5px; }
+
+    /* Machine-readable answer sheet page (fixed mm geometry, read by the app's photo scanner) */
+    @page { size: A4; margin: 6mm; }
+    .omr-sheet-a4 {
+      position: relative; width: 198mm; height: 284mm; margin: 20px auto; background: #ffffff;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.4); overflow: hidden; break-before: page; page-break-before: always;
+    }
+    .omr-sheet-svg { position: absolute; left: 0; top: 0; width: 198mm; height: 284mm; }
+    .omr-sheet-head { position: absolute; top: 3mm; left: 20mm; right: 20mm; text-align: center; line-height: 1.35; }
+    .omr-sheet-info {
+      position: absolute; top: 27mm; left: 16mm; right: 16mm; height: 34mm; overflow: hidden;
+      display: grid; grid-template-columns: 1.3fr 0.9fr 1.2fr; gap: 6px;
+      border: 1.5px solid #000; padding: 5px; border-radius: 4px; font-size: 8pt;
+    }
+    .omr-field { display: flex; gap: 4px; margin-bottom: 8px; white-space: nowrap; }
+    .omr-line { flex: 1; border-bottom: 1px solid #000; }
+    @media print { .omr-sheet-a4 { margin: 0; box-shadow: none; } }
+
+    .signature-box {
+      border: 1px solid #000; padding: 6px; text-align: center; font-size: 7.5pt; height: 38px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Navigation & Print Bar -->
+  <div class="top-toolbar no-print">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="/" class="btn-back">← মূল ড্যাশবোর্ডে ফিরুন</a>
+      <span style="font-weight: bold; font-size: 14px; color: #38bdf8;">🏛️ BPSC প্রিন্ট ও ওএমআর সেন্টার</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <label style="font-size: 12px; color: #fbbf24; font-weight: bold;">বিভাগ:</label>
+      <select id="selectBookletTrack" onchange="switchBookletTrack()">
+        <option value="BCS">🏛️ বিসিএস প্রিলিমিনারি (BPSC — ২০০ নম্বর)</option>
+        <option value="PRIMARY">🏫 প্রাথমিক শিক্ষক নিয়োগ (DPE — ৭৫/৮০ নম্বর)</option>
+      </select>
+
+      <label style="font-size: 12px; color: #94a3b8;">পরীক্ষা সেট:</label>
+      <select id="selectBookletExam" onchange="updateBookletExam()"></select>
+
+      <label style="font-size: 12px; color: #94a3b8;">সেট কোড:</label>
+      <select id="selectBookletSet" onchange="updateBookletSet()">
+        <option value="ক">সেট-ক (SET-A)</option>
+        <option value="খ">সেট-খ (SET-B)</option>
+        <option value="গ">সেট-গ (SET-C)</option>
+        <option value="ঘ">সেট-ঘ (SET-D)</option>
+      </select>
+
+      <button onclick="window.print()" class="btn-print">
+        🖨️ PDF প্রিন্ট / সেভ করুন (Print Booklet & OMR)
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 1: AUTHENTIC BPSC 2-COLUMN QUESTION BOOKLET -->
+  <!-- ========================================================================= -->
+  <div class="page-container" id="bookletPage">
+    <div class="header-box">
+      <div class="bpsc-emblem">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+      <h1 id="bookletOrgDisplay">বাংলাদেশ সরকারি কর্ম কমিশন (BPSC)</h1>
+      <h2 id="bookletTitleDisplay">৪৭তম বিসিএস (প্রিলিমিনারি) পূর্ণাঙ্গ মডেল টেস্ট</h2>
+    </div>
+
+    <div class="meta-bar">
+      <span id="bookletCodeDisplay">বিষয় কোড: ০০১ (সাধারণ ও পেশাগত)</span>
+      <span id="bookletSetDisplay">সেট: ক (SET - A)</span>
+      <span id="bookletMarksDisplay">পূর্ণমান: ২০০ | সময়: ২ ঘণ্টা</span>
+    </div>
+
+    <div class="instructions">
+      <strong>পরীক্ষার্থীদের জন্য জরুরি নির্দেশাবলী:</strong>
+      <ol>
+        <li id="bookletPenaltyRule">প্রশ্নপত্রে প্রদত্ত প্রতিটি প্রশ্নের মান ১ (এক)। প্রতিটি ভুল উত্তরের জন্য <strong>০.৫০ (অর্ধেক) নম্বর কাটা যাবে</strong>।</li>
+        <li>ওএমআর উত্তরপত্রে কালো কালির বলপয়েন্ট কলম দ্বারা নির্ধারিত বৃত্ত সম্পূর্ণ ভরাট করতে হবে।</li>
+        <li>উত্তরপত্রে কোনো প্রকার অবাঞ্ছিত দাগ, ভাঁজ বা ফ্লুইড ব্যবহার করা যাবে না। প্রশ্নপত্র ও উত্তরপত্রের সেট কোড একই হওয়া বাধ্যতামূলক।</li>
+      </ol>
+    </div>
+
+    <!-- 2-Column Question Layout -->
+    <div class="two-columns" id="bookletQuestions">
+      <!-- Populated dynamically via JS -->
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 2: OFFICIAL BPSC OMR SHEET WITH CORNER FINDERS & 200 BUBBLES -->
+  <!-- ========================================================================= -->
+  <div class="omr-sheet-a4" id="omrSheetPage">
+    <!-- Machine-read area: corner squares + bubble grid are drawn in mm by renderOmrGrid().
+         The app's scanner (app.js OMR_LAYOUT) uses the same numbers. -->
+    <svg id="omrSheetSvg" class="omr-sheet-svg" viewBox="0 0 198 284" xmlns="http://www.w3.org/2000/svg"></svg>
+
+    <div class="omr-sheet-head">
+      <h2 id="omrPageOrgTitle" style="font-size: 12pt; font-weight: bold; letter-spacing: 0.5px;">BANGLADESH PUBLIC SERVICE COMMISSION</h2>
+      <h3 id="omrPageSubTitle" style="font-size: 9pt; font-weight: 600;">PRELIMINARY TEST OMR ANSWER SHEET (200 QUESTIONS)</h3>
+      <p style="font-size: 7.5pt;">উত্তরপত্র (OMR শিট) • মোবাইলে ছবি তুলে অ্যাপে ফলাফল দেখা যাবে</p>
+    </div>
+
+    <div class="omr-sheet-info">
+      <div>
+        <div class="omr-field">নাম: <span class="omr-line"></span></div>
+        <div class="omr-field">রোল নম্বর: <span class="omr-line"></span></div>
+        <div class="omr-field">পরীক্ষা: <span class="omr-line"></span></div>
+      </div>
+      <div style="text-align: center; border-left: 1px dashed #64748b; padding-left: 6px;">
+        <div style="font-size: 7pt; font-weight: bold; margin-bottom: 4px;">SET CODE (প্রশ্ন সেট)</div>
+        <div style="display: flex; gap: 5px; justify-content: center;" id="omrSetBubbles"></div>
+      </div>
+      <div style="border-left: 1px dashed #64748b; padding-left: 6px; font-size: 7pt; line-height: 1.45;">
+        <strong>ভরাট নিয়ম:</strong><br>
+        ● কালো/নীল বলপয়েন্টে বৃত্ত পুরো ভরাট করুন<br>
+        ● প্রতি প্রশ্নে একটিই বৃত্ত<br>
+        ● চার কোণার কালো বর্গে দাগ দেবেন না, পাতা ভাঁজ করবেন না
+      </div>
+    </div>
+  </div>
+
+  <script src="/seed-data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      switchBookletTrack();
+    });
+
+    function toBn(n) {
+      return String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+    }
+
+    function switchBookletTrack() {
+      const trackSel = document.getElementById('selectBookletTrack');
+      const track = trackSel ? trackSel.value : 'BCS';
+      const examSel = document.getElementById('selectBookletExam');
+      const setSel = document.getElementById('selectBookletSet');
+      const exams = (typeof window !== 'undefined' && window.availableExams) ? window.availableExams : [];
+
+      if (track === 'PRIMARY') {
+        const priPractice = exams.filter(e => e.examTrack === 'PRIMARY' && e.id.startsWith('PRI_PRACTICE_'));
+        const priPast = exams.filter(e => e.examTrack === 'PRIMARY' && !e.id.startsWith('PRI_PRACTICE_'));
+        examSel.innerHTML = `
+          <optgroup label="🌟 প্রাথমিক শিক্ষক নিয়োগ পূর্ণাঙ্গ মডেল সেট (৮০ প্রশ্ন)">
+            ${priPractice.map(e => `<option value="${e.id}">${e.title}</option>`).join('')}
+          </optgroup>
+          <optgroup label="🏫 বিগত সালের প্রাথমিক শিক্ষক নিয়োগ প্রশ্নসেট (২০১২ – ২০২৪)">
+            ${priPast.map(e => `<option value="${e.id}">${e.title}</option>`).join('')}
+          </optgroup>
+        `;
+        setSel.innerHTML = `
+          <option value="পদ্মা">সেট: পদ্মা (SET-1)</option>
+          <option value="মেঘনা">সেট: মেঘনা (SET-2)</option>
+          <option value="যমুনা">সেট: যমুনা (SET-3)</option>
+          <option value="সুরমা">সেট: সুরমা (SET-4)</option>
+        `;
+      } else {
+        const bcsPractice = exams.filter(e => e.examTrack === 'BCS' && e.id.startsWith('PRACTICE_SET_'));
+        const bcsPast = exams.filter(e => e.examTrack === 'BCS' && e.id.startsWith('BCS_'));
+        examSel.innerHTML = `
+          <optgroup label="🌟 পূর্ণাঙ্গ বিসিএস অনুশীলন সেট (৬০০ ইউনিক প্রশ্ন)">
+            ${bcsPractice.map(e => `<option value="${e.id}">${e.title}</option>`).join('')}
+          </optgroup>
+          <optgroup label="🏛️ বিগত ২০ বিসিএস আর্কাইভ সেট">
+            ${bcsPast.map(e => `<option value="${e.id}">${e.title}</option>`).join('')}
+          </optgroup>
+        `;
+        setSel.innerHTML = `
+          <option value="ক">সেট-ক (SET-A)</option>
+          <option value="খ">সেট-খ (SET-B)</option>
+          <option value="গ">সেট-গ (SET-C)</option>
+          <option value="ঘ">সেট-ঘ (SET-D)</option>
+        `;
+      }
+      updateBookletExam();
+    }
+
+    function updateBookletExam() {
+      const trackSel = document.getElementById('selectBookletTrack');
+      const track = trackSel ? trackSel.value : 'BCS';
+      const selectExam = document.getElementById('selectBookletExam');
+      const examId = selectExam ? selectExam.value : 'PRACTICE_SET_1';
+      const pool = (typeof window !== 'undefined' && window.sampleQuestions) ? window.sampleQuestions : [];
+      const byId = new Map(pool.map(q => [q.id, q]));
+
+      let examQuestions = [];
+      let examTitle = 'বিসিএস প্রিলিমিনারি পূর্ণাঙ্গ অনুশীলন সেট-১';
+      let marksText = 'পূর্ণমান: ২০০ | সময়: ২ ঘণ্টা';
+
+      if (track === 'PRIMARY') {
+        document.getElementById('bookletOrgDisplay').textContent = 'প্রাথমিক শিক্ষা অধিদপ্তর (DPE)';
+        document.getElementById('bookletCodeDisplay').textContent = 'পদ: সহকারী শিক্ষক (সরকারি প্রাথমিক বিদ্যালয়)';
+        document.getElementById('bookletPenaltyRule').innerHTML = 'প্রশ্নপত্রে প্রদত্ত প্রতিটি প্রশ্নের মান ১ (এক)। প্রতিটি ভুল উত্তরের জন্য <strong>০.২৫ নম্বর কাটা যাবে</strong>।';
+        document.getElementById('omrPageOrgTitle').textContent = 'DIRECTORATE OF PRIMARY EDUCATION (DPE)';
+        document.getElementById('omrPageSubTitle').textContent = 'ASSISTANT TEACHER RECRUITMENT OMR ANSWER SHEET (80 QUESTIONS)';
+
+        if (examId && examId.startsWith('PRI_PRACTICE_')) {
+          const priSets = (typeof window !== 'undefined' && window.primaryPracticeSets) || [];
+          const found = priSets.find(p => p.id === examId);
+          if (found) {
+            examQuestions = (found.questionIds || []).map(id => byId.get(id)).filter(Boolean);
+            examTitle = found.title;
+            marksText = `পূর্ণমান: ${toBn(examQuestions.length)} | সময়: ১ ঘণ্টা (৬০ মিনিট)`;
+            document.getElementById('selectBookletSet').value = found.setCodeBn || 'পদ্মা';
+          }
+        } else {
+          const rawCode = examId.replace(/_SET$/, '');
+          const priArch = ((typeof window !== 'undefined' && window.primaryExamsArchive) || []).find(a => a.code === rawCode);
+          if (priArch) {
+            examQuestions = (priArch.questionIds || []).map(id => byId.get(id)).filter(Boolean);
+            examTitle = `${priArch.title} (${priArch.examDate})`;
+            marksText = `পূর্ণমান: ${toBn(examQuestions.length)} | সময়: ৬০ মিনিট | ভুল: -০.২৫`;
+          }
+        }
+        updateBookletSet();
+        renderOmrGrid(examQuestions.length || 80);
+      } else {
+        document.getElementById('bookletOrgDisplay').textContent = 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC)';
+        document.getElementById('bookletCodeDisplay').textContent = 'বিষয় কোড: ১০০ (সাধারণ ও পেশাগত)';
+        document.getElementById('bookletPenaltyRule').innerHTML = 'প্রশ্নপত্রে প্রদত্ত প্রতিটি প্রশ্নের মান ১ (এক)। প্রতিটি ভুল উত্তরের জন্য <strong>০.৫০ (অর্ধেক) নম্বর কাটা যাবে</strong>।';
+        document.getElementById('omrPageOrgTitle').textContent = 'BANGLADESH PUBLIC SERVICE COMMISSION';
+        document.getElementById('omrPageSubTitle').textContent = 'PRELIMINARY TEST OMR ANSWER SHEET (200 QUESTIONS)';
+
+        if (examId && examId.startsWith('PRACTICE_SET_')) {
+          const setNum = parseInt(examId.replace('PRACTICE_SET_', ''), 10) || 1;
+          examQuestions = pool.filter(q => q.setNo === setNum);
+          examTitle = `৪৭তম বিসিএস (প্রিলিমিনারি) পূর্ণাঙ্গ অনুশীলন সেট-${toBn(setNum)}`;
+          marksText = 'পূর্ণমান: ২০০ | সময়: ২ ঘণ্টা';
+          const defaultSetCodes = ['ক', 'খ', 'গ', 'ঘ'];
+          const setSel = document.getElementById('selectBookletSet');
+          if (setSel) setSel.value = defaultSetCodes[(setNum - 1) % 4];
+        } else {
+          const bcsNumMatch = examId.match(/BCS_(\d+)/);
+          const bcsNum = bcsNumMatch ? parseInt(bcsNumMatch[1], 10) : null;
+          if (bcsNum) {
+            examQuestions = pool.filter(q => q.bcsExamNo === bcsNum);
+            examTitle = `${toBn(bcsNum)}তম বিসিএস প্রিলিমিনারি পরীক্ষা প্রশ্নপত্র`;
+            marksText = `মোট প্রশ্ন: ${toBn(examQuestions.length)}টি | মান: প্রতি প্রশ্নে ১.০০ | ভুল: -০.৫০`;
+          } else {
+            examQuestions = pool.slice(0, 200);
+          }
+        }
+        updateBookletSet();
+        renderOmrGrid(200);
+      }
+
+      document.getElementById('bookletTitleDisplay').textContent = examTitle;
+      document.getElementById('bookletMarksDisplay').textContent = marksText;
+
+      const booklet = document.getElementById('bookletQuestions');
+      if (booklet) {
+        booklet.innerHTML = examQuestions.map((q, idx) => `
+          <div class="q-item">
+            <div class="q-stem">${toBn(idx + 1)}. ${q.stemBn}</div>
+            <div class="options-grid">
+              <div><span class="opt-label">(ক)</span> ${q.options.A}</div>
+              <div><span class="opt-label">(খ)</span> ${q.options.B}</div>
+              <div><span class="opt-label">(গ)</span> ${q.options.C}</div>
+              <div><span class="opt-label">(ঘ)</span> ${q.options.D}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function updateBookletSet() {
+      const setSel = document.getElementById('selectBookletSet');
+      const val = setSel ? setSel.value : 'ক';
+      const map = { 'ক': 'A', 'খ': 'B', 'গ': 'C', 'ঘ': 'D', 'পদ্মা': '1', 'মেঘনা': '2', 'যমুনা': '3', 'সুরমা': '4' };
+      const eng = map[val] || 'A';
+
+      document.getElementById('bookletSetDisplay').textContent = `সেট: ${val} (SET - ${eng})`;
+
+      const omrBubbles = document.getElementById('omrSetBubbles');
+      if (omrBubbles) {
+        omrBubbles.innerHTML = ['A', 'B', 'C', 'D'].map((code, i) => {
+          const isSelected = code === eng || String(i + 1) === eng;
+          const bnLabel = ['ক', 'খ', 'গ', 'ঘ'][i];
+          return `
+            <div>
+              <div class="omr-bubble" style="${isSelected ? 'background:#000; color:#fff;' : ''}">${code}</div>
+              <div style="font-size:6.5pt;">${bnLabel}</div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Sheet geometry in mm. Must stay in sync with OMR_LAYOUT in app.js (the photo scanner).
+    const OMR_SHEET = {
+      width: 198, height: 284,
+      markers: [[8, 8], [190, 8], [190, 276], [8, 276]],
+      markerSize: 10,
+      rowY0: 74, rowPitch: 3.9, rowsPerCol: 50,
+      colX0: [16, 58, 100, 142],
+      optDx: [12.5, 18.8, 25.1, 31.4],
+      bubbleR: 1.75
+    };
+
+    // Always 4 columns x 50 rows; questions past the exam length simply stay blank
+    function renderOmrGrid(totalBubbles = 200) {
+      const svg = document.getElementById('omrSheetSvg');
+      if (!svg) return;
+      const L = OMR_SHEET;
+      const total = Math.min(totalBubbles, L.colX0.length * L.rowsPerCol);
+      let out = '';
+      L.markers.forEach(([cx, cy]) => {
+        out += `<rect x="${cx - L.markerSize / 2}" y="${cy - L.markerSize / 2}" width="${L.markerSize}" height="${L.markerSize}" fill="#000"/>`;
+      });
+      L.colX0.forEach((x0, col) => {
+        const startQ = col * L.rowsPerCol + 1;
+        if (startQ > total) return;
+        const endQ = Math.min(total, startQ + L.rowsPerCol - 1);
+        const lastY = L.rowY0 + (endQ - startQ) * L.rowPitch;
+        out += `<rect x="${x0 + 1}" y="${L.rowY0 - 8}" width="${L.optDx[3] + 4}" height="${lastY - L.rowY0 + 10.5}" fill="none" stroke="#94a3b8" stroke-width="0.25" rx="1"/>`;
+        ['ক', 'খ', 'গ', 'ঘ'].forEach((lbl, oi) => {
+          out += `<text x="${x0 + L.optDx[oi]}" y="${L.rowY0 - 4.2}" font-size="2.6" font-weight="bold" text-anchor="middle">${lbl}</text>`;
+        });
+        for (let q = startQ; q <= endQ; q++) {
+          const y = L.rowY0 + (q - startQ) * L.rowPitch;
+          out += `<text x="${x0 + 9}" y="${y + 0.9}" font-size="2.4" text-anchor="end" font-family="monospace">${String(q).padStart(3, '0')}</text>`;
+          L.optDx.forEach(dx => {
+            out += `<circle cx="${x0 + dx}" cy="${y}" r="${L.bubbleR}" fill="none" stroke="#111" stroke-width="0.25"/>`;
+          });
+        }
+      });
+      svg.innerHTML = out;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>লাইভ পরীক্ষা ও মেধা তালিকা</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/live.css">
+</head>
+<body>
+  <header class="toolbar">
+    <div class="tb-left">
+      <a href="/" class="btn light sm">← হোম</a>
+      <div class="tb-title">লাইভ পরীক্ষা ও মেধা তালিকা</div>
+    </div>
+    <div class="clock" id="clock"></div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <div>
+        <h1>নির্ধারিত সময়ে পরীক্ষা দিন, সবার সাথে মেধা তালিকায় নিজের অবস্থান দেখুন</h1>
+        <p>নিবন্ধন করুন, পরীক্ষা শুরু হলে পরীক্ষার হলে প্রবেশ করুন। পরীক্ষা শেষ হওয়ার সাথে সাথে ফলাফল ও মেধা তালিকা প্রকাশ হবে।</p>
+      </div>
+    </div>
+
+    <div class="section-title">🔴 চলমান পরীক্ষা</div>
+    <div class="exam-grid" id="listLive"></div>
+
+    <div class="section-title">⏳ আসন্ন পরীক্ষা</div>
+    <div class="exam-grid" id="listUpcoming"></div>
+
+    <div class="section-title">🏆 সমাপ্ত পরীক্ষা ও ফলাফল</div>
+    <div class="exam-grid" id="listEnded"></div>
+  </main>
+
+  <!-- Registration -->
+  <div class="overlay" id="regOverlay" hidden>
+    <form class="modal" id="regForm">
+      <div class="modal-head">
+        <div>
+          <h2>পরীক্ষায় নিবন্ধন</h2>
+          <div class="sub" id="regExamTitle"></div>
+        </div>
+        <button type="button" class="x" data-close>✕</button>
+      </div>
+      <label class="field">পরীক্ষার্থীর নাম
+        <input id="regName" required minlength="2" maxlength="80" placeholder="আপনার পূর্ণ নাম" autocomplete="name">
+      </label>
+      <label class="field">মোবাইল নম্বর
+        <input id="regPhone" required inputmode="tel" maxlength="15" placeholder="01XXXXXXXXX" autocomplete="tel">
+        <small>অন্য ডিভাইস থেকে পরীক্ষা দিতে বা ফলাফল দেখতে একই নম্বর দিয়ে আবার নিবন্ধন করলেই হবে।</small>
+      </label>
+      <div class="error" id="regError"></div>
+      <button class="btn primary" type="submit" id="regSubmit">নিবন্ধন করুন</button>
+    </form>
+  </div>
+
+  <!-- Result & merit list -->
+  <div class="overlay" id="meritOverlay" hidden>
+    <div class="modal wide">
+      <div class="modal-head">
+        <div>
+          <h2>ফলাফল ও মেধা তালিকা</h2>
+          <div class="sub" id="meritExamTitle"></div>
+        </div>
+        <button type="button" class="x no-print" data-close>✕</button>
+      </div>
+      <div id="myResult"></div>
+      <div class="merit-tools no-print">
+        <span id="meritSummary"></span>
+        <span>
+          <input id="meritSearch" type="search" placeholder="নাম বা রোল দিয়ে খুঁজুন">
+          <button class="btn ghost sm" id="btnPrintMerit" type="button">🖨️ প্রিন্ট</button>
+        </span>
+      </div>
+      <div class="table-wrap">
+        <table class="merit">
+          <thead>
+            <tr><th>মেধাক্রম</th><th>রোল</th><th>নাম</th><th class="num">সঠিক</th><th class="num">ভুল</th><th class="num">নিট নম্বর</th><th class="num">সময়</th></tr>
+          </thead>
+          <tbody id="meritBody"></tbody>
+        </table>
+      </div>
+      <p class="rule-note">মেধাক্রম নির্ধারণ: প্রথমে নিট নম্বর (ভুল উত্তরের নেগেটিভ মার্ক বাদে)। নিট নম্বর সমান হলে যিনি কম সময়ে উত্তরপত্র জমা দিয়েছেন তিনি এগিয়ে থাকবেন (টাই-ব্রেকার: ১ − সময় ÷ মোট সময়)।</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="/live.js"></script>
+</body>
+</html>

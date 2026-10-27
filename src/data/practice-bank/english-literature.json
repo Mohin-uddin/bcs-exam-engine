@@ -1,0 +1,1262 @@
+[
+  {
+    "topicBn": "প্রাচীন ইংরেজি সাহিত্য",
+    "stem": "\"Beowulf\" is written in —",
+    "options": {
+      "A": "Middle English",
+      "B": "Old English",
+      "C": "Latin",
+      "D": "Anglo-Norman"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "Beowulf প্রাচীন ইংরেজি (Old English / Anglo-Saxon) ভাষায় রচিত সবচেয়ে বিখ্যাত মহাকাব্য।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "মধ্যযুগের ইংরেজি সাহিত্য",
+    "stem": "Who is called the \"Father of English Poetry\"?",
+    "options": {
+      "A": "William Langland",
+      "B": "John Gower",
+      "C": "Edmund Spenser",
+      "D": "Geoffrey Chaucer"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "জন ড্রাইডেন চসারকে \"Father of English Poetry\" বলেছেন; তিনি The Canterbury Tales-এর রচয়িতা।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "এলিজাবেথীয় যুগ",
+    "stem": "Who is known as the \"Poet's Poet\"?",
+    "options": {
+      "A": "Edmund Spenser",
+      "B": "John Milton",
+      "C": "John Keats",
+      "D": "Philip Sidney"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "চার্লস ল্যাম্ব এডমান্ড স্পেন্সারকে \"Poet's Poet\" আখ্যা দেন; তাঁর প্রধান কাব্য The Faerie Queene।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "এলিজাবেথীয় যুগ",
+    "stem": "\"Doctor Faustus\" was written by —",
+    "options": {
+      "A": "Thomas Kyd",
+      "B": "Ben Jonson",
+      "C": "Christopher Marlowe",
+      "D": "John Webster"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "Doctor Faustus ক্রিস্টোফার মার্লোর বিখ্যাত ট্র্যাজেডি, যেখানে ফস্টাস শয়তানের কাছে আত্মা বিক্রি করে।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "শেক্সপিয়র",
+    "stem": "How many sonnets did Shakespeare write?",
+    "options": {
+      "A": "144",
+      "B": "152",
+      "C": "154",
+      "D": "164"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "১৬০৯ সালে প্রকাশিত শেক্সপিয়রের সনেট সংকলনে মোট ১৫৪টি সনেট রয়েছে।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "শেক্সপিয়র",
+    "stem": "Which is generally regarded as Shakespeare's last complete play?",
+    "options": {
+      "A": "The Tempest",
+      "B": "King Lear",
+      "C": "Macbeth",
+      "D": "Twelfth Night"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "The Tempest (১৬১১) সাধারণভাবে শেক্সপিয়রের একক রচিত শেষ পূর্ণাঙ্গ নাটক হিসেবে গণ্য।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "শেক্সপিয়র",
+    "stem": "\"Frailty, thy name is woman!\" is a line from —",
+    "options": {
+      "A": "Othello",
+      "B": "Hamlet",
+      "C": "Macbeth",
+      "D": "King Lear"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "হ্যামলেট তার মায়ের দ্রুত পুনর্বিবাহে ক্ষুব্ধ হয়ে প্রথম স্বগতোক্তিতে এই উক্তি করে।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "শেক্সপিয়র",
+    "stem": "Shylock is a character in —",
+    "options": {
+      "A": "As You Like It",
+      "B": "Othello",
+      "C": "Twelfth Night",
+      "D": "The Merchant of Venice"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "শাইলক The Merchant of Venice নাটকের ইহুদি মহাজন, যে অ্যান্টোনিওর কাছে \"এক পাউন্ড মাংস\" দাবি করে।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "এলিজাবেথীয় যুগ",
+    "stem": "Who is called the \"Father of English Essay\"?",
+    "options": {
+      "A": "Charles Lamb",
+      "B": "Joseph Addison",
+      "C": "Richard Steele",
+      "D": "Francis Bacon"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "ফ্রান্সিস বেকন ইংরেজি প্রবন্ধের জনক; \"Of Studies\", \"Of Truth\" তাঁর বিখ্যাত প্রবন্ধ।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "মেটাফিজিক্যাল কবি",
+    "stem": "Who is the chief of the Metaphysical poets?",
+    "options": {
+      "A": "George Herbert",
+      "B": "John Donne",
+      "C": "Andrew Marvell",
+      "D": "Henry Vaughan"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "জন ডান মেটাফিজিক্যাল কবিগোষ্ঠীর প্রধান; \"The Canonization\", \"The Flea\" তাঁর কবিতা।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "জ্যাকোবীয় যুগ",
+    "stem": "\"Volpone\" is a comedy by —",
+    "options": {
+      "A": "Ben Jonson",
+      "B": "John Webster",
+      "C": "Thomas Dekker",
+      "D": "Christopher Marlowe"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "Volpone বেন জনসনের বিখ্যাত কমেডি; তিনি \"Comedy of Humours\"-এর জন্য পরিচিত।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "পিউরিটান যুগ",
+    "stem": "Milton's \"Paradise Lost\" is written in —",
+    "options": {
+      "A": "Heroic couplet",
+      "B": "Free verse",
+      "C": "Blank verse",
+      "D": "Terza rima"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "Paradise Lost মিল্টন অমিত্রাক্ষর (blank verse) অর্থাৎ মিলহীন আয়াম্বিক পেন্টামিটারে লিখেছেন।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "পিউরিটান যুগ",
+    "stem": "Milton's \"Lycidas\" is an elegy on the death of —",
+    "options": {
+      "A": "Edward King",
+      "B": "Arthur Hallam",
+      "C": "John Keats",
+      "D": "Edward Williams"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Lycidas মিল্টনের প্যাস্টোরাল এলিজি, কেমব্রিজের সহপাঠী এডওয়ার্ড কিং-এর জলে ডুবে মৃত্যু উপলক্ষে লেখা।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "রেস্টোরেশন যুগ",
+    "stem": "Who is called the \"Father of English Criticism\"?",
+    "options": {
+      "A": "Samuel Johnson",
+      "B": "Alexander Pope",
+      "C": "Philip Sidney",
+      "D": "John Dryden"
+    },
+    "answer": "D",
+    "difficulty": "HIGH",
+    "explanationBn": "ড. স্যামুয়েল জনসন জন ড্রাইডেনকে \"Father of English Criticism\" বলেছেন।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "অগাস্টান যুগ",
+    "stem": "\"The Rape of the Lock\" is a —",
+    "options": {
+      "A": "Pastoral elegy",
+      "B": "Mock-heroic poem",
+      "C": "Epic poem",
+      "D": "Dramatic monologue"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "আলেকজান্ডার পোপের The Rape of the Lock একটি মক-হিরোইক (ব্যঙ্গাত্মক বীরকাব্য) কবিতা।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "অগাস্টান যুগ",
+    "stem": "Lilliput is a land in —",
+    "options": {
+      "A": "Robinson Crusoe",
+      "B": "Tom Jones",
+      "C": "Gulliver's Travels",
+      "D": "Pamela"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "জোনাথন সুইফটের Gulliver's Travels-এ লিলিপুট ক্ষুদ্রকায় মানুষের দেশ।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "অগাস্টান যুগ",
+    "stem": "\"Robinson Crusoe\" was written by —",
+    "options": {
+      "A": "Jonathan Swift",
+      "B": "Daniel Defoe",
+      "C": "Samuel Richardson",
+      "D": "Laurence Sterne"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "ড্যানিয়েল ডিফোর Robinson Crusoe (১৭১৯) নির্জন দ্বীপে আটকে পড়া এক নাবিকের কাহিনি।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "অগাস্টান যুগ",
+    "stem": "\"A Dictionary of the English Language\" (1755) was compiled by —",
+    "options": {
+      "A": "Samuel Johnson",
+      "B": "Noah Webster",
+      "C": "James Boswell",
+      "D": "Oliver Goldsmith"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "ড. স্যামুয়েল জনসন ১৭৫৫ সালে বিখ্যাত ইংরেজি অভিধান প্রকাশ করেন।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "অষ্টাদশ শতকের উপন্যাস",
+    "stem": "\"Tom Jones\" is a novel by —",
+    "options": {
+      "A": "Samuel Richardson",
+      "B": "Tobias Smollett",
+      "C": "Daniel Defoe",
+      "D": "Henry Fielding"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "হেনরি ফিল্ডিং-এর Tom Jones (১৭৪৯); তাঁকে ইংরেজি উপন্যাসের জনকও বলা হয়।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "রোমান্টিক যুগ",
+    "stem": "The publication of \"Lyrical Ballads\" (1798) is linked with —",
+    "options": {
+      "A": "Byron and Shelley",
+      "B": "Keats and Shelley",
+      "C": "Wordsworth and Coleridge",
+      "D": "Southey and Scott"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "ওয়ার্ডসওয়ার্থ ও কোলরিজের যৌথ Lyrical Ballads (১৭৯৮) ইংরেজি রোমান্টিক যুগের সূচনা করে।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "রোমান্টিক যুগ",
+    "stem": "In \"The Rime of the Ancient Mariner\", the mariner kills —",
+    "options": {
+      "A": "An albatross",
+      "B": "A seagull",
+      "C": "A dove",
+      "D": "A nightingale"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "কোলরিজের কবিতায় বৃদ্ধ নাবিক একটি অ্যালবাট্রস পাখি হত্যা করে অভিশপ্ত হয়।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "রোমান্টিক যুগ",
+    "stem": "\"Don Juan\" is a poem by —",
+    "options": {
+      "A": "P. B. Shelley",
+      "B": "John Keats",
+      "C": "Lord Byron",
+      "D": "Walter Scott"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "Don Juan লর্ড বায়রনের ব্যঙ্গাত্মক দীর্ঘ কবিতা; Childe Harold's Pilgrimage-ও তাঁর রচনা।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "রোমান্টিক যুগ",
+    "stem": "\"If Winter comes, can Spring be far behind?\" — this line is by —",
+    "options": {
+      "A": "John Keats",
+      "B": "P. B. Shelley",
+      "C": "William Wordsworth",
+      "D": "Lord Byron"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "এটি শেলির \"Ode to the West Wind\" কবিতার শেষ লাইন।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "রোমান্টিক যুগ",
+    "stem": "\"A thing of beauty is a joy for ever\" is the opening line of —",
+    "options": {
+      "A": "Ode to a Nightingale",
+      "B": "Hyperion",
+      "C": "Lamia",
+      "D": "Endymion"
+    },
+    "answer": "D",
+    "difficulty": "TRICKY",
+    "explanationBn": "জন কিটসের Endymion কাব্যের প্রথম লাইন \"A thing of beauty is a joy for ever\"।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "রোমান্টিক যুগ",
+    "stem": "Shelley's \"Adonais\" is an elegy on the death of —",
+    "options": {
+      "A": "Lord Byron",
+      "B": "John Keats",
+      "C": "Edward King",
+      "D": "Arthur Hallam"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "Adonais (১৮২১) শেলি কিটসের মৃত্যুতে রচনা করেন।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "ভিক্টোরীয় যুগ",
+    "stem": "Tennyson's \"In Memoriam\" was written in memory of —",
+    "options": {
+      "A": "Arthur Henry Hallam",
+      "B": "Edward King",
+      "C": "John Keats",
+      "D": "Edward FitzGerald"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "In Memoriam A.H.H. টেনিসন তাঁর ঘনিষ্ঠ বন্ধু আর্থার হেনরি হ্যালামের মৃত্যুতে রচনা করেন।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "ভিক্টোরীয় যুগ",
+    "stem": "Robert Browning is best known for the —",
+    "options": {
+      "A": "Sonnet sequence",
+      "B": "Pastoral elegy",
+      "C": "Mock-epic",
+      "D": "Dramatic monologue"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "\"My Last Duchess\"-এর মতো কবিতার জন্য রবার্ট ব্রাউনিং ড্রামাটিক মনোলগের শ্রেষ্ঠ রূপকার।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "ভিক্টোরীয় যুগ",
+    "stem": "\"A Tale of Two Cities\" is set in —",
+    "options": {
+      "A": "London and Rome",
+      "B": "Paris and Venice",
+      "C": "London and Paris",
+      "D": "Dublin and London"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "চার্লস ডিকেন্সের A Tale of Two Cities ফরাসি বিপ্লবের পটভূমিতে লন্ডন ও প্যারিসে বিস্তৃত।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "ভিক্টোরীয় যুগ",
+    "stem": "\"Wessex\" is the fictional region of the novels of —",
+    "options": {
+      "A": "Thomas Hardy",
+      "B": "Charles Dickens",
+      "C": "George Eliot",
+      "D": "Anthony Trollope"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "টমাস হার্ডির Tess of the d'Urbervilles-সহ উপন্যাসগুলোর কাল্পনিক অঞ্চল ওয়েসেক্স।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "ভিক্টোরীয় যুগ",
+    "stem": "\"Wuthering Heights\" was written by —",
+    "options": {
+      "A": "Charlotte Brontë",
+      "B": "Emily Brontë",
+      "C": "Anne Brontë",
+      "D": "Jane Austen"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "Wuthering Heights এমিলি ব্রন্টির একমাত্র উপন্যাস; Jane Eyre লিখেছেন শার্লট ব্রন্টি।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "ভিক্টোরীয় যুগ",
+    "stem": "\"George Eliot\" was the pen name of —",
+    "options": {
+      "A": "Elizabeth Gaskell",
+      "B": "Charlotte Brontë",
+      "C": "Mary Shelley",
+      "D": "Mary Ann Evans"
+    },
+    "answer": "D",
+    "difficulty": "HIGH",
+    "explanationBn": "Middlemarch-এর লেখিকা মেরি অ্যান ইভান্স \"George Eliot\" ছদ্মনামে লিখতেন।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "ভিক্টোরীয় যুগ",
+    "stem": "\"Dover Beach\" is a poem by —",
+    "options": {
+      "A": "Alfred Tennyson",
+      "B": "Robert Browning",
+      "C": "Matthew Arnold",
+      "D": "A. C. Swinburne"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "Dover Beach ম্যাথু আর্নল্ডের বিখ্যাত কবিতা, যাতে বিশ্বাসের অবক্ষয়ের বেদনা প্রকাশ পায়।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আধুনিক যুগ",
+    "stem": "Which Irish poet won the Nobel Prize in Literature in 1923?",
+    "options": {
+      "A": "W. B. Yeats",
+      "B": "Seamus Heaney",
+      "C": "James Joyce",
+      "D": "G. B. Shaw"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "ডব্লিউ. বি. ইয়েটস ১৯২৩ সালে সাহিত্যে নোবেল পান; শ' পান ১৯২৫ সালে।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আধুনিক যুগ",
+    "stem": "\"April is the cruellest month\" is the opening line of —",
+    "options": {
+      "A": "Four Quartets",
+      "B": "The Hollow Men",
+      "C": "Ash Wednesday",
+      "D": "The Waste Land"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "টি. এস. এলিয়টের The Waste Land (১৯২২) এই লাইন দিয়ে শুরু।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আধুনিক যুগ",
+    "stem": "\"Ulysses\" (1922) is a novel by —",
+    "options": {
+      "A": "Joseph Conrad",
+      "B": "James Joyce",
+      "C": "E. M. Forster",
+      "D": "D. H. Lawrence"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "জেমস জয়েসের Ulysses ডাবলিনের একটি দিনের (১৬ জুন ১৯০৪) কাহিনি।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আধুনিক যুগ",
+    "stem": "\"Mrs Dalloway\" is a stream-of-consciousness novel by —",
+    "options": {
+      "A": "Katherine Mansfield",
+      "B": "Doris Lessing",
+      "C": "Virginia Woolf",
+      "D": "Iris Murdoch"
+    },
+    "answer": "C",
+    "difficulty": "TRICKY",
+    "explanationBn": "ভার্জিনিয়া উলফের Mrs Dalloway (১৯২৫) চেতনাপ্রবাহ রীতির উল্লেখযোগ্য উপন্যাস।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আধুনিক যুগ",
+    "stem": "\"Sons and Lovers\" was written by —",
+    "options": {
+      "A": "Thomas Hardy",
+      "B": "E. M. Forster",
+      "C": "Joseph Conrad",
+      "D": "D. H. Lawrence"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "Sons and Lovers (১৯১৩) ডি. এইচ. লরেন্সের আত্মজৈবনিক ধাঁচের উপন্যাস।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আধুনিক যুগ",
+    "stem": "\"Pygmalion\" is a play by —",
+    "options": {
+      "A": "G. B. Shaw",
+      "B": "Oscar Wilde",
+      "C": "J. M. Synge",
+      "D": "John Galsworthy"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "জর্জ বার্নার্ড শ'র Pygmalion নাটকে অধ্যাপক হিগিন্স ফুলবিক্রেতা এলিজাকে পরিশীলিত করেন।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আধুনিক যুগ",
+    "stem": "George Orwell's real name was —",
+    "options": {
+      "A": "Hector Hugh Munro",
+      "B": "Eric Arthur Blair",
+      "C": "William Sydney Porter",
+      "D": "Samuel Clemens"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "Animal Farm ও Nineteen Eighty-Four-এর লেখক জর্জ অরওয়েলের প্রকৃত নাম এরিক আর্থার ব্লেয়ার।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আধুনিক যুগ",
+    "stem": "\"Waiting for Godot\" belongs to the —",
+    "options": {
+      "A": "Comedy of Manners",
+      "B": "Kitchen Sink Drama",
+      "C": "Theatre of the Absurd",
+      "D": "Comedy of Humours"
+    },
+    "answer": "C",
+    "difficulty": "STANDARD",
+    "explanationBn": "স্যামুয়েল বেকেটের Waiting for Godot অ্যাবসার্ড নাটকের শ্রেষ্ঠ উদাহরণ।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আমেরিকান সাহিত্য",
+    "stem": "\"The Old Man and the Sea\" was written by —",
+    "options": {
+      "A": "Ernest Hemingway",
+      "B": "John Steinbeck",
+      "C": "William Faulkner",
+      "D": "Mark Twain"
+    },
+    "answer": "A",
+    "difficulty": "STANDARD",
+    "explanationBn": "আর্নেস্ট হেমিংওয়ের The Old Man and the Sea (১৯৫২) বৃদ্ধ জেলে সান্তিয়াগোর কাহিনি।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আমেরিকান সাহিত্য",
+    "stem": "\"Leaves of Grass\" is a poetry collection by —",
+    "options": {
+      "A": "Robert Frost",
+      "B": "Emily Dickinson",
+      "C": "Edgar Allan Poe",
+      "D": "Walt Whitman"
+    },
+    "answer": "D",
+    "difficulty": "STANDARD",
+    "explanationBn": "ওয়াল্ট হুইটম্যানের Leaves of Grass মুক্তছন্দে (free verse) রচিত বিখ্যাত কাব্যগ্রন্থ।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "আমেরিকান সাহিত্য",
+    "stem": "\"Stopping by Woods on a Snowy Evening\" is a poem by —",
+    "options": {
+      "A": "Walt Whitman",
+      "B": "Robert Frost",
+      "C": "Carl Sandburg",
+      "D": "Wallace Stevens"
+    },
+    "answer": "B",
+    "difficulty": "STANDARD",
+    "explanationBn": "\"And miles to go before I sleep\" লাইনসমৃদ্ধ কবিতাটি রবার্ট ফ্রস্টের।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "সাহিত্য পরিভাষা",
+    "stem": "A Petrarchan sonnet is divided into —",
+    "options": {
+      "A": "An octave and a sestet",
+      "B": "Three quatrains and a couplet",
+      "C": "Two sestets and a couplet",
+      "D": "Four tercets and a couplet"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "পেত্রার্কান (ইতালীয়) সনেট ৮ লাইনের অক্টেভ ও ৬ লাইনের সেস্টেটে বিভক্ত।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "সাহিত্য পরিভাষা",
+    "stem": "A Shakespearean sonnet ends with a —",
+    "options": {
+      "A": "Sestet",
+      "B": "Quatrain",
+      "C": "Rhyming couplet",
+      "D": "Refrain"
+    },
+    "answer": "C",
+    "difficulty": "TRICKY",
+    "explanationBn": "শেক্সপিয়রীয় সনেটে তিনটি কোয়াট্রেনের পর একটি মিলযুক্ত কাপলেট (abab cdcd efef gg) থাকে।",
+    "source": "Edward Albert — History of English Literature"
+  },
+  {
+    "topicBn": "Christopher Marlowe — University Wits & Doctor Faustus (Hard)",
+    "stem": "Who is the pioneer of “Blank Verse” in Elizabethan drama and author of the tragedy “Doctor Faustus” and “The Jew of Malta”?",
+    "options": {
+      "A": "Christopher Marlowe",
+      "B": "Thomas Kyd",
+      "C": "Ben Jonson",
+      "D": "John Webster"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "University Wits-দের প্রধান নাট্যকার Christopher Marlowe (১৫৬৪–১৫৯৩)-কে ইংরেজি ট্র্যাজেডি ও Blank Verse-এর প্রকৃত পথিকৃৎ বলা হয়। তাঁর বিখ্যাত নাটক Doctor Faustus, Tamburlaine the Great এবং The Jew of Malta।",
+    "source": "৪৫তম ও ৪০তম বিসিএস"
+  },
+  {
+    "topicBn": "Edmund Spenser — Poet’s Poet & The Faerie Queene (Medium)",
+    "stem": "Which Elizabethan poet is called the “Poet’s Poet” and wrote the epic allegory “The Faerie Queene”?",
+    "options": {
+      "A": "Sir Philip Sidney",
+      "B": "Edmund Spenser",
+      "C": "Geoffrey Chaucer",
+      "D": "John Donne"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "Edmund Spenser-কে ‘Poet’s Poet’ (কবিদের কবি) বলা হয়; তাঁর মহাকাব্যিক রূপক গ্রন্থ ‘The Faerie Queene’ এবং সনেট সংকলন ‘Amoretti’।",
+    "source": "৪৩তম বিসিএস প্রিলিমিনারি"
+  },
+  {
+    "topicBn": "John Donne — Metaphysical Poetry (Hard)",
+    "stem": "“For God’s sake hold your tongue, and let me love”—is the opening line of which poem by the Metaphysical poet John Donne?",
+    "options": {
+      "A": "The Canonization",
+      "B": "The Good-Morrow",
+      "C": "The Sun Rising",
+      "D": "A Valediction: Forbidding Mourning"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Metaphysical Poets-এর জনক John Donne (‘Poet of Love and Religious Poems’)-এর ‘The Canonization’ কবিতার প্রথম লাইন এটি।",
+    "source": "৪৪তম ও ৩৮তম বিসিএস"
+  },
+  {
+    "topicBn": "John Milton — Paradise Lost & Areopagitica (Medium)",
+    "stem": "“Better to reign in Hell, than serve in Heaven”—who utters this famous rebellious speech in John Milton’s epic “Paradise Lost”?",
+    "options": {
+      "A": "Adam",
+      "B": "Satan",
+      "C": "Beelzebub",
+      "D": "Archangel Michael"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "John Milton-এর অমিত্রাক্ষর ছন্দে রচিত মহাকাব্য ‘Paradise Lost’ (Book I)-এ পতিত দেবদূত Satan এই বিখ্যাত উক্তিটি করে। মিল্টনের বাকস্বাধীনতা বিষয়ক গদ্যগ্রন্থ ‘Areopagitica’ এবং ট্র্যাজেডি ‘Samson Agonistes’।",
+    "source": "৪১তম ও ৩৬তম বিসিএস"
+  },
+  {
+    "topicBn": "Alexander Pope — Mock-Heroic Epic & Neo-Classical Period (Hard)",
+    "stem": "Which of the following famous quotations is NOT from Alexander Pope’s “An Essay on Criticism”?",
+    "options": {
+      "A": "“A little learning is a dangerous thing.”",
+      "B": "“To err is human; to forgive, divine.”",
+      "C": "“Fools rush in where angels fear to tread.”",
+      "D": "“Child is the father of the man.”"
+    },
+    "answer": "D",
+    "difficulty": "HIGH",
+    "explanationBn": "প্রথম তিনটি বিখ্যাত উক্তিই Alexander Pope-এর ‘An Essay on Criticism’ থেকে নেওয়া; কিন্তু “Child is the father of the man” উক্তিটি William Wordsworth-এর ‘My Heart Leaps Up’ কবিতার!",
+    "source": "৪৫তম ও ৩৭তম বিসিএস"
+  },
+  {
+    "topicBn": "Jonathan Swift — Gulliver’s Travels Satire (Medium)",
+    "stem": "Jonathan Swift’s masterpiece “Gulliver’s Travels” (1726) is primarily a sharp political and human satire divided into how many voyages?",
+    "options": {
+      "A": "Two voyages",
+      "B": "Four voyages (Lilliput, Brobdingnag, Laputa, Houyhnhnms)",
+      "C": "Three voyages",
+      "D": "Seven voyages"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "অ্যাংলো-আইরিশ ব্যঙ্গরচয়িতা Jonathan Swift-এর ‘Gulliver’s Travels’ উপন্যাসে ৪টি সমুদ্রযাত্রার (Lilliput, Brobdingnag, Laputa এবং ঘোড়াদের দেশ Houyhnhnms) বর্ণনা রয়েছে।",
+    "source": "৪৩তম বিসিএস ও এনটিআরসিএ"
+  },
+  {
+    "topicBn": "Lord Byron — Rebel Poet & Don Juan (Medium)",
+    "stem": "Who is known as the “Rebel Poet” in English Romantic literature and wrote the satirical epic “Don Juan” and “Childe Harold’s Pilgrimage”?",
+    "options": {
+      "A": "Lord Byron (George Gordon Byron)",
+      "B": "P.B. Shelley",
+      "C": "William Blake",
+      "D": "Robert Southey"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "ইংরেজি সাহিত্যে ‘Rebel Poet’ (বিদ্রোহী কবি) বলা হয় Lord Byron-কে এবং ‘Revolutionary Poet’ (বিপ্লবী কবি) বলা হয় P.B. Shelley-কে।",
+    "source": "৪০তম বিসিএস প্রিলিমিনারি"
+  },
+  {
+    "topicBn": "Jane Austen — Pride and Prejudice (Medium)",
+    "stem": "“It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife”—is the famous opening line of which novel by Jane Austen?",
+    "options": {
+      "A": "Sense and Sensibility",
+      "B": "Pride and Prejudice",
+      "C": "Emma",
+      "D": "Mansfield Park"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "নারী ঔপন্যাসিক Jane Austen-এর শ্রেষ্ঠ উপন্যাস ‘Pride and Prejudice’ (১৮১৩, প্রধান চরিত্র Elizabeth Bennet ও Mr. Darcy)-এর প্রথম লাইন এটি।",
+    "source": "৪৫তম বিসিএস প্রিলিমিনারি"
+  },
+  {
+    "topicBn": "Victorian Poets — Tennyson vs Browning (Hard)",
+    "stem": "Who was the famous Victorian Poet Laureate who wrote “Ulysses” (“To strive, to seek, to find, and not to yield”) and “In Memoriam”?",
+    "options": {
+      "A": "Robert Browning",
+      "B": "Alfred, Lord Tennyson",
+      "C": "Matthew Arnold",
+      "D": "Dante Gabriel Rossetti"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "ভিক্টোরিয়ান যুগের প্রতিনিধি কবি Alfred, Lord Tennyson লিখেছেন ‘Ulysses’, ‘The Lotos-Eaters’, ‘Morte d’Arthur’ ও ‘In Memoriam’ (বন্ধু Arthur Hallam-এর মৃত্যুতে শোককাব্য)। আর Dramatic Monologue-এর জনক Robert Browning লিখেছেন ‘My Last Duchess’ ও ‘Andrea del Sarto’।",
+    "source": "৪৬তম ও ৪১তম বিসিএস"
+  },
+  {
+    "topicBn": "Charlotte Bronte vs Emily Bronte (Hard)",
+    "stem": "The Gothic novel “Wuthering Heights” (featuring the character Heathcliff) was written by ______ , whereas “Jane Eyre” was written by ______.",
+    "options": {
+      "A": "Emily Brontë; Charlotte Brontë",
+      "B": "Charlotte Brontë; Emily Brontë",
+      "C": "George Eliot; Virginia Woolf",
+      "D": "Anne Brontë; Jane Austen"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Emily Brontë-র একমাত্র উপন্যাস হলো ‘Wuthering Heights’ (প্রধান চরিত্র Heathcliff ও Catherine); আর তাঁর বোন Charlotte Brontë লিখেছেন ‘Jane Eyre’। (মনে রাখবেন: George Eliot ছিলেন একজন নারী লেখক যার আসল নাম Mary Ann Evans, রচনা ‘Silas Marner’)।",
+    "source": "৪৪তম ও ৩৮তম বিসিএস"
+  },
+  {
+    "topicBn": "T.S. Eliot — The Waste Land & Modernism (Hard)",
+    "stem": "“April is the cruellest month”—is the famous opening line of which modernist masterpiece by Nobel Laureate T.S. Eliot?",
+    "options": {
+      "A": "The Love Song of J. Alfred Prufrock",
+      "B": "The Waste Land (1922)",
+      "C": "The Hollow Men",
+      "D": "Murder in the Cathedral"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "১৯৪৮ সালে সাহিত্যে নোবেলজয়ী আধুনিক কবি T.S. Eliot-এর সবচেয়ে বিখ্যাত কাব্যগ্রন্থ ‘The Waste Land’ (১৯২২)-এর প্রথম লাইন হলো “April is the cruellest month”।",
+    "source": "৪৫তম ও ৩৭তম বিসিএস"
+  },
+  {
+    "topicBn": "W.B. Yeats — Irish Poet & Gitanjali Introduction (Medium)",
+    "stem": "Which Irish Nobel Laureate poet wrote the introduction to Rabindranath Tagore’s English “Gitanjali” (Song Offerings) and authored “The Second Coming” and “The Lake Isle of Innisfree”?",
+    "options": {
+      "A": "James Joyce",
+      "B": "William Butler Yeats (W.B. Yeats)",
+      "C": "Samuel Beckett",
+      "D": "Seamus Heaney"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "আইরিশ জাতীয়তাবাদী কবি W.B. Yeats (১৯২৩ সালে নোবেলজয়ী) রবীন্দ্রনাথের ইংরেজি গীতাঞ্জলির ভূমিকা লিখেছিলেন; তাঁর বিখ্যাত কবিতা ‘The Second Coming’ (“Things fall apart; the centre cannot hold”), ‘Easter 1916’ এবং ‘Sailing to Byzantium’।",
+    "source": "৪৩তম ও ৪০তম বিসিএস"
+  },
+  {
+    "topicBn": "George Orwell — Animal Farm & 1984 (Medium)",
+    "stem": "What was the real name of George Orwell, the author of “Animal Farm”, “Nineteen Eighty-Four (1984)” and “Shooting an Elephant”?",
+    "options": {
+      "A": "Eric Arthur Blair",
+      "B": "Samuel Langhorne Clemens",
+      "C": "William Sydney Porter",
+      "D": "Charles Lutwidge Dodgson"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "George Orwell-এর প্রকৃত নাম Eric Arthur Blair; Mark Twain-এর প্রকৃত নাম Samuel Langhorne Clemens; এবং O. Henry-র প্রকৃত নাম William Sydney Porter।",
+    "source": "৪৪তম বিসিএস ও ব্যাংক পরীক্ষা"
+  },
+  {
+    "topicBn": "Ernest Hemingway — The Old Man and the Sea (Medium)",
+    "stem": "“Man is not made for defeat. A man can be destroyed but not defeated”—this famous line appears in which novella by American Nobel Laureate Ernest Hemingway?",
+    "options": {
+      "A": "A Farewell to Arms",
+      "B": "The Old Man and the Sea (1952)",
+      "C": "For Whom the Bell Tolls",
+      "D": "The Sun Also Rises"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "কিউবার বৃদ্ধ জেলে Santiago ও বিশাল Marlin মাছের সংগ্রাম নিয়ে রচিত Ernest Hemingway-র পুলিৎজার ও নোবেলজয়ী উপন্যাসিকা ‘The Old Man and the Sea’ (১৯৫২)-র অমর বাণী এটি।",
+    "source": "৪৬তম ও ৩৯তম বিসিএস"
+  },
+  {
+    "topicBn": "Literary Terms — Soliloquy vs Dramatic Monologue vs Elegy (Hard)",
+    "stem": "In drama, when a character speaks his or her inner thoughts aloud while alone on stage (such as Hamlet’s “To be, or not to be”), it is called a—",
+    "options": {
+      "A": "Dramatic Monologue",
+      "B": "Soliloquy (স্বগতোক্তি)",
+      "C": "Prologue",
+      "D": "Catastrophe"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "মঞ্চে একা থাকা অবস্থায় চরিত্রের নিজের মনের সাথে উচ্চস্বরে কথা বলাকে Soliloquy (স্বগতোক্তি) বলে; আর কবিতায় একজন বক্তা ও নীরব শ্রোতার উপস্থিতিতে একক বক্তৃতাকে Dramatic Monologue বলে।",
+    "source": "৪৫তম ও ৪১তম বিসিএস"
+  },
+  {
+    "topicBn": "Old & Middle English — Geoffrey Chaucer & Canterbury Tales (Medium)",
+    "stem": "Who is universally acclaimed as the “Father of English Poetry” (and the morning star of the Renaissance/Reformation is John Wycliffe) and what is his masterpiece?",
+    "options": {
+      "A": "Geoffrey Chaucer — “The Canterbury Tales” (written in Middle English)",
+      "B": "Caedmon — “Beowulf”",
+      "C": "William Langland — “Piers Plowman”",
+      "D": "Sir Thomas Malory — “Morte d’Arthur”"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "চতুর্দশ শতাব্দীর কবি Geoffrey Chaucer-কে ‘Father of English Poetry’ এবং ‘Father of English Language’ বলা হয়; তাঁর শ্রেষ্ঠ কাব্যগ্রন্থ ‘The Canterbury Tales’। (অন্যদিকে অ্যাংলো-স্যাক্সন বা Old English যুগের মহাকাব্য হলো ‘Beowulf’ এবং বাইবেলের প্রথম ইংরেজি অনুবাদক John Wycliffe-কে Morning Star of the Reformation বলা হয়)।",
+    "source": "৪৩তম ও ৩৭তম বিসিএস"
+  },
+  {
+    "topicBn": "Elizabethan Period — University Wits (Hard)",
+    "stem": "Which group of 16th-century Elizabethan playwrights and pamphleteers educated at Oxford or Cambridge was known as the “University Wits”?",
+    "options": {
+      "A": "Christopher Marlowe, Thomas Kyd, Robert Greene, Thomas Nashe, George Peele, John Lyly, and Thomas Lodge (Note: William Shakespeare was NOT one of them!)",
+      "B": "William Shakespeare, Ben Jonson, and Francis Bacon",
+      "C": "John Milton, John Donne, and Andrew Marvell",
+      "D": "John Dryden, Alexander Pope, and Jonathan Swift"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "অক্সফোর্ড (John Lyly, George Peele, Thomas Lodge) এবং কেমব্রিজ (Christopher Marlowe, Robert Greene, Thomas Nashe) বিশ্ববিদ্যালয়ে শিক্ষিত ৬ জন নাট্যকার ও Thomas Kyd—এই ৭ জনকে একত্রে ‘University Wits’ বলা হয়। শেক্সপিয়ার বা বেন জনসন এর অন্তর্ভুক্ত ছিলেন না!",
+    "source": "৪৪তম ও ৩৮তম বিসিএস"
+  },
+  {
+    "topicBn": "William Shakespeare — Famous Soliloquies & Quotations (Hard)",
+    "stem": "“All the world’s a stage, / And all the men and women merely players”—in which comedy of William Shakespeare does the melancholic character Jaques speak these lines?",
+    "options": {
+      "A": "As You Like It (spoken by Jaques in the Forest of Arden)",
+      "B": "Twelfth Night",
+      "C": "The Merchant of Venice",
+      "D": "A Midsummer Night’s Dream"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "শেক্সপিয়ারের রোমান্টিক কমেডি ‘As You Like It’-এ বিষণ্ণ দার্শনিক চরিত্র Jaques মানুষের জীবনের ৭টি স্তরের বর্ণনা দিতে গিয়ে বলেন: “All the world’s a stage...”। (অন্যদিকে “Life’s but a walking shadow, a poor player” উক্তিটি ‘Macbeth’ ট্র্যাজেডির!)।",
+    "source": "৪৫তম ও ৩৬তম বিসিএস"
+  },
+  {
+    "topicBn": "William Shakespeare — The Tempest & Measure for Measure (Medium)",
+    "stem": "Which play is widely regarded as William Shakespeare’s “Swan Song” (his last standalone play), featuring the characters Prospero, Miranda, Ariel, and Caliban?",
+    "options": {
+      "A": "The Tempest (a Tragi-comedy / Dramatic Romance)",
+      "B": "The Winter’s Tale",
+      "C": "Measure for Measure",
+      "D": "King Lear"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "শেক্সপিয়ারের সর্বশেষ একক নাটক (Swan Song) হলো ‘The Tempest’ (১৬১১), যার প্রধান চরিত্র মিলানের ডিউক Prospero, তাঁর কন্যা Miranda, বায়বীয় আত্মা Ariel এবং দানব Caliban। এ নাটকের বিখ্যাত উক্তি: “O brave new world, that has such people in’t!”",
+    "source": "৪১তম ও ৩৭তম বিসিএস"
+  },
+  {
+    "topicBn": "Jacobean Period — John Webster & The Duchess of Malfi (Hard)",
+    "stem": "Who wrote the famous Jacobean revenge tragedies “The Duchess of Malfi” and “The White Devil”, containing the line “Cover her face; mine eyes dazzle: she died young”?",
+    "options": {
+      "A": "John Webster",
+      "B": "Ben Jonson",
+      "C": "Cyril Tourneur",
+      "D": "Thomas Middleton"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "জ্যাকোবিয়ান যুগের অন্যতম শ্রেষ্ঠ ট্র্যাজেডি নাট্যকার John Webster রচনা করেন ‘The Duchess of Malfi’ (চরিত্র: Bosola, Ferdinand, Duchess) এবং ‘The White Devil’।",
+    "source": "৪৪তম বিসিএস ইংলিশ লিটারেচার"
+  },
+  {
+    "topicBn": "Puritan Age — John Milton’s Areopagitica & Elegies (Hard)",
+    "stem": "Which prose work by the epic poet John Milton is a passionate philosophical defense of “freedom of the press and free speech”, and what is his pastoral elegy on the death of his friend Edward King?",
+    "options": {
+      "A": "Prose tract: “Areopagitica” (1644); Pastoral elegy: “Lycidas” (1637)",
+      "B": "Prose tract: “Leviathan”; Elegy: “Adonais”",
+      "C": "Prose tract: “Utopia”; Elegy: “In Memoriam”",
+      "D": "Prose tract: “Biographia Literaria”; Elegy: “Thyrsis”"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "মিল্টনের বিখ্যাত গদ্যগ্রন্থ ‘Areopagitica’ সংবাদপত্র ও বাক-স্বাধীনতার পক্ষে রচিত এবং বন্ধু Edward King-এর মৃত্যুতে রচিত শোককাব্য হলো ‘Lycidas’। (উল্লেখ্য: Adonais লিখেছেন Shelley কীটসের মৃত্যুতে; এবং In Memoriam লিখেছেন Tennyson বন্ধু Arthur Hallam-এর মৃত্যুতে)।",
+    "source": "৪৩তম ও ৩৮তম বিসিএস"
+  },
+  {
+    "topicBn": "Restoration Period — William Congreve & Comedy of Manners (Hard)",
+    "stem": "Who is the master of Restoration “Comedy of Manners”, famous for plays such as “The Way of the World” and “Love for Love”?",
+    "options": {
+      "A": "William Congreve",
+      "B": "John Bunyan",
+      "C": "Samuel Butler",
+      "D": "Oliver Goldsmith"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "রেস্টোরেশন যুগে উচ্চবিত্ত সমাজের কৃত্রিম আচার-আচরণকে ব্যঙ্গ করে রচিত ‘Comedy of Manners’-এর শ্রেষ্ঠ নাট্যকার William Congreve; তাঁর শ্রেষ্ঠ নাটক ‘The Way of the World’ (১৭০০ — চরিত্র: Mirabell ও Millamant)।",
+    "source": "৪৫তম বিসিএস ও পিএসসি নন-ক্যাডার"
+  },
+  {
+    "topicBn": "Augustan / Neoclassical Age — Daniel Defoe & Jonathan Swift (Medium)",
+    "stem": "“Man Friday” is a famous character in which adventure novel by Daniel Defoe, and what are the four voyages in Jonathan Swift’s satire “Gulliver’s Travels”?",
+    "options": {
+      "A": "Novel: “Robinson Crusoe” (1719); Voyages in Gulliver’s Travels: Lilliput (dwarfs), Brobdingnag (giants), Laputa, and the land of the Houyhnhnms",
+      "B": "Novel: “Treasure Island”; Voyages: Utopia and Atlantis",
+      "C": "Novel: “Gulliver’s Travels”; Voyages: Crusoe’s Island",
+      "D": "Novel: “Tom Jones”; Voyages: Eldorado"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Daniel Defoe-এর ‘Robinson Crusoe’ (১৭১৯) উপন্যাসের বিখ্যাত চরিত্র ‘Man Friday’। আর Jonathan Swift-এর রাজনৈতিক ব্যঙ্গাত্মক উপন্যাস ‘Gulliver’s Travels’ (১৭২৬)-এর ৪টি খণ্ড হলো: Lilliput, Brobdingnag, Laputa এবং Houyhnhnms (বুদ্ধিমান ঘোড়াদের দেশ)।",
+    "source": "৪০তম ও ৩৫তম বিসিএস"
+  },
+  {
+    "topicBn": "Pre-Romantic / Graveyard Poets — Thomas Gray’s Elegy (Medium)",
+    "stem": "“Where ignorance is bliss, ’tis folly to be wise” and “Full many a flower is born to blush unseen”—these immortal lines are from which poem by Thomas Gray?",
+    "options": {
+      "A": "Elegy Written in a Country Churchyard (and Ode on a Distant Prospect of Eton College)",
+      "B": "The Rime of the Ancient Mariner",
+      "C": "Ode to the West Wind",
+      "D": "Tintern Abbey"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "Graveyard Poet নামে পরিচিত Thomas Gray-এর ‘Elegy Written in a Country Churchyard’ (১৭৫১) কবিতার বিখ্যাত চরণ: “The paths of glory lead but to the grave” এবং “Full many a flower is born to blush unseen”।",
+    "source": "৪৪তম ও ৩৬তম বিসিএস"
+  },
+  {
+    "topicBn": "Romantic Period — Lord Byron & Don Juan (Medium)",
+    "stem": "Which Romantic poet is known as the “Rebel Poet” of English literature, created the “Byronic Hero”, and wrote the epic satire “Don Juan” and “Childe Harold’s Pilgrimage”?",
+    "options": {
+      "A": "George Gordon, Lord Byron",
+      "B": "William Wordsworth",
+      "C": "Samuel Taylor Coleridge",
+      "D": "William Blake"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "লর্ড বায়রনকে (Lord Byron) ইংরেজি সাহিত্যের ‘Rebel Poet’ (বিদ্রোহী কবি) বলা হয় (আর Shelley-কে বলা হয় Revolutionary Poet)। বায়রনের বিখ্যাত রচনা: Don Juan, Childe Harold’s Pilgrimage, এবং কাব্য: “She Walks in Beauty”।",
+    "source": "৪২তম ও ৩৮তম বিসিএস"
+  },
+  {
+    "topicBn": "Victorian Period — Thomas Hardy’s Wessex Novels (Hard)",
+    "stem": "Which Victorian novelist created the fictional region of “Wessex” in pessimistic novels such as “Tess of the d’Urbervilles”, “The Return of the Native”, and “The Mayor of Casterbridge”?",
+    "options": {
+      "A": "Thomas Hardy",
+      "B": "Charles Dickens",
+      "C": "George Eliot (Mary Ann Evans)",
+      "D": "William Makepeace Thackeray"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "ভিক্টোরিয়ান যুগের হতাশাবাদী (Pessimistic) ঔপন্যাসিক ও কবি Thomas Hardy-এর বিখ্যাত উপন্যাসগুলো হলো: Tess of the d’Urbervilles, Far from the Madding Crowd, The Return of the Native, The Mayor of Casterbridge এবং Jude the Obscure।",
+    "source": "৪৫তম ও ৪১তম বিসিএস"
+  },
+  {
+    "topicBn": "Victorian Women Novelists — Brontë Sisters & George Eliot (Hard)",
+    "stem": "Match the Victorian masterpieces with their female authors: (1) “Jane Eyre”, (2) “Wuthering Heights”, and (3) “Silas Marner / Middlemarch”.",
+    "options": {
+      "A": "(1) Charlotte Brontë, (2) Emily Brontë (character: Heathcliff), and (3) George Eliot (pen name of Mary Ann Evans)",
+      "B": "(1) Jane Austen, (2) Charlotte Brontë, and (3) Virginia Woolf",
+      "C": "(1) Emily Brontë, (2) Anne Brontë, and (3) Elizabeth Barrett Browning",
+      "D": "(1) George Eliot, (2) Jane Austen, and (3) Emily Dickinson"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Charlotte Brontë লিখেছেন ‘Jane Eyre’; তাঁর বোন Emily Brontë লিখেছেন তাঁর একমাত্র উপন্যাস ‘Wuthering Heights’ (যার কেন্দ্রীয় চরিত্র Heathcliff ও Catherine); এবং Mary Ann Evans ‘George Eliot’ ছদ্মনামে লিখেছেন ‘Silas Marner’, ‘Adam Bede’ ও ‘Middlemarch’।",
+    "source": "৪৬তম ও ৪০তম বিসিএস"
+  },
+  {
+    "topicBn": "Modern Period — T.S. Eliot & The Waste Land (Hard)",
+    "stem": "“April is the cruellest month, breeding / Lilacs out of the dead land”—this famous opening line belongs to which landmark modernist poem that won its author the 1948 Nobel Prize in Literature?",
+    "options": {
+      "A": "“The Waste Land” (1922) by T.S. Eliot",
+      "B": "“The Second Coming” by W.B. Yeats",
+      "C": "“Ulysses” by James Joyce",
+      "D": "“Waiting for Godot” by Samuel Beckett"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "আধুনিক ইংরেজি কবিতার শ্রেষ্ঠ নিদর্শন T.S. Eliot-এর ‘The Waste Land’ (১৯২২, কবি Ezra Pound-কে উৎসর্গীকৃত)। এলিয়টের অন্যান্য বিখ্যাত রচনা: The Love Song of J. Alfred Prufrock, The Hollow Men এবং কাব্যনাট্য Murder in the Cathedral।",
+    "source": "৪৪তম ও ৩৭তম বিসিএস"
+  },
+  {
+    "topicBn": "Modern Drama — George Bernard Shaw & Drama of Ideas (Medium)",
+    "stem": "Who wrote the famous satirical plays “Arms and the Man”, “Man and Superman”, “Pygmalion”, and “Saint Joan”, and received the Nobel Prize in Literature in 1925?",
+    "options": {
+      "A": "George Bernard Shaw (G.B. Shaw — Father of Modern English Drama)",
+      "B": "Henrik Ibsen",
+      "C": "John Galsworthy",
+      "D": "Oscar Wilde"
+    },
+    "answer": "A",
+    "difficulty": "TRICKY",
+    "explanationBn": "আইরিশ বংশোদ্ভূত নাট্যকার G.B. Shaw-কে আধুনিক ইংরেজি ‘Drama of Ideas’-এর জনক বলা হয়। ‘Arms and the Man’ নাটকে তিনি যুদ্ধ ও রোমান্টিসিজমকে ব্যঙ্গ করেছেন (চরিত্র: Bluntschli ও Raina) এবং ‘Pygmalion’ নাটক থেকে পরবর্তীতে ‘My Fair Lady’ চলচ্চিত্র নির্মিত হয়।",
+    "source": "৪৫তম, ৪১তম ও ৩৫তম বিসিএস"
+  },
+  {
+    "topicBn": "Post-Colonial & World Literature — Chinua Achebe, Gabriel García Márquez & Toni Morrison (Hard)",
+    "stem": "Match the following world literature classics with their Nobel/renowned authors: (1) “Things Fall Apart”, (2) “One Hundred Years of Solitude”, and (3) “Beloved”.",
+    "options": {
+      "A": "(1) Chinua Achebe (Nigeria — character: Okonkwo), (2) Gabriel García Márquez (Colombia — Magic Realism), and (3) Toni Morrison (USA)",
+      "B": "(1) Wole Soyinka, (2) Pablo Neruda, and (3) Ernest Hemingway",
+      "C": "(1) Nelson Mandela, (2) Jorge Luis Borges, and (3) Alice Walker",
+      "D": "(1) Ngũgĩ wa Thiong’o, (2) Salman Rushdie, and (3) Virginia Woolf"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "আফ্রিকান সাহিত্যের জনক নাইজেরিয়ার Chinua Achebe রচনা করেন ‘Things Fall Apart’ (১৯৫৮); কলম্বিয়ার নোবেলজয়ী লেখক Gabriel García Márquez জাদুবাস্তবতা (Magic Realism) শৈলীতে রচনা করেন ‘One Hundred Years of Solitude’; এবং প্রথম কৃষ্ণাঙ্গ নারী নোবেলজয়ী মার্কিন লেখিকা Toni Morrison রচনা করেন ‘Beloved’ ও ‘The Bluest Eye’।",
+    "source": "৪৬তম ও ৪৩তম বিসিএস"
+  },
+  {
+    "topicBn": "Elizabethan Literature — Shakespeare's Four Great Tragedies (Critical)",
+    "stem": "Which of the following represents William Shakespeare's four great tragedies arranged in correct chronological order of composition?",
+    "options": {
+      "A": "Hamlet (1601), Othello (1603), King Lear (1605), Macbeth (1606)",
+      "B": "Macbeth, King Lear, Othello, Hamlet",
+      "C": "Othello, Hamlet, Macbeth, King Lear",
+      "D": "King Lear, Hamlet, Othello, Macbeth"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "The mnemonic H-O-L-M (Hamlet -> Othello -> King Lear -> Macbeth) captures Shakespeare's four supreme tragedies written between 1601 and 1606.",
+    "source": "45th & 40th BCS English Literature"
+  },
+  {
+    "topicBn": "Metaphysical Poetry — John Donne & Conceit (Critical)",
+    "stem": "In John Donne's metaphysical masterpiece 'A Valediction: Forbidding Mourning', the souls of the two separated lovers are famously compared to:",
+    "options": {
+      "A": "Two intertwined climbing roses",
+      "B": "The twin compasses used by a draftsman",
+      "C": "A bird and its migratory flight path",
+      "D": "Sun and moon in perpetual orbit"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "This is the most celebrated metaphysical conceit in English literature: Donne compares his and his wife's souls to the two stiff legs of a draughtsman's compass (one fixed in the center while the other leans and roams).",
+    "source": "44th & 38th BCS Literature"
+  },
+  {
+    "topicBn": "Romantic Period — Preface to Lyrical Ballads (Critical)",
+    "stem": "The manifesto of English Romanticism, 'Preface to Lyrical Ballads' (1800), wherein poetry is defined as 'the spontaneous overflow of powerful feelings', was authored by:",
+    "options": {
+      "A": "Samuel Taylor Coleridge",
+      "B": "William Wordsworth",
+      "C": "Percy Bysshe Shelley",
+      "D": "John Keats"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "While 'Lyrical Ballads' (1798) was co-published by Wordsworth (19 poems) and Coleridge (4 poems including Rime of the Ancient Mariner), the famous 'Preface' was written solely by William Wordsworth in the second edition (1800).",
+    "source": "46th & 41st BCS Literature"
+  },
+  {
+    "topicBn": "Romantic Period — Keats's Negative Capability (Critical)",
+    "stem": "The aesthetic concept of 'Negative Capability'—the capacity to exist in uncertainties, mysteries, and doubts without any irritable reaching after fact and reason—was coined by:",
+    "options": {
+      "A": "William Wordsworth",
+      "B": "Lord Byron",
+      "C": "John Keats",
+      "D": "P.B. Shelley"
+    },
+    "answer": "C",
+    "difficulty": "HIGH",
+    "explanationBn": "John Keats introduced 'Negative Capability' in a letter to his brothers in December 1817, citing Shakespeare as the prime example of an author possessing this quality.",
+    "source": "45th & 37th BCS Literature"
+  },
+  {
+    "topicBn": "Victorian Literature — Dramatic Monologue & Browning (Critical)",
+    "stem": "Robert Browning is pre-eminently celebrated in Victorian literature for mastering which poetic form?",
+    "options": {
+      "A": "Pastoral Elegy",
+      "B": "Dramatic Monologue (seen in 'My Last Duchess' and 'Fra Lippo Lippi')",
+      "C": "Spenserian Stanza",
+      "D": "Blank Verse Epic"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "Robert Browning perfected the Dramatic Monologue, where a single fictional speaker addresses a silent listener at a moment of emotional crisis, unintentionally revealing their true character (e.g. Duke of Ferrara in 'My Last Duchess').",
+    "source": "44th & 41st BCS Literature"
+  },
+  {
+    "topicBn": "Victorian Novels — George Eliot's Pseudonym (Critical)",
+    "stem": "The Victorian masterpiece 'Middlemarch' was written under the male pen name 'George Eliot' by the female novelist:",
+    "options": {
+      "A": "Mary Ann Evans",
+      "B": "Charlotte Bronte",
+      "C": "Emily Bronte",
+      "D": "Elizabeth Gaskell"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "George Eliot was the pseudonym of Mary Ann Evans (1819–1880), author of 'Middlemarch', 'Silas Marner', 'The Mill on the Floss', and 'Adam Bede'.",
+    "source": "43rd & 36th BCS Literature"
+  },
+  {
+    "topicBn": "Modernist Poetry — T.S. Eliot & The Waste Land (Critical)",
+    "stem": "The modernist landmark poem 'The Waste Land' (1922) by T.S. Eliot opens with which immortal line?",
+    "options": {
+      "A": "'Things fall apart; the centre cannot hold'",
+      "B": "'April is the cruellest month, breeding / Lilacs out of the dead land'",
+      "C": "'Let us go then, you and I, / When the evening is spread out against the sky'",
+      "D": "'Shall I compare thee to a summer's day?'"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "'The Waste Land' (dedicated to Ezra Pound, 'il miglior fabbro') begins with the famous line 'April is the cruellest month...'. Line A is by W.B. Yeats, Line C is from Eliot's 'The Love Song of J. Alfred Prufrock'.",
+    "source": "45th & 42nd BCS Literature"
+  },
+  {
+    "topicBn": "Modernist Fiction — Stream of Consciousness & Joyce (Critical)",
+    "stem": "Which 1922 modernist novel depicts a single day (June 16, 1904 — Bloomsday) in the life of Leopold Bloom in Dublin using the Stream of Consciousness technique?",
+    "options": {
+      "A": "A Portrait of the Artist as a Young Man",
+      "B": "Ulysses (by James Joyce)",
+      "C": "To the Lighthouse (by Virginia Woolf)",
+      "D": "The Great Gatsby (by F. Scott Fitzgerald)"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "'Ulysses' by James Joyce chronicles June 16, 1904 in Dublin across 18 episodes paralleling Homer's Odyssey, celebrated globally as Bloomsday.",
+    "source": "44th & 39th BCS Literature"
+  },
+  {
+    "topicBn": "Irish Revival & W.B. Yeats — Nobel Prize (Critical)",
+    "stem": "W.B. Yeats, who wrote the Introduction to Rabindranath Tagore's English 'Song Offerings' (Gitanjali) in 1912, was awarded the Nobel Prize in Literature in:",
+    "options": {
+      "A": "1913",
+      "B": "1923",
+      "C": "1925",
+      "D": "1938"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "Rabindranath Tagore received the Nobel Prize in 1913, while his close admirer and Irish poet W.B. Yeats received the Nobel Prize in Literature in 1923. George Bernard Shaw received it in 1925.",
+    "source": "46th & 40th BCS Literature"
+  },
+  {
+    "topicBn": "Modern Drama — George Bernard Shaw & Pygmalion (Critical)",
+    "stem": "In G.B. Shaw's satirical drama 'Pygmalion' (1913), Professor Henry Higgins wagers that he can transform which Cockney flower girl into a duchess?",
+    "options": {
+      "A": "Nora Helmer",
+      "B": "Eliza Doolittle",
+      "C": "Major Barbara",
+      "D": "Saint Joan"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "Eliza Doolittle is the Cockney flower girl taught phonetics and etiquette by Professor Henry Higgins in Shaw's 'Pygmalion' (adapted into the musical 'My Fair Lady').",
+    "source": "45th & 38th BCS Literature"
+  },
+  {
+    "topicBn": "American Literature — Ernest Hemingway & Nobel Prize (Critical)",
+    "stem": "Ernest Hemingway was awarded the 1954 Nobel Prize in Literature primarily for his mastery of narrative art demonstrated in which novella?",
+    "options": {
+      "A": "A Farewell to Arms",
+      "B": "For Whom the Bell Tolls",
+      "C": "The Old Man and the Sea (featuring Cuban fisherman Santiago)",
+      "D": "The Sun Also Rises"
+    },
+    "answer": "C",
+    "difficulty": "HIGH",
+    "explanationBn": "'The Old Man and the Sea' (1952) won the Pulitzer Prize in 1953 and was cited as the principal reason for Hemingway receiving the 1954 Nobel Prize in Literature. Central quote: 'A man can be destroyed but not defeated.'",
+    "source": "44th & 37th BCS Literature"
+  },
+  {
+    "topicBn": "Epic Poetry — John Milton's Paradise Lost (Critical)",
+    "stem": "In John Milton's 12-book epic 'Paradise Lost' (1667), what stated objective does the poet set out to achieve in Book I?",
+    "options": {
+      "A": "'To depict the glorious triumph of human ambition'",
+      "B": "'To justify the ways of God to men'",
+      "C": "'To expose the theological corruption of the clergy'",
+      "D": "'To mourn the tragic downfall of England\\'s commonwealth'"
+    },
+    "answer": "B",
+    "difficulty": "HIGH",
+    "explanationBn": "Milton declares his grand epic purpose in Book I (line 26): 'That to the heighth of this great Argument / I may assert Eternal Providence, / And justifie the wayes of God to men.'",
+    "source": "46th & 35th BCS Literature"
+  },
+  {
+    "topicBn": "Restoration Comedy & Satire — Jonathan Swift (Critical)",
+    "stem": "Jonathan Swift's biting political satire 'Gulliver's Travels' (1726) describes Lemuel Gulliver's voyages to four distinct lands in which exact order?",
+    "options": {
+      "A": "Lilliput, Brobdingnag, Laputa, and the Land of the Houyhnhnms",
+      "B": "Brobdingnag, Lilliput, Houyhnhnms, Laputa",
+      "C": "Lilliput, Laputa, Brobdingnag, Houyhnhnms",
+      "D": "Houyhnhnms, Laputa, Brobdingnag, Lilliput"
+    },
+    "answer": "A",
+    "difficulty": "HIGH",
+    "explanationBn": "Gulliver's four voyages: 1. Lilliput (tiny people, 6 inches), 2. Brobdingnag (giants), 3. Laputa (flying island of eccentric philosophers), 4. Land of Houyhnhnms (rational talking horses ruling barbaric human-like Yahoos).",
+    "source": "43rd & 38th BCS Literature"
+  },
+  {
+    "topicBn": "Romantic Odes — Shelley's Ode to the West Wind (Critical)",
+    "stem": "Percy Bysshe Shelley concludes his famous poem 'Ode to the West Wind' with which optimistic rhetorical prophecy?",
+    "options": {
+      "A": "'Beauty is truth, truth beauty,—that is all'",
+      "B": "'If Winter comes, can Spring be far behind?'",
+      "C": "'Water, water, everywhere, / Nor any drop to drink'",
+      "D": "'The world is too much with us; late and soon'"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "Shelley's final trumpet of prophecy in 'Ode to the West Wind' is: 'O, Wind, / If Winter comes, can Spring be far behind?' (Option A is Keats's Ode on a Grecian Urn).",
+    "source": "45th & 38th BCS Literature"
+  },
+  {
+    "topicBn": "Literary Terms — Soliloquy vs Aside vs Monologue (Critical)",
+    "stem": "A dramatic speech made by a character alone on stage, revealing their inmost thoughts directly to the audience, is termed a:",
+    "options": {
+      "A": "Dialogue",
+      "B": "Soliloquy",
+      "C": "Prologue",
+      "D": "Epilogue"
+    },
+    "answer": "B",
+    "difficulty": "TRICKY",
+    "explanationBn": "A 'Soliloquy' is spoken when a character is alone on stage (e.g. Hamlet's 'To be, or not to be'). An 'Aside' is spoken while others are on stage but presumed not to hear. A 'Dramatic Monologue' is spoken to an implied silent listener.",
+    "source": "44th & 36th BCS Literature"
+  }
+]

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>পরীক্ষার হল — বিসিএস প্রিলিমিনারি অনুশীলন</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/exam-hall.css">
+</head>
+<body>
+
+  <!-- ===== Top control bar (screen only) ===== -->
+  <header class="toolbar no-print">
+    <div class="tb-left">
+      <a href="/" class="tb-btn ghost">← হোম</a>
+      <div class="tb-title">পরীক্ষার হল</div>
+    </div>
+    <div class="tb-mid">
+      <label>বিভাগ
+        <select id="selTrack">
+          <option value="BCS">🏛️ বিসিএস প্রিলিমিনারি (BPSC)</option>
+          <option value="PRIMARY">🏫 প্রাথমিক শিক্ষক নিয়োগ (DPE)</option>
+          <option value="NTRCA">🎓 শিক্ষক নিবন্ধন (NTRCA)</option>
+          <option value="BANK">🏦 ব্যাংক জব (BB AD ও সমন্বিত ব্যাংক)</option>
+          <option value="MINISTRY">🏢 মন্ত্রণালয়, খাদ্য, অডিটর ও রেলওয়ে</option>
+          <option value="NON_CADRE">⚖️ পিএসসি নন-ক্যাডার ও দুদক (৯ম-১০ম গ্রেড)</option>
+        </select>
+      </label>
+      <label>প্রশ্নসেট
+        <select id="selSet"></select>
+      </label>
+      <label>প্রশ্নসেট কোড
+        <select id="selCode">
+          <option value="ক">ক</option><option value="খ">খ</option><option value="গ">গ</option><option value="ঘ">ঘ</option>
+        </select>
+      </label>
+      <label class="chk"><input type="checkbox" id="chkHeadings"> বিষয়ের শিরোনাম</label>
+    </div>
+    <div class="tb-right">
+      <div class="timer" id="timer" title="অবশিষ্ট সময়">২:০০:০০</div>
+      <button class="tb-btn" id="btnPrint">🖨️ প্রিন্ট / PDF</button>
+      <button class="tb-btn primary" id="btnSubmit" disabled>উত্তরপত্র জমা দিন</button>
+    </div>
+  </header>
+
+  <div class="hall">
+    <!-- ===== Question paper ===== -->
+    <main class="paper-wrap">
+      <article class="paper" id="paper">
+        <div class="watermark">অনুশীলন</div>
+        <div class="p-head">
+          <div class="p-gov">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+          <div class="p-org" id="pOrg">বাংলাদেশ সরকারি কর্ম কমিশন</div>
+          <div class="p-exam" id="pExam">বিসিএস প্রিলিমিনারি টেস্ট — অনুশীলন সেট-১</div>
+          <div class="p-meta">
+            <span id="pTimeMeta">সময়: ২ ঘণ্টা</span>
+            <span class="p-setbox">প্রশ্নসেট: <b id="pCode">ক</b></span>
+            <span id="pMarksMeta">পূর্ণমান: ২০০</span>
+          </div>
+        </div>
+        <div class="p-ins" id="pIns">
+          <b>বিশেষ দ্রষ্টব্য:</b> প্রতিটি প্রশ্নের মান ১। প্রতিটি ভুল উত্তরের জন্য ০.৫০ নম্বর কাটা যাবে।
+          সঠিক উত্তরের জন্য উত্তরপত্রে (OMR) সংশ্লিষ্ট বৃত্তটি কালো বলপয়েন্ট কলম দিয়ে সম্পূর্ণ ভরাট করুন।
+          একটি প্রশ্নের একাধিক বৃত্ত ভরাট করলে উত্তরটি ভুল বলে গণ্য হবে। প্রশ্নপত্রে কোনো দাগ দিলে তা মূল্যায়িত হবে না।
+        </div>
+        <div class="p-cols" id="pQuestions"></div>
+        <div class="p-foot">— সমাপ্ত —<br><small>এটি অনুশীলনের জন্য তৈরি মডেল প্রশ্নপত্র; বাংলাদেশ সরকারি কর্ম কমিশনের আনুষ্ঠানিক প্রশ্নপত্র নয়।</small></div>
+      </article>
+
+      <!-- Answer key (print only, optional) -->
+      <article class="paper answer-key" id="answerKey"></article>
+    </main>
+
+    <!-- ===== On-screen OMR answer sheet ===== -->
+    <aside class="omr no-print" id="omrPanel">
+      <div class="omr-inner">
+        <div class="omr-head">
+          <div class="omr-title">উত্তরপত্র (OMR)</div>
+          <button class="omr-close" id="btnOmrClose" aria-label="বন্ধ">✕</button>
+        </div>
+        <div class="omr-cand">
+          <div><span>নাম:</span> <b id="omrName">—</b></div>
+          <div><span>রোল:</span> <b id="omrRoll">—</b></div>
+          <div class="omr-setcode"><span>প্রশ্নসেট:</span>
+            <span class="sc" data-c="ক">ক</span><span class="sc" data-c="খ">খ</span><span class="sc" data-c="গ">গ</span><span class="sc" data-c="ঘ">ঘ</span>
+          </div>
+        </div>
+        <div class="omr-mode">
+          <label class="chk"><input type="checkbox" id="chkStrict" checked> বাস্তব নিয়ম (ভরাট করা বৃত্ত মোছা যাবে না)</label>
+        </div>
+        <div class="omr-count" id="omrCount">ভরাট: ০ / ২০০</div>
+        <div class="omr-grid" id="omrGrid"></div>
+      </div>
+    </aside>
+  </div>
+
+  <button class="fab no-print" id="btnOmrOpen">উত্তরপত্র (OMR) <span id="fabCount">০/২০০</span></button>
+
+  <!-- ===== Printable OMR sheet (print only) ===== -->
+  <section class="print-omr" id="printOmr"></section>
+
+  <!-- ===== Start overlay ===== -->
+  <div class="overlay no-print" id="startOverlay">
+    <div class="card">
+      <div class="card-head">
+        <div class="p-org">বিসিএস প্রিলিমিনারি অনুশীলন পরীক্ষা</div>
+        <div id="startSetTitle" class="card-sub"></div>
+      </div>
+      <div class="form">
+        <label>পরীক্ষার্থীর নাম<input id="inName" placeholder="আপনার নাম লিখুন"></label>
+        <label>রোল নম্বর (ঐচ্ছিক)<input id="inRoll" inputmode="numeric" maxlength="8" placeholder="যেমন: ১২৩৪৫৬"></label>
+      </div>
+      <ul class="rules">
+        <li>মোট ২০০টি প্রশ্ন, সময় ২ ঘণ্টা। সময় শেষ হলে উত্তরপত্র স্বয়ংক্রিয়ভাবে জমা হবে।</li>
+        <li>উত্তর শুধু ডান পাশের <b>OMR উত্তরপত্রে</b> বৃত্ত ভরাট করে দিতে হবে — ঠিক আসল পরীক্ষার মতো।</li>
+        <li>প্রশ্নপত্রের অপশনে ক্লিক করলে শুধু খসড়া টিক পড়বে, এটি নম্বরে গণ্য হবে না।</li>
+        <li>প্রতিটি ভুল উত্তরে ০.৫০ নম্বর কাটা যাবে। একাধিক বৃত্ত ভরাট = ভুল।</li>
+      </ul>
+      <div class="card-actions">
+        <button class="tb-btn primary big" id="btnStart">পরীক্ষা শুরু করুন</button>
+        <button class="tb-btn ghost" id="btnJustView">শুধু প্রশ্নপত্র দেখুন / প্রিন্ট করুন</button>
+      </div>
+      <div class="resume" id="resumeBox" hidden>
+        আগের অসমাপ্ত পরীক্ষা পাওয়া গেছে। <button class="link" id="btnResume">যেখানে ছিলেন সেখান থেকে শুরু করুন</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Result modal ===== -->
+  <div class="overlay no-print" id="resultOverlay" hidden>
+    <div class="card wide">
+      <div class="card-head">
+        <div class="p-org">ফলাফল</div>
+        <div class="card-sub" id="resTitle"></div>
+      </div>
+      <div class="res-grid" id="resSummary"></div>
+      <table class="res-table" id="resTable"></table>
+      <div class="card-actions">
+        <button class="tb-btn primary" id="btnReview">উত্তর মিলিয়ে দেখুন</button>
+        <a class="tb-btn ghost" href="/dashboard#mistakes">ভুল খাতায় যান</a>
+        <button class="tb-btn ghost" id="btnRetake">আবার পরীক্ষা দিন</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="print-dialog no-print" id="printDialog" hidden>
+    <div class="card">
+      <div class="card-head"><div class="p-org">প্রিন্ট / PDF ডাউনলোড</div></div>
+      <label class="chk"><input type="checkbox" id="prPaper" checked> প্রশ্নপত্র (২ কলাম)</label>
+      <label class="chk"><input type="checkbox" id="prOmr" checked> OMR উত্তরপত্র (৪ কোণায় স্ক্যানার মার্কার সহ)</label>
+      <label class="chk"><input type="checkbox" id="prKey"> উত্তরমালা</label>
+      <p class="hint">PDF হিসেবে সেভ করতে প্রিন্ট উইন্ডোতে "Save as PDF" বেছে নিন। কাগজ: A4।</p>
+      <div class="card-actions">
+        <button class="tb-btn primary" id="btnDoPrint">প্রিন্ট করুন</button>
+        <button class="tb-btn ghost" id="btnCancelPrint">বাতিল</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/seed-data.js"></script>
+  <script src="/exam-hall.js"></script>
+</body>
+</html>

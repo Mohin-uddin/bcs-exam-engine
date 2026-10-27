@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for Prisma ORM
+  postgres:
+    image: postgres:16-alpine
+    container_name: bcs_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: bcs_admin
+      POSTGRES_PASSWORD: secure_password
+      POSTGRES_DB: bcs_prep_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bcs_admin -d bcs_prep_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis for High-Concurrency Model Test Leaderboards (Sorted Sets)
+  redis:
+    image: redis:7-alpine
+    container_name: bcs_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Node.js Core Backend & Web Application
+  web-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bcs_web_app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: "postgresql://bcs_admin:secure_password@postgres:5432/bcs_prep_db?schema=public"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      OMR_SERVICE_URL: "http://omr-vision:8000"
+      GEMINI_API_KEY: "${GEMINI_API_KEY}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Python OpenCV OMR Computer Vision Microservice
+  omr-vision:
+    build:
+      context: ./omr-service
+      dockerfile: Dockerfile
+    container_name: bcs_omr_vision
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: 1
+
+volumes:
+  postgres_data:
+  redis_data:
