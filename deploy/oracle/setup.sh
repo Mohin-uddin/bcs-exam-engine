@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Install or update Sonar Horin on the Oracle VM, next to Doko.
 # Run on the server from the app folder:   bash deploy/oracle/setup.sh sonarhorin.com
+# Another domain later (e.g. a subdomain first): run it again with that name.
 # Safe to run again: it pulls the latest code and restarts only the sonarhorin process.
 #
 # What it uses (none of Doko's pieces are changed):
@@ -61,6 +62,8 @@ ENV
   echo ".env written (only you can read it). Change values later with: nano ~/sonarhorin/.env"
 else
   echo ".env already exists, keeping it"
+  # Domain changed since the first run: point the payment callbacks at the new one
+  sed -i "s|^PUBLIC_URL=.*|PUBLIC_URL=https://$DOMAIN|" .env
 fi
 
 say "4/6 App (pm2: sonarhorin on port $PORT)"
@@ -74,7 +77,8 @@ curl -fs -o /dev/null "http://127.0.0.1:$PORT/" && echo "app answers on 127.0.0.
 
 say "5/6 Nginx site for $DOMAIN"
 sed -e "s/__DOMAIN__/$DOMAIN/g" -e "s/__PORT__/$PORT/g" deploy/oracle/nginx-sonarhorin.conf > /tmp/sonarhorin.nginx
-if [ ! -f /etc/nginx/sites-available/sonarhorin ]; then
+# Write it on the first run or when the domain changed (certbot adds its HTTPS lines again in step 6)
+if ! grep -q "server_name $DOMAIN " /etc/nginx/sites-available/sonarhorin 2>/dev/null; then
   sudo cp /tmp/sonarhorin.nginx /etc/nginx/sites-available/sonarhorin
   sudo ln -sf /etc/nginx/sites-available/sonarhorin /etc/nginx/sites-enabled/sonarhorin
 fi
