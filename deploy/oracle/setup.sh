@@ -81,7 +81,7 @@ fi
 sudo nginx -t && sudo systemctl reload nginx
 
 say "6/6 HTTPS certificate"
-DNS_IP="$(getent ahostsv4 "$DOMAIN" | awk '{print $1; exit}')"
+DNS_IP="$(getent ahostsv4 "$DOMAIN" | awk '{print $1; exit}' || true)"
 if [ -n "$SERVER_IP" ] && [ "$DNS_IP" != "$SERVER_IP" ]; then
   warn "$DOMAIN points to '${DNS_IP:-nothing}', not this server ($SERVER_IP)."
   warn "In Cloudflare add A records @ and www -> $SERVER_IP (grey cloud, DNS only), wait 5 minutes, then run this script again."
@@ -89,7 +89,7 @@ elif sudo test -d "/etc/letsencrypt/live/$DOMAIN"; then
   echo "certificate already there"
 else
   NAMES=(-d "$DOMAIN")
-  [ "$(getent ahostsv4 "www.$DOMAIN" | awk '{print $1; exit}')" = "$SERVER_IP" ] && NAMES+=(-d "www.$DOMAIN")
+  [ "$(getent ahostsv4 "www.$DOMAIN" | awk '{print $1; exit}' || true)" = "$SERVER_IP" ] && NAMES+=(-d "www.$DOMAIN")
   sudo certbot --nginx "${NAMES[@]}" --non-interactive --agree-tos --redirect \
     --register-unsafely-without-email || warn "certbot failed; check DNS and run this script again"
 fi
