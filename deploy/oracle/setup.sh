@@ -88,7 +88,7 @@ say "6/6 HTTPS certificate"
 DNS_IP="$(getent ahostsv4 "$DOMAIN" | awk '{print $1; exit}' || true)"
 if [ -n "$SERVER_IP" ] && [ "$DNS_IP" != "$SERVER_IP" ]; then
   warn "$DOMAIN points to '${DNS_IP:-nothing}', not this server ($SERVER_IP)."
-  warn "In Cloudflare add A records @ and www -> $SERVER_IP (grey cloud, DNS only), wait 5 minutes, then run this script again."
+  warn "Add a DNS A record for $DOMAIN -> $SERVER_IP (Cloudflare: grey cloud, DNS only), wait 5 minutes, then run this script again."
 elif sudo test -d "/etc/letsencrypt/live/$DOMAIN"; then
   echo "certificate already there"
 else
