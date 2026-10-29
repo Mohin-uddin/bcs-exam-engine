@@ -13,9 +13,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { isAdmin } = require('./admin-auth');
 
 const DATA_FILE = process.env.LIVE_DATA_FILE || path.join(__dirname, '..', '..', 'data', 'live-exams.json');
-const ADMIN_KEY = process.env.ADMIN_KEY || 'admin123';
 const SUBMIT_GRACE_SEC = 90; // network slack for auto-submit at the final second
 
 const TRACK_META = {
@@ -30,13 +30,14 @@ const TRACK_META = {
 
 const STORE_KEY = 'live-exams';
 
-function createLiveExamEngine({ availableExams, sampleQuestions, store = null }) {
+function createLiveExamEngine({ availableExams, sampleQuestions, store = null, currentUser = () => null }) {
   const questionById = new Map((sampleQuestions || []).map(q => [q.id, q]));
   const catalog = (availableExams || []).filter(e => Array.isArray(e.questionIds) && e.questionIds.length > 0);
   const catalogById = new Map(catalog.map(e => [e.id, e]));
 
   let state = { exams: [] };
   let saveTimer = null;
+  let writeChain = Promise.resolve();
 
   // ---------------------------------------------------------------------------
   // Persistence
@@ -57,7 +58,13 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null })
     clearTimeout(saveTimer);
     saveTimer = null;
     if (store) {
-      return store.set(STORE_KEY, state).catch(e => console.error(`[live-exam] Could not save to database: ${e.message}`));
+      // One write at a time, each with a snapshot taken now: when many candidates submit in the
+      // last second, an older snapshot can never land after (and overwrite) a newer one
+      const snapshot = JSON.parse(JSON.stringify(state));
+      writeChain = writeChain
+        .then(() => store.set(STORE_KEY, snapshot))
+        .catch(e => console.error(`[live-exam] Could not save to database: ${e.message}`));
+      return writeChain;
     }
     fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
     const tmp = `${DATA_FILE}.tmp`;
@@ -84,7 +91,8 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null })
 
   // Write any pending change now (used on shutdown)
   async function flush() {
-    if (saveTimer) await saveNow();
+    if (saveTimer) saveNow();
+    await writeChain;
   }
 
   // ---------------------------------------------------------------------------
@@ -227,8 +235,6 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null })
     });
   }
 
-  const isAdmin = req => req.headers['x-admin-key'] === ADMIN_KEY;
-
   // ---------------------------------------------------------------------------
   // Route handler. Returns true when it handled the request.
   // ---------------------------------------------------------------------------
@@ -362,15 +368,30 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null })
       if (name.length < 2) return fail(res, 400, 'BAD_NAME', 'আপনার পূর্ণ নাম লিখুন।'), true;
       if (phone.length < 11) return fail(res, 400, 'BAD_PHONE', 'সঠিক মোবাইল নম্বর দিন (১১ ডিজিট)।'), true;
 
-      // Same phone = same candidate: lets someone re-open the exam on another device
-      let c = exam.candidates.find(x => x.phone === phone);
-      if (!c) {
+      // A phone number alone is not proof of who someone is: the existing seat is only handed back to
+      // the same account (or to that phone's own account). Otherwise anyone could type another
+      // candidate's number and answer or read results in their name.
+      const user = currentUser(req);
+      const last11 = p => String(p || '').replace(/\D/g, '').slice(-11); // +8801… and 01… are the same number
+      let c = exam.candidates.find(x => last11(x.phone) === last11(phone)) || (user && exam.candidates.find(x => x.userId === user.id));
+      if (c) {
+        const sameUser = user && (c.userId === user.id || (!c.userId && last11(user.phone) === last11(c.phone)));
+        if (!sameUser) {
+          return fail(res, 409, 'ALREADY_REGISTERED',
+            'এই নম্বরে আগেই নিবন্ধন হয়েছে। যে ফোন/ব্রাউজারে নিবন্ধন করেছিলেন সেখান থেকে খুলুন, অথবা এই নম্বরের অ্যাকাউন্টে লগইন করে আবার চেষ্টা করুন।'), true;
+        }
+        if (!c.userId) {
+          c.userId = user.id;
+          save();
+        }
+      } else {
         c = {
           id: newId('cand'),
           token: crypto.randomBytes(18).toString('hex'),
           roll: exam.nextRoll++,
           name,
           phone,
+          userId: user ? user.id : null,
           registeredAt: new Date().toISOString(),
           draftAnswers: {}
         };

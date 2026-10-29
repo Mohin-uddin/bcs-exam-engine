@@ -20,10 +20,11 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const zlib = require('node:zlib');
 const gateways = require('./payment-gateways');
+const { isAdmin } = require('./admin-auth');
 
 const DATA_FILE = process.env.ACCOUNTS_DATA_FILE || path.join(__dirname, '..', '..', 'data', 'accounts.json');
-const ADMIN_KEY = process.env.ADMIN_KEY || 'admin123';
 const STORE_KEY = 'accounts';
 const COOKIE = 'sh_sid';
 const SESSION_DAYS = 60;
@@ -146,24 +147,34 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     const version = bundles.version + 1;
     const lockedList = JSON.stringify([...lockedExamIds]);
     const access = premium => `\n;window.APP_ACCESS = ${JSON.stringify({ premium })};window.APP_ACCESS.lockedExamIds = ${lockedList};\n`;
+    const full = Buffer.concat([fs.readFileSync(seedFile), Buffer.from(access(true))]);
+    const free = Buffer.from(parts.join('\n') + access(false));
     bundles = {
       version,
-      full: Buffer.concat([fs.readFileSync(seedFile), Buffer.from(access(true))]),
-      free: Buffer.from(parts.join('\n') + access(false)),
+      full,
+      free,
+      // ~5 MB of questions shrinks to ~0.7 MB: compress once here, not on every request
+      fullGz: zlib.gzipSync(full, { level: 9 }),
+      freeGz: zlib.gzipSync(free, { level: 9 }),
       freeQuestionIds: freeQ
     };
   }
 
   function serveSeedBundle(req, res) {
     const premium = isPremium(currentUser(req));
-    const body = premium ? bundles.full : bundles.free;
+    const gzip = /\bgzip\b/.test(req.headers['accept-encoding'] || '');
+    let body = premium ? bundles.full : bundles.free;
     const etag = `"seed-${premium ? 'full' : 'free'}-${bundles.version}-${body.length}"`;
     const headers = {
       'Content-Type': 'application/javascript; charset=utf-8',
       'Cache-Control': 'private, no-cache',
-      Vary: 'Cookie, Authorization',
+      Vary: 'Cookie, Authorization, Accept-Encoding',
       ETag: etag
     };
+    if (gzip) {
+      body = premium ? bundles.fullGz : bundles.freeGz;
+      headers['Content-Encoding'] = 'gzip';
+    }
     if (req.headers['if-none-match'] === etag) {
       res.writeHead(304, headers);
       return res.end();
@@ -260,14 +271,19 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
 
   // Simple brute-force guard for login: 10 tries per 15 min per phone and per IP
   const attempts = new Map();
-  function tooManyAttempts(key) {
+  function tooManyAttempts(key, max = 10) {
     const now = Date.now();
     const list = (attempts.get(key) || []).filter(t => now - t < 15 * 60000);
-    attempts.set(key, list);
-    return list.length >= 10;
+    if (list.length) attempts.set(key, list);
+    else attempts.delete(key);
+    return list.length >= max;
   }
+  // Forget old entries so the map does not grow forever
+  setInterval(() => { [...attempts.keys()].forEach(k => tooManyAttempts(k)); }, 15 * 60000).unref();
   const noteAttempt = key => attempts.set(key, [...(attempts.get(key) || []), Date.now()]);
-  const clientIp = req => String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+  // Nginx sets X-Real-IP. Otherwise the LAST X-Forwarded-For entry (added by our own proxy);
+  // the first one can be typed by the client to dodge the limit.
+  const clientIp = req => String(req.headers['x-real-ip'] || String(req.headers['x-forwarded-for'] || '').split(',').pop() || req.socket.remoteAddress || '').trim();
 
   // ---------------------------------------------------------------------------
   // Payments
@@ -390,8 +406,6 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     });
   }
 
-  const isAdmin = req => req.headers['x-admin-key'] === ADMIN_KEY;
-
   function publicConfig() {
     const s = state.settings;
     const gw = gateways.gatewayConfig();
@@ -420,6 +434,9 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
 
     // ---------------- Auth ----------------
     if (pathname === '/api/auth/register' && method === 'POST') {
+      const ip = clientIp(req);
+      if (tooManyAttempts(`r:${ip}`, 30)) return fail(res, 429, 'TOO_MANY', 'অনেকবার চেষ্টা হয়েছে। ১৫ মিনিট পর আবার চেষ্টা করুন।');
+      noteAttempt(`r:${ip}`);
       const name = String(body.name || '').trim().slice(0, 80);
       const phone = normalizePhone(body.phone);
       const password = String(body.password || '');
@@ -669,6 +686,22 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
           .filter(u => !q || u.phone.includes(q.replace(/[^\d]/g, '') || '#') || u.name.toLowerCase().includes(q.toLowerCase()))
           .slice(-200).reverse();
         send(res, 200, { status: 'SUCCESS', totalUsers: state.users.length, premiumUsers: state.users.filter(isPremium).length, users: list.map(publicUser) });
+        return true;
+      }
+
+      // Forgotten password: admin sets a new one (the user's other logins are signed out)
+      mm = pathname.match(/^\/api\/admin\/accounts\/users\/([\w-]+)\/password$/);
+      if (mm && method === 'POST') {
+        const u = state.users.find(x => x.id === mm[1]);
+        if (!u) return fail(res, 404, 'NOT_FOUND', 'ইউজার পাওয়া যায়নি।');
+        const password = String(body.password || '');
+        if (password.length < 6) return fail(res, 400, 'BAD_PASSWORD', 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন।');
+        const { salt, hash } = hashPassword(password);
+        u.passSalt = salt;
+        u.passHash = hash;
+        state.sessions = state.sessions.filter(s => s.userId !== u.id);
+        await saveNow();
+        send(res, 200, { status: 'SUCCESS', user: publicUser(u) });
         return true;
       }
 

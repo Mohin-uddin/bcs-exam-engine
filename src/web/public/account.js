@@ -175,6 +175,7 @@
         });
         me = data.user;
         renderPill();
+        announce();
         // Premium content comes with the page data, so reload once to get it
         if (me.premium && !access.premium && reloadForPremium()) return;
         close();
@@ -353,6 +354,9 @@
     });
   }
 
+  // Lets other scripts (study progress sync) know who is logged in
+  const announce = () => window.dispatchEvent(new CustomEvent('account:change', { detail: me }));
+
   let pill = null;
   function renderPill() {
     if (!pill) {
@@ -501,6 +505,7 @@
       const data = await api('/api/auth/me');
       me = data.user;
       renderPill();
+      announce();
       if (gwResult) return showGatewayResult(gwResult);
       // Logged in elsewhere or approved since this page loaded
       if (me && me.premium && !access.premium) reloadForPremium();
