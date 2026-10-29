@@ -76,29 +76,49 @@ for _ in $(seq 1 20); do curl -fs -o /dev/null "http://127.0.0.1:$PORT/" && brea
 curl -fs -o /dev/null "http://127.0.0.1:$PORT/" && echo "app answers on 127.0.0.1:$PORT" || { warn "App did not start. See: pm2 logs sonarhorin"; exit 1; }
 
 say "5/6 Nginx site for $DOMAIN"
-sed -e "s/__DOMAIN__/$DOMAIN/g" -e "s/__PORT__/$PORT/g" deploy/oracle/nginx-sonarhorin.conf > /tmp/sonarhorin.nginx
-# Write it on the first run or when the domain changed (certbot adds its HTTPS lines again in step 6)
-if ! grep -q "server_name $DOMAIN " /etc/nginx/sites-available/sonarhorin 2>/dev/null; then
-  sudo cp /tmp/sonarhorin.nginx /etc/nginx/sites-available/sonarhorin
-  sudo ln -sf /etc/nginx/sites-available/sonarhorin /etc/nginx/sites-enabled/sonarhorin
-fi
-sudo nginx -t && sudo systemctl reload nginx
+# Our own file only (sites-available/sonarhorin), rewritten on every run so it always matches
+# the domain and the certificate. Certbot only fetches certificates; it never edits nginx here.
+write_nginx() {
+  local names="$DOMAIN" cert="/etc/letsencrypt/live/$DOMAIN"
+  [ "$(getent ahostsv4 "www.$DOMAIN" | awk '{print $1; exit}' || true)" = "$SERVER_IP" ] && names="$DOMAIN www.$DOMAIN"
+  local tmp; tmp="$(mktemp)"
+  sed -e "s/__NAMES__/$names/g" -e "s/__PORT__/$PORT/g" deploy/oracle/nginx-sonarhorin.conf > "$tmp"
+  if sudo test -f "$cert/fullchain.pem"; then
+    sed -i 's/#HTTPS_REDIRECT //' "$tmp"
+    sed -e "s/__NAMES__/$names/g" -e "s/__DOMAIN__/$DOMAIN/g" -e "s/__PORT__/$PORT/g" deploy/oracle/nginx-sonarhorin-ssl.conf >> "$tmp"
+  fi
+  sudo cp "$tmp" /etc/nginx/sites-available/sonarhorin && rm -f "$tmp"
+  # A real file here (not our symlink) would be an old certbot-edited copy: replace it
+  sudo rm -f /etc/nginx/sites-enabled/sonarhorin
+  sudo ln -s /etc/nginx/sites-available/sonarhorin /etc/nginx/sites-enabled/sonarhorin
+  if ! sudo nginx -t; then
+    sudo rm -f /etc/nginx/sites-enabled/sonarhorin
+    warn "nginx config failed, Sonar Horin site removed so Doko keeps working"; exit 1
+  fi
+  sudo systemctl reload nginx
+}
+write_nginx
 
 say "6/6 HTTPS certificate"
 DNS_IP="$(getent ahostsv4 "$DOMAIN" | awk '{print $1; exit}' || true)"
 if [ -n "$SERVER_IP" ] && [ "$DNS_IP" != "$SERVER_IP" ]; then
   warn "$DOMAIN points to '${DNS_IP:-nothing}', not this server ($SERVER_IP)."
   warn "Add a DNS A record for $DOMAIN -> $SERVER_IP (Cloudflare: grey cloud, DNS only), wait 5 minutes, then run this script again."
-elif sudo test -d "/etc/letsencrypt/live/$DOMAIN"; then
-  echo "certificate already there"
+elif sudo test -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem"; then
+  echo "certificate already there, HTTPS is on"
 else
   NAMES=(-d "$DOMAIN")
   [ "$(getent ahostsv4 "www.$DOMAIN" | awk '{print $1; exit}' || true)" = "$SERVER_IP" ] && NAMES+=(-d "www.$DOMAIN")
-  sudo certbot --nginx "${NAMES[@]}" --non-interactive --agree-tos --redirect \
-    --register-unsafely-without-email || warn "certbot failed; check DNS and run this script again"
+  if sudo certbot certonly --nginx "${NAMES[@]}" --non-interactive --agree-tos --register-unsafely-without-email; then
+    write_nginx
+    echo "HTTPS is on"
+  else
+    warn "certbot failed; check DNS and run this script again"
+  fi
 fi
 
 say "Check"
-printf 'Sonar Horin  https://%s  -> ' "$DOMAIN"; curl -s -o /dev/null -w '%{http_code}\n' --max-time 15 "https://$DOMAIN/" || echo "not yet"
+printf 'Sonar Horin  https://%s  -> ' "$DOMAIN"
+if curl -s --max-time 15 "https://$DOMAIN/" | grep -q 'সোনার হরিণ'; then echo "OK (Sonar Horin page)"; else echo "NOT the Sonar Horin page yet"; fi
 printf 'Doko         https://dokoikeba.com -> '; curl -s -o /dev/null -w '%{http_code}\n' --max-time 15 https://dokoikeba.com/ || echo "no answer"
 pm2 ls
