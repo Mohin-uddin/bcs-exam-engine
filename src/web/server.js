@@ -15,6 +15,7 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const zlib = require('node:zlib');
+const crypto = require('node:crypto');
 const {
   sampleQuestions,
   availableExams,
@@ -87,7 +88,10 @@ function serveStatic(req, res, filePath, contentType) {
       hit = { mtime: st.mtimeMs, raw, gz: zlib.gzipSync(raw, { level: 9 }), etag: `"${st.size.toString(36)}-${Math.round(st.mtimeMs).toString(36)}"` };
       staticCache.set(filePath, hit);
     }
-    const headers = { 'Content-Type': contentType, 'Cache-Control': 'no-cache', ETag: hit.etag, Vary: 'Accept-Encoding' };
+    // Pages link files as /app.js?v=<etag>: such a URL changes whenever the file does, so it can be kept for good
+    const versioned = new URL(req.url, 'http://x').searchParams.get('v') === hit.etag.slice(1, -1);
+    const cache = versioned ? 'public, max-age=31536000, immutable' : 'no-cache';
+    const headers = { 'Content-Type': contentType, 'Cache-Control': cache, ETag: hit.etag, Vary: 'Accept-Encoding' };
     if (req.headers['if-none-match'] === hit.etag) {
       res.writeHead(304, headers);
       return res.end();
@@ -96,6 +100,47 @@ function serveStatic(req, res, filePath, contentType) {
     if (gzip) headers['Content-Encoding'] = 'gzip';
     res.writeHead(200, headers);
     res.end(gzip ? hit.gz : hit.raw);
+  });
+}
+
+// Version tag of a public file (its ETag without quotes), for the ?v= links in pages
+function assetVersion(name) {
+  const filePath = path.join(PUBLIC_DIR, name);
+  try {
+    const st = fs.statSync(filePath);
+    return `${st.size.toString(36)}-${Math.round(st.mtimeMs).toString(36)}`;
+  } catch {
+    return null;
+  }
+}
+
+// Helper: Serve an HTML page with ?v= added to its own scripts, styles and the seed bundle,
+// so the browser loads them from its cache on later visits instead of asking the server each time
+function servePage(req, res, filePath) {
+  fs.readFile(filePath, 'utf8', (err, html) => {
+    if (err) {
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+      return res.end('File Not Found');
+    }
+    const out = Buffer.from(html.replace(/(src|href)="\/([\w.-]+\.(?:js|css|svg))"/g, (m, attr, name) => {
+      const v = name === 'seed-data.js' ? accounts.seedVersion(req) : PUBLIC_FILES[`/${name}`] && assetVersion(name);
+      return v ? `${attr}="/${name}?v=${v}"` : m;
+    }));
+    const etag = `"p-${crypto.createHash('sha1').update(out).digest('hex').slice(0, 16)}"`;
+    const headers = {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-cache',
+      ETag: etag,
+      Vary: 'Accept-Encoding, Cookie, Authorization'
+    };
+    if (req.headers['if-none-match'] === etag) {
+      res.writeHead(304, headers);
+      return res.end();
+    }
+    const gzip = /\bgzip\b/.test(req.headers['accept-encoding'] || '');
+    if (gzip) headers['Content-Encoding'] = 'gzip';
+    res.writeHead(200, headers);
+    res.end(gzip ? zlib.gzipSync(out) : out);
   });
 }
 
@@ -243,7 +288,7 @@ const server = http.createServer(async (req, res) => {
   // STATIC ASSETS & HTML VIEWS
   // ---------------------------------------------------------------------------
   if (method === 'GET' && PAGES[pathname]) {
-    return serveStatic(req, res, path.join(PUBLIC_DIR, PAGES[pathname]), 'text/html; charset=utf-8');
+    return servePage(req, res, path.join(PUBLIC_DIR, PAGES[pathname]));
   }
 
   if (method === 'GET' && PUBLIC_FILES[pathname]) {

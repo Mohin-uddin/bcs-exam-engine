@@ -156,18 +156,28 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
       // ~5 MB of questions shrinks to ~0.7 MB: compress once here, not on every request
       fullGz: zlib.gzipSync(full, { level: 9 }),
       freeGz: zlib.gzipSync(free, { level: 9 }),
+      // Content hashes for the versioned /seed-data.js?v=... URL (stay the same across restarts)
+      fullHash: crypto.createHash('sha1').update(full).digest('hex').slice(0, 12),
+      freeHash: crypto.createHash('sha1').update(free).digest('hex').slice(0, 12),
       freeQuestionIds: freeQ
     };
+  }
+
+  function seedVersion(req) {
+    return isPremium(currentUser(req)) ? `full-${bundles.fullHash}` : `free-${bundles.freeHash}`;
   }
 
   function serveSeedBundle(req, res) {
     const premium = isPremium(currentUser(req));
     const gzip = /\bgzip\b/.test(req.headers['accept-encoding'] || '');
     let body = premium ? bundles.full : bundles.free;
-    const etag = `"seed-${premium ? 'full' : 'free'}-${bundles.version}-${body.length}"`;
+    const etag = `"seed-${premium ? 'full' : 'free'}-${premium ? bundles.fullHash : bundles.freeHash}"`;
+    // Pages link /seed-data.js?v=<seedVersion>, which changes with the content and the account's tier,
+    // so such a URL can be kept by the browser without asking again.
+    const versioned = new URL(req.url, 'http://x').searchParams.get('v') === seedVersion(req);
     const headers = {
       'Content-Type': 'application/javascript; charset=utf-8',
-      'Cache-Control': 'private, no-cache',
+      'Cache-Control': versioned ? 'private, max-age=31536000, immutable' : 'private, no-cache',
       Vary: 'Cookie, Authorization, Accept-Encoding',
       ETag: etag
     };
@@ -779,6 +789,7 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     ready,
     flush,
     serveSeedBundle,
+    seedVersion,
     visibleQuestions,
     currentUser,
     isPremium,
