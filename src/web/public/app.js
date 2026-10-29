@@ -9,7 +9,8 @@
  * - Feynman AI Doubt Explainer & Bengali Mnemonics
  * - Bookmarking & PSC Conflict Reporting
  * - SuperMemo SM-2 Spaced Repetition & Mistake Vault (Cuotiben)
- * - Computer Vision OMR Simulator & Redis Live Leaderboard
+ * - Computer Vision OMR photo scanner
+ * Personal progress (Mistake Vault, bookmarks, flashcards, results) lives in study.js (window.Study).
  */
 
 // State
@@ -21,13 +22,23 @@ let examStartTime = null;
 let timerInterval = null;
 let remainingSeconds = 7200; // 120 minutes full BCS
 let totalExamSeconds = 7200;
+// The clock runs only after the candidate presses "শুরু করুন" (or marks the first answer)
+let examStarted = false;
+let examSubmitted = false;
+let examEndAt = 0;
+let currentExamId = 'PRACTICE_SET_1';
+let currentCustomSet = null; // { title, track } while a practice set from Study is open
+const EXAM_DRAFT_KEY = 'sh_exam_draft';
 
+let flashDeck = [];
 let currentFlashcardIndex = 0;
-let userMistakes = [];
 let activeMistakeFilter = 'ALL';
 
-// Bookmarks & Reports
-let bookmarkedIds = new Set(['bcs_q_1', 'bcs_q_7']);
+// Bookmarks are saved by study.js; this keeps the old `bookmarkedIds.has(id)` calls working
+const bookmarkedIds = {
+  has: id => Study.isBookmarked(id),
+  get size() { return Study.bookmarkIds().length; }
+};
 let activeReportingQuestion = null;
 
 // Past Bank State
@@ -51,18 +62,19 @@ let battleRemainingSeconds = 90;
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
   await loadDatabase();
-  changeExamCategory(); // Loads full 200 BCS questions and 120-minute timer
+  const draft = readExamDraft(); // read first: opening a set clears the saved draft
+  changeExamCategory(); // Loads the first set; the clock waits for "শুরু করুন"
+  const resumed = restoreExamDraft(draft);
   initVirtualOmr();
-  initFlashcardDeck();
   initPastBank();
   calculatePrimaryMerit();
-  updateAnalyticsDashboard();
   updateBookmarkBadges();
-  refreshLeaderboard();
+  updateMistakeBadge();
+  Study.onChange(() => { updateMistakeBadge(); updateBookmarkBadges(); });
 
   // Open the section named in the address bar (e.g. /#past-bank), so refresh and shared links keep their place
-  const startTab = location.hash.replace('#', '');
-  switchTab(startTab && document.getElementById(`pane-${startTab}`) ? startTab : 'exam', { keepScroll: true });
+  const startTab = resumed ? 'exam' : location.hash.replace('#', '');
+  switchTab(startTab && document.getElementById(`pane-${startTab}`) ? startTab : 'home', { keepScroll: true });
 });
 
 // Load Questions and Exam Packs
@@ -471,7 +483,7 @@ function setPaperDisplayMode(mode) {
 // Tab Switching
 function switchTab(tabName, opts = {}) {
   const targetPane = document.getElementById(`pane-${tabName}`);
-  if (!targetPane) tabName = 'exam';
+  if (!targetPane) tabName = 'home';
 
   document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
   document.getElementById(`pane-${tabName}`).classList.remove('hidden');
@@ -490,13 +502,15 @@ function switchTab(tabName, opts = {}) {
   if (location.hash !== `#${tabName}`) history.replaceState(null, '', `#${tabName}`);
 
   // Tab specific lifecycle triggers
-  if (tabName === 'mistakes') renderMistakeVault();
+  if (tabName === 'home') Study.renderHome();
+  else if (tabName === 'mistakes') renderMistakeVault();
   else if (tabName === 'past-bank') renderPastBank();
   else if (tabName === 'confusing-hot') renderConfusingHotTab();
   else if (tabName === 'master-toolkit') renderMasterToolkitTab();
   else if (tabName === 'bookmarks') renderBookmarks();
-  else if (tabName === 'analytics') updateAnalyticsDashboard();
-  else if (tabName === 'leaderboard') refreshLeaderboard();
+  else if (tabName === 'analytics') Study.renderResults();
+  else if (tabName === 'custom-quiz') Study.renderPracticeForm();
+  else if (tabName === 'flashcards') initFlashcardDeck();
 }
 
 function toggleSideNav(open) {
@@ -535,6 +549,8 @@ function changeExamCategory() {
     return changeExamCategory();
   }
   changeExamCategory.lastId = selectedExamId;
+  currentExamId = selectedExamId;
+  currentCustomSet = null;
   userAnswers = {};
   guess5050Ids = new Set();
 
@@ -710,35 +726,158 @@ function changeExamCategory() {
   remainingSeconds = duration * 60;
   totalExamSeconds = remainingSeconds;
 
-  renderExamQuestions();
-  renderQuestionPalette();
-  updateLiveSafetyMeter();
-  startTimer();
+  resetExamClock();
 }
 
+// Start (or resume) the clock. Time is read from the wall clock, so a phone that
+// sleeps or a tab in the background never "loses" or "gains" seconds.
 function startTimer() {
-  examStartTime = Date.now();
   if (timerInterval) clearInterval(timerInterval);
-
-  timerInterval = setInterval(() => {
-    remainingSeconds--;
+  examStarted = true;
+  if (!examEndAt) examEndAt = Date.now() + remainingSeconds * 1000;
+  examStartTime = examEndAt - totalExamSeconds * 1000;
+  const tick = () => {
+    remainingSeconds = Math.max(0, Math.round((examEndAt - Date.now()) / 1000));
+    updateTimerDisplay();
     if (remainingSeconds <= 0) {
       clearInterval(timerInterval);
       submitExam(true);
     }
-    updateTimerDisplay();
-  }, 1000);
-  updateTimerDisplay();
+  };
+  timerInterval = setInterval(tick, 1000);
+  tick();
+  updateExamControls();
+  saveExamDraft();
 }
 
-function restartTimer() {
-  if (currentCategory === 'BCS_PRELI') {
-    remainingSeconds = 7200; // 120 mins
-  } else {
-    remainingSeconds = 3600; // 60 mins
-  }
-  totalExamSeconds = remainingSeconds;
+function startExam() {
+  if (examSubmitted) return restartExam();
+  if (examStarted) return;
   startTimer();
+  Study.toast(`পরীক্ষা শুরু হয়েছে। সময় ${toBnDigits(Math.round(totalExamSeconds / 60))} মিনিট।`);
+}
+
+// New set opened (or the same set again): full time on the clock, not running yet
+function resetExamClock() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = null;
+  examStarted = false;
+  examSubmitted = false;
+  examEndAt = 0;
+  remainingSeconds = totalExamSeconds;
+  clearExamDraft();
+  updateTimerDisplay();
+  updateExamControls();
+  renderExamQuestions();
+  renderQuestionPalette();
+  updateLiveSafetyMeter();
+}
+
+// Shows "শুরু করুন" before the start, the running clock + submit during, "আবার দিন" after
+function updateExamControls() {
+  const startBtn = document.getElementById('examStartBtn');
+  const submitBtn = document.getElementById('examSubmitBtn');
+  const note = document.getElementById('examStateNote');
+  if (startBtn) {
+    startBtn.classList.toggle('hidden', examStarted && !examSubmitted);
+    startBtn.textContent = examSubmitted ? '↻ আবার নতুন করে দিন' : '▶ পরীক্ষা শুরু করুন';
+  }
+  if (submitBtn) submitBtn.classList.toggle('hidden', !examStarted || examSubmitted);
+  if (note) {
+    note.textContent = examSubmitted
+      ? 'ফলাফল দেখছেন: সবুজ = সঠিক উত্তর, লাল = আপনার ভুল উত্তর।'
+      : examStarted ? '' : 'প্রশ্ন দেখে নিন। "শুরু করুন" চাপলে (বা প্রথম উত্তর দাগালে) সময় গণনা শুরু হবে।';
+    note.classList.toggle('hidden', !note.textContent);
+  }
+}
+
+// Same questions again with a fresh clock
+function restartExam() {
+  userAnswers = {};
+  guess5050Ids = new Set();
+  resetExamClock();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Practice sets made by study.js (daily 20, weak subject, mistakes, smart practice)
+function startQuestionSet({ examId = 'CUSTOM', title, questions: list, track = 'BCS', negRate = 0.5, durationMin = 10 }) {
+  questions = list;
+  currentExamId = examId;
+  currentCustomSet = { title, track };
+  activeExamTrack = track;
+  currentCategory = track === 'BCS' ? 'BCS_PRELI' : track;
+  currentExamTitleBn = title;
+  currentNegativeRate = negRate;
+  currentSetCodeBn = 'ক';
+  currentOrgHeaderBn = 'সোনার হরিণ • অনুশীলন';
+  currentPostLabelBn = `${Study.TRACK_BN[track] || ''} • ${toBnDigits(list.length)} প্রশ্ন`;
+  userAnswers = {};
+  guess5050Ids = new Set();
+  totalExamSeconds = Math.round(durationMin * 60);
+  remainingSeconds = totalExamSeconds;
+  const omrPenText = document.getElementById('omrPenaltyFooterText');
+  if (omrPenText) omrPenText.textContent = `● সঠিক = +১.০০ | ভুল = -${toBnDigits(negRate.toFixed(2))}`;
+  const badge = document.getElementById('modalExamSubtitle');
+  if (badge) badge.textContent = title;
+  switchTab('exam');
+  resetExamClock();
+  startTimer();
+  Study.toast(`${title} শুরু হয়েছে।`);
+}
+
+// ---- Unfinished exam survives a refresh / closed tab ----
+function saveExamDraft() {
+  if (!examStarted || examSubmitted) return;
+  try {
+    localStorage.setItem(EXAM_DRAFT_KEY, JSON.stringify({
+      examId: currentExamId,
+      custom: currentCustomSet ? { ...currentCustomSet, neg: currentNegativeRate, qids: questions.map(q => q.id) } : null,
+      answers: userAnswers,
+      guess: [...guess5050Ids],
+      endAt: examEndAt,
+      total: totalExamSeconds
+    }));
+  } catch { /* storage blocked */ }
+}
+
+function clearExamDraft() {
+  try { localStorage.removeItem(EXAM_DRAFT_KEY); } catch { /* storage blocked */ }
+}
+
+function readExamDraft() {
+  try { return JSON.parse(localStorage.getItem(EXAM_DRAFT_KEY) || 'null'); } catch { return null; }
+}
+
+function restoreExamDraft(d) {
+  if (!d || !d.endAt) return false;
+  if (d.custom) {
+    const list = (d.custom.qids || []).map(id => Study.qById(id)).filter(Boolean);
+    if (!list.length) return clearExamDraft(), false;
+    startQuestionSet({ title: d.custom.title, questions: list, track: d.custom.track, negRate: d.custom.neg, durationMin: d.total / 60 });
+    if (timerInterval) clearInterval(timerInterval);
+  } else {
+    const sel = document.getElementById('examCategorySelect');
+    if (!sel || ![...sel.options].some(o => o.value === d.examId)) return clearExamDraft(), false;
+    sel.value = d.examId;
+    changeExamCategory();
+  }
+  userAnswers = d.answers || {};
+  guess5050Ids = new Set(d.guess || []);
+  totalExamSeconds = d.total || totalExamSeconds;
+  examEndAt = d.endAt;
+  remainingSeconds = Math.max(0, Math.round((examEndAt - Date.now()) / 1000));
+  renderExamQuestions();
+  renderQuestionPalette();
+  updateLiveSafetyMeter();
+  if (remainingSeconds <= 0) {
+    examStarted = true;
+    submitExam(true);
+    Study.toast('আগের পরীক্ষার সময় শেষ হয়ে গিয়েছিল, যা দাগিয়েছিলেন তা দিয়ে জমা দেওয়া হলো।');
+  } else {
+    startTimer();
+    Study.toast('আগের পরীক্ষা যেখানে ছিলেন সেখান থেকে চলছে।');
+  }
+  return true;
 }
 
 function updateTimerDisplay() {
@@ -772,13 +911,22 @@ function renderExamQuestions() {
       const optsHtml = ['A', 'B', 'C', 'D'].map(optKey => {
         const isChecked = selected === optKey;
         const bnKey = { A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' }[optKey];
+        const state = examSubmitted
+          ? (optKey === q.correctOption ? 'correct-ans' : isChecked ? 'wrong-ans' : '')
+          : (isChecked ? 'selected' : '');
         return `
-          <div onclick="selectAnswer('${q.id}', '${optKey}')" class="bpsc-opt-btn ${isChecked ? 'selected' : ''}">
+          <div onclick="selectAnswer('${q.id}', '${optKey}')" class="bpsc-opt-btn ${state}">
             <span class="font-bold">(${bnKey})</span>
             <span>${q.options[optKey]}</span>
           </div>
         `;
       }).join('');
+      const reviewHtml = examSubmitted ? `
+          <div class="bpsc-exp-box">
+            ${!selected ? '<strong class="text-slate-600">উত্তর দেননি। </strong>' : selected === q.correctOption ? '<strong class="text-emerald-700">✓ সঠিক। </strong>' : '<strong class="text-rose-700">✗ ভুল। </strong>'}
+            ${q.explanationBn || ''}
+            ${q.mnemonicBn ? `<div class="mt-1 italic text-emerald-800">🎶 ${q.mnemonicBn}</div>` : ''}
+          </div>` : '';
 
       const is5050 = guess5050Ids.has(q.id);
       const repeatBadgeHtml = (q.crossExamRepeats && q.crossExamRepeats.length > 1)
@@ -793,14 +941,16 @@ function renderExamQuestions() {
           <div class="flex items-start justify-between gap-2 font-bold text-[#0b0f17] mb-1">
             <span>${qNoBn}. ${q.stemBn}</span>
             <div class="flex items-center gap-1 shrink-0">
-              <button onclick="toggleGuess5050('${q.id}')" title="২টি অপশন বাদ দিয়ে 50:50 অনুমান চিহ্নিত করুন" class="px-1.5 py-0.5 rounded text-[10px] font-bold border transition ${is5050 ? 'bg-amber-400 text-slate-950 border-slate-900' : 'bg-white/80 text-slate-700 border-slate-400 hover:bg-amber-100'}">🎲 50:50</button>
+              ${examSubmitted ? '' : `<button onclick="toggleGuess5050('${q.id}')" title="২টি অপশন বাদ দিয়ে 50:50 অনুমান চিহ্নিত করুন" class="px-1.5 py-0.5 rounded text-[10px] font-bold border transition ${is5050 ? 'bg-amber-400 text-slate-950 border-slate-900' : 'bg-white/80 text-slate-700 border-slate-400 hover:bg-amber-100'}">🎲 50:50</button>`}
               <button onclick="toggleBookmark('${q.id}')" title="বুকমার্ক" class="text-xs opacity-60 hover:opacity-100 shrink-0">${bookmarkedIds.has(q.id) ? '⭐' : '☆'}</button>
+              <button onclick="openReportModal('${q.id}')" title="প্রশ্নে ভুল থাকলে জানান" class="text-xs opacity-50 hover:opacity-100 shrink-0">🚩</button>
             </div>
           </div>
           ${repeatBadgeHtml}
           <div class="grid grid-cols-2 gap-x-2 gap-y-0.5 pl-1">
             ${optsHtml}
           </div>
+          ${reviewHtml}
         </div>
       `;
     }).join('');
@@ -881,12 +1031,11 @@ function renderExamQuestions() {
           ${['A', 'B', 'C', 'D'].map(optKey => {
             const isChecked = selected === optKey;
             const bengaliKey = { A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' }[optKey];
+            const look = examSubmitted
+              ? (optKey === q.correctOption ? 'bg-emerald-50 border-emerald-500 text-emerald-800 font-bold' : isChecked ? 'bg-rose-50 border-rose-400 text-rose-800' : 'bg-white border-slate-200 text-slate-500')
+              : (isChecked ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'bg-white border-slate-200 hover:bg-white text-slate-700');
             return `
-              <label onclick="selectAnswer('${q.id}', '${optKey}')" class="flex items-center p-3 rounded-xl border cursor-pointer transition ${
-                isChecked
-                  ? 'bg-emerald-50 border-emerald-500 text-emerald-700'
-                  : 'bg-white border-slate-200 hover:bg-white text-slate-700'
-              }">
+              <label onclick="selectAnswer('${q.id}', '${optKey}')" class="flex items-center p-3 rounded-xl border cursor-pointer transition ${look}">
                 <span class="w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs mr-3 ${
                   isChecked ? 'bg-emerald-500 text-slate-950' : 'bg-white text-slate-500'
                 }">${bengaliKey}</span>
@@ -895,12 +1044,15 @@ function renderExamQuestions() {
             `;
           }).join('')}
         </div>
+        ${examSubmitted && (q.explanationBn || q.mnemonicBn) ? `<div class="bpsc-exp-box">${q.explanationBn || ''}${q.mnemonicBn ? `<div class="mt-1 italic">🎶 ${q.mnemonicBn}</div>` : ''}</div>` : ''}
       </div>
     `;
   }).join('');
 }
 
 function selectAnswer(questionId, optionKey) {
+  if (examSubmitted) return; // result view: answers are locked
+  if (!examStarted) startExam();
   if (userAnswers[questionId] === optionKey) {
     delete userAnswers[questionId];
   } else {
@@ -909,9 +1061,11 @@ function selectAnswer(questionId, optionKey) {
   renderExamQuestions();
   renderQuestionPalette();
   updateLiveSafetyMeter();
+  saveExamDraft();
 }
 
 function toggleGuess5050(questionId) {
+  if (examSubmitted) return;
   if (guess5050Ids.has(questionId)) {
     guess5050Ids.delete(questionId);
   } else {
@@ -1008,8 +1162,11 @@ function renderQuestionPalette() {
     const chosen = userAnswers[q.id];
     const bubblesHtml = ['A', 'B', 'C', 'D'].map(optKey => {
       const isFilled = chosen === optKey;
+      const cls = examSubmitted
+        ? (optKey === q.correctOption ? 'bubble correct' : isFilled ? 'bubble wrong' : '')
+        : (isFilled ? 'filled' : '');
       return `
-        <span onclick="selectAnswer('${q.id}', '${optKey}')" class="omr-circle ${isFilled ? 'filled' : ''}" title="প্রশ্ন ${idx + 1} - অপশন ${bnOpt[optKey]}">
+        <span onclick="selectAnswer('${q.id}', '${optKey}')" class="omr-circle ${cls}" title="প্রশ্ন ${idx + 1} - অপশন ${bnOpt[optKey]}">
           ${bnOpt[optKey]}
         </span>
       `;
@@ -1037,73 +1194,71 @@ function scrollToQuestion(id) {
 // EXAM SUBMISSION, SCORECARD & WEAKNESS INTEGRATION
 // -----------------------------------------------------------------------------
 function submitExam(isAuto = false) {
+  if (examSubmitted) return;
+  if (!examStarted) {
+    Study.toast('আগে "পরীক্ষা শুরু করুন" চাপুন।');
+    return;
+  }
+  const answeredCount = Object.keys(userAnswers).length;
+  if (!isAuto && answeredCount < questions.length &&
+      !confirm(`${toBnDigits(questions.length - answeredCount)}টি প্রশ্নের উত্তর দেননি। এখনই জমা দেবেন?`)) return;
   if (timerInterval) clearInterval(timerInterval);
 
-  const negRate = currentCategory === 'BCS_PRELI' ? 0.50 : 0.25;
+  const negRate = typeof currentNegativeRate === 'number' ? currentNegativeRate : 0.5;
   let correct = 0;
   let wrong = 0;
   let blank = 0;
-
-  const newMistakes = [];
-
+  const wrongList = [];
   questions.forEach(q => {
     const chosen = userAnswers[q.id];
-    if (!chosen) {
-      blank++;
-    } else if (chosen === q.correctOption) {
-      correct++;
-    } else {
+    if (!chosen) blank++;
+    else if (chosen === q.correctOption) correct++;
+    else {
       wrong++;
-      newMistakes.push({
-        id: `mv_${Date.now()}_${q.id}`,
-        questionId: q.id,
-        question: q,
-        sourceExamTitle: currentCategory === 'BCS_PRELI' ? '৪৭তম বিসিএস মডেল টেস্ট' : 'প্রাথমিক সহকারী শিক্ষক পরীক্ষা',
-        selectedOption: chosen,
-        correctOption: q.correctOption,
-        tag: determineInitialTag(q),
-        userNotes: '',
-        status: 'OPEN',
-        errorCount: 1,
-        sm2Quality: 1,
-        easinessFactor: 2.5,
-        intervalDays: 1,
-        nextReviewDate: new Date(Date.now() + 86400000)
-      });
+      wrongList.push({ q, sel: chosen });
     }
   });
 
-  const rawScore = correct * 1.0;
   const penalty = Number((wrong * negRate).toFixed(2));
-  const netScore = Math.max(0, Number((rawScore - penalty).toFixed(2)));
+  const netScore = Number((correct - penalty).toFixed(2));
+  const timeTakenSec = Math.max(1, Math.min(totalExamSeconds, totalExamSeconds - remainingSeconds));
 
-  // Tie-Breaking Ranking Formula: NetScore + (1 - (timeTaken / totalDuration))
-  const timeTakenSec = Math.max(1, totalExamSeconds - remainingSeconds);
-  const timeBonus = 1 - (timeTakenSec / totalExamSeconds);
-  const tieBreakerScore = Number((netScore + timeBonus).toFixed(6));
-
-  // Ingest into Mistake Vault
-  newMistakes.forEach(m => {
-    const existing = userMistakes.find(item => item.questionId === m.questionId);
-    if (existing) {
-      existing.errorCount += 1;
-      existing.status = 'IN_REVIEW';
-    } else {
-      userMistakes.unshift(m);
-    }
+  examSubmitted = true;
+  clearExamDraft();
+  const track = currentCustomSet ? currentCustomSet.track : activeExamTrack;
+  const { attempt, prev } = Study.recordAttempt({
+    examId: currentExamId,
+    title: currentExamTitleBn,
+    track,
+    questions,
+    answers: userAnswers,
+    neg: negRate,
+    dur: totalExamSeconds,
+    time: timeTakenSec
   });
+  Study.addMistakes(wrongList, currentExamTitleBn);
 
-  updateMistakeBadge();
-  updateAnalyticsDashboard(penalty, correct, wrong);
+  // Scorecard
+  document.getElementById('modalExamSubtitle').textContent = currentExamTitleBn;
+  document.getElementById('modalCorrect').textContent = toBnDigits(correct);
+  document.getElementById('modalWrong').textContent = `${toBnDigits(wrong)} (−${toBnDigits(penalty)})`;
+  document.getElementById('modalNetScore').textContent = `${toBnDigits(netScore)} / ${toBnDigits(questions.length)}`;
+  const accuracy = correct + wrong ? Math.round((correct / (correct + wrong)) * 100) : 0;
+  document.getElementById('modalTieBreaker').textContent = `সঠিক উত্তরের হার ${toBnDigits(accuracy)}% • ফাঁকা ${toBnDigits(blank)}টি`;
+  const lines = [`সময় লেগেছে: ${toBnDigits(Math.floor(timeTakenSec / 60))} মি. ${toBnDigits(timeTakenSec % 60)} সে.${isAuto ? ' (সময় শেষ, নিজে থেকে জমা হয়েছে)' : ''}`];
+  const cut = Study.cutMarkFor(track, questions.length);
+  if (cut) {
+    lines.push(netScore >= cut.mark
+      ? `✅ গত ${toBnDigits(cut.years)} বছরের নিরাপদ কাট-মার্ক (এই মাপে প্রায় ${toBnDigits(cut.mark)}) পার করেছেন।`
+      : `⚠️ নিরাপদ কাট-মার্ক এই মাপে প্রায় ${toBnDigits(cut.mark)}, আর ${toBnDigits((cut.mark - netScore).toFixed(1))} নম্বর দরকার।`);
+  }
+  if (prev) {
+    const diff = Number((netScore - prev.net).toFixed(2));
+    lines.push(`এই সেটে আগেরবার পেয়েছিলেন ${toBnDigits(prev.net)}। ${diff >= 0 ? `এবার ${toBnDigits(diff)} নম্বর বেশি 🎉` : `এবার ${toBnDigits(-diff)} নম্বর কম`}।`);
+  }
+  document.getElementById('modalRankText').innerHTML = lines.map(l => `<div>${l}</div>`).join('');
 
-  // Scorecard Modal
-  document.getElementById('modalCorrect').textContent = correct;
-  document.getElementById('modalWrong').textContent = `${wrong} (-${penalty})`;
-  document.getElementById('modalNetScore').textContent = netScore.toFixed(2);
-  document.getElementById('modalTieBreaker').textContent = `Composite: ${tieBreakerScore}`;
-  document.getElementById('modalRankText').textContent = `ব্যয়িত সময়: ${Math.floor(timeTakenSec / 60)}মি. ${timeTakenSec % 60}সে. | মেধা স্থান: ১ম (শীর্ষ ৯৯.৯%)`;
-
-  // 50:50 Elimination Guess Mathematical Profit/Loss Breakdown
+  // 50:50 guesses: did they pay off?
   const guessSummaryEl = document.getElementById('modalGuessSummaryText');
   if (guessSummaryEl) {
     let gCorrect = 0;
@@ -1114,36 +1269,30 @@ function submitExam(isAuto = false) {
         else gWrong++;
       }
     });
-    const gTotal = gCorrect + gWrong;
-    if (gTotal > 0) {
-      const gNet = Number((gCorrect * 1.0 - gWrong * negRate).toFixed(2));
-      const sign = gNet >= 0 ? '+' : '';
-      guessSummaryEl.innerHTML = `আপনি মোট <strong>${toBnDigits(gTotal)}টি</strong> প্রশ্নে 50:50 গেস নিয়েছেন: সঠিক <strong>${toBnDigits(gCorrect)}টি</strong>, ভুল <strong>${toBnDigits(gWrong)}টি</strong> ➔ গেসিং থেকে নিট ফলাফল: <strong class="${gNet >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${sign}${toBnDigits(gNet.toFixed(2))} নম্বর</strong> (${gNet >= 0 ? 'গাণিতিকভাবে লাভজনক সিদ্ধান্ত!' : 'নেগেটিভ ক্ষতি হয়েছে!'})।`;
+    if (gCorrect + gWrong > 0) {
+      const gNet = Number((gCorrect - gWrong * negRate).toFixed(2));
+      guessSummaryEl.innerHTML = `${toBnDigits(gCorrect + gWrong)}টি প্রশ্নে 50:50 অনুমান করেছেন: সঠিক ${toBnDigits(gCorrect)}, ভুল ${toBnDigits(gWrong)}। অনুমান থেকে নিট <strong class="${gNet >= 0 ? 'text-emerald-700' : 'text-rose-700'}">${gNet >= 0 ? '+' : ''}${toBnDigits(gNet.toFixed(2))} নম্বর</strong>।`;
     } else {
-      guessSummaryEl.innerHTML = `এই পরীক্ষায় মোট সঠিক <strong>${toBnDigits(correct)}টি</strong> ও ভুল <strong>${toBnDigits(wrong)}টি</strong> (নেগেটিভ দণ্ড: <strong>-${toBnDigits(penalty.toFixed(2))}</strong>)। পরের বার ২টি অপশন বাদ দিয়ে অনুমান করলে প্রশ্নের পাশে <strong>🎲 50:50</strong> বাটন চাপুন।`;
+      guessSummaryEl.innerHTML = `ভুলের জন্য কাটা গেছে <strong>${toBnDigits(penalty.toFixed(2))}</strong> নম্বর। দুটি অপশন বাদ দিতে পারলে প্রশ্নের পাশে <strong>🎲 50:50</strong> চিহ্ন দিন, পরে দেখবেন অনুমান লাভ না ক্ষতি দিল।`;
     }
   }
+  const mistakesBtn = document.getElementById('modalMistakesBtn');
+  if (mistakesBtn) mistakesBtn.classList.toggle('hidden', wrong === 0);
+
+  renderExamQuestions();
+  renderQuestionPalette();
+  updateExamControls();
+  updateTimerDisplay();
 
   const modal = document.getElementById('scorecardModal');
   if (modal) modal.classList.remove('hidden');
-
-  // Submit to Redis Live Leaderboard
-  submitToLeaderboard({
-    userId: 'usr_candidate_me',
-    userName: 'ক্যান্ডিডেট #৪৭ (আপনি)',
-    rawScore,
-    penalty,
-    netScore,
-    timeTakenSec,
-    totalDurationSec: totalExamSeconds,
-    tieBreakerRankScore: tieBreakerScore
-  });
+  return attempt;
 }
 
-function determineInitialTag(q) {
-  if (q.difficulty === 'STANDARD') return 'SILLY_MISTAKE';
-  if (q.stemBn.includes('নয়') || q.stemBn.includes('কোনটি সঠিক নয়')) return 'UNREAD_STEM';
-  return 'CONCEPT_GAP';
+function reviewAfterExam() {
+  closeModal();
+  const first = document.getElementById('questionsContainer');
+  if (first) first.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function closeModal() {
@@ -1158,7 +1307,11 @@ function viewMistakesAfterExam() {
 
 function updateMistakeBadge() {
   const badge = document.getElementById('mistakeBadge');
-  if (badge) badge.textContent = userMistakes.length;
+  if (!badge) return;
+  const due = Study.dueReviewIds().length;
+  const total = Object.keys(Study.data.mistakes).length;
+  badge.textContent = due ? `${toBnDigits(due)} বাকি` : toBnDigits(total);
+  badge.classList.toggle('nav-badge-due', due > 0);
 }
 
 // -----------------------------------------------------------------------------
@@ -1983,38 +2136,7 @@ function toggleFeynman(qId) {
 // 3. CUSTOM QUIZ CREATOR (কাস্টম কুইজ ক্রিয়েটর)
 // -----------------------------------------------------------------------------
 function startCustomQuiz() {
-  const subject = document.getElementById('customQuizSubject').value;
-  const count = parseInt(document.getElementById('customQuizCount').value, 10);
-  const duration = parseInt(document.getElementById('customQuizTime').value, 10);
-  const negRadio = document.querySelector('input[name="customNegRate"]:checked');
-  const negRate = negRadio ? parseFloat(negRadio.value) : 0.50;
-
-  // Filter pool
-  let pool = questions;
-  if (subject !== 'ALL') {
-    pool = pool.filter(q => q.subjectCode === subject);
-  }
-
-  // Slice questions
-  const customSet = pool.slice(0, Math.min(count, pool.length));
-  if (customSet.length === 0) {
-    alert('এই বিষয়ে পর্যাপ্ত প্রশ্ন পাওয়া যায়নি।');
-    return;
-  }
-
-  // Load into main exam state
-  questions = customSet;
-  userAnswers = {};
-  remainingSeconds = duration * 60;
-  totalExamSeconds = remainingSeconds;
-
-  document.getElementById('modalExamSubtitle').textContent = `কাস্টম কুইজ (${count} প্রশ্ন • ${duration} মিনিট • নেগেটিভ -${negRate})`;
-
-  switchTab('exam');
-  renderExamQuestions();
-  renderQuestionPalette();
-  updateLiveSafetyMeter();
-  startTimer();
+  Study.startSmartPractice();
 }
 
 // -----------------------------------------------------------------------------
@@ -2024,7 +2146,8 @@ function startBattleRound() {
   document.getElementById('battleLobby').classList.add('hidden');
   document.getElementById('battleArena').classList.remove('hidden');
 
-  battleQuestions = questions.slice(0, 5);
+  const track = Study.data.settings.track || activeExamTrack || 'BCS';
+  battleQuestions = Study.pickQuestions({ track, count: 5 });
   battleCurrentIdx = 0;
   battleUserScore = 0;
   battleOppScore = 0;
@@ -2146,59 +2269,45 @@ function calculatePrimaryMerit() {
 // 6. BOOKMARKS & QUESTIONS SAVED FOR NIGHT REVISION
 // -----------------------------------------------------------------------------
 function toggleBookmark(questionId) {
-  if (bookmarkedIds.has(questionId)) {
-    bookmarkedIds.delete(questionId);
-  } else {
-    bookmarkedIds.add(questionId);
-  }
+  Study.toggleBookmark(questionId);
   updateBookmarkBadges();
-  renderExamQuestions();
-  renderPastBank();
-  renderBookmarks();
+  const open = location.hash.replace('#', '') || 'home';
+  if (open === 'exam') renderExamQuestions();
+  else if (open === 'past-bank') renderPastBank();
+  else if (open === 'bookmarks') renderBookmarks();
+  else if (open === 'confusing-hot') renderConfusingHotTab();
+  else if (open === 'home') Study.search((document.getElementById('qSearchInput') || {}).value || '');
 }
 
 function updateBookmarkBadges() {
-  const count = bookmarkedIds.size;
   const el = document.getElementById('headerBookmarkCount');
-  if (el) el.textContent = count;
+  if (el) el.textContent = toBnDigits(bookmarkedIds.size);
 }
 
 function renderBookmarks() {
   const feed = document.getElementById('bookmarkItemsFeed');
   if (!feed) return;
-
-  const saved = questions.filter(q => bookmarkedIds.has(q.id));
+  const saved = Study.bookmarkIds().map(id => Study.qById(id)).filter(Boolean);
+  const examBtn = document.getElementById('bookmarkExamBtn');
+  if (examBtn) examBtn.classList.toggle('hidden', saved.length === 0);
   if (saved.length === 0) {
     feed.innerHTML = `
-      <div class="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-500 space-y-2">
-        <span class="text-3xl">⭐</span>
-        <h3 class="text-base font-bold text-slate-800">এখনো কোনো প্রশ্ন বুকমার্ক করা হয়নি!</h3>
-        <p class="text-xs">যেসব প্রশ্ন কঠিন লাগে বা বারবার ভুল হয়, সেগুলো স্টার চিহ্নে ক্লিক করে এখানে সংরক্ষণ করুন।</p>
+      <div class="panel empty-state">
+        <div class="empty-ic">⭐</div>
+        <h3>এখনো কোনো প্রশ্ন বুকমার্ক করা হয়নি</h3>
+        <p class="muted">যেসব প্রশ্ন কঠিন লাগে বা বারবার ভুল হয়, প্রশ্নের পাশের ☆ চিহ্নে চাপ দিন। পরীক্ষার আগের রাতে এখান থেকে রিভিশন দিন।</p>
       </div>
     `;
     return;
   }
-
-  feed.innerHTML = saved.map(q => `
-    <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-3">
-      <div class="flex justify-between items-center text-xs border-b border-slate-200 pb-2">
-        <span class="text-amber-700 font-semibold font-mono">⭐ সেভ করা প্রশ্ন &bull; ${q.subjectNameBn}</span>
-        <button onclick="toggleBookmark('${q.id}')" class="text-rose-700 hover:text-rose-700">রিমুভ করুন ✕</button>
-      </div>
-      <h4 class="text-base font-semibold text-slate-900">${q.stemBn}</h4>
-      <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-xs">
-        <span class="text-emerald-700 font-bold block mb-1">✓ সঠিক উত্তর: ${q.correctOption} (${q.options[q.correctOption]})</span>
-        <p class="text-emerald-700 italic">${q.mnemonicBn || ''}</p>
-      </div>
-    </div>
-  `).join('');
+  feed.innerHTML = saved.map(q => Study.questionCard(q)).join('');
 }
 
 // -----------------------------------------------------------------------------
 // 7. REPORT QUESTION MODAL (পিএসসি মতভেদ ও ভুল প্রশ্ন রিপোর্টার)
 // -----------------------------------------------------------------------------
 function openReportModal(questionId) {
-  const q = questions.find(item => item.id === questionId);
+  const q = Study.qById(questionId) || questions.find(item => item.id === questionId);
   if (!q) return;
 
   activeReportingQuestion = q;
@@ -2212,168 +2321,123 @@ function closeReportModal() {
   activeReportingQuestion = null;
 }
 
-function submitQuestionReport() {
-  const reason = document.getElementById('reportReasonSelect').value;
-  const comment = document.getElementById('reportCommentInput').value;
-
-  alert('ধন্যবাদ! আপনার রিপোর্টটি সফলভাবে গ্রহণ করা হয়েছে। প্রশ্ন প্রণেতা টিম এটি যাচাই করে আপডেট করবে।');
-  closeReportModal();
+async function submitQuestionReport() {
+  if (!activeReportingQuestion) return;
+  const btn = document.getElementById('reportSubmitBtn');
+  if (btn) btn.disabled = true;
+  try {
+    const res = await fetch('/api/reports', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        questionId: activeReportingQuestion.id,
+        reason: document.getElementById('reportReasonSelect').value,
+        comment: document.getElementById('reportCommentInput').value
+      })
+    });
+    const out = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(out.messageBn || 'রিপোর্ট পাঠানো যায়নি।');
+    closeReportModal();
+    Study.toast('ধন্যবাদ! রিপোর্ট পাঠানো হয়েছে, যাচাই করে প্রশ্নটি ঠিক করা হবে।');
+  } catch (e) {
+    Study.toast(e.message || 'ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
 }
 
 // -----------------------------------------------------------------------------
 // 8. SMART WEAKNESS TRACKER & ANALYTICS
 // -----------------------------------------------------------------------------
-function updateAnalyticsDashboard(lostPenalty = 3.50, correct = 12, wrong = 7) {
-  const penaltyEl = document.getElementById('statNegativeLost');
-  if (penaltyEl) penaltyEl.textContent = lostPenalty.toFixed(2);
-
-  const container = document.getElementById('subjectAnalyticsBars');
-  if (!container) return;
-
-  const subjects = [
-    { name: 'বাংলা ভাষা ও সাহিত্য', accuracy: 85, status: 'সবল' },
-    { name: 'বাংলাদেশ বিষয়াবলী', accuracy: 80, status: 'সন্তোষজনক' },
-    { name: 'English Language', accuracy: 65, status: 'মধ্যম' },
-    { name: 'গাণিতিক যুক্তি ও মানসিক দক্ষতা', accuracy: 45, status: 'দুর্বল (মনোযোগ দিন)' },
-    { name: 'সাধারণ বিজ্ঞান ও আইসিটি', accuracy: 75, status: 'সন্তোষজনক' },
-    { name: 'আন্তর্জাতিক বিষয়াবলী', accuracy: 70, status: 'সন্তোষজনক' }
-  ];
-
-  container.innerHTML = subjects.map(s => `
-    <div class="space-y-1">
-      <div class="flex justify-between items-center text-slate-700">
-        <span>${s.name}</span>
-        <span class="font-mono font-bold ${s.accuracy < 50 ? 'text-rose-400' : 'text-emerald-400'}">${s.accuracy}% (${s.status})</span>
-      </div>
-      <div class="w-full bg-white rounded-full h-2.5 overflow-hidden">
-        <div class="h-2.5 rounded-full ${s.accuracy < 50 ? 'bg-rose-500' : s.accuracy < 70 ? 'bg-amber-500' : 'bg-emerald-500'}" style="width: ${s.accuracy}%"></div>
-      </div>
-    </div>
-  `).join('');
-}
-
 // -----------------------------------------------------------------------------
 // 9. SCIENCE-BACKED MISTAKE VAULT (ভুল খাতা / Cuotiben)
 // -----------------------------------------------------------------------------
-function filterMistakes(tag) {
+function filterMistakes(tag, btn) {
   activeMistakeFilter = tag;
-  document.querySelectorAll('#mistakeFilterPills .filter-pill').forEach(btn => {
-    btn.classList.remove('active', 'bg-rose-600', 'text-white');
-    btn.classList.add('bg-slate-800', 'text-slate-300');
-  });
-  event.target.classList.add('active', 'bg-rose-600', 'text-white');
-  event.target.classList.remove('bg-slate-800', 'text-slate-300');
+  document.querySelectorAll('#mistakeFilterPills .chip').forEach(b => b.classList.toggle('chip-active', b === btn));
   renderMistakeVault();
 }
 
 function renderMistakeVault() {
   const feed = document.getElementById('mistakeItemsFeed');
   if (!feed) return;
-
-  let items = userMistakes;
-  if (activeMistakeFilter !== 'ALL') {
-    items = items.filter(i => i.tag === activeMistakeFilter);
+  const all = Study.mistakeList();
+  const now = Date.now();
+  const dueCount = all.filter(m => m.status !== 'MASTERED' && m.due <= now).length;
+  const summary = document.getElementById('mistakeSummary');
+  if (summary) {
+    summary.innerHTML = all.length
+      ? `মোট <b>${toBnDigits(all.length)}</b>টি • আজ রিভিশন বাকি <b>${toBnDigits(dueCount)}</b>টি • আয়ত্তে এসেছে <b>${toBnDigits(all.filter(m => m.status === 'MASTERED').length)}</b>টি`
+      : '';
   }
+  const examBtn = document.getElementById('mistakeExamBtn');
+  if (examBtn) examBtn.classList.toggle('hidden', !all.some(m => m.status !== 'MASTERED'));
+
+  let items = all;
+  if (activeMistakeFilter === 'DUE') items = items.filter(m => m.status !== 'MASTERED' && m.due <= now);
+  else if (activeMistakeFilter === 'MASTERED') items = items.filter(m => m.status === 'MASTERED');
+  else if (activeMistakeFilter !== 'ALL') items = items.filter(m => m.tag === activeMistakeFilter);
 
   if (items.length === 0) {
-    feed.innerHTML = `
-      <div class="bg-white border border-slate-200 rounded-2xl p-12 text-center space-y-3">
-        <span class="text-4xl">🎉</span>
-        <h3 class="text-lg font-bold text-slate-800">এই ক্যাটাগরিতে কোনো ভুল জমা নেই!</h3>
-        <p class="text-xs text-slate-500">মডেল টেস্ট সম্পন্ন করুন বা ওএমআর স্ক্যান করুন; ভুলগুলো স্বয়ংক্রিয়ভাবে এখানে তালিকাভুক্ত হবে।</p>
-      </div>
-    `;
+    feed.innerHTML = all.length
+      ? `<div class="panel empty-state"><div class="empty-ic">✅</div><h3>এই তালিকায় কিছু নেই</h3><p class="muted">অন্য ফিল্টার দেখুন।</p></div>`
+      : `<div class="panel empty-state">
+          <div class="empty-ic">📕</div>
+          <h3>ভুল খাতা এখনো খালি</h3>
+          <p class="muted">মডেল টেস্ট বা অনুশীলনে যে প্রশ্ন ভুল করবেন, তা নিজে থেকেই এখানে জমা হবে। তারপর নির্দিষ্ট দিন পরপর ঝালাই করতে বলা হবে, যাতে আর ভুল না হয়।</p>
+          <button type="button" class="btn btn-primary" onclick="switchTab('exam')">মডেল টেস্ট দিন →</button>
+        </div>`;
     return;
   }
 
-  feed.innerHTML = items.map(m => {
-    const q = m.question;
+  const TAGS = { SILLY_MISTAKE: 'অসাবধানতা', CONCEPT_GAP: 'জানা ছিল না', TIME_PRESSURE: 'সময়ের চাপ', UNREAD_STEM: 'প্রশ্ন ভালো করে পড়িনি' };
+  const nextText = m => m.status === 'MASTERED' ? '✅ আয়ত্তে এসেছে'
+    : m.due <= now ? '⏰ আজ রিভিশন করুন'
+    : `পরের রিভিশন: ${new Date(m.due).toLocaleDateString('bn-BD', { timeZone: 'Asia/Dhaka', day: 'numeric', month: 'short' })}`;
+
+  feed.innerHTML = items.slice(0, 150).map(m => {
+    const q = m.q;
     return `
-      <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
-        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-          <div class="flex items-center space-x-2">
-            <span class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-              ভুল সংখ্যা: ${m.errorCount} বার
-            </span>
-            <span class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200">
-              উৎস: ${m.sourceExamTitle}
-            </span>
+      <div class="panel mistake-card space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-sm">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="pill bad">${toBnDigits(m.n)} বার ভুল</span>
+            <span class="pill">${nextText(m)}</span>
+            <span class="muted">${Study.esc(m.src)}</span>
           </div>
-
-          <div class="flex items-center space-x-2 text-xs">
-            <span class="text-slate-500">ট্যাগ:</span>
-            <select onchange="updateMistakeTag('${m.id}', this.value)" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs text-rose-700 focus:outline-none focus:border-rose-500">
-              <option value="SILLY_MISTAKE" ${m.tag === 'SILLY_MISTAKE' ? 'selected' : ''}>সিলি মিস্টেক</option>
-              <option value="CONCEPT_GAP" ${m.tag === 'CONCEPT_GAP' ? 'selected' : ''}>কনসেপ্ট গ্যাপ</option>
-              <option value="TIME_PRESSURE" ${m.tag === 'TIME_PRESSURE' ? 'selected' : ''}>সময়ের স্বল্পতা</option>
-              <option value="UNREAD_STEM" ${m.tag === 'UNREAD_STEM' ? 'selected' : ''}>প্রশ্ন না খেয়াল করা</option>
-            </select>
-          </div>
+          <select onchange="updateMistakeTag('${q.id}', this.value)" class="mini-select" aria-label="ভুলের কারণ">
+            ${Object.entries(TAGS).map(([k, v]) => `<option value="${k}" ${m.tag === k ? 'selected' : ''}>${v}</option>`).join('')}
+          </select>
         </div>
-
         <h4 class="text-base font-semibold text-slate-900">${q.stemBn}</h4>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-          <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700">
-            <span class="block text-rose-700 font-bold mb-1">❌ আপনার ভুল উত্তর:</span>
-            <span>${m.selectedOption} - ${q.options[m.selectedOption] || 'অজানা'}</span>
+        <details class="reveal">
+          <summary>উত্তর ও ব্যাখ্যা দেখুন (আগে নিজে মনে করার চেষ্টা করুন)</summary>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm mt-2">
+            ${m.sel ? `<div class="p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800">✗ আপনার উত্তর: (${{ A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' }[m.sel]}) ${q.options[m.sel] || ''}</div>` : ''}
+            <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">✓ সঠিক: (${{ A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' }[q.correctOption]}) ${q.options[q.correctOption]}</div>
           </div>
-          <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700">
-            <span class="block text-emerald-700 font-bold mb-1">✓ সঠিক উত্তর:</span>
-            <span>${m.correctOption} - ${q.options[m.correctOption]}</span>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl p-4 border border-slate-200 space-y-2 text-xs">
-          <div class="text-emerald-700 font-semibold flex items-center">
-            <span>🎶 মনে রাখার বাংলা ছন্দ ও টেকনিক:</span>
-          </div>
-          <p class="text-emerald-700 italic font-sans text-sm">${q.mnemonicBn || 'নিয়মিত রিভিশন করুন।'}</p>
-          <div class="pt-2 text-slate-500 border-t border-slate-200 font-sans">
-            <strong class="text-slate-700">ফাইনম্যান সহজ ব্যাখ্যা: </strong>${q.feynmanExplanation || q.explanationBn}
-          </div>
-        </div>
-
-        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
-          <span class="text-xs font-mono text-slate-500">সুপারমেমো রিকল রেটিং দিন (SM-2):</span>
-          <div class="flex space-x-2">
-            <button onclick="retestMistake('${m.id}', 1)" class="px-2.5 py-1 rounded bg-rose-50 hover:bg-rose-50 border border-rose-200 text-rose-700 text-xs">
-              ভুলে গেছি (q: 1)
-            </button>
-            <button onclick="retestMistake('${m.id}', 3)" class="px-2.5 py-1 rounded bg-amber-50 hover:bg-amber-50 border border-amber-200 text-amber-800 text-xs">
-              মনে পড়েছে (q: 3)
-            </button>
-            <button onclick="retestMistake('${m.id}', 5)" class="px-2.5 py-1 rounded bg-emerald-50 hover:bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs">
-              আয়ত্তে এসেছে (q: 5)
-            </button>
+          ${q.mnemonicBn ? `<p class="mt-2 italic text-emerald-800">🎶 ${q.mnemonicBn}</p>` : ''}
+          <p class="mt-1 text-slate-700">${q.feynmanExplanation || q.explanationBn || ''}</p>
+        </details>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <span class="muted text-sm">এখন কতটা মনে আছে?</span>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="retestMistake('${q.id}', 1)" class="rate-btn bad">ভুলে গেছি</button>
+            <button onclick="retestMistake('${q.id}', 3)" class="rate-btn mid">কষ্টে মনে পড়েছে</button>
+            <button onclick="retestMistake('${q.id}', 5)" class="rate-btn good">ভালো মনে আছে</button>
           </div>
         </div>
       </div>
     `;
-  }).join('');
+  }).join('') + (items.length > 150 ? `<p class="muted text-center">প্রথম ১৫০টি দেখানো হচ্ছে।</p>` : '');
 }
 
-function updateMistakeTag(mistakeId, newTag) {
-  const item = userMistakes.find(m => m.id === mistakeId);
-  if (item) item.tag = newTag;
-  renderMistakeVault();
+function updateMistakeTag(questionId, newTag) {
+  Study.tagMistake(questionId, newTag);
 }
 
-function retestMistake(mistakeId, quality) {
-  const item = userMistakes.find(m => m.id === mistakeId);
-  if (!item) return;
-
-  const q = Number(quality);
-  if (q >= 4) {
-    item.status = 'MASTERED';
-    item.intervalDays = 6;
-  } else if (q >= 3) {
-    item.status = 'IN_REVIEW';
-    item.intervalDays = 2;
-  } else {
-    item.status = 'OPEN';
-    item.intervalDays = 1;
-  }
+function retestMistake(questionId, quality) {
+  Study.reviewMistake(questionId, quality);
   renderMistakeVault();
 }
 
@@ -2381,7 +2445,15 @@ function retestMistake(mistakeId, quality) {
 // 10. ACTIVE RECALL & SM-2 FLASHCARDS
 // -----------------------------------------------------------------------------
 function initFlashcardDeck() {
-  if (questions.length === 0) return;
+  const deck = Study.buildDeck(40);
+  flashDeck = deck.ids;
+  currentFlashcardIndex = 0;
+  const info = document.getElementById('cardDeckInfo');
+  if (info) {
+    info.textContent = deck.due
+      ? `আজ রিভিশন বাকি ${toBnDigits(deck.due)}টি কার্ড, তারপর নতুন কার্ড।`
+      : 'আজকের রিভিশন শেষ। এখন নতুন কার্ড দেখাচ্ছে (আপনার পরীক্ষার ধরন ও বুকমার্ক থেকে)।';
+  }
   displayCurrentCard();
 }
 
@@ -2390,18 +2462,28 @@ function toggleCardFlip(cardElement) {
 }
 
 function displayCurrentCard() {
-  const q = questions[currentFlashcardIndex];
-  if (!q) return;
-
+  const q = Study.qById(flashDeck[currentFlashcardIndex]);
   const card = document.getElementById('mainFlashCard');
   if (card) card.classList.remove('flipped');
+  const empty = document.getElementById('cardEmpty');
+  const area = document.getElementById('cardArea');
+  if (!q) {
+    if (empty) empty.classList.remove('hidden');
+    if (area) area.classList.add('hidden');
+    return;
+  }
+  if (empty) empty.classList.add('hidden');
+  if (area) area.classList.remove('hidden');
 
-  document.getElementById('cardIndexDisplay').textContent = `${currentFlashcardIndex + 1}/${questions.length}`;
+  const saved = Study.data.cards[q.id];
+  document.getElementById('cardIndexDisplay').textContent = `${toBnDigits(currentFlashcardIndex + 1)}/${toBnDigits(flashDeck.length)}`;
+  document.getElementById('cardEfDisplay').textContent = saved ? `${toBnDigits(saved.iv)} দিন` : 'নতুন';
+  document.getElementById('cardRepDisplay').textContent = toBnDigits(saved ? saved.reps : 0);
   document.getElementById('cardSubjectBadge').textContent = q.subjectNameBn;
   document.getElementById('cardStemFront').textContent = q.stemBn;
-  document.getElementById('cardCorrectOption').textContent = `${q.correctOption} (${{ A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' }[q.correctOption]})`;
-  document.getElementById('cardMnemonicBack').textContent = q.mnemonicBn || 'নিয়মিত মডেল টেস্টের মাধ্যমে প্রস্তুতি নিশ্চিত করুন।';
-  document.getElementById('cardExplanationBack').textContent = q.feynmanExplanation || q.explanationBn;
+  document.getElementById('cardCorrectOption').textContent = `(${{ A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' }[q.correctOption]}) ${q.options[q.correctOption]}`;
+  document.getElementById('cardMnemonicBack').textContent = q.mnemonicBn || '—';
+  document.getElementById('cardExplanationBack').textContent = q.feynmanExplanation || q.explanationBn || '';
 
   const shortcutBox = document.getElementById('cardShortcutBox');
   const shortcutText = document.getElementById('cardShortcutBack');
@@ -2414,21 +2496,13 @@ function displayCurrentCard() {
 }
 
 function rateRecallQuality(quality) {
-  const efEl = document.getElementById('cardEfDisplay');
-  const repEl = document.getElementById('cardRepDisplay');
-
-  let ef = parseFloat(efEl.textContent) || 2.5;
-  const delta = 5 - quality;
-  ef = ef + (0.1 - delta * (0.08 + delta * 0.02));
-  ef = Math.max(1.3, Number(ef.toFixed(2)));
-  efEl.textContent = ef.toFixed(2);
-
-  let rep = parseInt(repEl.textContent) || 0;
-  rep = quality >= 3 ? rep + 1 : 0;
-  repEl.textContent = rep;
-
-  currentFlashcardIndex = (currentFlashcardIndex + 1) % questions.length;
-  displayCurrentCard();
+  const qid = flashDeck[currentFlashcardIndex];
+  if (!qid) return;
+  const card = Study.rateCard(qid, quality);
+  Study.toast(quality < 3 ? 'আগামীকাল আবার আসবে।' : `পরের বার দেখাবে ${toBnDigits(card.iv)} দিন পর।`);
+  currentFlashcardIndex++;
+  if (currentFlashcardIndex >= flashDeck.length) initFlashcardDeck();
+  else displayCurrentCard();
 }
 
 // -----------------------------------------------------------------------------
@@ -2857,24 +2931,10 @@ function omrShowResult(img, scan, examQs, negRate, examTitle) {
 
 function exportOmrMistakesToVault() {
   if (!omrLastResult || omrLastResult.exported || !omrLastResult.wrongItems.length) return;
-  omrLastResult.wrongItems.forEach(({ q, chosen }) => {
-    userMistakes.unshift({
-      id: `mv_omr_${Date.now()}_${q.id}`,
-      questionId: q.id,
-      question: q,
-      sourceExamTitle: `উত্তরপত্র স্ক্যান${omrLastResult.examTitle ? ` (${omrLastResult.examTitle})` : ''}`,
-      selectedOption: chosen,
-      correctOption: q.correctOption,
-      tag: 'CONCEPT_GAP',
-      userNotes: '',
-      status: 'OPEN',
-      errorCount: 1,
-      sm2Quality: 1,
-      easinessFactor: 2.5,
-      intervalDays: 1,
-      nextReviewDate: new Date()
-    });
-  });
+  Study.addMistakes(
+    omrLastResult.wrongItems.map(({ q, chosen }) => ({ q, sel: chosen })),
+    `উত্তরপত্র স্ক্যান${omrLastResult.examTitle ? ` (${omrLastResult.examTitle})` : ''}`
+  );
   omrLastResult.exported = true;
   const btn = document.getElementById('omrToVaultBtn');
   btn.disabled = true;
@@ -2882,73 +2942,6 @@ function exportOmrMistakesToVault() {
 
   updateMistakeBadge();
   switchTab('mistakes');
-}
-
-// -----------------------------------------------------------------------------
-// 12. REDIS LIVE LEADERBOARD
-// -----------------------------------------------------------------------------
-let simulatedLeaderboard = [
-  { rank: 1, userName: 'মেহের নিগার', rawScore: 7.0, penalty: 0.0, netScore: 7.00, timeTakenSec: 185, tieBreakerRankScore: 7.743056, percentile: 99.8 },
-  { rank: 2, userName: 'তানভীর আহমেদ', rawScore: 7.0, penalty: 0.0, netScore: 7.00, timeTakenSec: 240, tieBreakerRankScore: 7.666667, percentile: 98.5 },
-  { rank: 3, userName: 'রাফি আল হাসান', rawScore: 6.5, penalty: 0.5, netScore: 6.00, timeTakenSec: 210, tieBreakerRankScore: 6.708333, percentile: 95.2 },
-  { rank: 4, userName: 'নুসরাত জাহান', rawScore: 6.0, penalty: 0.5, netScore: 5.50, timeTakenSec: 290, tieBreakerRankScore: 6.097222, percentile: 91.0 },
-  { rank: 5, userName: 'কাজী জামিল', rawScore: 5.5, penalty: 0.5, netScore: 5.00, timeTakenSec: 320, tieBreakerRankScore: 5.555556, percentile: 85.4 }
-];
-
-function submitToLeaderboard(candidateData) {
-  simulatedLeaderboard.push(candidateData);
-  simulatedLeaderboard.sort((a, b) => b.tieBreakerRankScore - a.tieBreakerRankScore);
-  simulatedLeaderboard.forEach((item, idx) => {
-    item.rank = idx + 1;
-  });
-  renderLeaderboard();
-}
-
-function refreshLeaderboard() {
-  renderLeaderboard();
-}
-
-function renderLeaderboard() {
-  const tbody = document.getElementById('leaderboardTbody');
-  if (!tbody) return;
-
-  tbody.innerHTML = simulatedLeaderboard.map(item => {
-    const isMe = item.userId === 'usr_candidate_me';
-    const rankBadge = item.rank === 1 ? '🥇' : item.rank === 2 ? '🥈' : item.rank === 3 ? '🥉' : `#${item.rank}`;
-
-    return `
-      <tr class="${isMe ? 'bg-emerald-50 border-l-4 border-emerald-500 font-semibold' : 'hover:bg-slate-800/50'}">
-        <td class="py-3 px-4 font-mono font-bold">${rankBadge}</td>
-        <td class="py-3 px-4 flex items-center space-x-2">
-          <span>${item.userName}</span>
-          ${isMe ? '<span class="px-1.5 py-0.5 text-[10px] rounded bg-emerald-500 text-slate-950 font-bold">YOU</span>' : ''}
-        </td>
-        <td class="py-3 px-4 text-center font-mono">${item.rawScore.toFixed(1)}</td>
-        <td class="py-3 px-4 text-center font-mono text-rose-700">-${item.penalty.toFixed(2)}</td>
-        <td class="py-3 px-4 text-center font-mono font-bold text-emerald-700">${item.netScore.toFixed(2)}</td>
-        <td class="py-3 px-4 text-center font-mono text-slate-500">${Math.floor(item.timeTakenSec / 60)}মি. ${item.timeTakenSec % 60}সে.</td>
-        <td class="py-3 px-4 text-center font-mono text-emerald-700">${item.tieBreakerRankScore.toFixed(4)}</td>
-        <td class="py-3 px-4 text-center font-mono text-emerald-700 font-semibold">${item.percentile || 95}%</td>
-      </tr>
-    `;
-  }).join('');
-}
-
-// -----------------------------------------------------------------------------
-// 13. GEMINI AI CURRENT AFFAIRS SYNTHESIZER
-// -----------------------------------------------------------------------------
-async function synthesizeWithAi() {
-  document.getElementById('aiGeneratedStem').textContent = `বাংলাদেশ সরকারের সর্বশেষ অর্থনৈতিক সমীক্ষা ও রাজস্ব বাজেট অনুযায়ী সর্বোচ্চ খাতওয়ারী বরাদ্দ কোন খাতে দেওয়া হয়েছে?`;
-  document.getElementById('aiGeneratedMnemonic').textContent = `"শিক্ষা প্রযুক্তি সবার আগে, দেশের বাজেট শীর্ষে জাগে"`;
-  document.getElementById('aiGeneratedExplanation').textContent = `বিসিএস প্রিলিমিনারি বাংলাদেশ বিষয়াবলীতে বাজেট ও বার্ষিক উন্নয়ন কর্মসূচির (ADP) সর্বোচ্চ বরাদ্দপ্রাপ্ত খাত একটি স্থায়ী গুরুত্বপূর্ণ প্রশ্ন।`;
-
-  const optContainer = document.getElementById('aiGeneratedOptions');
-  optContainer.innerHTML = `
-    <div class="p-2 rounded bg-white text-emerald-700 font-semibold border border-emerald-200">ক) শিক্ষা ও প্রযুক্তি খাত (সঠিক)</div>
-    <div class="p-2 rounded bg-white text-slate-700">খ) পরিবহন ও যোগাযোগ অবকাঠামো খাত</div>
-    <div class="p-2 rounded bg-white text-slate-700">গ) স্বাস্থ্য ও পরিবার কল্যাণ খাত</div>
-    <div class="p-2 rounded bg-white text-slate-700">ঘ) কৃষি ও পল্লি উন্নয়ন খাত</div>
-  `;
 }
 
 // -----------------------------------------------------------------------------

@@ -8,34 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Noto Sans Bengali"', '"Kalpurush"', '"SolaimanLipi"', 'sans-serif'],
-            serif: ['"Tiro Bangla"', '"SolaimanLipi"', '"Kalpurush"', '"Noto Serif Bengali"', 'serif'],
-            mono: ['"JetBrains Mono"', '"Noto Sans Bengali"', 'monospace']
-          },
-          colors: {
-            emerald: {
-              50: '#eef7f3', 100: '#d6ece2', 200: '#acd8c5', 300: '#78bd9f', 400: '#3f9c79',
-              500: '#13805d', 600: '#006a4e', 700: '#00573f', 800: '#004532', 900: '#003426', 950: '#00221a'
-            },
-            bcs: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              600: '#006a4e',
-              700: '#00563f',
-              800: '#004230',
-              900: '#002e21',
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <meta name="theme-color" content="#006a4e">
+  <!-- Tailwind classes are pre-built into app.css (npm run css:build), no CDN at runtime -->
+  <link rel="stylesheet" href="/app.css">
   <style>
     .flip-card { perspective: 1000px; }
     .flip-card-inner {
@@ -232,7 +207,9 @@
       box-shadow: inset 0 0 0 3px #fff, 0 0 0 2px var(--rose);
     }
     .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
-    .brand-name { font-weight: 700; font-size: 18px; color: var(--green); }
+    .brand-name { font-weight: 700; font-size: 18px; color: var(--green); white-space: nowrap; }
+    @media (max-width: 767px) { .md-up { display: none !important; } }
+    @media (max-width: 420px) { .brand-name { font-size: 16px; } .topbar-inner { gap: 8px; padding: 0 10px; } }
     .brand-sub { font-size: 11.5px; color: var(--ink-soft); white-space: nowrap; }
     .topbar-title {
       margin-left: 20px; padding-left: 20px; border-left: 1px solid var(--line);
@@ -390,6 +367,159 @@
     .text-xs:not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { font-size: 13px; line-height: 1.55; }
     .text-sm:not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { font-size: 14.5px; line-height: 1.6; }
     .font-extrabold:not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { font-weight: 700; }
+
+    /* ================================================================
+       Sonar Horin additions: home dashboard, results, practice, settings
+       ================================================================ */
+    .brand-logo { width: 38px; height: 38px; border-radius: 10px; flex: none; }
+    .app-main { zoom: var(--ui-zoom, 1); }
+    .muted { color: var(--ink-soft); font-size: 14px; }
+    .link { color: var(--green); font-weight: 600; text-decoration: none; background: none; padding: 0; }
+    .link:hover { text-decoration: underline; }
+    .ok-text { color: #15803d; } .bad-text { color: #be123c; } .mid-text { color: #b45309; }
+    .panel-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+    .pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; font-size: 13px; background: var(--paper); color: var(--ink-soft); border: 1px solid var(--line); }
+    .pill.ok { background: #e8f6ee; color: #15803d; border-color: #bfe5cf; }
+    .pill.bad { background: #fdecef; color: #be123c; border-color: #f6c6cf; }
+    .nav-badge-due { background: var(--rose) !important; color: #fff !important; }
+    .nav-more summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; }
+    .nav-more summary::after { content: "▾"; }
+    .nav-more[open] summary::after { content: "▴"; }
+    .nav-more summary::-webkit-details-marker { display: none; }
+    .exam-note { font-size: 14px; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 8px 12px; }
+
+    .app-toast {
+      position: fixed; left: 50%; bottom: 86px; transform: translate(-50%, 20px); z-index: 9500;
+      background: #1f2933; color: #fff; padding: 10px 16px; border-radius: 12px; font-size: 14px;
+      max-width: calc(100vw - 32px); box-shadow: 0 8px 24px rgba(0,0,0,.25);
+      opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+    }
+    .app-toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (min-width: 1024px) { .app-toast { bottom: 28px; } }
+
+    /* Home */
+    .home-hero { background: linear-gradient(135deg, var(--green-tint), var(--surface) 70%); }
+    .home-hero-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .home-title { font-size: 22px; font-weight: 700; color: var(--ink); }
+    .streak { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 6px 12px; border-radius: 999px; font-size: 15px; white-space: nowrap; }
+    .goal-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .goal-bar { flex: 1; min-width: 160px; height: 10px; border-radius: 999px; background: var(--line); overflow: hidden; }
+    .goal-bar span { display: block; height: 100%; background: var(--green); border-radius: 999px; transition: width .3s; }
+    .home-login-note { margin-top: 12px; font-size: 14px; color: var(--ink-soft); }
+    .home-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .home-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 900px) { .home-grid, .home-grid.two { grid-template-columns: 1fr; } }
+    .home-card { display: flex; flex-direction: column; gap: 6px; }
+    .home-card h3 { font-weight: 700; font-size: 16px; color: var(--ink); }
+    .home-card .btn { align-self: flex-start; margin-top: auto; }
+    .home-card-ic { font-size: 26px; }
+    .home-big { font-size: 30px; font-weight: 700; color: var(--green); line-height: 1.1; }
+    .home-big small { font-size: 14px; color: var(--ink-soft); font-weight: 500; }
+    .home-live-title { font-weight: 700; color: var(--ink); }
+    .weak-row { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+    .weak-row:last-child { border-bottom: 0; }
+    .weak-acc { font-weight: 700; } .weak-acc.bad { color: #be123c; } .weak-acc.mid { color: #b45309; } .weak-acc.good { color: #15803d; }
+    .result-title { font-weight: 600; color: var(--ink); }
+    .result-nums { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; margin: 4px 0; }
+    .result-nums .big { font-size: 28px; font-weight: 700; color: var(--green); }
+    .search-input { width: 100%; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 15px; }
+    .search-input:focus, .input:focus { outline: 2px solid var(--green); outline-offset: 1px; }
+
+    /* Question card (search, bookmarks) */
+    .q-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--surface); }
+    .q-card-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; }
+    .q-card-stem { font-weight: 600; color: var(--ink); margin: 4px 0 8px; }
+    .q-card-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; font-size: 14px; color: var(--ink-soft); }
+    .q-card-opts .right { color: #15803d; font-weight: 700; }
+    .q-card-exp { margin-top: 8px; font-size: 14px; color: var(--ink); background: var(--paper); border-left: 3px solid var(--green); padding: 6px 10px; border-radius: 4px; }
+    .q-card-seen { margin-top: 6px; font-size: 12.5px; color: #92400e; }
+    .icon-mini { padding: 2px 6px; border-radius: 6px; font-size: 15px; }
+    .icon-mini:hover { background: var(--paper); }
+    @media (max-width: 480px) { .q-card-opts { grid-template-columns: 1fr; } }
+
+    /* Results */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    @media (max-width: 800px) { .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .stat { display: flex; flex-direction: column; gap: 2px; }
+    .stat b { font-size: 26px; color: var(--ink); }
+    .trend { display: flex; align-items: flex-end; gap: 8px; height: 180px; padding-top: 18px; overflow-x: auto; }
+    .trend-col { flex: 1; min-width: 34px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+    .trend-bar { width: 70%; max-width: 36px; background: var(--green); border-radius: 6px 6px 0 0; }
+    .trend-val { font-size: 12px; color: var(--ink); font-weight: 600; }
+    .trend-date { font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
+    .subj-row { padding: 8px 0; border-bottom: 1px solid var(--line); }
+    .subj-row:last-child { border-bottom: 0; }
+    .subj-head { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; margin-bottom: 4px; }
+    .subj-bar { height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
+    .subj-bar span { display: block; height: 100%; border-radius: 999px; }
+    .subj-bar .bad { background: #e11d48; } .subj-bar .mid { background: #f59e0b; } .subj-bar .good { background: #059669; }
+    .table-scroll { overflow-x: auto; }
+    .hist-table { width: 100%; font-size: 14px; border-collapse: collapse; }
+    .hist-table th { text-align: left; color: var(--ink-soft); font-weight: 600; padding: 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+    .hist-table td { padding: 8px; border-bottom: 1px solid var(--line); color: var(--ink); }
+    .empty-state { text-align: center; padding: 36px 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .empty-state h3 { font-size: 18px; font-weight: 700; color: var(--ink); }
+    .empty-state p { max-width: 520px; }
+    /* our own display rules load after app.css, so keep Tailwind's .hidden winning on them */
+    .btn.hidden, .empty-state.hidden { display: none; }
+    .empty-ic { font-size: 40px; }
+
+    /* Mistake vault + practice form */
+    .mini-select, .input { background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 7px 10px; font-size: 14px; }
+    .input { width: 100%; margin-top: 4px; }
+    .field-l { display: flex; flex-direction: column; font-size: 14px; font-weight: 600; color: var(--ink); }
+    .reveal summary { cursor: pointer; color: var(--green); font-weight: 600; font-size: 14px; }
+    .rate-btn { padding: 6px 12px; border-radius: 10px; font-size: 14px; font-weight: 600; border: 1px solid; }
+    .rate-btn.bad { background: #fdecef; color: #be123c; border-color: #f6c6cf; }
+    .rate-btn.mid { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+    .rate-btn.good { background: #e8f6ee; color: #15803d; border-color: #bfe5cf; }
+    .source-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+    .source-opt { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; background: var(--surface); }
+    .source-opt:has(input:checked) { border-color: var(--green); background: var(--green-tint); }
+    .source-opt input { margin-top: 5px; accent-color: var(--green); }
+    .source-opt b { display: block; color: var(--ink); font-size: 14.5px; }
+    .source-opt small { color: var(--ink-soft); font-size: 12.5px; }
+
+    /* Settings sheet */
+    .sheet-backdrop { position: fixed; inset: 0; z-index: 9000; background: rgba(15, 23, 42, .45); display: flex; align-items: flex-end; justify-content: center; }
+    .sheet-backdrop[hidden] { display: none; }
+    .sheet { background: var(--surface); color: var(--ink); width: 100%; max-width: 520px; border-radius: 18px 18px 0 0; padding: 18px 18px calc(18px + env(safe-area-inset-bottom)); max-height: 85vh; overflow-y: auto; }
+    @media (min-width: 640px) { .sheet-backdrop { align-items: center; } .sheet { border-radius: 18px; } }
+    .sheet-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .sheet-head h3 { font-size: 18px; font-weight: 700; }
+    .mt-3 { margin-top: 12px; }
+
+    /* ---------------- Dark mode (রাতে পড়ার জন্য) ----------------
+       The printed question paper and OMR sheet stay paper-coloured on purpose. */
+    html.theme-dark {
+      --paper: #0f1513; --surface: #18201d; --line: #2a3530; --ink: #e5ece8; --ink-soft: #9db0a7;
+      --green: #2fa77c; --green-dark: #24946c; --green-tint: #15302a;
+      color-scheme: dark;
+    }
+    html.theme-dark body.app-body { background: var(--paper); color: var(--ink); }
+    html.theme-dark :is(.bg-white, .bg-slate-50, .bg-slate-100, .bg-white\/80):not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { background-color: var(--surface) !important; }
+    html.theme-dark :is(.text-slate-900, .text-slate-800, .text-slate-700, .text-slate-950):not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *):not(.bpsc-paper-sheet):not(.bpsc-omr-sheet) { color: var(--ink) !important; }
+    html.theme-dark :is(.text-slate-500, .text-slate-600, .text-slate-400):not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { color: var(--ink-soft) !important; }
+    html.theme-dark :is(.border-slate-200, .border-slate-300, .border-slate-100):not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { border-color: var(--line) !important; }
+    html.theme-dark :is(.bg-emerald-50, .bg-emerald-100):not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { background-color: #12322a !important; }
+    html.theme-dark :is(.bg-rose-50, .bg-rose-100):not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { background-color: #3a1820 !important; }
+    html.theme-dark :is(.bg-amber-50, .bg-amber-100):not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { background-color: #352a10 !important; }
+    html.theme-dark :is(.text-emerald-700, .text-emerald-800, .text-emerald-600):not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { color: #6fd6ab !important; }
+    html.theme-dark :is(.text-rose-700, .text-rose-800):not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { color: #ff8fa0 !important; }
+    html.theme-dark :is(.text-amber-700, .text-amber-800):not(.bpsc-paper-sheet *):not(.bpsc-omr-sheet *) { color: #f6c860 !important; }
+    html.theme-dark :is(.border-emerald-200, .border-rose-200, .border-amber-200, .border-amber-300):not(.bpsc-paper-sheet *) { border-color: var(--line) !important; }
+    html.theme-dark .bpsc-paper-sheet { background: #ece6d3; }
+    html.theme-dark .chip { background: var(--surface); color: var(--ink); }
+    html.theme-dark .chip.chip-active { background: var(--green); color: #fff; }
+    html.theme-dark .streak { background: #3a2410; border-color: #6b3d14; color: #fdba74; }
+    html.theme-dark .exam-note { background: #2d2410; border-color: #5a4614; color: #fcd34d; }
+    html.theme-dark .pill.ok, html.theme-dark .rate-btn.good { background: #12322a; color: #6fd6ab; border-color: #1f5443; }
+    html.theme-dark .pill.bad, html.theme-dark .rate-btn.bad { background: #3a1820; color: #ff8fa0; border-color: #5c2530; }
+    html.theme-dark .rate-btn.mid { background: #352a10; color: #f6c860; border-color: #5a4614; }
+    html.theme-dark .ok-text { color: #6fd6ab; } html.theme-dark .bad-text { color: #ff8fa0; } html.theme-dark .mid-text { color: #f6c860; }
+    html.theme-dark .q-card-opts .right { color: #6fd6ab; }
+    html.theme-dark .q-card-seen { color: #f6c860; }
+    html.theme-dark .topbar::after { opacity: .7; }
   </style>
   <script src="/native-app.js"></script>
 </head>
@@ -403,20 +533,21 @@
       <button type="button" class="icon-btn lg-hide" onclick="toggleSideNav(true)" aria-label="মেনু খুলুন">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
-      <a href="#exam" onclick="switchTab('exam'); return false;" class="brand">
-        <span class="brand-mark">বি</span>
+      <a href="#home" onclick="switchTab('home'); return false;" class="brand" aria-label="সোনার হরিণ — হোম">
+        <img src="/logo.svg" alt="" class="brand-logo" width="38" height="38">
         <span class="brand-text">
-          <span class="brand-name">প্রস্তুতি</span>
-          <span class="brand-sub">বিসিএস ও সরকারি চাকরি</span>
+          <span class="brand-name">সোনার হরিণ</span>
+          <span class="brand-sub">বিসিএস ও সরকারি চাকরির প্রস্তুতি</span>
         </span>
       </a>
       <div class="topbar-title" id="currentSectionTitle">মডেল টেস্ট</div>
       <div class="topbar-actions">
+        <button type="button" class="icon-btn" onclick="Study.openSettings()" aria-label="সেটিংস: অন্ধকার মোড, লেখার আকার" title="সেটিংস">⚙️</button>
         <span id="accountSlot"></span>
         <a href="/exam-hall" class="btn btn-primary">
           <span>🏛️</span><span class="hidden sm:inline">পরীক্ষার হল</span>
         </a>
-        <a href="/omr-printable" target="_blank" class="btn btn-ghost hidden md:inline-flex">
+        <a href="/omr-printable" target="_blank" class="btn btn-ghost md-up">
           <span>🖨️</span><span>প্রিন্ট</span>
         </a>
       </div>
@@ -437,41 +568,44 @@
       </div>
 
       <div class="nav-group">
-        <div class="nav-group-title">অনুশীলন</div>
-        <button type="button" onclick="switchTab('exam')" id="tab-exam" data-title="মডেল টেস্ট" class="tab-btn nav-item active"><span class="nav-ic">📝</span><span>মডেল টেস্ট</span></button>
-        <button type="button" onclick="switchTab('past-bank')" id="tab-past-bank" data-title="বিগত সালের প্রশ্ন" class="tab-btn nav-item"><span class="nav-ic">📚</span><span>বিগত সালের প্রশ্ন</span></button>
-        <button type="button" onclick="switchTab('custom-quiz')" id="tab-custom-quiz" data-title="নিজের কুইজ" class="tab-btn nav-item"><span class="nav-ic">🎯</span><span>নিজের কুইজ বানান</span></button>
-        <button type="button" onclick="switchTab('battle')" id="tab-battle" data-title="কুইজ ব্যাটল" class="tab-btn nav-item"><span class="nav-ic">⚔️</span><span>কুইজ ব্যাটল</span></button>
+        <button type="button" onclick="switchTab('home')" id="tab-home" data-title="আজকের পড়া" class="tab-btn nav-item active"><span class="nav-ic">🏠</span><span>আজকের পড়া</span></button>
       </div>
 
       <div class="nav-group">
-        <div class="nav-group-title">পড়া ও রিভিশন</div>
+        <div class="nav-group-title">পরীক্ষা দিন</div>
+        <button type="button" onclick="switchTab('exam')" id="tab-exam" data-title="মডেল টেস্ট" class="tab-btn nav-item"><span class="nav-ic">📝</span><span>মডেল টেস্ট</span></button>
+        <button type="button" onclick="switchTab('past-bank')" id="tab-past-bank" data-title="বিগত সালের প্রশ্ন" class="tab-btn nav-item"><span class="nav-ic">📚</span><span>বিগত সালের প্রশ্ন</span></button>
+        <button type="button" onclick="switchTab('custom-quiz')" id="tab-custom-quiz" data-title="নিজের মতো অনুশীলন" class="tab-btn nav-item"><span class="nav-ic">🎯</span><span>নিজের মতো অনুশীলন</span></button>
+        <a href="/live" class="nav-item"><span class="nav-ic">🏆</span><span>লাইভ পরীক্ষা ও মেধা তালিকা</span></a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">রিভিশন</div>
+        <button type="button" onclick="switchTab('mistakes')" id="tab-mistakes" data-title="ভুল খাতা" class="tab-btn nav-item"><span class="nav-ic">📕</span><span>ভুল খাতা</span><span id="mistakeBadge" class="nav-badge">০</span></button>
+        <button type="button" onclick="switchTab('flashcards')" id="tab-flashcards" data-title="ফ্ল্যাশকার্ড" class="tab-btn nav-item"><span class="nav-ic">🧠</span><span>ফ্ল্যাশকার্ড</span></button>
+        <button type="button" onclick="switchTab('bookmarks')" id="tab-bookmarks" data-title="বুকমার্ক" class="tab-btn nav-item"><span class="nav-ic">⭐</span><span>বুকমার্ক</span><span id="headerBookmarkCount" class="nav-badge">০</span></button>
         <button type="button" onclick="switchTab('confusing-hot')" id="tab-confusing-hot" data-title="কনফিউজিং ও কমন প্রশ্ন" class="tab-btn nav-item"><span class="nav-ic">🔥</span><span>কনফিউজিং ও কমন প্রশ্ন</span></button>
         <button type="button" onclick="switchTab('master-toolkit')" id="tab-master-toolkit" data-title="শর্টকাট, ভাইভা ও রুটিন" class="tab-btn nav-item"><span class="nav-ic">🧮</span><span>শর্টকাট, ভাইভা ও রুটিন</span></button>
-        <button type="button" onclick="switchTab('flashcards')" id="tab-flashcards" data-title="ফ্ল্যাশকার্ড" class="tab-btn nav-item"><span class="nav-ic">🧠</span><span>ফ্ল্যাশকার্ড</span></button>
-        <button type="button" onclick="switchTab('ai')" id="tab-ai" data-title="সাম্প্রতিক সাধারণ জ্ঞান" class="tab-btn nav-item"><span class="nav-ic">📰</span><span>সাম্প্রতিক সাধারণ জ্ঞান</span></button>
       </div>
 
       <div class="nav-group">
         <div class="nav-group-title">আমার অগ্রগতি</div>
-        <button type="button" onclick="switchTab('mistakes')" id="tab-mistakes" data-title="ভুল খাতা" class="tab-btn nav-item"><span class="nav-ic">📕</span><span>ভুল খাতা</span><span id="mistakeBadge" class="nav-badge">0</span></button>
-        <button type="button" onclick="switchTab('bookmarks')" id="tab-bookmarks" data-title="বুকমার্ক" class="tab-btn nav-item"><span class="nav-ic">⭐</span><span>বুকমার্ক</span><span id="headerBookmarkCount" class="nav-badge">০</span></button>
-        <button type="button" onclick="switchTab('analytics')" id="tab-analytics" data-title="দুর্বলতা বিশ্লেষণ" class="tab-btn nav-item"><span class="nav-ic">📊</span><span>দুর্বলতা বিশ্লেষণ</span></button>
-        <button type="button" onclick="switchTab('leaderboard')" id="tab-leaderboard" data-title="মেধা তালিকা" class="tab-btn nav-item"><span class="nav-ic">🏆</span><span>মেধা তালিকা</span></button>
+        <button type="button" onclick="switchTab('analytics')" id="tab-analytics" data-title="ফলাফল ও দুর্বলতা" class="tab-btn nav-item"><span class="nav-ic">📊</span><span>ফলাফল ও দুর্বলতা</span></button>
       </div>
 
-      <div class="nav-group">
-        <div class="nav-group-title">টুলস</div>
+      <details class="nav-group nav-more">
+        <summary class="nav-group-title">আরও টুলস</summary>
         <button type="button" onclick="switchTab('omr')" id="tab-omr" data-title="উত্তরপত্র স্ক্যান করে ফলাফল" class="tab-btn nav-item"><span class="nav-ic">📷</span><span>উত্তরপত্র স্ক্যান করে ফলাফল</span></button>
-        <button type="button" onclick="switchTab('primary-calc')" id="tab-primary-calc" data-title="প্রাইমারি নম্বর ক্যালকুলেটর" class="tab-btn nav-item"><span class="nav-ic">🧾</span><span>প্রাইমারি নম্বর ক্যালকুলেটর</span></button>
-        <a href="/exam-hall" class="nav-item"><span class="nav-ic">🏛️</span><span>পূর্ণ পরীক্ষার হল</span></a>
-        <a href="/live" class="nav-item"><span class="nav-ic">🏆</span><span>লাইভ পরীক্ষা ও মেধা তালিকা</span></a>
         <a href="/omr-printable" target="_blank" class="nav-item"><span class="nav-ic">🖨️</span><span>প্রশ্নপত্র ও উত্তরপত্র প্রিন্ট</span></a>
-      </div>
+        <a href="/exam-hall" class="nav-item"><span class="nav-ic">🏛️</span><span>পূর্ণ পরীক্ষার হল</span></a>
+        <button type="button" onclick="switchTab('primary-calc')" id="tab-primary-calc" data-title="প্রাইমারি নম্বর ক্যালকুলেটর" class="tab-btn nav-item"><span class="nav-ic">🧾</span><span>প্রাইমারি নম্বর ক্যালকুলেটর</span></button>
+        <button type="button" onclick="switchTab('battle')" id="tab-battle" data-title="কুইজ খেলা" class="tab-btn nav-item"><span class="nav-ic">⚔️</span><span>কুইজ খেলা (কম্পিউটারের সাথে)</span></button>
+      </details>
 
       <div class="side-note">
         <div class="font-bold text-slate-800">আজকের টিপস 💡</div>
         <p>নিশ্চিত না হলে দাগাবেন না। প্রতিটি ভুলে নম্বর কাটা যায়।</p>
+        <p class="mt-1">⚙️ উপরের সেটিংসে অন্ধকার মোড ও বড় লেখা পাবেন।</p>
       </div>
     </aside>
 
@@ -481,7 +615,14 @@
     <!-- ===================================================================== -->
     <!-- TAB 1: LIVE MODEL TEST ENGINE (AUTHENTIC BPSC & DPE QUESTION PAPER + OMR) -->
     <!-- ===================================================================== -->
-    <section id="pane-exam" class="tab-pane space-y-4">
+    <!-- ===================================================================== -->
+    <!-- HOME: আজকের পড়া (filled by study.js) -->
+    <!-- ===================================================================== -->
+    <section id="pane-home" class="tab-pane space-y-4">
+      <div id="homeBody" class="space-y-4"></div>
+    </section>
+
+    <section id="pane-exam" class="tab-pane hidden space-y-4">
       <!-- Step 1: choose exam type -->
       <div class="panel">
         <span class="section-label">১. কোন পরীক্ষার প্রস্তুতি নিচ্ছেন?</span>
@@ -553,9 +694,11 @@
               <span class="text-sm text-amber-800">⏱ সময়</span>
               <span id="examTimer" class="text-lg font-mono font-bold text-amber-800">120:00</span>
             </div>
-            <button onclick="submitExam()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition">উত্তরপত্র জমা দিন →</button>
+            <button type="button" id="examStartBtn" onclick="startExam()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition">▶ পরীক্ষা শুরু করুন</button>
+            <button type="button" id="examSubmitBtn" onclick="submitExam()" class="hidden px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition">উত্তরপত্র জমা দিন →</button>
           </div>
         </div>
+        <p id="examStateNote" class="exam-note">প্রশ্ন দেখে নিন। "শুরু করুন" চাপলে (বা প্রথম উত্তর দাগালে) সময় গণনা শুরু হবে।</p>
 
         <div class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
           <button onclick="printFullExamPackage('LIVE')" class="text-emerald-700 hover:underline font-medium">🖨️ প্রশ্নপত্র + OMR + উত্তরমালা প্রিন্ট করুন</button>
@@ -608,7 +751,7 @@
             <div class="bg-[#d94662] text-white px-4 py-2.5 flex items-center justify-between">
               <div>
                 <h3 id="omrAuthorityHeading" class="text-sm font-bold tracking-wide">বাংলাদেশ সরকারি কর্ম কমিশন</h3>
-                <p id="omrAuthoritySub" class="text-[10px] opacity-90 font-mono">BPSC OMR ANSWER SHEET • কালো বলপয়েন্ট বৃত্ত ভরাট</p>
+                <p id="omrAuthoritySub" class="text-[10px] opacity-90 font-mono">BPSC OMR ANSWER SHEET • কালো বলপয়েন্ট বৃত্ত ভরাট</p>
               </div>
               <span id="answeredCounter" class="px-2.5 py-1 rounded-full bg-slate-950 text-amber-300 font-mono text-xs font-bold">০/২০০</span>
             </div>
@@ -643,7 +786,7 @@
 
             <div class="px-3 py-2 bg-[#fff0f3] border-t border-rose-200 flex items-center justify-between text-[11px] text-rose-900 font-semibold">
               <span id="omrPenaltyFooterText">● সঠিক = +১.০০ | ভুল = -০.৫০</span>
-              <button onclick="submitExam()" class="px-3 py-1 rounded bg-[#006a4e] text-white font-bold hover:bg-[#004d38] transition">
+              <button onclick="examStarted ? submitExam() : startExam()" class="px-3 py-1 rounded bg-[#006a4e] text-white font-bold hover:bg-[#004d38] transition">
                 জমা দিন →
               </button>
             </div>
@@ -709,88 +852,49 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 3: CUSTOM QUIZ BUILDER (কাস্টম কুইজ ক্রিয়েটর) -->
+    <!-- TAB 3: CUSTOM QUIZ BUILDER (কাস্টম কুইজ ক্রিয়েটর) -->
     <!-- ===================================================================== -->
-    <section id="pane-custom-quiz" class="tab-pane hidden space-y-6">
-      <div class="max-w-2xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
-        <div class="text-center space-y-2">
-          <div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-500/20 text-emerald-700 flex items-center justify-center font-bold text-xl">
-            🎯
-          </div>
-          <h2 class="text-xl font-bold text-slate-900">🎯 নিজের কুইজ বানান</h2>
-          <p class="text-xs text-slate-500">
-            নিজের প্রয়োজন অনুযায়ী বিষয়, টপিক, সময় ও প্রশ্নের সংখ্যা ঠিক করে যেকোনো মুহূর্তে নিজস্ব টেস্ট বানিয়ে নিন।
-          </p>
+    <section id="pane-custom-quiz" class="tab-pane hidden space-y-4">
+      <div class="panel max-w-2xl mx-auto space-y-4">
+        <div class="page-head">
+          <h2>🎯 নিজের মতো অনুশীলন</h2>
+          <p>পুরো প্রশ্নব্যাংক থেকে, প্রতিবার এলোমেলো নতুন সেট।</p>
         </div>
-
-        <div class="space-y-4 text-xs font-sans">
-          <!-- Subject Select -->
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">বিষয় নির্বাচন করুন:</label>
-            <select id="customQuizSubject" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 text-sm focus:outline-none focus:border-emerald-500">
-              <option value="ALL">সকল বিষয় (কম্বাইন্ড কুইজ)</option>
-              <option value="BANGLADESH_AFFAIRS">বাংলাদেশ বিষয়াবলী (মুক্তিযুদ্ধ ও সংবিধান)</option>
-              <option value="BANGLA">বাংলা ভাষা ও সাহিত্য (চর্যাপদ ও ব্যাকরণ)</option>
-              <option value="MATH">গাণিতিক যুক্তি (শতকরা, লাভ-ক্ষতি ও ধারা)</option>
-              <option value="INT_AFFAIRS">আন্তর্জাতিক বিষয়াবলী (পরিবেশ ও স্ক্যান্ডিনেভিয়া)</option>
-              <option value="ENGLISH">English Language & Literature</option>
-              <option value="COMPUTER_ICT">কম্পিউটার ও তথ্যপ্রযুক্তি</option>
-              <option value="GENERAL_SCIENCE">সাধারণ বিজ্ঞান (মানবদেহ ও রক্ত)</option>
+        <div>
+          <span class="section-label">কোথা থেকে প্রশ্ন</span>
+          <div class="source-grid">
+            <label class="source-opt"><input type="radio" name="spSource" value="ALL" checked><span><b>সব প্রশ্ন</b><small>যেকোনো বিষয় বা নির্দিষ্ট বিষয়</small></span></label>
+            <label class="source-opt"><input type="radio" name="spSource" value="WEAK"><span><b>আমার দুর্বল বিষয়</b><small>ফলাফল দেখে যেখানে সবচেয়ে কম পারছেন</small></span></label>
+            <label class="source-opt"><input type="radio" name="spSource" value="UNSEEN"><span><b>এখনো দেখিনি</b><small>যে প্রশ্ন আগে আসেনি</small></span></label>
+            <label class="source-opt"><input type="radio" name="spSource" value="MISTAKES"><span><b>ভুল খাতা</b><small><span data-sp-count="MISTAKES">০</span>টি প্রশ্ন</small></span></label>
+            <label class="source-opt"><input type="radio" name="spSource" value="BOOKMARKS"><span><b>বুকমার্ক</b><small><span data-sp-count="BOOKMARKS">০</span>টি প্রশ্ন</small></span></label>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label class="field-l">পরীক্ষার ধরন<select id="spTrack" class="input" onchange="Study.renderPracticeForm()"></select></label>
+          <label class="field-l">বিষয়<select id="spSubject" class="input"></select></label>
+          <label class="field-l">প্রশ্নের সংখ্যা
+            <select id="spCount" class="input">
+              <option value="10">১০টি</option><option value="20" selected>২০টি</option><option value="30">৩০টি</option><option value="50">৫০টি</option><option value="100">১০০টি</option>
             </select>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <!-- Question Count -->
-            <div>
-              <label class="block font-semibold text-slate-700 mb-1">প্রশ্নের সংখ্যা:</label>
-              <select id="customQuizCount" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-slate-800 text-sm focus:outline-none focus:border-emerald-500">
-                <option value="5">৫ টি প্রশ্ন</option>
-                <option value="10" selected>১০ টি প্রশ্ন</option>
-                <option value="15">১৫ টি প্রশ্ন</option>
-                <option value="20">২০ টি প্রশ্ন</option>
-              </select>
-            </div>
-
-            <!-- Duration -->
-            <div>
-              <label class="block font-semibold text-slate-700 mb-1">সময় বরাদ্দ (মিনিট):</label>
-              <select id="customQuizTime" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-slate-800 text-sm focus:outline-none focus:border-emerald-500">
-                <option value="5" selected>৫ মিনিট</option>
-                <option value="10">১০ মিনিট</option>
-                <option value="15">১৫ মিনিট</option>
-                <option value="20">২০ মিনিট</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Negative Penalty -->
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">নেগেটিভ মার্কিং রেট:</label>
-            <div class="grid grid-cols-3 gap-2">
-              <label class="flex items-center p-3 rounded-xl bg-white border border-slate-200 cursor-pointer">
-                <input type="radio" name="customNegRate" value="0.50" checked class="text-emerald-600 mr-2">
-                <span>বিসিএস (-০.৫০)</span>
-              </label>
-              <label class="flex items-center p-3 rounded-xl bg-white border border-slate-200 cursor-pointer">
-                <input type="radio" name="customNegRate" value="0.25" class="text-emerald-600 mr-2">
-                <span>প্রাইমারি (-০.২৫)</span>
-              </label>
-              <label class="flex items-center p-3 rounded-xl bg-white border border-slate-200 cursor-pointer">
-                <input type="radio" name="customNegRate" value="0.0" class="text-emerald-600 mr-2">
-                <span>কোনো নেগেটিভ নেই</span>
-              </label>
-            </div>
-          </div>
-
-          <button onclick="startCustomQuiz()" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:from-emerald-500 hover:to-slate-50 text-white font-bold text-sm shadow-sm transition flex items-center justify-center">
-            <span>কাস্টম কুইজ শুরু করুন 🚀</span>
-          </button>
+          </label>
+          <label class="field-l">সময়
+            <select id="spTime" class="input">
+              <option value="0" selected>প্রশ্ন অনুযায়ী (প্রতি প্রশ্নে ৩৬ সেকেন্ড)</option><option value="5">৫ মিনিট</option><option value="10">১০ মিনিট</option><option value="20">২০ মিনিট</option><option value="30">৩০ মিনিট</option><option value="60">৬০ মিনিট</option>
+            </select>
+          </label>
+          <label class="field-l">প্রতি ভুলে কাটা যাবে
+            <select id="spNeg" class="input" onchange="this.dataset.touched=1">
+              <option value="0.5">০.৫০ (বিসিএস / পিএসসি)</option><option value="0.25">০.২৫ (প্রাথমিক / ব্যাংক)</option><option value="0">কাটা যাবে না</option>
+            </select>
+          </label>
         </div>
+        <button type="button" onclick="Study.startSmartPractice()" class="btn btn-primary w-full justify-center py-3">অনুশীলন শুরু করুন →</button>
       </div>
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 4: 1-VS-1 BATTLE QUIZ (গ্যামিফায়েড কুইজ ব্যাটল) -->
+    <!-- TAB 4: 1-VS-1 BATTLE QUIZ (গ্যামিফায়েড কুইজ ব্যাটল) -->
     <!-- ===================================================================== -->
     <section id="pane-battle" class="tab-pane hidden space-y-6">
       <div class="max-w-2xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
@@ -800,7 +904,7 @@
           </div>
           <h2 class="text-xl font-bold text-slate-900">⚔️ কুইজ ব্যাটল</h2>
           <p class="text-xs text-slate-500">
-            রিয়েল-টাইমে অন্য প্রার্থীর সাথে ৫টি প্রশ্নের দ্রুত কুইজ লড়াই! কে দ্রুত এবং নির্ভুল উত্তর দিতে পারে দেখুন।
+            কম্পিউটারের সাথে ৫টি এলোমেলো প্রশ্নের দ্রুত কুইজ খেলা। মজা করে ঝালাই করার জন্য।
           </p>
         </div>
 
@@ -808,24 +912,24 @@
         <div id="battleLobby" class="space-y-4">
           <div class="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200">
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-sm">আপনি</div>
+              <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">🙂</div>
               <div>
-                <strong class="text-sm block text-slate-900">ক্যান্ডিডেট #৪৭</strong>
-                <span class="text-xs text-emerald-700 font-mono">Win Rate: 78%</span>
+                <strong class="text-sm block text-slate-900">আপনি</strong>
+                <span class="text-xs text-emerald-700">আপনার পরীক্ষার ধরন থেকে</span>
               </div>
             </div>
             <span class="font-bold text-amber-700 text-lg">VS</span>
             <div class="flex items-center space-x-3 text-right">
               <div>
-                <strong class="text-sm block text-slate-900" id="battleOpponentName">তানভীর আহমেদ (ঢাকা বিশ্ববিদ্যালয়)</strong>
-                <span class="text-xs text-emerald-700 font-mono">Live Rank: #২</span>
+                <strong class="text-sm block text-slate-900" id="battleOpponentName">কম্পিউটার</strong>
+                <span class="text-xs text-emerald-700">এলোমেলো গতি</span>
               </div>
-              <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-sm">প্রতিপক্ষ</div>
+              <div class="w-10 h-10 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold text-sm">🤖</div>
             </div>
           </div>
 
           <button onclick="startBattleRound()" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:from-amber-500 hover:to-amber-500 text-white font-bold text-sm shadow-sm transition flex items-center justify-center">
-            <span>লড়াই শুরু করুন (২ মিনিট, ৫ প্রশ্ন) ⚔️</span>
+            <span>খেলা শুরু করুন (৯০ সেকেন্ড, ৫ প্রশ্ন) ⚔️</span>
           </button>
         </div>
 
@@ -854,14 +958,14 @@
           </div>
           <h2 class="text-xl font-bold text-slate-900">🧾 প্রাথমিক শিক্ষক নিয়োগ: ১০০ নম্বরের ফাইনাল স্কোর</h2>
           <p class="text-xs text-slate-500">
-            লিখিত ৭৫ নম্বর (-০.২৫ নেগেটিভ) + ভাইভা ১০ + এসএসসি ৫ + এইচএসসি ১০ = চূড়ান্ত ১০০ নম্বরের সেফ জোন অ্যানালাইসিস।
+            লিখিত ৭৫ নম্বর (-০.২৫ নেগেটিভ) + ভাইভা ১০ + এসএসসি ৫ + এইচএসসি ১০ = চূড়ান্ত ১০০ নম্বরের সেফ জোন অ্যানালাইসিস।
           </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs font-sans">
           <!-- Written Exam Score -->
           <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-2">
-            <label class="block font-semibold text-slate-800">১. লিখিত পরীক্ষায় প্রাপ্ত নম্বর (সর্বোচ্চ ৭৫):</label>
+            <label class="block font-semibold text-slate-800">১. লিখিত পরীক্ষায় প্রাপ্ত নম্বর (সর্বোচ্চ ৭৫):</label>
             <input type="number" id="calcWrittenScore" value="৫৮.৫০" min="0" max="75" step="0.25" oninput="calculatePrimaryMerit()" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 font-mono focus:outline-none focus:border-emerald-500">
             <span class="text-[10px] text-slate-500 block">মডেল টেস্ট থেকে প্রাপ্ত আপনার নেট স্কোর দিন (-০.২৫ কর্তনসহ)।</span>
           </div>
@@ -870,7 +974,7 @@
           <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-2">
             <label class="block font-semibold text-slate-800">২. মৌখিক পরীক্ষা / ভাইভা (সর্বোচ্চ ১০):</label>
             <input type="number" id="calcVivaScore" value="৮.০০" min="0" max="10" step="0.5" oninput="calculatePrimaryMerit()" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 font-mono focus:outline-none focus:border-emerald-500">
-            <span class="text-[10px] text-slate-500 block">সাধারণত ৭ থেকে ৯ এর মধ্যে নম্বর দেওয়া হয়।</span>
+            <span class="text-[10px] text-slate-500 block">সাধারণত ৭ থেকে ৯ এর মধ্যে নম্বর দেওয়া হয়।</span>
           </div>
 
           <!-- SSC GPA -->
@@ -878,8 +982,8 @@
             <label class="block font-semibold text-slate-800">৩. এসএসসি (SSC) ফলাফল (সর্বোচ্চ ৫ মার্কস):</label>
             <select id="calcSscScore" onchange="calculatePrimaryMerit()" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-emerald-500">
               <option value="5.0" selected>GPA 3.00 বা তদূর্ধ্ব / ১ম বিভাগ (৫.০০ নম্বর)</option>
-              <option value="4.0">GPA 2.00 থেকে 2.99 / ২য় বিভাগ (৪.০০ নম্বর)</option>
-              <option value="2.0">GPA 1.00 থেকে 1.99 / ৩য় বিভাগ (২.০০ নম্বর)</option>
+              <option value="4.0">GPA 2.00 থেকে 2.99 / ২য় বিভাগ (৪.০০ নম্বর)</option>
+              <option value="2.0">GPA 1.00 থেকে 1.99 / ৩য় বিভাগ (২.০০ নম্বর)</option>
             </select>
           </div>
 
@@ -888,21 +992,21 @@
             <label class="block font-semibold text-slate-800">৪. এইচএসসি (HSC) ফলাফল (সর্বোচ্চ ১০ মার্কস):</label>
             <select id="calcHscScore" onchange="calculatePrimaryMerit()" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-emerald-500">
               <option value="10.0" selected>GPA 3.00 বা তদূর্ধ্ব / ১ম বিভাগ (১০.০০ নম্বর)</option>
-              <option value="8.0">GPA 2.00 থেকে 2.99 / ২য় বিভাগ (৮.০০ নম্বর)</option>
-              <option value="4.0">GPA 1.00 থেকে 1.99 / ৩য় বিভাগ (৪.০০ নম্বর)</option>
+              <option value="8.0">GPA 2.00 থেকে 2.99 / ২য় বিভাগ (৮.০০ নম্বর)</option>
+              <option value="4.0">GPA 1.00 থেকে 1.99 / ৩য় বিভাগ (৪.০০ নম্বর)</option>
             </select>
           </div>
         </div>
 
         <!-- Merit Summary & Safe Zone Result -->
         <div class="bg-white border border-emerald-200 rounded-2xl p-6 text-center space-y-3">
-          <span class="text-xs uppercase font-mono text-emerald-700 tracking-wider">আপনার চূড়ান্ত সম্ভাব্য মেরিট স্কোর (১০০ নম্বরে)</span>
+          <span class="text-xs uppercase font-mono text-emerald-700 tracking-wider">আপনার চূড়ান্ত সম্ভাব্য মেরিট স্কোর (১০০ নম্বরে)</span>
           <div class="text-4xl font-bold font-mono text-slate-900" id="calcTotalScore">৮১.৫০</div>
           <div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200" id="calcSafeZoneBadge">
-            🟢 অত্যন্ত নিরাপদ স্কোর (চাকরি পাওয়ার সর্বোচ্চ সম্ভাবনা)
+            🟢 অত্যন্ত নিরাপদ স্কোর (চাকরি পাওয়ার সর্বোচ্চ সম্ভাবনা)
           </div>
           <p class="text-xs text-slate-700 max-w-lg mx-auto" id="calcAdviceText">
-            প্রাথমিক সহকারী শিক্ষক নিয়োগে ৮০+ নম্বর যেকোনো জেলার জন্য অত্যন্ত নিরাপদ জোন হিসেবে বিবেচিত হয়।
+            প্রাথমিক সহকারী শিক্ষক নিয়োগে ৮০+ নম্বর যেকোনো জেলার জন্য অত্যন্ত নিরাপদ জোন হিসেবে বিবেচিত হয়।
           </p>
         </div>
       </div>
@@ -911,29 +1015,24 @@
     <!-- ===================================================================== -->
     <!-- TAB 6: MISTAKE VAULT (ভুল খাতা / Cuotiben) -->
     <!-- ===================================================================== -->
-    <section id="pane-mistakes" class="tab-pane hidden space-y-6">
-      <div class="bg-white border border-rose-200 rounded-2xl p-6">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h2 class="text-xl font-bold text-slate-900 flex items-center">
-              <span>📕 ভুল খাতা</span>
-              <span class="ml-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-                বিজ্ঞানসম্মত রিভিশন
-              </span>
-            </h2>
-            <p class="text-sm text-slate-700 mt-1">
-              পরীক্ষা বা ওএমআর স্ক্যানে ভুল হওয়া প্রশ্নগুলো এখানে স্বয়ংক্রিয়ভাবে সংগৃহীত হয়। প্রতিটি ভুলের ধরণ ট্যাগ করুন এবং স্মৃতি ঝালাই করুন।
-            </p>
+    <section id="pane-mistakes" class="tab-pane hidden space-y-4">
+      <div class="panel space-y-3">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="page-head">
+            <h2>📕 ভুল খাতা</h2>
+            <p>যে প্রশ্ন ভুল করেছেন তা এখানে জমা হয়। প্রথমে ১ দিন, তারপর ৬ দিন, তারপর আরও দূরে দূরে রিভিশন আসবে (SM-2 পদ্ধতি)।</p>
+            <p id="mistakeSummary" class="text-sm text-slate-700 mt-1"></p>
           </div>
-
-          <!-- Tag Filters -->
-          <div class="flex flex-wrap gap-2 text-xs" id="mistakeFilterPills">
-            <button onclick="filterMistakes('ALL')" class="filter-pill active px-3 py-1.5 rounded-lg bg-rose-600 text-white font-medium">সব ভুলের তালিকা</button>
-            <button onclick="filterMistakes('SILLY_MISTAKE')" class="filter-pill px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200">সিলি মিস্টেক</button>
-            <button onclick="filterMistakes('CONCEPT_GAP')" class="filter-pill px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200">কনসেপ্ট গ্যাপ</button>
-            <button onclick="filterMistakes('TIME_PRESSURE')" class="filter-pill px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200">সময়ের স্বল্পতা</button>
-            <button onclick="filterMistakes('UNREAD_STEM')" class="filter-pill px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200">প্রশ্ন না খেয়াল করা</button>
-          </div>
+          <button type="button" id="mistakeExamBtn" onclick="Study.practiceMistakes()" class="btn btn-primary hidden">ভুলগুলো দিয়ে পরীক্ষা দিন →</button>
+        </div>
+        <div class="chip-row" id="mistakeFilterPills">
+          <button type="button" onclick="filterMistakes('DUE', this)" class="chip">⏰ আজ রিভিশন</button>
+          <button type="button" onclick="filterMistakes('ALL', this)" class="chip chip-active">সব</button>
+          <button type="button" onclick="filterMistakes('CONCEPT_GAP', this)" class="chip">জানা ছিল না</button>
+          <button type="button" onclick="filterMistakes('SILLY_MISTAKE', this)" class="chip">অসাবধানতা</button>
+          <button type="button" onclick="filterMistakes('UNREAD_STEM', this)" class="chip">প্রশ্ন ভালো করে পড়িনি</button>
+          <button type="button" onclick="filterMistakes('TIME_PRESSURE', this)" class="chip">সময়ের চাপ</button>
+          <button type="button" onclick="filterMistakes('MASTERED', this)" class="chip">✅ আয়ত্তে এসেছে</button>
         </div>
       </div>
 
@@ -945,19 +1044,25 @@
     <!-- TAB 7: ACTIVE RECALL & SM-2 FLASHCARDS -->
     <!-- ===================================================================== -->
     <section id="pane-flashcards" class="tab-pane hidden space-y-6">
-      <div class="max-w-3xl mx-auto space-y-6">
-        <div class="text-center space-y-2">
+      <div class="max-w-3xl mx-auto space-y-5">
+        <div class="text-center space-y-1">
           <h2 class="text-2xl font-bold text-slate-900">🧠 ফ্ল্যাশকার্ড</h2>
-          <p class="text-sm text-slate-500">
-            কার্ডের উপর ক্লিক করে উল্টান (Flip Card)। ছন্দ ও শর্টকাট দেখুন এবং নিজের স্মৃতি অনুযায়ী রেটিং দিয়ে ইন্টারভাল নির্ধারণ করুন।
-          </p>
-          <div class="flex justify-center space-x-4 text-xs font-mono text-slate-500 pt-2">
-            <span>কার্ড নম্বর: <strong id="cardIndexDisplay" class="text-emerald-700">১/১৫</strong></span>
-            <span>ইজিনেস ফ্যাক্টর (EF): <strong id="cardEfDisplay" class="text-emerald-700">২.৫০</strong></span>
-            <span>পুনরাবৃত্তি: <strong id="cardRepDisplay" class="text-amber-700">০</strong></span>
+          <p class="text-sm text-slate-500">প্রশ্ন পড়ে উত্তর মনে করুন, তারপর কার্ডে চাপ দিয়ে মিলিয়ে নিন। যত ভালো মনে থাকবে, তত দেরিতে আবার আসবে।</p>
+          <p id="cardDeckInfo" class="text-sm font-semibold text-emerald-700"></p>
+          <div class="flex justify-center gap-4 text-xs text-slate-500 pt-1">
+            <span>কার্ড: <strong id="cardIndexDisplay" class="text-emerald-700">০/০</strong></span>
+            <span>বর্তমান বিরতি: <strong id="cardEfDisplay" class="text-emerald-700">নতুন</strong></span>
+            <span>পরপর মনে ছিল: <strong id="cardRepDisplay" class="text-amber-700">০</strong> বার</span>
           </div>
         </div>
 
+        <div id="cardEmpty" class="panel empty-state hidden">
+          <div class="empty-ic">🎉</div>
+          <h3>আপাতত কোনো কার্ড নেই</h3>
+          <p class="muted">পরীক্ষা দিলে ভুল প্রশ্ন আর বুকমার্ক করা প্রশ্ন এখানে কার্ড হয়ে আসবে।</p>
+        </div>
+
+        <div id="cardArea" class="space-y-5">
         <!-- 3D Interactive Flip Card -->
         <div class="flip-card h-96 w-full cursor-pointer" onclick="toggleCardFlip(this)" id="mainFlashCard">
           <div class="flip-card-inner rounded-3xl shadow-sm border border-slate-200 bg-white">
@@ -1007,26 +1112,27 @@
 
         <div class="bg-white border border-slate-200 rounded-2xl p-4">
           <label class="block text-xs text-center text-slate-500 font-mono mb-3">
-            আপনার স্মৃতি স্মরণ মান (Quality 0 - 5) রেট করুন:
+            কতটা মনে ছিল?
           </label>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button onclick="rateRecallQuality(1)" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium transition text-center">
-              <span class="block font-bold">ভুলে গেছি (q: 1)</span>
+              <span class="block font-bold">ভুলে গেছি</span>
               <span class="text-[10px] text-rose-700">আগামীকাল আবার আসবে</span>
             </button>
             <button onclick="rateRecallQuality(3)" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium transition text-center">
-              <span class="block font-bold">কষ্টে পেরেছি (q: 3)</span>
-              <span class="text-[10px] text-amber-800">ইন্টারভাল বাড়বে সামান্য</span>
+              <span class="block font-bold">কষ্টে পেরেছি</span>
+              <span class="text-[10px] text-amber-800">শীঘ্রই আবার আসবে</span>
             </button>
             <button onclick="rateRecallQuality(4)" class="px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium transition text-center">
-              <span class="block font-bold">মনে ছিল (q: 4)</span>
-              <span class="text-[10px] text-emerald-700">৬ দিন পর পুনরাবৃত্তি</span>
+              <span class="block font-bold">মনে ছিল</span>
+              <span class="text-[10px] text-emerald-700">কয়েক দিন পর</span>
             </button>
             <button onclick="rateRecallQuality(5)" class="px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium transition text-center">
-              <span class="block font-bold">অনায়াসে মনে আছে (q: 5)</span>
-              <span class="text-[10px] text-emerald-700">দীর্ঘ বিরতি ও আয়ত্ত</span>
+              <span class="block font-bold">খুব সহজ</span>
+              <span class="text-[10px] text-emerald-700">অনেক দিন পর</span>
             </button>
           </div>
+        </div>
         </div>
       </div>
     </section>
@@ -1155,169 +1261,24 @@
     <!-- ===================================================================== -->
     <!-- TAB 9: SMART WEAKNESS TRACKER & ANALYTICS -->
     <!-- ===================================================================== -->
-    <section id="pane-analytics" class="tab-pane hidden space-y-6">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <!-- Negative Penalty Loss Card -->
-        <div class="bg-white border border-rose-200 rounded-2xl p-5 space-y-2">
-          <span class="text-xs font-mono text-rose-700 uppercase tracking-wider block">⚠️ নেগেটিভ মার্কিং লস অ্যালার্ট</span>
-          <div class="text-3xl font-bold font-mono text-slate-900" id="statNegativeLost">৩.৫০</div>
-          <p class="text-xs text-slate-700" id="statNegativeWarning">
-            আপনি বিগত পরীক্ষাগুলোতে অপ্রয়োজনীয় আন্দাজে ৭টি ভুল দাগিয়ে ৩.৫০ নম্বর হারিয়েছেন! প্রিলিমিনারি পাসের জন্য আন্দাজে দাগানো অবিলম্বে কমান।
-          </p>
-        </div>
-
-        <!-- Accuracy Card -->
-        <div class="bg-white border border-emerald-200 rounded-2xl p-5 space-y-2">
-          <span class="text-xs font-mono text-emerald-700 uppercase tracking-wider block">🎯 সার্বিক এক্যুরেসি (Accuracy)</span>
-          <div class="text-3xl font-bold font-mono text-emerald-700" id="statOverallAccuracy">৭৮.৫%</div>
-          <p class="text-xs text-slate-700">
-            ৭৫% এর উপরে এক্যুরেসি থাকলে যেকোনো বিসিএস প্রিলিমিনারিতে কাট-মার্ক নিশ্চিত করা সহজ হয়।
-          </p>
-        </div>
-
-        <!-- Spaced Retention Strength -->
-        <div class="bg-white border border-emerald-200 rounded-2xl p-5 space-y-2">
-          <span class="text-xs font-mono text-emerald-700 uppercase tracking-wider block">🧠 স্মৃতি স্থায়িত্ব (Retention Strength)</span>
-          <div class="text-3xl font-bold font-mono text-emerald-700" id="statRetentionRate">৮২%</div>
-          <p class="text-xs text-slate-700">
-            SM-2 স্পেসড রিপিটেশন অ্যালগরিদম অনুযায়ী আপনার আয়ত্তে থাকা প্রশ্নগুলোর মেমরি রিটেনশন নিরাপদ স্তরে আছে।
-          </p>
-        </div>
+    <section id="pane-analytics" class="tab-pane hidden space-y-4">
+      <div class="page-head">
+        <h2>📊 ফলাফল ও দুর্বলতা</h2>
+        <p>আপনার দেওয়া প্রতিটি পরীক্ষার আসল হিসাব। লাইভ পরীক্ষার মেধা তালিকা দেখতে <a href="/live" class="link">লাইভ পরীক্ষা</a> পেজে যান।</p>
       </div>
-
-      <!-- Subject-wise Weakness Progress Bars -->
-      <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
-        <h3 class="text-base font-bold text-slate-900 flex items-center justify-between">
-          <span>বিষয়ভিত্তিক পারফরম্যান্স ও দুর্বলতা নির্ণয়</span>
-          <span class="text-xs text-slate-500 font-mono">৮টি প্রধান বিষয়</span>
-        </h3>
-
-        <div class="space-y-3 font-sans text-xs" id="subjectAnalyticsBars">
-          <!-- Dynamically populated -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================== -->
-    <!-- TAB 10: REAL-TIME REDIS LEADERBOARD -->
-    <!-- ===================================================================== -->
-    <section id="pane-leaderboard" class="tab-pane hidden space-y-6">
-      <div class="bg-white border border-slate-200 rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h2 class="text-xl font-bold text-slate-900 flex items-center">
-            <span>🏆 লাইভ মেধা তালিকা</span>
-            <span class="ml-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              টাই-ব্রেকার র‌্যাঙ্কিং
-            </span>
-          </h2>
-          <p class="text-sm text-slate-500 mt-1">
-            সমান নম্বরে দ্রুত সময়ে উত্তর প্রদানকারী প্রার্থীকে টাই-ব্রেকিং ফর্মুলার মাধ্যমে উপরে স্থান দেওয়া হয়েছে।
-          </p>
-        </div>
-        <button onclick="refreshLeaderboard()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-mono flex items-center">
-          <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-          রিফ্রেশ
-        </button>
-      </div>
-
-      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-slate-700">
-            <thead class="bg-white text-xs font-mono uppercase text-slate-500 border-b border-slate-200">
-              <tr>
-                <th class="py-3 px-4">মেধা স্থান</th>
-                <th class="py-3 px-4">প্রার্থীর নাম</th>
-                <th class="py-3 px-4 text-center">মোট নম্বর</th>
-                <th class="py-3 px-4 text-center">নেগেটিভ (-)</th>
-                <th class="py-3 px-4 text-center">চূড়ান্ত নেট</th>
-                <th class="py-3 px-4 text-center">ব্যয়িত সময়</th>
-                <th class="py-3 px-4 text-center">টাই-ব্রেকার স্কোর</th>
-                <th class="py-3 px-4 text-center">পারসেন্টাইল</th>
-              </tr>
-            </thead>
-            <tbody id="leaderboardTbody" class="divide-y divide-slate-200/60 font-sans"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================== -->
-    <!-- TAB 11: AI CURRENT AFFAIRS (GEMINI API) -->
-    <!-- ===================================================================== -->
-    <section id="pane-ai" class="tab-pane hidden space-y-6">
-      <div class="bg-white border border-slate-200 rounded-2xl p-6">
-        <h2 class="text-xl font-bold text-slate-900 flex items-center mb-2">
-          <span>📰 সাম্প্রতিক খবর থেকে MCQ</span>
-          <span class="ml-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-            AI দিয়ে তৈরি
-          </span>
-        </h2>
-        <p class="text-sm text-slate-500 mb-6">
-          যেকোনো দৈনিক জাতীয় ও আন্তর্জাতিক ঘটনা বা গেজেট ইনপুট দিন; এআই তাৎক্ষণিকভাবে বিসিএস স্ট্যান্ডার্ড ৪-অপশন MCQ, নির্ভুল ব্যাখ্যা ও মনে রাখার বাংলা ছন্দ তৈরি করবে।
-        </p>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="space-y-4">
-            <div>
-              <label class="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">খবরের শিরোনাম (Headline)</label>
-              <input type="text" id="aiHeadlineInput" value="বাংলাদেশ জাতীয় সংসদে ২০২৬-২৭ অর্থবছরের বাজেট পেশ ও শিক্ষা খাতে সর্বোচ্চ বরাদ্দ" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-emerald-500">
-            </div>
-            <div>
-              <label class="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">মূল ঘটনার বিবরণ (Body / Gazette Details)</label>
-              <textarea id="aiBodyInput" rows="4" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-emerald-500">অর্থ মন্ত্রণালয় কর্তৃক ঘোষিত জাতীয় উন্নয়ন বাজেট ও জিডিপি প্রবৃদ্ধির লক্ষ্যমাত্রা ৭.২% নির্ধারণ করা হয়েছে। মানবসম্পদ উন্নয়নে শিক্ষা ও প্রযুক্তি খাতে মোট জাতীয় বাজেটের ১৫.৮% বরাদ্দ নিশ্চিত করা হয়েছে।</textarea>
-            </div>
-            <div class="flex items-center space-x-3">
-              <select id="aiCategorySelect" class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700">
-                <option value="BANGLADESH_AFFAIRS">বাংলাদেশ বিষয়াবলী</option>
-                <option value="INT_AFFAIRS">আন্তর্জাতিক বিষয়াবলী</option>
-              </select>
-              <button onclick="synthesizeWithAi()" class="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:from-emerald-500 hover:to-slate-50 text-white font-bold text-sm shadow-sm transition flex items-center justify-center">
-                <span>বিসিএস MCQ সিন্থেসিস করুন ✨</span>
-              </button>
-            </div>
-          </div>
-
-          <div id="aiResultCard" class="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-              <span class="text-xs font-mono text-emerald-700">এআই সিন্থেসিস রেডি</span>
-              <span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">BPSC মান: ৯৬%</span>
-            </div>
-            <div>
-              <span class="text-xs text-slate-500 font-mono block mb-1">প্রশ্ন (ক, খ, গ, ঘ):</span>
-              <h4 id="aiGeneratedStem" class="text-base font-bold text-slate-900">
-                বাংলাদেশ সরকারের সর্বশেষ অর্থনৈতিক সমীক্ষা ও রাজস্ব বাজেট অনুযায়ী সর্বোচ্চ খাতওয়ারী বরাদ্দ কোন খাতে দেওয়া হয়েছে?
-              </h4>
-            </div>
-            <div class="grid grid-cols-2 gap-2 text-xs" id="aiGeneratedOptions">
-              <div class="p-2 rounded bg-white text-emerald-700 font-semibold border border-emerald-200">ক) শিক্ষা ও প্রযুক্তি খাত (সঠিক)</div>
-              <div class="p-2 rounded bg-white text-slate-700">খ) পরিবহন ও যোগাযোগ অবকাঠামো খাত</div>
-              <div class="p-2 rounded bg-white text-slate-700">গ) স্বাস্থ্য ও পরিবার কল্যাণ খাত</div>
-              <div class="p-2 rounded bg-white text-slate-700">ঘ) কৃষি ও পল্লি উন্নয়ন খাত</div>
-            </div>
-            <div class="bg-white p-3 rounded-lg border border-slate-200 text-xs space-y-1">
-              <strong class="text-emerald-700 block">🎶 বাংলা ছন্দ ও টেকনিক:</strong>
-              <p id="aiGeneratedMnemonic" class="text-slate-700 italic">"শিক্ষা প্রযুক্তি সবার আগে, দেশের বাজেট শীর্ষে জাগে"</p>
-            </div>
-            <div class="text-xs text-slate-500">
-              <strong class="text-slate-700">বিস্তারিত ব্যাখ্যা: </strong>
-              <span id="aiGeneratedExplanation">বিসিএস প্রিলিমিনারি বাংলাদেশ বিষয়াবলীতে বাজেট ও বার্ষিক উন্নয়ন কর্মসূচির (ADP) সর্বোচ্চ বরাদ্দপ্রাপ্ত খাত একটি স্থায়ী গুরুত্বপূর্ণ প্রশ্ন।</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div id="resultsBody" class="space-y-4"></div>
     </section>
 
     <!-- ===================================================================== -->
     <!-- TAB 12: BOOKMARKS / SAVED QUESTIONS -->
     <!-- ===================================================================== -->
-    <section id="pane-bookmarks" class="tab-pane hidden space-y-6">
-      <div class="bg-white border border-amber-200 rounded-2xl p-6">
-        <h2 class="text-xl font-bold text-slate-900 flex items-center">
-          <span>⭐ বুকমার্ক করা প্রশ্ন</span>
-        </h2>
-        <p class="text-sm text-slate-700 mt-1">
-          কঠিন, বিভ্রান্তিকর বা গুরুত্বপূর্ণ যেসব প্রশ্ন আপনি স্টার মার্ক করে রেখেছেন, পরীক্ষার আগের রাতে রিভিশনের জন্য এখানে সংরক্ষিত রয়েছে।
-        </p>
+    <section id="pane-bookmarks" class="tab-pane hidden space-y-4">
+      <div class="panel flex flex-wrap items-start justify-between gap-3">
+        <div class="page-head">
+          <h2>⭐ বুকমার্ক করা প্রশ্ন</h2>
+          <p>কঠিন বা গুরুত্বপূর্ণ প্রশ্নগুলো, পরীক্ষার আগের রাতে রিভিশনের জন্য।</p>
+        </div>
+        <button type="button" id="bookmarkExamBtn" onclick="Study.practiceBookmarks()" class="btn btn-primary hidden">এগুলো দিয়ে পরীক্ষা দিন →</button>
       </div>
 
       <div id="bookmarkItemsFeed" class="space-y-4"></div>
@@ -1372,10 +1333,10 @@
 
   <!-- Mobile bottom navigation (most used sections) -->
   <nav class="bottom-nav lg-hide" aria-label="দ্রুত মেনু">
+    <button type="button" data-tab="home" onclick="switchTab('home')"><span>🏠</span><span>আজ</span></button>
     <button type="button" data-tab="exam" onclick="switchTab('exam')"><span>📝</span><span>মডেল টেস্ট</span></button>
     <button type="button" data-tab="past-bank" onclick="switchTab('past-bank')"><span>📚</span><span>প্রশ্নব্যাংক</span></button>
     <button type="button" data-tab="mistakes" onclick="switchTab('mistakes')"><span>📕</span><span>ভুল খাতা</span></button>
-    <button type="button" data-tab="flashcards" onclick="switchTab('flashcards')"><span>🧠</span><span>ফ্ল্যাশকার্ড</span></button>
     <button type="button" onclick="toggleSideNav(true)"><span>☰</span><span>আরও</span></button>
   </nav>
 
@@ -1389,7 +1350,7 @@
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         </div>
         <h3 class="text-xl font-bold text-slate-900">পরীক্ষার ফলাফল রিপোর্ট</h3>
-        <p class="text-xs text-slate-500 font-mono" id="modalExamSubtitle">৪৭তম বিসিএস প্রিলিমিনারি মডেল টেস্ট</p>
+        <p class="text-sm text-slate-500" id="modalExamSubtitle"></p>
       </div>
 
       <div class="grid grid-cols-3 gap-3 text-center">
@@ -1408,22 +1369,25 @@
       </div>
 
       <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-center space-y-1">
-        <span class="text-xs text-emerald-700 font-mono">টাই-ব্রেকার রেটিং ও সম্ভাব্য অবস্থান</span>
-        <div class="text-lg font-bold font-mono text-emerald-700" id="modalTieBreaker">Score: 0.000000</div>
-        <div class="text-xs text-slate-700" id="modalRankText">মেধাতালিকায় স্থান: ১ম (শীর্ষ ৯৯.৯%)</div>
+        <span class="text-xs text-emerald-700">আপনার অবস্থান</span>
+        <div class="text-base font-bold text-emerald-700" id="modalTieBreaker"></div>
+        <div class="text-sm text-slate-700 space-y-1" id="modalRankText"></div>
       </div>
 
       <!-- 🎲 50:50 Guess Elimination Profit/Loss Analysis -->
       <div id="modalGuessAnalysisBox" class="bg-white border border-amber-500 rounded-2xl p-3.5 text-xs space-y-1 text-slate-800">
-        <div class="font-bold text-amber-800">🎲 50:50 এলিমিনেশন ও গেস-কন্ট্রোল বিশ্লেষণ:</div>
-        <div id="modalGuessSummaryText" class="text-slate-700">আপনি এই পরীক্ষায় কোনো প্রশ্ন 50:50 গেস হিসেবে চিহ্নিত করেননি।</div>
+        <div class="font-bold text-amber-800">🎲 অনুমান ও নেগেটিভ মার্কিং:</div>
+        <div id="modalGuessSummaryText" class="text-slate-700">আপনি এই পরীক্ষায় কোনো প্রশ্ন 50:50 গেস হিসেবে চিহ্নিত করেননি।</div>
       </div>
 
       <div class="space-y-2">
-        <button onclick="viewMistakesAfterExam()" class="w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm shadow-sm transition">
-          📕 ভুল হওয়া প্রশ্নগুলো ভুল খাতায় দেখুন →
+        <button type="button" onclick="reviewAfterExam()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition">
+          ✓ উত্তর ও ব্যাখ্যা মিলিয়ে দেখুন
         </button>
-        <button onclick="closeModal()" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-medium">
+        <button type="button" id="modalMistakesBtn" onclick="viewMistakesAfterExam()" class="w-full py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-sm transition">
+          📕 ভুলগুলো ভুল খাতায় জমা হয়েছে, দেখুন →
+        </button>
+        <button type="button" onclick="closeModal()" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-medium">
           বন্ধ করুন
         </button>
       </div>
@@ -1445,18 +1409,19 @@
       <div class="space-y-2 text-xs">
         <label class="block font-semibold text-slate-700">রিপোর্টের ধরণ:</label>
         <select id="reportReasonSelect" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800">
-          <option value="PSC_CONFLICT">পিএসসির অফিশিয়াল উত্তর বনাম প্রচলিত উত্তরে মতভেদ</option>
+          <option value="WRONG_ANSWER">দেওয়া উত্তরটি ভুল</option>
+          <option value="PSC_CONFLICT">পিএসসির অফিশিয়াল উত্তর বনাম প্রচলিত উত্তরে মতভেদ</option>
           <option value="TYPO">টাইপিং বা বানানের ভুল</option>
-          <option value="OUTDATED_DATA">তথ্য হালনাগাদ হয়নি (পরিবর্তিত তথ্য)</option>
-          <option value="WRONG_EXPLANATION">ব্যাখ্যায় ভুল তথ্য রয়েছে</option>
+          <option value="OUTDATED_DATA">তথ্য হালনাগাদ হয়নি (পরিবর্তিত তথ্য)</option>
+          <option value="WRONG_EXPLANATION">ব্যাখ্যায় ভুল তথ্য রয়েছে</option>
         </select>
 
         <label class="block font-semibold text-slate-700 pt-2">আপনার মন্তব্য / প্রমাণিক রেফারেন্স:</label>
-        <textarea id="reportCommentInput" rows="3" placeholder="যেমন: ৯-১০ শ্রেণির ব্যাকরণ বইয়ের ৪২ পৃষ্ঠা অনুযায়ী..." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-800"></textarea>
+        <textarea id="reportCommentInput" rows="3" placeholder="যেমন: ৯-১০ শ্রেণির ব্যাকরণ বইয়ের ৪২ পৃষ্ঠা অনুযায়ী..." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-800"></textarea>
       </div>
 
       <div class="flex space-x-2 pt-2">
-        <button onclick="submitQuestionReport()" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs">
+        <button id="reportSubmitBtn" onclick="submitQuestionReport()" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs">
           রিপোর্ট জমা দিন
         </button>
         <button onclick="closeReportModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs">
@@ -1467,6 +1432,8 @@
   </div>
 
   <script src="/seed-data.js"></script>
+  <script src="/progress-core.js"></script>
+  <script src="/study.js"></script>
   <script src="/account.js"></script>
   <script src="/app.js"></script>
 </body>
