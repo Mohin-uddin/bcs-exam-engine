@@ -342,6 +342,28 @@ async function serverTests() {
       assert.equal(login.status, 200);
     });
 
+    await test('admission portal: page loads, every set has its questions, practice questions never claim a past exam', async () => {
+      const page = await fetch(base + '/admission');
+      assert.equal(page.status, 200);
+      assert.match(await page.text(), /admission\.js/);
+      const seed = require('../src/web/seed-data');
+      const ids = new Set(seed.sampleQuestions.map(q => q.id));
+      const sets = seed.availableExams.filter(e => e.examTrack === 'ADMISSION');
+      assert.ok(sets.length >= 12, 'unit model tests + subject sets');
+      for (const unit of ['SCIENCE', 'HUMANITIES', 'BUSINESS', 'PRIVATE']) assert.ok(sets.some(e => e.unitType === unit), unit);
+      for (const e of sets) {
+        assert.equal(e.questionIds.length, e.questionCount, e.id);
+        assert.equal(new Set(e.questionIds).size, e.questionIds.length, `${e.id} repeats a question`);
+        e.questionIds.forEach(id => assert.ok(ids.has(id), `${e.id}: ${id}`));
+      }
+      seed.sampleQuestions.filter(q => q.examTrack === 'ADMISSION').forEach(q => {
+        if (q.isVerifiedPast) return;
+        assert.equal(q.previousExams.length, 0, q.id);
+        assert.match(q.reference, /আসল প্রশ্ন নয়/, q.id);
+      });
+      assert.ok(!seed.superHotQuestionIds.some(id => id.startsWith('adm_')), 'admission questions stay out of the job-exam hard sets');
+    });
+
     await test('pages and the question bundle are sent gzipped', async () => {
       for (const url of ['/', '/app.css', '/app.js', '/seed-data.js']) {
         const res = await fetch(base + url, { headers: { 'Accept-Encoding': 'gzip' } });
