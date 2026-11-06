@@ -281,7 +281,7 @@
 
     const html = `
       <h3>🔒 ${exam ? esc(exam.title) : 'প্রিমিয়াম সেট'}</h3>
-      <div class="acc-sub">ফ্রিতে প্রতিটি পরীক্ষার ধরনে ${bn(config.freePerGroup)}টি মডেল সেট ও ${bn(config.freePerGroup)}টি বিগত সালের প্রশ্ন খোলা। প্রিমিয়ামে সব মডেল টেস্ট, সব বিগত প্রশ্ন, সুপার-হট সেট ও প্রিন্ট করার সুবিধা সব খুলে যাবে।</div>
+      <div class="acc-sub">ফ্রিতে প্রতিটি পরীক্ষার ধরনে ${bn(config.freePerGroup)}টি মডেল সেট ও ${bn(config.freePerGroup)}টি বিগত পরীক্ষার ধাঁচে প্রশ্ন খোলা। প্রিমিয়ামে সব মডেল টেস্ট, বিগত পরীক্ষার ধাঁচে সব সেট, কঠিন প্রশ্নের সেট ও প্রিন্ট করার সুবিধা সব খুলে যাবে।</div>
       ${pending.length ? `<div class="acc-ok">⏳ আপনার ${bn(pending.length)}টি পেমেন্ট যাচাই হচ্ছে (TrxID: ${pending.map(p => esc(p.trxId)).join(', ')})। অনুমোদন হলেই সব সেট খুলে যাবে, এই পেজ খোলা থাকলে নিজে থেকেই জানানো হবে।</div>` : ''}
       <div class="app-unlock-note acc-warn">আনলক করতে ওয়েবসাইটে একই মোবাইল নম্বর দিয়ে লগইন করুন। পেমেন্টের পর অ্যাপেও সব সেট খুলে যাবে।</div>
       <div class="acc-pay" data-payment>
@@ -478,7 +478,7 @@
         <tbody>
           <tr><td>সব ফিচার ঘুরে দেখা</td><td>✅</td><td>✅</td><td class="hl">✅</td></tr>
           <tr><td>প্রতি বিভাগে কয়েকটি ফ্রি সেট</td><td>✅</td><td>✅</td><td class="hl">✅</td></tr>
-          <tr><td>সব মডেল টেস্ট ও বিগত প্রশ্ন</td><td>—</td><td>✅</td><td class="hl">✅</td></tr>
+          <tr><td>সব মডেল টেস্ট ও পরীক্ষাভিত্তিক সেট</td><td>—</td><td>✅</td><td class="hl">✅</td></tr>
           <tr><td>ছাপানো প্রশ্নসেট বাসায়</td><td>—</td><td>✅</td><td class="hl">✅</td></tr>
           <tr><td>প্রশ্নসেট ডাউনলোড ও প্রিন্ট</td><td>—</td><td>—</td><td class="hl">✅</td></tr>
         </tbody>
@@ -843,7 +843,7 @@
       return;
     }
     if (access.premium) {
-      modal(`<h3>🎉 পেমেন্ট সফল, প্রিমিয়াম চালু হয়েছে</h3><div class="acc-ok">সব মডেল টেস্ট, বিগত প্রশ্ন ও সুপার-হট সেট এখন খোলা।${me && me.premiumUntil ? ` মেয়াদ: ${fmtDate(me.premiumUntil)} পর্যন্ত।` : ''}</div>
+      modal(`<h3>🎉 পেমেন্ট সফল, প্রিমিয়াম চালু হয়েছে</h3><div class="acc-ok">সব মডেল টেস্ট, পরীক্ষাভিত্তিক সেট ও কঠিন প্রশ্নের সেট এখন খোলা।${me && me.premiumUntil ? ` মেয়াদ: ${fmtDate(me.premiumUntil)} পর্যন্ত।` : ''}</div>
         <button type="button" class="acc-btn acc-x" style="position:static">শুরু করুন</button>`);
       return;
     }

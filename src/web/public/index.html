@@ -769,7 +769,7 @@
       <div class="nav-group">
         <div class="nav-group-title">পরীক্ষা দিন</div>
         <button type="button" onclick="switchTab('exam')" id="tab-exam" data-title="মডেল টেস্ট" class="tab-btn nav-item"><span class="nav-ic">📝</span><span>মডেল টেস্ট</span></button>
-        <button type="button" onclick="switchTab('past-bank')" id="tab-past-bank" data-title="বিগত সালের প্রশ্ন" class="tab-btn nav-item"><span class="nav-ic">📚</span><span>বিগত সালের প্রশ্ন</span></button>
+        <button type="button" onclick="switchTab('past-bank')" id="tab-past-bank" data-title="বিগত পরীক্ষার ধাঁচে প্রশ্ন" class="tab-btn nav-item"><span class="nav-ic">📚</span><span>বিগত পরীক্ষার ধাঁচে প্রশ্ন</span></button>
         <button type="button" onclick="switchTab('custom-quiz')" id="tab-custom-quiz" data-title="নিজের মতো অনুশীলন" class="tab-btn nav-item"><span class="nav-ic">🎯</span><span>নিজের মতো অনুশীলন</span></button>
         <a href="/live" class="nav-item"><span class="nav-ic">🏆</span><span>লাইভ পরীক্ষা ও মেধা তালিকা</span></a>
       </div>
@@ -779,7 +779,7 @@
         <button type="button" onclick="switchTab('mistakes')" id="tab-mistakes" data-title="ভুল খাতা" class="tab-btn nav-item"><span class="nav-ic">📕</span><span>ভুল খাতা</span><span id="mistakeBadge" class="nav-badge">০</span></button>
         <button type="button" onclick="switchTab('flashcards')" id="tab-flashcards" data-title="ফ্ল্যাশকার্ড" class="tab-btn nav-item"><span class="nav-ic">🧠</span><span>ফ্ল্যাশকার্ড</span></button>
         <button type="button" onclick="switchTab('bookmarks')" id="tab-bookmarks" data-title="বুকমার্ক" class="tab-btn nav-item"><span class="nav-ic">⭐</span><span>বুকমার্ক</span><span id="headerBookmarkCount" class="nav-badge">০</span></button>
-        <button type="button" onclick="switchTab('confusing-hot')" id="tab-confusing-hot" data-title="কনফিউজিং ও কমন প্রশ্ন" class="tab-btn nav-item"><span class="nav-ic">🔥</span><span>কনফিউজিং ও কমন প্রশ্ন</span></button>
+        <button type="button" onclick="switchTab('confusing-hot')" id="tab-confusing-hot" data-title="কনফিউজিং ও কঠিন প্রশ্ন" class="tab-btn nav-item"><span class="nav-ic">🔥</span><span>কনফিউজিং ও কঠিন প্রশ্ন</span></button>
         <button type="button" onclick="switchTab('master-toolkit')" id="tab-master-toolkit" data-title="শর্টকাট, ভাইভা ও রুটিন" class="tab-btn nav-item"><span class="nav-ic">🧮</span><span>শর্টকাট, ভাইভা ও রুটিন</span></button>
       </div>
 
@@ -836,7 +836,7 @@
       <div id="examTrackBanner" class="panel space-y-4">
         <div>
           <span class="section-label">২. একটি প্রশ্নসেট বেছে নিন</span>
-          <h2 id="examTrackHeading" class="text-lg font-bold text-slate-900 leading-snug">বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) হুবহু প্রশ্নপত্র ও উত্তরপত্র অনুশীলন কেন্দ্র</h2>
+          <h2 id="examTrackHeading" class="text-lg font-bold text-slate-900 leading-snug">বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) প্রশ্নপত্রের ফরম্যাটে অনুশীলন কেন্দ্র</h2>
           <p id="examTrackBadge" class="text-sm text-slate-500 mt-0.5">বিসিএস স্ট্যান্ডার্ড • ১,৫৪০টি ১০০% ইউনিক প্রশ্ন</p>
         </div>
 
@@ -879,7 +879,7 @@
           <div>
             <span class="section-label !mb-1">প্রশ্ন দেখার ধরন</span>
             <div class="inline-flex rounded-lg bg-slate-100 p-0.5 text-sm">
-              <button onclick="setPaperDisplayMode('BOOKLET')" id="btnModeBooklet" class="px-3 py-1 rounded-md bg-emerald-600 text-white font-bold transition">📄 আসল প্রশ্নপত্র</button>
+              <button onclick="setPaperDisplayMode('BOOKLET')" id="btnModeBooklet" class="px-3 py-1 rounded-md bg-emerald-600 text-white font-bold transition">📄 প্রশ্নপত্র ফরম্যাট</button>
               <button onclick="setPaperDisplayMode('CARD')" id="btnModeCard" class="px-3 py-1 rounded-md text-slate-700 hover:text-slate-900 transition">📱 কার্ড</button>
             </div>
           </div>
@@ -991,12 +991,12 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 2: PAST YEAR QUESTION BANK (বিগত সালের প্রশ্নব্যাংক — বিসিএস ও প্রাইমারি আলাদা) -->
+    <!-- TAB 2: PAST YEAR QUESTION BANK (বিগত পরীক্ষার ধাঁচে প্রশ্নব্যাংক — বিসিএস ও প্রাইমারি আলাদা) -->
     <!-- ===================================================================== -->
     <section id="pane-past-bank" class="cg-protect tab-pane hidden space-y-4">
       <div class="panel space-y-4">
         <div>
-          <span class="section-label">১. কোন পরীক্ষার বিগত প্রশ্ন দেখবেন?</span>
+          <span class="section-label">১. কোন পরীক্ষার ধাঁচে প্রশ্ন দেখবেন?</span>
           <div class="chip-row">
             <button onclick="setPastBankTrack('BCS')" id="btnPastTrackBCS" class="chip chip-active">🏛️ বিসিএস <span class="chip-meta">৪৬–২৭তম</span></button>
             <button onclick="setPastBankTrack('PRIMARY')" id="btnPastTrackPRIMARY" class="chip">🏫 প্রাথমিক শিক্ষক <span class="chip-meta">২০১২–২৪</span></button>
@@ -1010,12 +1010,12 @@
 
         <div class="pt-3 border-t border-slate-200">
           <h2 class="text-lg font-bold text-slate-900 leading-snug">
-            <span id="pastBankMainHeading">📚 বিগত ২০ বিসিএস প্রশ্নব্যাংক ও বোর্ড বই ড্রিল</span>
+            <span id="pastBankMainHeading">📚 বিগত ২০ বিসিএসের ধাঁচে প্রশ্নব্যাংক ও বোর্ড বই ড্রিল</span>
           </h2>
           <p class="text-sm text-slate-500 mt-0.5">
             <span id="pastBankSubBadge" class="font-medium text-emerald-700">২৭তম - ৪৬তম বিসিএস • ৬০০ ইউনিক প্রশ্ন</span>
             <span class="mx-1">•</span>
-            <span id="pastBankDescText">বছরভিত্তিক পূর্ণাঙ্গ আর্কাইভ দেখুন অথবা সরাসরি হুবহু ২-কলাম প্রশ্নপত্রে পরীক্ষা দিন। প্রতিটি প্রশ্নে রয়েছে নির্ভুল ব্যাখ্যা ও শর্টকাট।</span>
+            <span id="pastBankDescText">বছরভিত্তিক পূর্ণাঙ্গ আর্কাইভ দেখুন অথবা সরাসরি পরীক্ষার মতো ২-কলাম প্রশ্নপত্রে পরীক্ষা দিন। প্রতিটি প্রশ্নে রয়েছে নির্ভুল ব্যাখ্যা ও শর্টকাট।</span>
           </p>
         </div>
 
@@ -1026,7 +1026,7 @@
             <button onclick="setPastBankMode('TOPIC')" id="btnModeTopic" class="px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-900">বিষয় অনুযায়ী</button>
           </div>
           <div class="inline-flex rounded-lg bg-slate-100 p-0.5 text-sm">
-            <button onclick="setPastBankDisplayMode('BOOKLET')" id="btnPastDisplayBooklet" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold">📄 আসল প্রশ্নপত্র</button>
+            <button onclick="setPastBankDisplayMode('BOOKLET')" id="btnPastDisplayBooklet" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold">📄 প্রশ্নপত্র ফরম্যাট</button>
             <button onclick="setPastBankDisplayMode('CARD')" id="btnPastDisplayCard" class="px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-900">📱 কার্ড</button>
           </div>
           <button onclick="togglePastBankAnswerKey()" id="btnPastShowAnswers" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-400 text-amber-800 text-sm font-bold transition">
@@ -1485,13 +1485,13 @@
     <section id="pane-confusing-hot" class="cg-protect tab-pane hidden space-y-4">
       <div class="panel">
         <div class="page-head">
-          <h2>🔥 কনফিউজিং পেয়ার ও বারবার আসা কমন প্রশ্ন</h2>
-          <p>কাছাকাছি নামের তথ্যগুলো (যেমন: <em>সঞ্চিতা বনাম সঞ্চয়িতা</em>, <em>অনুচ্ছেদ ২৭ বনাম ২৮</em>) পাশাপাশি মিলিয়ে শিখুন, আর বিভিন্ন পরীক্ষায় ১০+ বার আসা প্রশ্নগুলো অনুশীলন করুন।</p>
+          <h2>🔥 কনফিউজিং পেয়ার ও বাছাই করা কঠিন প্রশ্ন</h2>
+          <p>কাছাকাছি নামের তথ্যগুলো (যেমন: <em>সঞ্চিতা বনাম সঞ্চয়িতা</em>, <em>অনুচ্ছেদ ২৭ বনাম ২৮</em>) পাশাপাশি মিলিয়ে শিখুন, আর বাছাই করা কঠিন ও ট্রিকি প্রশ্নগুলো অনুশীলন করুন।</p>
         </div>
 
         <div class="seg-row mt-3">
           <button onclick="setConfusingHotSubView('PAIRS')" id="btnSubViewPairs" class="seg seg-active">⚡ কনফিউজিং পেয়ার ও ট্র্যাপ কুইজ</button>
-          <button onclick="setConfusingHotSubView('SUPER_HOT')" id="btnSubViewSuperHot" class="seg">🔥 সুপার-হট ২০০ প্রশ্ন</button>
+          <button onclick="setConfusingHotSubView('SUPER_HOT')" id="btnSubViewSuperHot" class="seg">🔥 কঠিন ২০০ প্রশ্ন</button>
           <button onclick="launchSuperHot100Exam()" class="ml-auto self-center px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition">📝 এই ২০০ প্রশ্নে পরীক্ষা দিন →</button>
         </div>
         <!-- Subject Filter Pills -->

@@ -144,8 +144,8 @@ function selectExamTrack(track) {
 
   if (track === 'BCS') {
     if (badge) badge.textContent = 'বিসিএস স্ট্যান্ডার্ড • ১,৫৪০টি ১০০% ইউনিক প্রশ্ন (BPSC • ৬টি সম্পূর্ণ স্বতন্ত্র ২০০-মার্কস সেট + ৪টি ক্যাডার স্পেশাল চ্যালেঞ্জ সেট = ১০টি বিসিএস পূর্ণাঙ্গ মডেল সেট)';
-    if (heading) heading.textContent = 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) হুবহু প্রশ্নপত্র ও উত্তরপত্র অনুশীলন কেন্দ্র';
-    if (dropLabel) dropLabel.textContent = 'বিসিএস ১০টি পূর্ণাঙ্গ মডেল সেট, ১০টি বিষয়ভিত্তিক মাস্টার সেট ও বিগত ২০ বিসিএস নির্বাচন করুন:';
+    if (heading) heading.textContent = 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) প্রশ্নপত্রের ফরম্যাটে অনুশীলন কেন্দ্র';
+    if (dropLabel) dropLabel.textContent = 'বিসিএস ১০টি পূর্ণাঙ্গ মডেল সেট, ১০টি বিষয়ভিত্তিক মাস্টার সেট ও বিগত ২০ বিসিএসের ধাঁচে নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
         <button onclick="selectQuickPracticeSet('PRACTICE_SET_1')" id="btnQuickSet1" class="chip">
@@ -175,9 +175,9 @@ function selectExamTrack(track) {
       `;
     }
   } else if (track === 'PRIMARY') {
-    if (badge) badge.textContent = 'প্রাথমিক শিক্ষা অধিদপ্তর (DPE) • ১০টি নতুন মডেল সেট (পদ্মা–চিত্রা) + বিগত সালের ১৬টি ধাপের প্রশ্নব্যাংক';
-    if (heading) heading.textContent = 'সরকারি প্রাথমিক বিদ্যালয় সহকারী শিক্ষক নিয়োগ পরীক্ষা (হুবহু DPE প্রশ্নপত্র ও উত্তরপত্র)';
-    if (dropLabel) dropLabel.textContent = 'প্রাথমিক বিদ্যালয় শিক্ষক নিয়োগ ১০টি মডেল সেট ও বিগত সালের সকল ধাপ নির্বাচন করুন:';
+    if (badge) badge.textContent = 'প্রাথমিক শিক্ষা অধিদপ্তর (DPE) • ১০টি নতুন মডেল সেট (পদ্মা–চিত্রা) + বিগত পরীক্ষার ধাঁচে ১৬টি ধাপের প্রশ্নব্যাংক';
+    if (heading) heading.textContent = 'সরকারি প্রাথমিক বিদ্যালয় সহকারী শিক্ষক নিয়োগ পরীক্ষা (DPE প্রশ্নপত্রের ফরম্যাটে)';
+    if (dropLabel) dropLabel.textContent = 'প্রাথমিক বিদ্যালয় শিক্ষক নিয়োগ ১০টি মডেল সেট ও বিগত পরীক্ষার ধাঁচে সকল ধাপ নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
         <button onclick="selectQuickPracticeSet('PRI_PRACTICE_1')" id="btnQuickPri1" class="chip">
@@ -204,7 +204,7 @@ function selectExamTrack(track) {
       `;
     }
   } else if (track === 'NTRCA') {
-    if (badge) badge.textContent = 'বেসরকারি শিক্ষক নিবন্ধন ও প্রত্যয়ন কর্তৃপক্ষ (NTRCA) • ১০টি স্পেশাল মডেল সেট + বিগত সালের সেট';
+    if (badge) badge.textContent = 'বেসরকারি শিক্ষক নিবন্ধন ও প্রত্যয়ন কর্তৃপক্ষ (NTRCA) • ১০টি স্পেশাল মডেল সেট + বিগত পরীক্ষার ধাঁচে সেট';
     if (heading) heading.textContent = 'এনটিআরসিএ (NTRCA) স্কুল ও কলেজ পর্যায় প্রিলিমিনারি প্রশ্নপত্র ও উত্তরপত্র (১০০ নম্বর • পাস মার্ক ৪০)';
     if (dropLabel) dropLabel.textContent = 'শিক্ষক নিবন্ধন ১০টি নতুন মডেল টেস্ট (Hard & Medium) ও ১৪তম–১৮তম নিবন্ধন সেট নির্বাচন করুন:';
     if (quickContainer) {
@@ -230,9 +230,9 @@ function selectExamTrack(track) {
       `;
     }
   } else if (track === 'BANK') {
-    if (badge) badge.textContent = 'বাংলাদেশ ব্যাংক ও ব্যাংকার্স সিলেকশন কমিটি (BSC) • ১০টি স্পেশাল মডেল সেট + বিগত সালের সেট';
+    if (badge) badge.textContent = 'বাংলাদেশ ব্যাংক ও ব্যাংকার্স সিলেকশন কমিটি (BSC) • ১০টি স্পেশাল মডেল সেট + বিগত পরীক্ষার ধাঁচে সেট';
     if (heading) heading.textContent = 'বাংলাদেশ ব্যাংক AD এবং সমন্বিত ৮/৯/১০ ব্যাংক অফিসার (জেনারেল ও ক্যাশ) প্রশ্নপত্র ও উত্তরপত্র';
-    if (dropLabel) dropLabel.textContent = 'ব্যাংক নিয়োগ ১০টি নতুন মডেল টেস্ট (Hard & Analytical) ও বিগত সালের প্রশ্নসেট নির্বাচন করুন:';
+    if (dropLabel) dropLabel.textContent = 'ব্যাংক নিয়োগ ১০টি নতুন মডেল টেস্ট (Hard & Analytical) ও বিগত পরীক্ষার ধাঁচে প্রশ্নসেট নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
         <button onclick="selectQuickPracticeSet('BANK_MODEL_1')" class="chip">
@@ -256,9 +256,9 @@ function selectExamTrack(track) {
       `;
     }
   } else if (track === 'MINISTRY') {
-    if (badge) badge.textContent = 'খাদ্য অধিদপ্তর, অডিটর (CGA), রেলওয়ে, সমাজসেবা ও এলজিইডি • ১০টি নতুন মডেল সেট + বিগত সালের সেট';
-    if (heading) heading.textContent = 'মন্ত্রণালয় ও অধিদপ্তরের মেগা নিয়োগ পরীক্ষা (হুবহু প্রশ্নপত্র ও উত্তরপত্র)';
-    if (dropLabel) dropLabel.textContent = 'খাদ্য অধিদপ্তর, অডিটর, রেলওয়ে ও অন্যান্য অধিদপ্তর ১০টি নতুন মডেল ও বিগত প্রশ্নসেট নির্বাচন করুন:';
+    if (badge) badge.textContent = 'খাদ্য অধিদপ্তর, অডিটর (CGA), রেলওয়ে, সমাজসেবা ও এলজিইডি • ১০টি নতুন মডেল সেট + বিগত পরীক্ষার ধাঁচে সেট';
+    if (heading) heading.textContent = 'মন্ত্রণালয় ও অধিদপ্তরের মেগা নিয়োগ পরীক্ষা (প্রশ্নপত্রের ফরম্যাটে)';
+    if (dropLabel) dropLabel.textContent = 'খাদ্য অধিদপ্তর, অডিটর, রেলওয়ে ও অন্যান্য অধিদপ্তর ১০টি নতুন মডেল ও বিগত পরীক্ষার ধাঁচে সেট নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
         <button onclick="selectQuickPracticeSet('MINISTRY_MODEL_1')" class="chip">
@@ -282,9 +282,9 @@ function selectExamTrack(track) {
       `;
     }
   } else if (track === 'NON_CADRE') {
-    if (badge) badge.textContent = 'পিএসসি নন-ক্যাডার (৯ম–১০ম গ্রেড) ও দুদক • ১০টি নতুন মডেল সেট + বিগত সালের সেট';
+    if (badge) badge.textContent = 'পিএসসি নন-ক্যাডার (৯ম–১০ম গ্রেড) ও দুদক • ১০টি নতুন মডেল সেট + বিগত পরীক্ষার ধাঁচে সেট';
     if (heading) heading.textContent = 'সিনিয়র স্টাফ নার্স, এটিইও (ATEO), সাব-রেজিস্ট্রার, তহশিলদার ও দুদক নিয়োগ পরীক্ষা';
-    if (dropLabel) dropLabel.textContent = 'পিএসসি নন-ক্যাডার ও দুদক ১০টি নতুন মডেল টেস্ট (Hard & Medium) ও বিগত সেট নির্বাচন করুন:';
+    if (dropLabel) dropLabel.textContent = 'পিএসসি নন-ক্যাডার ও দুদক ১০টি নতুন মডেল টেস্ট (Hard & Medium) ও বিগত পরীক্ষার ধাঁচে সেট নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
         <button onclick="selectQuickPracticeSet('NON_CADRE_MODEL_1')" class="chip">
@@ -308,9 +308,9 @@ function selectExamTrack(track) {
       `;
     }
   } else if (track === 'NURSING') {
-    if (badge) badge.textContent = 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) ও নার্সিং অধিদপ্তর • ১০টি স্পেশাল মডেল সেট + বিগত সালের প্রশ্নব্যাংক';
+    if (badge) badge.textContent = 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) ও নার্সিং অধিদপ্তর • ১০টি স্পেশাল মডেল সেট + বিগত পরীক্ষার ধাঁচে প্রশ্নব্যাংক';
     if (heading) heading.textContent = 'সিনিয়র স্টাফ নার্স (১০ম গ্রেড) ও মিডওয়াইফারি নিয়োগ পরীক্ষা (৬০ প্রফেশনাল বিজ্ঞান + ৪০ সাধারণ • BPSC প্যাটার্ন)';
-    if (dropLabel) dropLabel.textContent = 'সিনিয়র স্টাফ নার্স ও মিডওয়াইফ ১০টি মডেল টেস্ট (Clinical & Midwifery) ও বিগত সালের সেট নির্বাচন করুন:';
+    if (dropLabel) dropLabel.textContent = 'সিনিয়র স্টাফ নার্স ও মিডওয়াইফ ১০টি মডেল টেস্ট (Clinical & Midwifery) ও বিগত পরীক্ষার ধাঁচে সেট নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
         <button onclick="selectQuickPracticeSet('NURSE_MODEL_1')" class="chip">
@@ -354,7 +354,7 @@ function populateExamDropdown() {
     const superHotSets = availableExamPacks.filter(e => e.id === 'SUPER_HOT_200_SET' || e.id === 'SUPER_HOT_100_SET');
     const bcsSets = availableExamPacks.filter(e => e.examTrack === 'BCS' && e.id.startsWith('BCS_'));
     if (practiceModels.length > 0 || superHotSets.length > 0) {
-      html += `<optgroup label="🌟 বিসিএস পূর্ণাঙ্গ ২০০-মার্কস অনুশীলন সেট (সেট ১–৮) ও সুপার-হট কমন">`;
+      html += `<optgroup label="🌟 বিসিএস পূর্ণাঙ্গ ২০০-মার্কস অনুশীলন সেট (সেট ১–৮) ও বাছাই কঠিন প্রশ্ন">`;
       html += [...practiceModels, ...superHotSets].map(e => `<option value="${e.id}">${e.title}</option>`).join('');
       html += `</optgroup>`;
     }
@@ -364,7 +364,7 @@ function populateExamDropdown() {
       html += `</optgroup>`;
     }
     if (bcsSets.length > 0) {
-      html += `<optgroup label="🏛️ বিগত ২০ বিসিএস আর্কাইভ সেট (৪৬তম - ২৭তম)">`;
+      html += `<optgroup label="🏛️ বিগত ২০ বিসিএসের ধাঁচে আর্কাইভ সেট (৪৬তম - ২৭তম)">`;
       html += bcsSets.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
       html += `</optgroup>`;
     }
@@ -377,7 +377,7 @@ function populateExamDropdown() {
       html += `</optgroup>`;
     }
     if (priPast.length > 0) {
-      html += `<optgroup label="🏫 বিগত সালের প্রাথমিক শিক্ষক নিয়োগ প্রশ্নসেট (২০১২ – ২০২৪ সকল ধাপ)">`;
+      html += `<optgroup label="🏫 বিগত পরীক্ষার ধাঁচে প্রাথমিক শিক্ষক নিয়োগ প্রশ্নসেট (২০১২ – ২০২৪ সকল ধাপ)">`;
       html += priPast.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
       html += `</optgroup>`;
     }
@@ -390,7 +390,7 @@ function populateExamDropdown() {
       html += `</optgroup>`;
     }
     if (ntrcaPast.length > 0) {
-      html += `<optgroup label="🎓 বিগত সালের শিক্ষক নিবন্ধন পরীক্ষা (১৪তম – ১৮তম স্কুল ও কলেজ পর্যায়)">`;
+      html += `<optgroup label="🎓 বিগত পরীক্ষার ধাঁচে শিক্ষক নিবন্ধন পরীক্ষা (১৪তম – ১৮তম স্কুল ও কলেজ পর্যায়)">`;
       html += ntrcaPast.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
       html += `</optgroup>`;
     }
@@ -403,7 +403,7 @@ function populateExamDropdown() {
       html += `</optgroup>`;
     }
     if (bankPast.length > 0) {
-      html += `<optgroup label="🏦 বিগত সালের বাংলাদেশ ব্যাংক AD ও সমন্বিত ব্যাংক নিয়োগ পরীক্ষা">`;
+      html += `<optgroup label="🏦 বিগত পরীক্ষার ধাঁচে বাংলাদেশ ব্যাংক AD ও সমন্বিত ব্যাংক নিয়োগ পরীক্ষা">`;
       html += bankPast.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
       html += `</optgroup>`;
     }
@@ -416,7 +416,7 @@ function populateExamDropdown() {
       html += `</optgroup>`;
     }
     if (minPast.length > 0) {
-      html += `<optgroup label="🏢 বিগত সালের খাদ্য অধিদপ্তর, অডিটর (CGA), রেলওয়ে, সমাজসেবা ও এলজিইডি সেট">`;
+      html += `<optgroup label="🏢 বিগত পরীক্ষার ধাঁচে খাদ্য অধিদপ্তর, অডিটর (CGA), রেলওয়ে, সমাজসেবা ও এলজিইডি সেট">`;
       html += minPast.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
       html += `</optgroup>`;
     }
@@ -429,7 +429,7 @@ function populateExamDropdown() {
       html += `</optgroup>`;
     }
     if (ncPast.length > 0) {
-      html += `<optgroup label="🏛️ বিগত সালের পিএসসি নন-ক্যাডার ও দুদক নিয়োগ পরীক্ষা">`;
+      html += `<optgroup label="🏛️ বিগত পরীক্ষার ধাঁচে পিএসসি নন-ক্যাডার ও দুদক নিয়োগ পরীক্ষা">`;
       html += ncPast.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
       html += `</optgroup>`;
     }
@@ -442,7 +442,7 @@ function populateExamDropdown() {
       html += `</optgroup>`;
     }
     if (nursePast.length > 0) {
-      html += `<optgroup label="📜 বিগত সালের বিপিএসসি সিনিয়র স্টাফ নার্স ও মিডওয়াইফারি পরীক্ষা">`;
+      html += `<optgroup label="📜 বিগত পরীক্ষার ধাঁচে বিপিএসসি সিনিয়র স্টাফ নার্স ও মিডওয়াইফারি পরীক্ষা">`;
       html += nursePast.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
       html += `</optgroup>`;
     }
@@ -592,15 +592,15 @@ function changeExamCategory() {
 
   if (selectedExamId === 'SUPER_HOT_200_SET') {
     currentOrgHeaderBn = 'বিসিএস • প্রাইমারি • NTRCA • ব্যাংক • মন্ত্রণালয় সমন্বিত বোর্ড';
-    currentPostLabelBn = 'রাতের রিভিশন স্পেশাল: ১০+ বার আসা সুপার-হট কমন ২০০ প্রশ্ন';
+    currentPostLabelBn = 'রাতের রিভিশন স্পেশাল: বাছাই করা কঠিন ও ট্রিকি ২০০ প্রশ্ন';
     currentSetCodeBn = 'সুপার-২০০';
     const hot200Ids = (typeof window !== 'undefined' && window.superHot200QuestionIds) || pack.questionIds || [];
     questions = hot200Ids.map(id => byId.get(id)).filter(Boolean);
     if (questions.length === 0) questions = pool.filter(q => q.isSuperHot10 || q.isSuperHot).slice(0, 200);
   } else if (selectedExamId === 'SUPER_HOT_100_SET') {
     currentOrgHeaderBn = 'বিসিএস • প্রাইমারি • NTRCA • ব্যাংক • মন্ত্রণালয় সমন্বিত বোর্ড';
-    currentPostLabelBn = 'বিশেষ সংকলন: ৫+ বার আসা সুপার-হট কমন ১০০ প্রশ্ন';
-    currentSetCodeBn = 'কমন-১০০';
+    currentPostLabelBn = 'বিশেষ সংকলন: বাছাই করা সবচেয়ে কঠিন ১০০ প্রশ্ন';
+    currentSetCodeBn = 'কঠিন-১০০';
     const hotIds = (typeof window !== 'undefined' && window.superHotQuestionIds) || pack.questionIds || [];
     questions = hotIds.map(id => byId.get(id)).filter(Boolean);
     if (questions.length === 0) questions = pool.filter(q => q.isSuperHot).slice(0, 100);
@@ -1400,7 +1400,7 @@ function setPastBankTrack(track) {
   if (track === 'PRIMARY') {
     if (head) head.textContent = '🏫 সরকারি প্রাথমিক বিদ্যালয় সহকারী শিক্ষক নিয়োগ প্রশ্নব্যাংক (DPE)';
     if (badge) badge.textContent = '২০১২ – ২০২৪ সকল ধাপ (১৬টি পূর্ণাঙ্গ সেট + ১০টি নদী মডেল সেট)';
-    if (desc) desc.textContent = 'প্রাথমিক শিক্ষা অধিদপ্তরের (DPE) বিগত সালের সকল ধাপের প্রশ্নসেট সমাধান করুন অথবা এক ক্লিকে হুবহু ২-কলাম DPE প্রশ্নপত্রে লাইভ পরীক্ষা দিন।';
+    if (desc) desc.textContent = 'প্রাথমিক শিক্ষা অধিদপ্তরের (DPE) বিগত পরীক্ষার ধাঁচে সকল ধাপের প্রশ্নসেট সমাধান করুন অথবা এক ক্লিকে হুবহু ২-কলাম DPE প্রশ্নপত্রে লাইভ পরীক্ষা দিন।';
   } else if (track === 'NTRCA') {
     if (head) head.textContent = '🎓 বেসরকারি শিক্ষক নিবন্ধন ও প্রত্যয়ন কর্তৃপক্ষ (NTRCA) প্রশ্নব্যাংক';
     if (badge) badge.textContent = '১৪তম – ১৮তম শিক্ষক নিবন্ধন ও ১৯তম মডেল (স্কুল ও কলেজ পর্যায় • ১৮টি পূর্ণাঙ্গ সেট)';
@@ -1419,12 +1419,12 @@ function setPastBankTrack(track) {
     if (desc) desc.textContent = 'পিএসসি নন-ক্যাডার ৯ম ও ১০ম গ্রেড এবং দুর্নীতি দমন কমিশনের (ACC) প্রশ্নপত্র ২-কলাম বুকলেট ও উত্তরপত্রে সমাধান করুন।';
   } else if (track === 'NURSING') {
     if (head) head.textContent = '🩺 বিপিএসসি সিনিয়র স্টাফ নার্স ও মিডওয়াইফারি প্রশ্নব্যাংক (BPSC & DGNM)';
-    if (badge) badge.textContent = '১০ম গ্রেড নার্সিং ও মিডওয়াইফারি (১৪টি পূর্ণাঙ্গ সেট • ৪টি বিগত পরীক্ষা + ১০টি প্রফেশনাল মডেল সেট)';
+    if (badge) badge.textContent = '১০ম গ্রেড নার্সিং ও মিডওয়াইফারি (১৪টি পূর্ণাঙ্গ সেট • ৪টি বিগত পরীক্ষার ধাঁচে সেট + ১০টি প্রফেশনাল মডেল সেট)';
     if (desc) desc.textContent = 'বিপিএসসি সিনিয়র স্টাফ নার্স ও মিডওয়াইফারি নিয়োগের বিগত প্রশ্নপত্র ও প্রফেশনাল নার্সিং মডেল সেট (৬০ নার্সিং বিজ্ঞান + ৪০ সাধারণ) ২-কলাম বুকলেট ও উত্তরপত্রে সমাধান করুন।';
   } else {
-    if (head) head.textContent = '📚 বিগত ২০ বিসিএস প্রশ্নব্যাংক ও বোর্ড বই ড্রিল (BPSC)';
+    if (head) head.textContent = '📚 বিগত ২০ বিসিএসের ধাঁচে প্রশ্নব্যাংক ও বোর্ড বই ড্রিল (BPSC)';
     if (badge) badge.textContent = '২৭তম - ৪৬তম বিসিএস • ১,২০০+ ইউনিক প্রশ্ন';
-    if (desc) desc.textContent = 'বছরভিত্তিক পূর্ণাঙ্গ আর্কাইভ দেখুন অথবা সরাসরি হুবহু ২-কলাম প্রশ্নপত্রে পরীক্ষা দিন। প্রতিটি প্রশ্নে রয়েছে নির্ভুল ব্যাখ্যা ও শর্টকাট।';
+    if (desc) desc.textContent = 'বছরভিত্তিক পূর্ণাঙ্গ আর্কাইভ দেখুন অথবা সরাসরি পরীক্ষার মতো ২-কলাম প্রশ্নপত্রে পরীক্ষা দিন। প্রতিটি প্রশ্নে রয়েছে নির্ভুল ব্যাখ্যা ও শর্টকাট।';
   }
 
   renderPastBankFilters();
@@ -1480,8 +1480,8 @@ function renderPastBankFilters() {
     if (pastBankMode === 'YEAR') {
       const items = [
         { code: 'ARCHIVE_SECTOR', label: archiveOverviewLabel },
-        { code: 'SUPER_HOT_10', label: '🔥 ১০+ বার আসা কমন প্রশ্ন (Super Hot 200)' },
-        { code: 'SUPER_HOT_5', label: '🔥 ৫+ বার আসা সুপার-হট কমন প্রশ্ন' },
+        { code: 'SUPER_HOT_10', label: '🔥 বাছাই করা কঠিন ২০০ প্রশ্ন' },
+        { code: 'SUPER_HOT_5', label: '🔥 সবচেয়ে কঠিন ১০০ প্রশ্ন' },
         { code: 'ALL', label: allQuestionsLabel },
         ...sectorArchives.map(a => ({
           code: a.code,
@@ -1528,9 +1528,9 @@ function renderPastBankFilters() {
     ];
     const labels = {
       ARCHIVE_20: '🏛️ ২০ বিসিএস ইতিহাস, কাট-মার্ক ও পূর্ণাঙ্গ সেট',
-      SUPER_HOT_10: '🔥 ১০+ বার আসা কমন প্রশ্ন (Super Hot 200)',
-      SUPER_HOT_5: '🔥 ৫+ বার আসা সুপার-হট কমন প্রশ্ন (Cross-Exam Repeat)',
-      ALL: 'সকল বিগত বিসিএস (৮০০ ইউনিক বিসিএস প্রশ্ন)',
+      SUPER_HOT_10: '🔥 বাছাই করা কঠিন ২০০ প্রশ্ন',
+      SUPER_HOT_5: '🔥 সবচেয়ে কঠিন ১০০ প্রশ্ন',
+      ALL: 'বিগত বিসিএসের ধাঁচে সব প্রশ্ন (৮০০ ইউনিক বিসিএস প্রশ্ন)',
       '৪৬তম': '৪৬তম বিসিএস (২০২৪)',
       '৪৫তম': '৪৫তম বিসিএস (২০২৩)',
       '৪৪তম': '৪৪তম বিসিএস (২০২২)',
@@ -1635,6 +1635,7 @@ function renderPastBank() {
             <p class="text-xs text-slate-700 leading-relaxed">
               <strong class="text-amber-700">প্রশ্ন প্যাটার্ন: </strong>${a.notablePattern}
             </p>
+            <p class="text-[11px] text-slate-500">ℹ️ এখানে এই পরীক্ষার ধাঁচে বানানো অনুশীলন প্রশ্ন আছে, আসল প্রশ্নপত্র নয়।</p>
 
             <div class="grid grid-cols-2 gap-2 pt-1">
               <button onclick="filterPastBank('${a.code}')" class="py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs transition">
@@ -1679,6 +1680,7 @@ function renderPastBank() {
             <p class="text-xs text-slate-700 leading-relaxed">
               <strong class="text-amber-700">প্রশ্ন প্যাটার্ন: </strong>${a.notablePattern}
             </p>
+            <p class="text-[11px] text-slate-500">ℹ️ এখানে এই পরীক্ষার ধাঁচে বানানো অনুশীলন প্রশ্ন আছে, আসল প্রশ্নপত্র নয়।</p>
 
             <div class="grid grid-cols-2 gap-2 pt-1">
               <button onclick="filterPastBank('${a.title.split(' ')[0]}')" class="py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs transition">
@@ -1779,7 +1781,7 @@ function renderPastBank() {
         negRateNum: 0.50,
         durationMinBn: '১২০',
         codeLabelBn: 'বিষয় কোড: ১০০ (সাধারণ ও পেশাগত)',
-        paperTitleBn: 'বিসিএস প্রিলিমিনারি বিগত সালের প্রশ্নব্যাংক ও আর্কাইভ সেট',
+        paperTitleBn: 'বিসিএস প্রিলিমিনারি বিগত পরীক্ষার ধাঁচে প্রশ্নব্যাংক ও আর্কাইভ সেট',
         setCodeBn: 'ক'
       },
       PRIMARY: {
@@ -1840,7 +1842,7 @@ function renderPastBank() {
       const sectorArchives = getSectorArchiveList(pastBankTrack);
       const foundArch = sectorArchives.find(a => a.code === pastBankFilterValue);
       if (foundArch) {
-        meta.paperTitleBn = `${foundArch.title} (${foundArch.examDate})`;
+        meta.paperTitleBn = `${foundArch.title} — ধাঁচে মডেল টেস্ট`;
         meta.setCodeBn = (foundArch.setNameBn || meta.setCodeBn).replace(/^সেট:\s*/, '');
         if (foundArch.authorityBn) meta.orgHeaderBn = foundArch.authorityBn;
         if (foundArch.postNameBn) meta.codeLabelBn = `পদ: ${foundArch.postNameBn}`;
@@ -1848,7 +1850,7 @@ function renderPastBank() {
         if (foundArch.durationMinutes) meta.durationMinBn = toBnDigits(foundArch.durationMinutes);
       }
     } else if (pastBankTrack === 'BCS' && pastBankFilterValue !== 'ALL' && pastBankMode === 'YEAR') {
-      meta.paperTitleBn = `${pastBankFilterValue} বিসিএস প্রিলিমিনারি পরীক্ষা প্রশ্নপত্র`;
+      meta.paperTitleBn = `${pastBankFilterValue} বিসিএস প্রিলিমিনারি পরীক্ষার ধাঁচে মডেল টেস্ট`;
     }
 
     const orgHeaderBn = meta.orgHeaderBn;
@@ -2003,7 +2005,7 @@ function renderPastBank() {
             </div>
 
             <div class="mt-6 pt-3 border-t-2 border-slate-900 text-center text-xs font-bold text-slate-700">
-              — সমাপ্ত — (বিগত সালের আসল প্রশ্নপত্র ফরম্যাট • মোট প্রশ্ন: ${totalQBn}টি)
+              — সমাপ্ত — (বিগত পরীক্ষার ধাঁচে প্রশ্নপত্র ফরম্যাট • মোট প্রশ্ন: ${totalQBn}টি)
             </div>
           </div>
         </div>
@@ -2561,9 +2563,9 @@ function omrScanFillExams() {
   const exams = window.availableExams || [];
   const groups = track === 'PRIMARY'
     ? [['প্রাথমিক মডেল সেট', exams.filter(e => e.examTrack === 'PRIMARY' && e.id.startsWith('PRI_PRACTICE_'))],
-       ['বিগত সালের প্রাথমিক প্রশ্ন', exams.filter(e => e.examTrack === 'PRIMARY' && !e.id.startsWith('PRI_PRACTICE_'))]]
+       ['বিগত পরীক্ষার ধাঁচে প্রাথমিক প্রশ্ন', exams.filter(e => e.examTrack === 'PRIMARY' && !e.id.startsWith('PRI_PRACTICE_'))]]
     : [['বিসিএস অনুশীলন সেট', exams.filter(e => e.examTrack === 'BCS' && e.id.startsWith('PRACTICE_SET_'))],
-       ['বিগত বিসিএস প্রশ্ন', exams.filter(e => e.examTrack === 'BCS' && e.id.startsWith('BCS_'))]];
+       ['বিগত বিসিএসের ধাঁচে সেট', exams.filter(e => e.examTrack === 'BCS' && e.id.startsWith('BCS_'))]];
   sel.innerHTML = groups.map(([label, list]) =>
     `<optgroup label="${label}">${list.map(e => `<option value="${e.id}">${e.title}</option>`).join('')}</optgroup>`
   ).join('');
@@ -3154,7 +3156,7 @@ function renderConfusingHotTab() {
   hotList = hotList.slice(0, 100);
 
   if (statsLabel) {
-    statsLabel.textContent = `৫+ বার আসা সুপার-হট প্রশ্ন: ${toBnDigits(hotList.length)}টি (২-কলাম মুদ্রিত প্রশ্নপত্র ফরম্যাট)`;
+    statsLabel.textContent = `বাছাই করা কঠিন প্রশ্ন: ${toBnDigits(hotList.length)}টি (২-কলাম মুদ্রিত প্রশ্নপত্র ফরম্যাট)`;
   }
 
   let shCorrect = 0;
@@ -3267,12 +3269,12 @@ function renderConfusingHotTab() {
           <div class="text-center border-b-2 border-slate-900 pb-3 mb-3">
             <div class="text-xs font-bold tracking-wider text-slate-700">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার • সমন্বিত নিয়োগ পরীক্ষা আর্কাইভ</div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-950 mt-0.5">বিসিএস • প্রাইমারি (DPE) • শিক্ষক নিবন্ধন (NTRCA) • ব্যাংক • মন্ত্রণালয়</h2>
-            <h3 class="text-sm sm:text-base font-bold text-[#006a4e] mt-0.5">🔥 ৫+ বার বিভিন্ন সরকারি পরীক্ষায় হুবহু রিপিট হওয়া সুপার-হট কমন প্রশ্নপত্র</h3>
+            <h3 class="text-sm sm:text-base font-bold text-[#006a4e] mt-0.5">🔥 বাছাই করা সবচেয়ে কঠিন ও ট্রিকি প্রশ্নপত্র</h3>
 
             <div class="flex flex-wrap items-center justify-between border-t border-slate-800 mt-2.5 pt-2 text-xs sm:text-sm font-bold text-slate-900">
-              <span>বিশেষ সংকলন: Cross-Exam Repeat Master Set</span>
+              <span>বিশেষ সংকলন: কঠিন প্রশ্ন বাছাই</span>
               <span class="border-2 border-slate-950 px-3 py-0.5 bg-white text-slate-950 font-extrabold shadow-sm">
-                সেট কোড : সুপার-হট ১০০
+                সেট কোড : কঠিন-১০০
               </span>
               <span>মোট প্রশ্ন: ${totalQBn}টি | পূর্ণমান: ${totalQBn}</span>
             </div>
@@ -3297,7 +3299,7 @@ function renderConfusingHotTab() {
         <div class="bpsc-omr-sheet">
           <div class="bg-[#d94662] text-white px-4 py-2.5 flex items-center justify-between">
             <div>
-              <h3 class="text-sm font-bold tracking-wide">সুপার-হট কমন উত্তরপত্র</h3>
+              <h3 class="text-sm font-bold tracking-wide">কঠিন প্রশ্নের উত্তরপত্র</h3>
               <p class="text-[10px] opacity-90 font-mono">CROSS-EXAM REPEAT TRACKER • -০.২৫ নেগেটিভ</p>
             </div>
             <span class="dock-count px-2.5 py-1 rounded-full bg-slate-950 text-amber-300 font-mono text-xs font-bold">
