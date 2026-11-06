@@ -7,7 +7,16 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const fmt = iso => iso ? new Date(iso).toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
   const METHOD_BN = { bkash: 'বিকাশ', nagad: 'নগদ', rocket: 'রকেট' };
-  const STATUS_BN = { PENDING: 'যাচাই বাকি', APPROVED: 'অনুমোদিত', REJECTED: 'বাতিল', INITIATED: 'অসম্পূর্ণ', FAILED: 'ব্যর্থ', CANCELLED: 'ইউজার বাতিল করেছে' };
+  const STATUS_BN = { PENDING: 'যাচাই বাকি', APPROVED: 'অনুমোদিত', REJECTED: 'বাতিল', INITIATED: 'অসম্পূর্ণ', FAILED: 'ব্যর্থ', CANCELLED: 'ইউজার বাতিল করেছে', SHIP: '📦 পাঠানো বাকি' };
+  const isManual = p => p.provider === 'MANUAL' || p.provider === 'COD';
+  // Address of the printed pack + shipped state / button
+  const deliveryCell = p => !p.delivery ? '' : `<div style="margin-top:6px;padding:6px 8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-size:12px">
+      📦 <b>${esc(p.delivery.name)}</b> • ${esc(p.delivery.phone)}<br>${esc(p.delivery.address)}, <b>${esc(p.delivery.district)}</b><br>
+      ${p.shippedAt
+        ? `✅ পাঠানো হয়েছে ${fmt(p.shippedAt)} <button class="btn ghost sm" data-unship="${p.id}">ফিরিয়ে নিন</button>`
+        : p.status === 'APPROVED' || p.provider === 'COD'
+        ? `<button class="btn primary sm" data-ship="${p.id}">🚚 কুরিয়ারে দিয়েছি</button>` : ''}
+    </div>`;
   const GW_NAME = { SSLCOMMERZ: 'SSLCommerz', AAMARPAY: 'aamarPay' };
 
   let adminKey = '';
@@ -52,14 +61,16 @@
         <tr>
           <td>${fmt(p.createdAt)}</td>
           <td><b>${esc(p.user ? p.user.name : '?')}</b><br><small>${esc(p.user ? p.user.phone : '')}</small></td>
-          <td>${p.provider === 'MANUAL'
+          <td>${p.provider === 'COD'
+            ? '<b>🚚 ক্যাশ অন ডেলিভারি</b><br><small>কুরিয়ার টাকা তুলবে</small>'
+            : p.provider === 'MANUAL'
             ? `<b>${esc(METHOD_BN[p.method] || p.method)}</b> (TrxID)<br><small>প্রেরক: ${esc(p.senderNumber)}${p.duplicateSender ? ` • এই নম্বরে আরও ${bn(p.duplicateSender)}টি` : ''}</small>`
-            : `<b>অনলাইন • ${esc(GW_NAME[p.provider] || p.provider)}</b><br><small>${esc(p.cardType || 'স্বয়ংক্রিয় যাচাই')}</small>`}</td>
-          <td><code style="font-size:14px;font-weight:700">${esc(p.provider === 'MANUAL' ? p.trxId : p.tranId)}</code>${p.gatewayTxnId ? `<br><small>ব্যাংক/MFS: ${esc(p.gatewayTxnId)}</small>` : ''}</td>
+            : `<b>অনলাইন • ${esc(GW_NAME[p.provider] || p.provider)}</b><br><small>${esc(p.cardType || 'স্বয়ংক্রিয় যাচাই')}</small>`}${deliveryCell(p)}</td>
+          <td><code style="font-size:14px;font-weight:700">${esc(p.provider === 'COD' ? 'COD' : p.provider === 'MANUAL' ? p.trxId : p.tranId)}</code>${p.gatewayTxnId ? `<br><small>ব্যাংক/MFS: ${esc(p.gatewayTxnId)}</small>` : ''}</td>
           <td><b>৳${bn(p.amount)}</b><br><small>${esc(p.planNameBn)} (${bn(p.days)} দিন)</small></td>
-          <td>${p.status === 'PENDING' && p.provider === 'MANUAL'
-            ? `<button class="btn primary sm" data-approve="${p.id}">✅ অনুমোদন</button> <button class="btn ghost sm" data-reject="${p.id}">✕ বাতিল</button>`
-            : p.provider !== 'MANUAL' && p.status !== 'APPROVED'
+          <td>${p.status === 'PENDING' && isManual(p)
+            ? `<button class="btn primary sm" data-approve="${p.id}">✅ ${p.provider === 'COD' ? 'টাকা পেয়েছি' : 'অনুমোদন'}</button> <button class="btn ghost sm" data-reject="${p.id}">✕ বাতিল</button>`
+            : !isManual(p) && p.status !== 'APPROVED'
             ? `<span class="badge ENDED">${STATUS_BN[p.status] || p.status}</span><br><button class="btn ghost sm" data-recheck="${p.id}" style="margin-top:4px">🔄 গেটওয়েতে আবার যাচাই</button>`
             : `<span class="badge${p.status === 'APPROVED' ? '" style="background:#dcfce7;color:#166534' : ' ENDED'}">${STATUS_BN[p.status]}</span><br><small>${fmt(p.reviewedAt)}${p.noteBn ? ` • ${esc(p.noteBn)}` : ''}</small>`}</td>
         </tr>`).join('') : `<tr><td colspan="6" style="text-align:center;color:#64748b">কোনো পেমেন্ট নেই।</td></tr>`;
@@ -127,9 +138,12 @@
           <label class="field">দাম (৳)<input data-pprice type="number" min="1" value="${p.price}"></label>
           <label class="field">মেয়াদ (দিন)<input data-pdays type="number" min="1" value="${p.days}"></label>
         </div>
+        <label class="field">প্রিন্ট প্যাকেট বাসায় পাঠাবেন?<select data-pprint><option value="1" ${p.printPack ? 'selected' : ''}>হ্যাঁ (ঠিকানা নেওয়া হবে, ক্যাশ অন ডেলিভারি চলবে)</option><option value="0" ${p.printPack ? '' : 'selected'}>না, শুধু অনলাইন</option></select></label>
       </div>`).join('');
     $('setFree').value = s.freePerGroup;
     $('setManual').value = s.manualEnabled === false ? '0' : '1';
+    $('setCod').value = s.codEnabled === false ? '0' : '1';
+    $('setCodExtra').value = s.codExtra ?? 0;
     const gw = data.gateway;
     $('setGateway').innerHTML = !gw
       ? '❌ অনলাইন গেটওয়ে চালু নেই। সার্ভারে PAYMENT_GATEWAY ও স্টোর আইডি সেট করুন (README দেখুন)।'
@@ -156,8 +170,11 @@
           id: row.querySelector('[data-pid]').value,
           nameBn: row.querySelector('[data-pname]').value,
           price: Number(row.querySelector('[data-pprice]').value),
-          days: Number(row.querySelector('[data-pdays]').value)
+          days: Number(row.querySelector('[data-pdays]').value),
+          printPack: row.querySelector('[data-pprint]').value === '1'
         })),
+        codEnabled: $('setCod').value === '1',
+        codExtra: Number($('setCodExtra').value),
         freePerGroup: Number($('setFree').value),
         manualEnabled: $('setManual').value === '1',
         noticeBn: $('setNotice').value
@@ -176,16 +193,22 @@
   // Events
   // ---------------------------------------------------------------------------
   document.addEventListener('click', async ev => {
-    const t = ev.target.closest('[data-pstatus],[data-approve],[data-reject],[data-grant],[data-revoke],[data-recheck]');
+    const t = ev.target.closest('[data-pstatus],[data-approve],[data-reject],[data-grant],[data-revoke],[data-recheck],[data-ship],[data-unship]');
     if (!t || !adminKey) return;
     try {
       if (t.dataset.pstatus) {
         statusFilter = t.dataset.pstatus;
         return loadPayments();
       }
+      if (t.dataset.ship || t.dataset.unship) {
+        await api(`/api/admin/accounts/payments/${t.dataset.ship || t.dataset.unship}/${t.dataset.ship ? 'shipped' : 'unshipped'}`, {});
+        toast(t.dataset.ship ? 'পাঠানো হয়েছে হিসেবে রাখা হলো।' : 'আবার "পাঠানো বাকি" তে ফেরত গেছে।');
+        return loadPayments();
+      }
       if (t.dataset.approve) {
         const row = t.closest('tr');
-        if (!confirm(`নিশ্চিত? ${row.querySelector('code').textContent} TrxID টি আপনার স্টেটমেন্টে সঠিক টাকাসহ এসেছে?`)) return;
+        const code = row.querySelector('code').textContent;
+        if (!confirm(code === 'COD' ? 'নিশ্চিত? কুরিয়ার এই অর্ডারের পুরো টাকা তুলে দিয়েছে?' : `নিশ্চিত? ${code} TrxID টি আপনার স্টেটমেন্টে সঠিক টাকাসহ এসেছে?`)) return;
         await api(`/api/admin/accounts/payments/${t.dataset.approve}/approve`, {});
         toast('অনুমোদিত। ইউজারের প্রিমিয়াম চালু হয়েছে।');
       }

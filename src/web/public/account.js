@@ -66,11 +66,20 @@
   .acc-err{color:#b91c1c;font-size:13px;min-height:18px;margin:4px 0}
   .acc-ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:10px}
   .acc-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:10px}
-  .acc-plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:12px}
+  .acc-plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin-bottom:12px}
   .acc-plan{border:2px solid #e2e8f0;border-radius:12px;padding:10px;text-align:center;cursor:pointer}
   .acc-plan input{display:none}
   .acc-plan.on{border-color:#006a4e;background:#ecfdf5}
   .acc-plan b{display:block;font-size:18px}
+  .acc-plan small{display:block;font-size:11px;color:#475569;line-height:1.4}
+  .acc-plan small.acc-plan-cod{color:#92400e}
+  .acc-field textarea{display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font:400 15px 'Noto Sans Bengali',sans-serif;resize:vertical}
+  .acc-address{border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px 2px;margin:0 0 12px}
+  .acc-address legend{font-weight:700;font-size:13px;padding:0 4px}
+  .acc-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media (max-width:420px){.acc-row2{grid-template-columns:1fr}}
+  .acc-cod{margin-top:10px}
+  .acc-cod .acc-sub{margin:6px 0 0}
   .acc-methods{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
   .acc-methods label{flex:1;min-width:90px;border:2px solid #e2e8f0;border-radius:10px;padding:8px;text-align:center;font-weight:700;cursor:pointer}
   .acc-methods label.on{border-color:#e2136e;background:#fdf2f8}
@@ -226,6 +235,25 @@
           ${config.noticeBn ? `<div class="acc-sub" style="margin:8px 0 0">${esc(config.noticeBn)}</div>` : ''}
         </form>` : '';
 
+    // Printed pack: home address (filled from the last order) and cash on delivery
+    const lastAddr = (mine.payments.find(p => p.delivery) || {}).delivery || { name: me.name, phone: me.phone };
+    const addressBox = config.plans.some(p => p.printPack) ? `
+        <fieldset class="acc-address" hidden>
+          <legend>📦 প্রিন্ট করা প্রশ্নের প্যাকেট কোথায় পাঠাব?</legend>
+          <div class="acc-row2">
+            <label class="acc-field">প্রাপকের নাম<input name="dName" autocomplete="name" maxlength="80" value="${esc(lastAddr.name)}"></label>
+            <label class="acc-field">মোবাইল (কুরিয়ার ফোন করবে)<input name="dPhone" type="tel" inputmode="numeric" placeholder="01XXXXXXXXX" value="${esc(lastAddr.phone)}"></label>
+          </div>
+          <label class="acc-field">জেলা<input name="dDistrict" maxlength="40" placeholder="যেমন ঢাকা" value="${esc(lastAddr.district)}"></label>
+          <label class="acc-field">পুরো ঠিকানা<textarea name="dAddress" rows="2" maxlength="300" placeholder="বাসা, রোড, এলাকা, থানা">${esc(lastAddr.address)}</textarea></label>
+        </fieldset>` : '';
+    const codBox = config.codEnabled ? `
+        <div class="acc-cod" hidden>
+          <button type="button" class="acc-btn ghost acc-cod-btn">🚚 ক্যাশ অন ডেলিভারি</button>
+          <div class="acc-sub acc-cod-note"></div>
+          <div class="acc-err acc-cod-err"></div>
+        </div>` : '';
+
     const html = `
       <h3>🔒 ${exam ? esc(exam.title) : 'প্রিমিয়াম সেট'}</h3>
       <div class="acc-sub">ফ্রিতে প্রতিটি পরীক্ষার ধরনে ${bn(config.freePerGroup)}টি মডেল সেট ও ${bn(config.freePerGroup)}টি বিগত সালের প্রশ্ন খোলা। প্রিমিয়ামে সব মডেল টেস্ট, সব বিগত প্রশ্ন, সুপার-হট সেট ও প্রিন্ট/OMR সব খুলে যাবে।</div>
@@ -234,23 +262,79 @@
       <div class="acc-pay" data-payment>
         <div class="acc-plans">${config.plans.map(p => `
           <label class="acc-plan ${p.id === plan0.id ? 'on' : ''}"><input type="radio" name="planId" value="${esc(p.id)}" ${p.id === plan0.id ? 'checked' : ''}>
-            ${esc(p.nameBn)}<b>৳${bn(p.price)}</b></label>`).join('')}
+            ${esc(p.nameBn)}<b>৳${bn(p.price)}</b>
+            <small>${p.printPack ? '📦 প্রিন্ট প্যাকেট বাসায়' : 'শুধু অনলাইন'}</small>
+            ${p.codPrice && config.codEnabled ? `<small class="acc-plan-cod">ক্যাশ অন ডেলিভারি ৳${bn(p.codPrice)}</small>` : ''}</label>`).join('')}
         </div>
+        ${addressBox}
         ${gw ? `
           ${gw.sandbox ? '<div class="acc-warn">🧪 টেস্ট মোড (Sandbox): আসল টাকা কাটবে না।</div>' : ''}
           <button type="button" class="acc-btn acc-gw">💳 অনলাইনে পেমেন্ট করুন</button>
           <div class="acc-sub" style="text-align:center;margin:6px 0 0">বিকাশ • নগদ • রকেট • উপায় • ভিসা • মাস্টারকার্ড — পেমেন্ট সফল হলেই সাথে সাথে সব সেট খুলে যাবে।</div>
           <div class="acc-err acc-gw-err"></div>
+          ${codBox}
           ${manualForm ? `<details style="margin-top:10px"><summary style="cursor:pointer;font-weight:600">অথবা নিজে Send Money করে TrxID দিন</summary>${manualForm}</details>` : ''}`
-        : manualForm || '<div class="acc-warn">অনলাইন পেমেন্ট শিগগির চালু হবে।</div>'}
+        : (codBox + manualForm) || '<div class="acc-warn">অনলাইন পেমেন্ট শিগগির চালু হবে।</div>'}
       </div>
       ${mine.payments.length ? `<details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600">আমার পেমেন্ট (${bn(mine.payments.length)})</summary><ul class="acc-list">${mine.payments.map(paymentRow).join('')}</ul></details>` : ''}`;
     const b = modal(html);
     const planId = () => (b.querySelector('input[name=planId]:checked') || {}).value;
-    b.querySelector('.acc-plans').addEventListener('change', () => {
+    const curPlan = () => config.plans.find(x => x.id === planId()) || plan0;
+    const addrEl = b.querySelector('.acc-address');
+    const codEl = b.querySelector('.acc-cod');
+    // Address only for plans with the printed pack; cash on delivery shows its own (higher) price
+    function showPlan() {
+      const plan = curPlan();
       b.querySelectorAll('.acc-plan').forEach(l => l.classList.toggle('on', l.querySelector('input').checked));
+      if (addrEl) addrEl.hidden = !plan.printPack;
+      if (codEl) {
+        codEl.hidden = !plan.codPrice;
+        if (plan.codPrice) {
+          codEl.querySelector('.acc-cod-btn').textContent = `🚚 ক্যাশ অন ডেলিভারি • ৳${bn(plan.codPrice)}`;
+          codEl.querySelector('.acc-cod-note').textContent = `প্যাকেট হাতে পেয়ে কুরিয়ারকে ৳${bn(plan.codPrice)} দেবেন (অনলাইনে দিলে ৳${bn(plan.codPrice - plan.price)} কম)। টাকা পৌঁছালে প্রিমিয়াম চালু হবে।`;
+        }
+      }
+    }
+    // null = address not needed; throws with a Bangla message when something is missing
+    function delivery() {
+      if (!curPlan().printPack || !addrEl) return null;
+      const d = { name: addrEl.querySelector('[name=dName]').value, phone: addrEl.querySelector('[name=dPhone]').value, district: addrEl.querySelector('[name=dDistrict]').value, address: addrEl.querySelector('[name=dAddress]').value };
+      if (!d.name.trim() || !d.phone.trim() || !d.district.trim() || d.address.trim().length < 10) {
+        addrEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        throw new Error('প্রিন্ট প্যাকেট পাঠাতে নাম, মোবাইল, জেলা ও পুরো ঠিকানা লিখুন।');
+      }
+      return d;
+    }
+    b.querySelector('.acc-plans').addEventListener('change', () => {
+      showPlan();
       if (form) showSteps();
     });
+    showPlan();
+
+    const codBtn = b.querySelector('.acc-cod-btn');
+    if (codBtn) {
+      codBtn.addEventListener('click', async () => {
+        const err = b.querySelector('.acc-cod-err');
+        err.textContent = '';
+        codBtn.disabled = true;
+        try {
+          const data = await api('/api/payment/cod', { planId: planId(), delivery: delivery() });
+          me = data.user;
+          renderPill();
+          startPolling();
+          const d = data.payment.delivery;
+          modal(`<h3>✅ অর্ডার নেওয়া হয়েছে</h3>
+            <div class="acc-ok">${esc(data.payment.planNameBn)} • ক্যাশ অন ডেলিভারি <b>৳${bn(data.payment.amount)}</b></div>
+            <p>প্রিন্ট করা প্রশ্নের প্যাকেট পাঠানো হবে:<br><b>${esc(d.name)}</b>, ${esc(d.phone)}<br>${esc(d.address)}, ${esc(d.district)}</p>
+            <p>কুরিয়ার ফোন করে প্যাকেট দেবে, তখন টাকা দেবেন। টাকা আমাদের কাছে পৌঁছালেই প্রিমিয়াম চালু হবে।</p>
+            <button type="button" class="acc-btn ghost acc-x" style="position:static">ঠিক আছে</button>`);
+        } catch (e) {
+          err.textContent = e.message;
+        } finally {
+          codBtn.disabled = false;
+        }
+      });
+    }
 
     // Online gateway: our server creates the checkout, then the browser goes to the gateway page
     const gwBtn = b.querySelector('.acc-gw');
@@ -261,7 +345,7 @@
         gwBtn.disabled = true;
         gwBtn.textContent = 'পেমেন্ট পেজ খোলা হচ্ছে...';
         try {
-          const data = await api('/api/payment/initiate', { planId: planId(), returnTo: location.pathname + location.hash });
+          const data = await api('/api/payment/initiate', { planId: planId(), delivery: delivery(), returnTo: location.pathname + location.hash });
           location.href = data.url;
         } catch (e) {
           err.textContent = e.message;
@@ -302,7 +386,7 @@
       try {
         const data = await api('/api/payment/submit', {
           planId: planId(), method: form.method.value,
-          senderNumber: form.senderNumber.value, trxId: form.trxId.value
+          senderNumber: form.senderNumber.value, trxId: form.trxId.value, delivery: delivery()
         });
         me = data.user;
         renderPill();
@@ -322,7 +406,8 @@
   const STATUS_BN = { PENDING: 'যাচাই হচ্ছে', APPROVED: 'সফল', REJECTED: 'বাতিল', INITIATED: 'অসম্পূর্ণ', FAILED: 'ব্যর্থ', CANCELLED: 'বাতিল করেছেন' };
   function paymentRow(p) {
     return `<li><span class="acc-badge ${p.status}">${STATUS_BN[p.status] || p.status}</span>
-      ${esc(p.provider === 'MANUAL' ? p.method : 'অনলাইন')} • ${esc(p.trxId || p.tranId)} • ৳${bn(p.amount)} • ${fmtDate(p.createdAt)}
+      ${esc(p.provider === 'MANUAL' ? p.method : p.provider === 'COD' ? 'ক্যাশ অন ডেলিভারি' : 'অনলাইন')}${p.trxId || p.tranId ? ` • ${esc(p.trxId || p.tranId)}` : ''} • ৳${bn(p.amount)} • ${fmtDate(p.createdAt)}
+      ${p.delivery ? `<br><small>📦 ${p.shippedAt ? `প্যাকেট পাঠানো হয়েছে (${fmtDate(p.shippedAt)})` : 'প্যাকেট এখনো পাঠানো হয়নি'}</small>` : ''}
       ${p.status === 'REJECTED' && p.noteBn ? `<br><small style="color:#991b1b">${esc(p.noteBn)}</small>` : ''}</li>`;
   }
 

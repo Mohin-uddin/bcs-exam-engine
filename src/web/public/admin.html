@@ -36,10 +36,11 @@
     <div id="adminArea" hidden>
       <section class="panel" id="paymentArea">
         <h2>💳 পেমেন্ট (অনলাইন ও বিকাশ / নগদ / রকেট) <span class="badge UPCOMING" id="payPendingBadge"></span></h2>
-        <p style="color:#475569;font-size:14px;margin-bottom:10px">অনলাইন গেটওয়ে (SSLCommerz / aamarPay) দিয়ে পেমেন্ট হলে গেটওয়ে থেকে যাচাই করে নিজে থেকেই প্রিমিয়াম চালু হয়, কিছু করতে হবে না। শুধু "নিজে Send Money + TrxID" পেমেন্টগুলো আপনার বিকাশ / নগদ / রকেট স্টেটমেন্টে মিলিয়ে অনুমোদন দিন।</p>
+        <p style="color:#475569;font-size:14px;margin-bottom:10px">অনলাইন গেটওয়ে (SSLCommerz / aamarPay) দিয়ে পেমেন্ট হলে গেটওয়ে থেকে যাচাই করে নিজে থেকেই প্রিমিয়াম চালু হয়, কিছু করতে হবে না। শুধু "নিজে Send Money + TrxID" পেমেন্টগুলো আপনার বিকাশ / নগদ / রকেট স্টেটমেন্টে মিলিয়ে অনুমোদন দিন। ক্যাশ অন ডেলিভারি অর্ডার কুরিয়ার টাকা তুলে দিলে অনুমোদন দিন। প্রিন্ট প্যাকেট কুরিয়ারে দিলে "📦 পাঠানো বাকি" থেকে "পাঠানো হয়েছে" চাপুন।</p>
         <div class="actions" style="margin-bottom:10px">
           <button class="btn primary sm" type="button" data-pstatus="PENDING">যাচাই বাকি</button>
           <button class="btn ghost sm" type="button" data-pstatus="APPROVED">অনুমোদিত</button>
+          <button class="btn ghost sm" type="button" data-pstatus="SHIP">📦 পাঠানো বাকি</button>
           <button class="btn ghost sm" type="button" data-pstatus="REJECTED">বাতিল</button>
           <button class="btn ghost sm" type="button" data-pstatus="ALL">সব</button>
         </div>
@@ -76,6 +77,14 @@
           <div class="row2">
             <label class="field">নিজে Send Money + TrxID অপশন (অনলাইনের পাশাপাশি)
               <select id="setManual"><option value="1">চালু</option><option value="0">বন্ধ</option></select>
+            </label>
+          </div>
+          <div class="row2">
+            <label class="field">ক্যাশ অন ডেলিভারি (শুধু প্রিন্ট প্যাকেটের প্যাকেজে)
+              <select id="setCod"><option value="1">চালু</option><option value="0">বন্ধ</option></select>
+            </label>
+            <label class="field">ক্যাশ অন ডেলিভারিতে বাড়তি টাকা (৳)
+              <input id="setCodExtra" type="number" min="0" max="5000" required>
             </label>
           </div>
           <h3 style="font-size:15px;margin:4px 0 8px">TrxID অপশনের জন্য টাকা নেওয়ার নম্বর</h3>
