@@ -144,7 +144,7 @@ function selectExamTrack(track) {
 
   if (track === 'BCS') {
     if (badge) badge.textContent = 'বিসিএস স্ট্যান্ডার্ড • ১,৫৪০টি ১০০% ইউনিক প্রশ্ন (BPSC • ৬টি সম্পূর্ণ স্বতন্ত্র ২০০-মার্কস সেট + ৪টি ক্যাডার স্পেশাল চ্যালেঞ্জ সেট = ১০টি বিসিএস পূর্ণাঙ্গ মডেল সেট)';
-    if (heading) heading.textContent = 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) হুবহু প্রশ্নপত্র ও OMR অনুশীলন কেন্দ্র';
+    if (heading) heading.textContent = 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) হুবহু প্রশ্নপত্র ও উত্তরপত্র অনুশীলন কেন্দ্র';
     if (dropLabel) dropLabel.textContent = 'বিসিএস ১০টি পূর্ণাঙ্গ মডেল সেট, ১০টি বিষয়ভিত্তিক মাস্টার সেট ও বিগত ২০ বিসিএস নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
@@ -176,7 +176,7 @@ function selectExamTrack(track) {
     }
   } else if (track === 'PRIMARY') {
     if (badge) badge.textContent = 'প্রাথমিক শিক্ষা অধিদপ্তর (DPE) • ১০টি নতুন মডেল সেট (পদ্মা–চিত্রা) + বিগত সালের ১৬টি ধাপের প্রশ্নব্যাংক';
-    if (heading) heading.textContent = 'সরকারি প্রাথমিক বিদ্যালয় সহকারী শিক্ষক নিয়োগ পরীক্ষা (হুবহু DPE প্রশ্নপত্র ও OMR)';
+    if (heading) heading.textContent = 'সরকারি প্রাথমিক বিদ্যালয় সহকারী শিক্ষক নিয়োগ পরীক্ষা (হুবহু DPE প্রশ্নপত্র ও উত্তরপত্র)';
     if (dropLabel) dropLabel.textContent = 'প্রাথমিক বিদ্যালয় শিক্ষক নিয়োগ ১০টি মডেল সেট ও বিগত সালের সকল ধাপ নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
@@ -205,7 +205,7 @@ function selectExamTrack(track) {
     }
   } else if (track === 'NTRCA') {
     if (badge) badge.textContent = 'বেসরকারি শিক্ষক নিবন্ধন ও প্রত্যয়ন কর্তৃপক্ষ (NTRCA) • ১০টি স্পেশাল মডেল সেট + বিগত সালের সেট';
-    if (heading) heading.textContent = 'এনটিআরসিএ (NTRCA) স্কুল ও কলেজ পর্যায় প্রিলিমিনারি প্রশ্নপত্র ও OMR (১০০ নম্বর • পাস মার্ক ৪০)';
+    if (heading) heading.textContent = 'এনটিআরসিএ (NTRCA) স্কুল ও কলেজ পর্যায় প্রিলিমিনারি প্রশ্নপত্র ও উত্তরপত্র (১০০ নম্বর • পাস মার্ক ৪০)';
     if (dropLabel) dropLabel.textContent = 'শিক্ষক নিবন্ধন ১০টি নতুন মডেল টেস্ট (Hard & Medium) ও ১৪তম–১৮তম নিবন্ধন সেট নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
@@ -231,7 +231,7 @@ function selectExamTrack(track) {
     }
   } else if (track === 'BANK') {
     if (badge) badge.textContent = 'বাংলাদেশ ব্যাংক ও ব্যাংকার্স সিলেকশন কমিটি (BSC) • ১০টি স্পেশাল মডেল সেট + বিগত সালের সেট';
-    if (heading) heading.textContent = 'বাংলাদেশ ব্যাংক AD এবং সমন্বিত ৮/৯/১০ ব্যাংক অফিসার (জেনারেল ও ক্যাশ) প্রশ্নপত্র ও OMR';
+    if (heading) heading.textContent = 'বাংলাদেশ ব্যাংক AD এবং সমন্বিত ৮/৯/১০ ব্যাংক অফিসার (জেনারেল ও ক্যাশ) প্রশ্নপত্র ও উত্তরপত্র';
     if (dropLabel) dropLabel.textContent = 'ব্যাংক নিয়োগ ১০টি নতুন মডেল টেস্ট (Hard & Analytical) ও বিগত সালের প্রশ্নসেট নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
@@ -257,7 +257,7 @@ function selectExamTrack(track) {
     }
   } else if (track === 'MINISTRY') {
     if (badge) badge.textContent = 'খাদ্য অধিদপ্তর, অডিটর (CGA), রেলওয়ে, সমাজসেবা ও এলজিইডি • ১০টি নতুন মডেল সেট + বিগত সালের সেট';
-    if (heading) heading.textContent = 'মন্ত্রণালয় ও অধিদপ্তরের মেগা নিয়োগ পরীক্ষা (হুবহু প্রশ্নপত্র ও OMR সেন্টার)';
+    if (heading) heading.textContent = 'মন্ত্রণালয় ও অধিদপ্তরের মেগা নিয়োগ পরীক্ষা (হুবহু প্রশ্নপত্র ও উত্তরপত্র)';
     if (dropLabel) dropLabel.textContent = 'খাদ্য অধিদপ্তর, অডিটর, রেলওয়ে ও অন্যান্য অধিদপ্তর ১০টি নতুন মডেল ও বিগত প্রশ্নসেট নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
@@ -309,7 +309,7 @@ function selectExamTrack(track) {
     }
   } else if (track === 'NURSING') {
     if (badge) badge.textContent = 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) ও নার্সিং অধিদপ্তর • ১০টি স্পেশাল মডেল সেট + বিগত সালের প্রশ্নব্যাংক';
-    if (heading) heading.textContent = 'সিনিয়র স্টাফ নার্স (১০ম গ্রেড) ও মিডওয়াইফারি নিয়োগ পরীক্ষা (৬০ প্রফেশনাল বিজ্ঞান + ৪০ সাধারণ • BPSC OMR)';
+    if (heading) heading.textContent = 'সিনিয়র স্টাফ নার্স (১০ম গ্রেড) ও মিডওয়াইফারি নিয়োগ পরীক্ষা (৬০ প্রফেশনাল বিজ্ঞান + ৪০ সাধারণ • BPSC প্যাটার্ন)';
     if (dropLabel) dropLabel.textContent = 'সিনিয়র স্টাফ নার্স ও মিডওয়াইফ ১০টি মডেল টেস্ট (Clinical & Midwifery) ও বিগত সালের সেট নির্বাচন করুন:';
     if (quickContainer) {
       quickContainer.innerHTML = `
@@ -487,6 +487,8 @@ function switchTab(tabName, opts = {}) {
 
   document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
   document.getElementById(`pane-${tabName}`).classList.remove('hidden');
+  document.body.classList.remove('dock-open');
+  if (window.refreshAnswerDockBar) refreshAnswerDockBar();
 
   // Sidebar + mobile bottom bar highlight
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.id === `tab-${tabName}`));
@@ -690,22 +692,22 @@ function changeExamCategory() {
   const negBn = toBnDigits(currentNegativeRate.toFixed(2));
   if (currentCategory === 'PRIMARY') {
     if (omrAuthHead) omrAuthHead.textContent = 'প্রাথমিক শিক্ষা অধিদপ্তর (DPE)';
-    if (omrAuthSub) omrAuthSub.textContent = 'DPE OMR ANSWER SHEET • সরকারি প্রাথমিক শিক্ষক নিয়োগ';
+    if (omrAuthSub) omrAuthSub.textContent = 'DPE ANSWER SHEET • সরকারি প্রাথমিক শিক্ষক নিয়োগ';
   } else if (currentCategory === 'NTRCA') {
     if (omrAuthHead) omrAuthHead.textContent = 'বেসরকারি শিক্ষক নিবন্ধন ও প্রত্যয়ন কর্তৃপক্ষ';
-    if (omrAuthSub) omrAuthSub.textContent = 'NTRCA OMR ANSWER SHEET • স্কুল ও কলেজ পর্যায় (পাস ৪০%)';
+    if (omrAuthSub) omrAuthSub.textContent = 'NTRCA ANSWER SHEET • স্কুল ও কলেজ পর্যায় (পাস ৪০%)';
   } else if (currentCategory === 'BANK') {
     if (omrAuthHead) omrAuthHead.textContent = 'বাংলাদেশ ব্যাংক / ব্যাংকার্স সিলেকশন কমিটি';
-    if (omrAuthSub) omrAuthSub.textContent = 'BANK RECRUITMENT OMR ANSWER SHEET • ১০০ নম্বর';
+    if (omrAuthSub) omrAuthSub.textContent = 'BANK RECRUITMENT ANSWER SHEET • ১০০ নম্বর';
   } else if (currentCategory === 'MINISTRY') {
     if (omrAuthHead) omrAuthHead.textContent = currentOrgHeaderBn.split('•').pop().trim();
-    if (omrAuthSub) omrAuthSub.textContent = 'MINISTRY & DIRECTORATE OMR SHEET • সরকারি নিয়োগ';
+    if (omrAuthSub) omrAuthSub.textContent = 'MINISTRY & DIRECTORATE ANSWER SHEET • সরকারি নিয়োগ';
   } else if (currentCategory === 'NON_CADRE') {
     if (omrAuthHead) omrAuthHead.textContent = 'পিএসসি নন-ক্যাডার ও দুদক নিয়োগ';
-    if (omrAuthSub) omrAuthSub.textContent = 'BPSC NON-CADRE OMR SHEET • ৯ম ও ১০ম গ্রেড';
+    if (omrAuthSub) omrAuthSub.textContent = 'BPSC NON-CADRE ANSWER SHEET • ৯ম ও ১০ম গ্রেড';
   } else {
     if (omrAuthHead) omrAuthHead.textContent = 'বাংলাদেশ সরকারি কর্ম কমিশন';
-    if (omrAuthSub) omrAuthSub.textContent = 'BPSC OMR ANSWER SHEET • কালো বলপয়েন্ট বৃত্ত ভরাট';
+    if (omrAuthSub) omrAuthSub.textContent = 'BPSC ANSWER SHEET • কালো বলপয়েন্ট বৃত্ত ভরাট';
   }
   if (omrPenText) omrPenText.textContent = `● সঠিক = +১.০০ | ভুল = -${negBn}`;
 
@@ -977,7 +979,7 @@ function renderExamQuestions() {
 
         <!-- Official Instructions Box -->
         <div class="bg-[#f5f1e3] border border-slate-700 px-3 py-2 mb-4 text-xs text-slate-900 leading-relaxed">
-          <strong>[দ্রষ্টব্য:</strong> ডান পাশের <strong>OMR উত্তরপত্রে</strong> কালো বলপয়েন্ট কলমের বৃত্ত ভরাট করুন অথবা সরাসরি প্রশ্নের অপশনে ক্লিক করুন। প্রতিটি সঠিক উত্তরের জন্য <strong>১ (এক) নম্বর</strong> পাওয়া যাবে এবং প্রতিটি ভুল উত্তরের জন্য <strong>${negRate} নম্বর কাটা যাবে</strong>।<strong>]</strong>
+          <strong>[দ্রষ্টব্য:</strong> <span class="lg-only">ডান পাশের</span><span class="lg-hide">নিচের লাল বারে চাপলে খোলা</span> <strong>উত্তরপত্রে</strong> কালো বলপয়েন্ট কলমের বৃত্ত ভরাট করুন অথবা সরাসরি প্রশ্নের অপশনে ক্লিক করুন। প্রতিটি সঠিক উত্তরের জন্য <strong>১ (এক) নম্বর</strong> পাওয়া যাবে এবং প্রতিটি ভুল উত্তরের জন্য <strong>${negRate} নম্বর কাটা যাবে</strong>।<strong>]</strong>
         </div>
 
         <!-- 2-Column Question Body -->
@@ -1315,7 +1317,7 @@ function updateMistakeBadge() {
 }
 
 // -----------------------------------------------------------------------------
-// 2. PAST YEAR QUESTION BANK BROWSER (বিসিএস ও প্রাইমারি সম্পূর্ণ আলাদা আর্কাইভ + হুবহু ২-কলাম প্রশ্নপত্র ও OMR)
+// 2. PAST YEAR QUESTION BANK BROWSER (বিসিএস ও প্রাইমারি সম্পূর্ণ আলাদা আর্কাইভ + হুবহু ২-কলাম প্রশ্নপত্র ও উত্তরপত্র)
 // -----------------------------------------------------------------------------
 let pastBankDisplayMode = 'BOOKLET'; // 'BOOKLET' (2-col real BPSC/DPE paper + OMR) or 'CARD'
 let pastBankShowAnswers = false; // Toggle answer key & explanation in Past Bank booklet
@@ -1402,7 +1404,7 @@ function setPastBankTrack(track) {
   } else if (track === 'NTRCA') {
     if (head) head.textContent = '🎓 বেসরকারি শিক্ষক নিবন্ধন ও প্রত্যয়ন কর্তৃপক্ষ (NTRCA) প্রশ্নব্যাংক';
     if (badge) badge.textContent = '১৪তম – ১৮তম শিক্ষক নিবন্ধন ও ১৯তম মডেল (স্কুল ও কলেজ পর্যায় • ১৮টি পূর্ণাঙ্গ সেট)';
-    if (desc) desc.textContent = 'স্কুল, স্কুল-২ ও কলেজ পর্যায়ের বিগত নিবন্ধন ও স্পেশাল মডেল সেট হুবহু ২-কলাম বুকলেট ও OMR শিটে সমাধান করুন (পাশ নম্বর ৪০%, নেগেটিভ ০.২৫)।';
+    if (desc) desc.textContent = 'স্কুল, স্কুল-২ ও কলেজ পর্যায়ের বিগত নিবন্ধন ও স্পেশাল মডেল সেট হুবহু ২-কলাম বুকলেট ও উত্তরপত্রে সমাধান করুন (পাশ নম্বর ৪০%, নেগেটিভ ০.২৫)।';
   } else if (track === 'BANK') {
     if (head) head.textContent = '🏦 বাংলাদেশ ব্যাংক AD ও সমন্বিত ব্যাংক নিয়োগ প্রশ্নব্যাংক (BSC)';
     if (badge) badge.textContent = 'BB AD, Combined 9/10 Banks Officer, SO & Cash (১৬টি পূর্ণাঙ্গ সেট)';
@@ -1414,11 +1416,11 @@ function setPastBankTrack(track) {
   } else if (track === 'NON_CADRE') {
     if (head) head.textContent = '⚖️ পিএসসি নন-ক্যাডার (৯ম-১০ম গ্রেড) ও দুদক (ACC) প্রশ্নব্যাংক';
     if (badge) badge.textContent = 'এটিইও (ATEO) • সাব-রেজিস্ট্রার • তহশিলদার • দুদক (১৪টি পূর্ণাঙ্গ সেট)';
-    if (desc) desc.textContent = 'পিএসসি নন-ক্যাডার ৯ম ও ১০ম গ্রেড এবং দুর্নীতি দমন কমিশনের (ACC) প্রশ্নপত্র ২-কলাম বুকলেট ও OMR শিটে সমাধান করুন।';
+    if (desc) desc.textContent = 'পিএসসি নন-ক্যাডার ৯ম ও ১০ম গ্রেড এবং দুর্নীতি দমন কমিশনের (ACC) প্রশ্নপত্র ২-কলাম বুকলেট ও উত্তরপত্রে সমাধান করুন।';
   } else if (track === 'NURSING') {
     if (head) head.textContent = '🩺 বিপিএসসি সিনিয়র স্টাফ নার্স ও মিডওয়াইফারি প্রশ্নব্যাংক (BPSC & DGNM)';
     if (badge) badge.textContent = '১০ম গ্রেড নার্সিং ও মিডওয়াইফারি (১৪টি পূর্ণাঙ্গ সেট • ৪টি বিগত পরীক্ষা + ১০টি প্রফেশনাল মডেল সেট)';
-    if (desc) desc.textContent = 'বিপিএসসি সিনিয়র স্টাফ নার্স ও মিডওয়াইফারি নিয়োগের বিগত প্রশ্নপত্র ও প্রফেশনাল নার্সিং মডেল সেট (৬০ নার্সিং বিজ্ঞান + ৪০ সাধারণ) ২-কলাম বুকলেট ও OMR শিটে সমাধান করুন।';
+    if (desc) desc.textContent = 'বিপিএসসি সিনিয়র স্টাফ নার্স ও মিডওয়াইফারি নিয়োগের বিগত প্রশ্নপত্র ও প্রফেশনাল নার্সিং মডেল সেট (৬০ নার্সিং বিজ্ঞান + ৪০ সাধারণ) ২-কলাম বুকলেট ও উত্তরপত্রে সমাধান করুন।';
   } else {
     if (head) head.textContent = '📚 বিগত ২০ বিসিএস প্রশ্নব্যাংক ও বোর্ড বই ড্রিল (BPSC)';
     if (badge) badge.textContent = '২৭তম - ৪৬তম বিসিএস • ১,২০০+ ইউনিক প্রশ্ন';
@@ -1767,13 +1769,13 @@ function renderPastBank() {
     return;
   }
 
-  // MODE 1 (DEFAULT): AUTHENTIC 2-COLUMN PRINTED BPSC / DPE / NTRCA / BANK / MINISTRY QUESTION BOOKLET + OMR SHEET
+  // MODE 1 (DEFAULT): AUTHENTIC 2-COLUMN PRINTED BPSC / DPE / NTRCA / BANK / MINISTRY QUESTION BOOKLET + ANSWER SHEET
   if (pastBankDisplayMode === 'BOOKLET') {
     const sectorDefaults = {
       BCS: {
         orgHeaderBn: 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC)',
         omrTitleBn: 'বাংলাদেশ সরকারি কর্ম কমিশন',
-        omrSubBn: 'BPSC OMR ANSWER SHEET • কালো বলপয়েন্ট বৃত্ত ভরাট',
+        omrSubBn: 'BPSC ANSWER SHEET • কালো বলপয়েন্ট বৃত্ত ভরাট',
         negRateNum: 0.50,
         durationMinBn: '১২০',
         codeLabelBn: 'বিষয় কোড: ১০০ (সাধারণ ও পেশাগত)',
@@ -1783,7 +1785,7 @@ function renderPastBank() {
       PRIMARY: {
         orgHeaderBn: 'প্রাথমিক শিক্ষা অধিদপ্তর (DPE)',
         omrTitleBn: 'প্রাথমিক শিক্ষা অধিদপ্তর (DPE)',
-        omrSubBn: 'DPE OMR ANSWER SHEET • সরকারি প্রাথমিক শিক্ষক নিয়োগ',
+        omrSubBn: 'DPE ANSWER SHEET • সরকারি প্রাথমিক শিক্ষক নিয়োগ',
         negRateNum: 0.25,
         durationMinBn: '৬০',
         codeLabelBn: 'পদ: সহকারী শিক্ষক (সরকারি প্রাথমিক বিদ্যালয়)',
@@ -1793,7 +1795,7 @@ function renderPastBank() {
       NTRCA: {
         orgHeaderBn: 'বেসরকারি শিক্ষক নিবন্ধন ও প্রত্যয়ন কর্তৃপক্ষ (NTRCA)',
         omrTitleBn: 'বেসরকারি শিক্ষক নিবন্ধন কর্তৃপক্ষ (NTRCA)',
-        omrSubBn: 'NTRCA OMR ANSWER SHEET • স্কুল ও কলেজ পর্যায় (পাশ নম্বর ৪০%)',
+        omrSubBn: 'NTRCA ANSWER SHEET • স্কুল ও কলেজ পর্যায় (পাশ নম্বর ৪০%)',
         negRateNum: 0.25,
         durationMinBn: '৬০',
         codeLabelBn: 'পর্যায়: স্কুল / স্কুল-২ ও কলেজ পর্যায় (প্রিলিমিনারি টেস্ট)',
@@ -1803,7 +1805,7 @@ function renderPastBank() {
       BANK: {
         orgHeaderBn: 'বাংলাদেশ ব্যাংক • ব্যাংকার্স সিলেকশন কমিটি সচিবালয় (BSCS)',
         omrTitleBn: 'ব্যাংকার্স সিলেকশন কমিটি (BSCS)',
-        omrSubBn: 'BANK RECRUITMENT OMR SHEET • BB AD / Officer / SO',
+        omrSubBn: 'BANK RECRUITMENT ANSWER SHEET • BB AD / Officer / SO',
         negRateNum: 0.25,
         durationMinBn: '৬০',
         codeLabelBn: 'পদ: সহকারী পরিচালক (AD) ও সমন্বিত ব্যাংক অফিসার (৯ম-১০ম গ্রেড)',
@@ -1813,7 +1815,7 @@ function renderPastBank() {
       MINISTRY: {
         orgHeaderBn: 'খাদ্য অধিদপ্তর • সিজিএ • বাংলাদেশ রেলওয়ে • সমাজসেবা অধিদপ্তর',
         omrTitleBn: 'মন্ত্রণালয় ও অধিদপ্তর নিয়োগ পরীক্ষা',
-        omrSubBn: 'GOVT RECRUITMENT OMR SHEET • ১১তম - ২০তম গ্রেড',
+        omrSubBn: 'GOVT RECRUITMENT ANSWER SHEET • ১১তম - ২০তম গ্রেড',
         negRateNum: 0.25,
         durationMinBn: '৬০',
         codeLabelBn: 'পদ: উপ-খাদ্য পরিদর্শক / অডিটর / ইউনিয়ন সমাজকর্মী / কার্যসহকারী',
@@ -1823,7 +1825,7 @@ function renderPastBank() {
       NON_CADRE: {
         orgHeaderBn: 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC নন-ক্যাডার ও দুদক)',
         omrTitleBn: 'বাংলাদেশ সরকারি কর্ম কমিশন (নন-ক্যাডার)',
-        omrSubBn: 'BPSC NON-CADRE OMR SHEET • ৯ম ও ১০ম গ্রেড',
+        omrSubBn: 'BPSC NON-CADRE ANSWER SHEET • ৯ম ও ১০ম গ্রেড',
         negRateNum: 0.50,
         durationMinBn: '৬০',
         codeLabelBn: 'পদ: সিনিয়র স্টাফ নার্স / এটিইও (ATEO) / সাব-রেজিস্ট্রার / দুদক সহকারী পরিচালক',
@@ -1989,7 +1991,7 @@ function renderPastBank() {
 
             <div class="bg-[#f5f1e3] border border-slate-700 px-3 py-2 mb-4 text-xs text-slate-900 leading-relaxed flex flex-wrap items-center justify-between gap-2">
               <span>
-                <strong>[নির্দেশনা:</strong> প্রশ্নের অপশনে বা ডান পাশের <strong>OMR উত্তরপত্রে</strong> ক্লিক করে অনুশীলন করুন। প্রতিটি সঠিক উত্তরের মান <strong>+১.০০</strong> এবং ভুল উত্তরের নেগেটিভ <strong>-${negRateBn}</strong>।<strong>]</strong>
+                <strong>[নির্দেশনা:</strong> প্রশ্নের অপশনে বা <span class="lg-only">ডান পাশের</span><span class="lg-hide">নিচের লাল বারে চাপলে খোলা</span> <strong>উত্তরপত্রে</strong> ক্লিক করে অনুশীলন করুন। প্রতিটি সঠিক উত্তরের মান <strong>+১.০০</strong> এবং ভুল উত্তরের নেগেটিভ <strong>-${negRateBn}</strong>।<strong>]</strong>
               </span>
               <button onclick="togglePastBankAnswerKey()" class="px-2.5 py-1 rounded bg-[#006a4e] text-white font-bold text-xs shrink-0">
                 ${pastBankShowAnswers ? '🙈 সব উত্তর লুকান' : '👁️ সব উত্তর ও ব্যাখ্যা দেখুন'}
@@ -2007,14 +2009,14 @@ function renderPastBank() {
         </div>
 
         <!-- Right 4 cols: Real Pink/Red BPSC/DPE OMR Answer Sheet -->
-        <div class="lg:col-span-4 sticky top-28">
+        <div class="lg:col-span-4 sticky top-28 answer-dock">
           <div class="bpsc-omr-sheet">
             <div class="bg-[#d94662] text-white px-4 py-2.5 flex items-center justify-between">
               <div>
                 <h3 class="text-sm font-bold tracking-wide">${omrTitleBn}</h3>
                 <p class="text-[10px] opacity-90 font-mono">${omrSubBn}</p>
               </div>
-              <span class="px-2.5 py-1 rounded-full bg-slate-950 text-amber-300 font-mono text-xs font-bold">
+              <span class="dock-count px-2.5 py-1 rounded-full bg-slate-950 text-amber-300 font-mono text-xs font-bold">
                 ${toBnDigits(pbAttempted)}/${totalQBn}
               </span>
             </div>
@@ -3278,7 +3280,7 @@ function renderConfusingHotTab() {
 
           <div class="bg-[#f5f1e3] border border-slate-700 px-3 py-2 mb-4 text-xs text-slate-900 leading-relaxed flex flex-wrap items-center justify-between gap-2">
             <span>
-              <strong>[নির্দেশনা:</strong> প্রতিটি প্রশ্নের নিচে <strong>কোন কোন পরীক্ষায় কতবার প্রশ্নটি এসেছে</strong> তা উল্লেখ করা আছে। ডান পাশের OMR শিটে বৃত্ত ভরাট করে অনুশীলন করুন।<strong>]</strong>
+              <strong>[নির্দেশনা:</strong> প্রতিটি প্রশ্নের নিচে <strong>কোন কোন পরীক্ষায় কতবার প্রশ্নটি এসেছে</strong> তা উল্লেখ করা আছে। <span class="lg-only">ডান পাশের</span><span class="lg-hide">নিচের লাল বারে চাপলে খোলা</span> উত্তরপত্রে বৃত্ত ভরাট করে অনুশীলন করুন।<strong>]</strong>
             </span>
             <button onclick="toggleSuperHotShowAnswers()" class="px-2.5 py-1 rounded bg-[#006a4e] text-white font-bold text-xs shrink-0">
               ${superHotShowAnswers ? '🙈 সব উত্তর লুকান' : '👁️ সব উত্তর ও ব্যাখ্যা দেখুন'}
@@ -3291,14 +3293,14 @@ function renderConfusingHotTab() {
         </div>
       </div>
 
-      <div class="lg:col-span-4 sticky top-28">
+      <div class="lg:col-span-4 sticky top-28 answer-dock">
         <div class="bpsc-omr-sheet">
           <div class="bg-[#d94662] text-white px-4 py-2.5 flex items-center justify-between">
             <div>
-              <h3 class="text-sm font-bold tracking-wide">সুপার-হট কমন OMR শিট</h3>
+              <h3 class="text-sm font-bold tracking-wide">সুপার-হট কমন উত্তরপত্র</h3>
               <p class="text-[10px] opacity-90 font-mono">CROSS-EXAM REPEAT TRACKER • -০.২৫ নেগেটিভ</p>
             </div>
-            <span class="px-2.5 py-1 rounded-full bg-slate-950 text-amber-300 font-mono text-xs font-bold">
+            <span class="dock-count px-2.5 py-1 rounded-full bg-slate-950 text-amber-300 font-mono text-xs font-bold">
               ${toBnDigits(shAttempted)}/${totalQBn}
             </span>
           </div>
@@ -3336,9 +3338,17 @@ function renderConfusingHotTab() {
 // -----------------------------------------------------------------------------
 // 15. 1-CLICK OFFLINE PRINTABLE QUESTION BOOKLET + BLANK OMR + ANSWER KEY PDF
 // -----------------------------------------------------------------------------
+// Small "licensed to" line on every printed page, so a shared printout points back to the account
+function printOwnerMark() {
+  const u = typeof window !== 'undefined' && window.Account && window.Account.user;
+  if (!u) return '';
+  const who = String(u.phone || u.name || '').replace(/[<>&"']/g, '');
+  return `<div class="owner-mark">সোনার হরিণ • ${who} • ${new Date().toLocaleDateString('en-GB')}</div>`;
+}
+
 function printFullExamPackage(source = 'LIVE') {
-  // Download / print is part of the PREMIUM plan (account.js shows the plans otherwise)
-  if (typeof window !== 'undefined' && window.Account && !window.Account.allowPrint()) return '';
+  // Print / PDF download is a premium feature (content-guard.js)
+  if (typeof window !== 'undefined' && window.ContentGuard && !window.ContentGuard.requirePrint()) return '';
   const bnOpt = { A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' };
   let printQuestions = questions || [];
   let orgTitle = currentOrgHeaderBn || 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC)';
@@ -3409,7 +3419,7 @@ function printFullExamPackage(source = 'LIVE') {
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>${examTitle} — প্রশ্নপত্র + ফাঁকা OMR + উত্তরমালা</title>
+  <title>${examTitle} — প্রশ্নপত্র + ফাঁকা উত্তরপত্র + উত্তরমালা</title>
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     @page { size: A4; margin: 11mm; }
@@ -3462,11 +3472,13 @@ function printFullExamPackage(source = 'LIVE') {
     .omr-b { width: 19px; height: 19px; border-radius: 50%; border: 1.5px solid #e11d48; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; color: #be123c; font-weight: bold; background: #fff; }
     .ak-grid { column-count: 2; column-gap: 18px; font-size: 12px; }
     .ak-item { break-inside: avoid; margin-bottom: 5px; border-bottom: 1px dashed #ccc; padding-bottom: 3px; }
+    .owner-mark { position: fixed; bottom: 2mm; right: 4mm; font-size: 9px; color: #64748b; }
   </style>
 </head>
 <body>
+  ${printOwnerMark()}
   <div class="no-print-bar">
-    <span>🖨️ ১-ক্লিকে অফলাইন প্রিন্টেবল প্যাকেজ: (১) ২-কলাম প্রশ্নপত্র + (২) ফাঁকা OMR উত্তরপত্র + (৩) ব্যাখ্যাসহ উত্তরমালা</span>
+    <span>🖨️ ১-ক্লিকে অফলাইন প্রিন্টেবল প্যাকেজ: (১) ২-কলাম প্রশ্নপত্র + (২) ফাঁকা উত্তরপত্র + (৩) ব্যাখ্যাসহ উত্তরমালা</span>
     <button onclick="window.print()">এখনই প্রিন্ট / Save as PDF করুন</button>
   </div>
 
@@ -3483,17 +3495,17 @@ function printFullExamPackage(source = 'LIVE') {
       </div>
     </div>
     <div class="ins">
-      <b>[নির্দেশনা:</b> প্রতিটি প্রশ্নের মান ১। প্রতিটি ভুল উত্তরের জন্য ${negBn} নম্বর কাটা যাবে। পরের পাতায় সংযুক্ত ফাঁকা OMR উত্তরপত্রে কালো বলপয়েন্ট কলম দিয়ে বৃত্ত ভরাট করে অনুশীলন করুন।<b>]</b>
+      <b>[নির্দেশনা:</b> প্রতিটি প্রশ্নের মান ১। প্রতিটি ভুল উত্তরের জন্য ${negBn} নম্বর কাটা যাবে। পরের পাতায় সংযুক্ত ফাঁকা উত্তরপত্রে কালো বলপয়েন্ট কলম দিয়ে বৃত্ত ভরাট করে অনুশীলন করুন।<b>]</b>
     </div>
     <div class="two-col">${qItemsHtml}</div>
   </div>
 
-  <!-- PART 2: BLANK PINK/RED OMR ANSWER SHEET -->
+  <!-- PART 2: BLANK PINK/RED ANSWER SHEET -->
   <div class="sheet page-break">
     <div class="omr-page">
       <div class="omr-header">
         <div>
-          <div style="font-size:16px;font-weight:bold;">${orgTitle} — ফাঁকা OMR উত্তরপত্র (Practice Sheet)</div>
+          <div style="font-size:16px;font-weight:bold;">${orgTitle} — ফাঁকা উত্তরপত্র (Practice Sheet)</div>
           <div style="font-size:11px;">${examTitle} • সেট কোড: ${setCode} • কালো বলপয়েন্ট কলমে বৃত্ত ভরাট করুন</div>
         </div>
         <div style="border:2px solid #fff;padding:4px 10px;font-weight:bold;">মোট প্রশ্ন: ${totalQBn}টি</div>

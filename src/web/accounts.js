@@ -14,6 +14,9 @@
  *   creates the checkout, the gateway's success / IPN callback is verified with the
  *   gateway's validation API (status, amount, currency, tran_id) and then activatePayment()
  *   unlocks the account. Manual TrxID stays as a fallback that admin can switch off.
+ * - Printed pack: plans with printPack ask for a home address; admin posts the papers and
+ *   marks the order shipped. Cash on delivery (/api/payment/cod) is only for these plans and
+ *   costs codExtra more; admin approves it once the courier has collected the cash.
  * - State is saved to a JSON file, or Postgres (app_state table) when DATABASE_URL is set
  */
 
@@ -36,10 +39,15 @@ const APP_UA = /SonarHorinApp\//;
 
 const DEFAULT_SETTINGS = {
   plans: [
-    { id: 'monthly', nameBn: '১ মাস', price: 299, days: 30 },
-    { id: 'half_year', nameBn: '৬ মাস', price: 999, days: 180 },
-    { id: 'yearly', nameBn: '১ বছর', price: 1499, days: 365 }
+    // printPack: printed question papers are posted to the student's home with this plan
+    { id: 'monthly', nameBn: '১ মাস', price: 299, days: 30, printPack: false },
+    { id: 'half_year', nameBn: '৬ মাস', price: 999, days: 180, printPack: true },
+    { id: 'yearly', nameBn: '১ বছর', price: 1499, days: 365, printPack: true }
   ],
+  // Cash on delivery: only for plans with a printed pack. The courier collects price + codExtra,
+  // admin approves once the cash is in, so online payment stays the cheaper choice.
+  codEnabled: true,
+  codExtra: 200,
   methods: [
     { id: 'bkash', nameBn: 'বিকাশ', number: '01XXXXXXXXX', accountType: 'Personal', enabled: true },
     { id: 'nagad', nameBn: 'নগদ', number: '01XXXXXXXXX', accountType: 'Personal', enabled: true },
@@ -67,6 +75,8 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     const out = s && typeof s === 'object' ? s : {};
     for (const k of ['users', 'sessions', 'payments', 'orders']) if (!Array.isArray(out[k])) out[k] = [];
     out.settings = { ...DEFAULT_SETTINGS, ...(out.settings || {}) };
+    // Plans saved before printed packs existed: 6 months or longer come with the pack
+    out.settings.plans = out.settings.plans.map(p => ({ ...p, printPack: p.printPack !== undefined ? Boolean(p.printPack) : p.days >= 180 }));
     return out;
   }
 
@@ -318,6 +328,21 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
   // Payments
   // ---------------------------------------------------------------------------
   const normalizeTrx = raw => String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const codPrice = plan => plan.price + Math.max(0, Math.round(Number(state.settings.codExtra) || 0));
+
+  // Home address for the printed pack. Returns { delivery } or { error } (Bangla message).
+  function readDelivery(raw) {
+    const d = raw && typeof raw === 'object' ? raw : {};
+    const name = String(d.name || '').trim().slice(0, 80);
+    const phone = normalizePhone(d.phone);
+    const district = String(d.district || '').trim().slice(0, 40);
+    const address = String(d.address || '').trim().slice(0, 300);
+    if (name.length < 2) return { error: 'প্রাপকের নাম লিখুন।' };
+    if (!phone) return { error: 'প্রাপকের সঠিক মোবাইল নম্বর দিন (কুরিয়ার ফোন করবে)।' };
+    if (district.length < 2) return { error: 'জেলা লিখুন।' };
+    if (address.length < 10) return { error: 'পুরো ঠিকানা লিখুন (বাসা, রোড, এলাকা, থানা)।' };
+    return { delivery: { name, phone, district, address } };
+  }
 
   function publicPayment(p, withUser = false) {
     const out = {
@@ -336,7 +361,9 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
       status: p.status,
       createdAt: p.createdAt,
       reviewedAt: p.reviewedAt || null,
-      noteBn: p.noteBn || ''
+      noteBn: p.noteBn || '',
+      delivery: p.delivery || null,
+      shippedAt: p.shippedAt || null
     };
     if (withUser) {
       const u = state.users.find(x => x.id === p.userId);
@@ -451,7 +478,10 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     return {
       gateway: gw && !gw.error ? { provider: gw.provider, sandbox: gw.sandbox } : null,
       manualEnabled: s.manualEnabled !== false,
-      plans: s.plans,
+      // Cash on delivery now goes through the OTP + access-code order (cod-orders.js, cod field below)
+      codEnabled: false,
+      codExtra: s.codExtra,
+      plans: s.plans.map(p => ({ ...p, codPrice: p.printPack ? codPrice(p) : null })),
       methods: s.methods.filter(m => m.enabled !== false).map(m => ({ id: m.id, nameBn: m.nameBn, number: m.number, accountType: m.accountType })),
       noticeBn: s.noticeBn,
       freePerGroup: s.freePerGroup,
@@ -568,6 +598,8 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
       }
       const plan = state.settings.plans.find(p => p.id === body.planId);
       if (!plan) return fail(res, 400, 'BAD_PLAN', 'প্যাকেজ বাছাই করুন।');
+      const d = plan.printPack ? readDelivery(body.delivery) : {};
+      if (d.error) return fail(res, 400, 'BAD_ADDRESS', d.error);
       const payment = {
         id: newId('pay'),
         provider: cfg.provider.toUpperCase(),
@@ -583,6 +615,7 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
         days: plan.days,
         status: 'INITIATED',
         returnTo: safeReturn(body.returnTo),
+        delivery: d.delivery || null,
         createdAt: new Date().toISOString()
       };
       const base = baseUrl(req);
@@ -657,9 +690,12 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
       if (state.payments.filter(p => p.userId === user.id && p.status === 'PENDING').length >= 3) {
         return fail(res, 429, 'TOO_MANY_PENDING', 'আপনার ৩টি পেমেন্ট যাচাইয়ের অপেক্ষায় আছে। একটু অপেক্ষা করুন।');
       }
+      const d = plan.printPack ? readDelivery(body.delivery) : {};
+      if (d.error) return fail(res, 400, 'BAD_ADDRESS', d.error);
       const payment = {
         id: newId('pay'),
         provider: 'MANUAL',
+        delivery: d.delivery || null,
         userId: user.id,
         method: m.id,
         toNumber: m.number,
@@ -678,31 +714,85 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
       return true;
     }
 
+    // Cash on delivery: the printed pack is posted, the courier collects price + codExtra,
+    // admin approves when the cash is in (same approve button as bKash / Nagad)
+    if (pathname === '/api/payment/cod' && method === 'POST') {
+      if (APP_UA.test(req.headers['user-agent'] || '')) {
+        return fail(res, 403, 'USE_WEBSITE', 'অ্যাপে পেমেন্ট নেওয়া হয় না। ওয়েবসাইটে লগইন করে আনলক করুন।');
+      }
+      if (!user) return fail(res, 401, 'LOGIN_REQUIRED', 'আগে লগইন করুন।');
+      // Replaced by /api/cod/order (phone OTP, location check, access code in the packet)
+      return fail(res, 410, 'USE_COD_ORDER', 'ক্যাশ অন ডেলিভারির জন্য "প্যাকেজ দেখুন" থেকে অর্ডার ফর্মটি ব্যবহার করুন।');
+      // eslint-disable-next-line no-unreachable
+      if (state.settings.codEnabled === false) return fail(res, 403, 'COD_OFF', 'ক্যাশ অন ডেলিভারি এখন বন্ধ আছে।');
+      const plan = state.settings.plans.find(p => p.id === body.planId);
+      if (!plan) return fail(res, 400, 'BAD_PLAN', 'প্যাকেজ বাছাই করুন।');
+      if (!plan.printPack) return fail(res, 400, 'NO_PRINT_PACK', 'এই প্যাকেজে প্রিন্ট করা প্রশ্ন নেই, তাই ক্যাশ অন ডেলিভারি হয় না। অনলাইনে পেমেন্ট করুন।');
+      const d = readDelivery(body.delivery);
+      if (d.error) return fail(res, 400, 'BAD_ADDRESS', d.error);
+      if (state.payments.some(p => p.userId === user.id && p.provider === 'COD' && p.status === 'PENDING')) {
+        return fail(res, 409, 'COD_PENDING', 'আপনার একটি ক্যাশ অন ডেলিভারি অর্ডার আগেই চলছে।');
+      }
+      const payment = {
+        id: newId('pay'),
+        provider: 'COD',
+        userId: user.id,
+        method: 'cod',
+        senderNumber: d.delivery.phone,
+        trxId: '',
+        planId: plan.id,
+        planNameBn: plan.nameBn,
+        amount: codPrice(plan),
+        days: plan.days,
+        status: 'PENDING',
+        delivery: d.delivery,
+        createdAt: new Date().toISOString()
+      };
+      state.payments.push(payment);
+      await saveNow();
+      send(res, 200, { status: 'SUCCESS', payment: publicPayment(payment), user: publicUser(user) });
+      return true;
+    }
+
     // ---------------- Admin ----------------
     if (pathname.startsWith('/api/admin/accounts/')) {
       if (!isAdmin(req)) return fail(res, 401, 'ADMIN_ONLY', 'অ্যাডমিন কী সঠিক নয়।');
 
       if (pathname === '/api/admin/accounts/payments' && method === 'GET') {
         const status = searchParams.get('status') || 'PENDING';
-        const list = state.payments.filter(p => status === 'ALL' || p.status === status).slice(-300).reverse();
+        // SHIP: printed packs still to post (paid, or cash on delivery waiting for the courier)
+        const toShip = p => p.delivery && !p.shippedAt && (p.status === 'APPROVED' || (p.provider === 'COD' && p.status === 'PENDING'));
+        const list = state.payments.filter(p => status === 'ALL' || (status === 'SHIP' ? toShip(p) : p.status === status)).slice(-300).reverse();
         send(res, 200, {
           status: 'SUCCESS',
           counts: {
             PENDING: state.payments.filter(p => p.status === 'PENDING').length,
             APPROVED: state.payments.filter(p => p.status === 'APPROVED').length,
             REJECTED: state.payments.filter(p => p.status === 'REJECTED').length,
-            ONLINE: state.payments.filter(p => p.provider !== 'MANUAL' && p.status === 'APPROVED').length
+            ONLINE: state.payments.filter(p => !['MANUAL', 'COD'].includes(p.provider) && p.status === 'APPROVED').length,
+            SHIP: state.payments.filter(toShip).length
           },
           payments: list.map(p => publicPayment(p, true))
         });
         return true;
       }
 
-      let mm = pathname.match(/^\/api\/admin\/accounts\/payments\/([\w-]+)\/recheck$/);
+      // Printed pack handed to the courier (or undo)
+      let mm = pathname.match(/^\/api\/admin\/accounts\/payments\/([\w-]+)\/(shipped|unshipped)$/);
+      if (mm && method === 'POST') {
+        const p = state.payments.find(x => x.id === mm[1]);
+        if (!p || !p.delivery) return fail(res, 404, 'NOT_FOUND', 'ডেলিভারির অর্ডার পাওয়া যায়নি।');
+        p.shippedAt = mm[2] === 'shipped' ? new Date().toISOString() : null;
+        await saveNow();
+        send(res, 200, { status: 'SUCCESS', payment: publicPayment(p, true) });
+        return true;
+      }
+
+      mm = pathname.match(/^\/api\/admin\/accounts\/payments\/([\w-]+)\/recheck$/);
       if (mm && method === 'POST') {
         const p = state.payments.find(x => x.id === mm[1]);
         const cfg = gateways.gatewayConfig();
-        if (!p || p.provider === 'MANUAL') return fail(res, 404, 'NOT_FOUND', 'অনলাইন পেমেন্ট পাওয়া যায়নি।');
+        if (!p || ['MANUAL', 'COD'].includes(p.provider)) return fail(res, 404, 'NOT_FOUND', 'অনলাইন পেমেন্ট পাওয়া যায়নি।');
         if (!cfg || cfg.error || cfg.provider.toUpperCase() !== p.provider) return fail(res, 400, 'NO_GATEWAY', 'এই গেটওয়ে এখন চালু নেই।');
         try {
           await confirmGatewayPayment(cfg, p, {});
@@ -717,7 +807,7 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
       if (mm && method === 'POST') {
         const p = state.payments.find(x => x.id === mm[1]);
         if (!p) return fail(res, 404, 'NOT_FOUND', 'পেমেন্ট পাওয়া যায়নি।');
-        if (p.status !== 'PENDING' || p.provider !== 'MANUAL') return fail(res, 409, 'NOT_PENDING', 'এই পেমেন্ট আগেই যাচাই করা হয়েছে।');
+        if (p.status !== 'PENDING' || !['MANUAL', 'COD'].includes(p.provider)) return fail(res, 409, 'NOT_PENDING', 'এই পেমেন্ট আগেই যাচাই করা হয়েছে।');
         if (mm[2] === 'approve') {
           activatePayment(p);
         } else {
@@ -790,7 +880,8 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
             id: String(p.id || '').replace(/[^\w-]/g, '').slice(0, 30),
             nameBn: String(p.nameBn || '').trim().slice(0, 40),
             price: Math.round(Number(p.price)),
-            days: Math.round(Number(p.days))
+            days: Math.round(Number(p.days)),
+            printPack: Boolean(p.printPack)
           }));
           if (!plans.length || plans.some(p => !p.id || !p.nameBn || !(p.price > 0) || !(p.days > 0))) {
             return fail(res, 400, 'BAD_PLANS', 'প্রতিটি প্যাকেজের নাম, দাম ও দিন সঠিকভাবে দিন।');
@@ -815,6 +906,12 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
         }
         if (body.noticeBn !== undefined) s.noticeBn = String(body.noticeBn).slice(0, 500);
         if (body.manualEnabled !== undefined) s.manualEnabled = Boolean(body.manualEnabled);
+        if (body.codEnabled !== undefined) s.codEnabled = Boolean(body.codEnabled);
+        if (body.codExtra !== undefined) {
+          const n = Math.round(Number(body.codExtra));
+          if (!(n >= 0 && n <= 5000)) return fail(res, 400, 'BAD_COD_EXTRA', 'ক্যাশ অন ডেলিভারির বাড়তি টাকা ০ থেকে ৫০০০ এর মধ্যে দিন।');
+          s.codExtra = n;
+        }
         if (body.previewPerSet !== undefined) {
           const n = Math.round(Number(body.previewPerSet));
           if (!(n >= 0 && n <= 20)) return fail(res, 400, 'BAD_PREVIEW', 'প্রিভিউ প্রশ্ন ০ থেকে ২০ এর মধ্যে দিন।');
