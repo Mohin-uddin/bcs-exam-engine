@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BPSC Official 2-Column Question Booklet & OMR Sheet</title>
+  <title>BPSC Official 2-Column Question Booklet & Answer Sheet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Noto+Sans+Bengali:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -155,7 +155,13 @@
       display: flex; flex-direction: column; justify-content: flex-end;
     }
   </style>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="সোনার হরিণ">
   <script src="/native-app.js"></script>
+  <script src="/pwa.js" defer></script>
 </head>
 <body>
 
@@ -185,7 +191,7 @@
       </select>
 
       <button onclick="window.print()" class="btn-print">
-        🖨️ PDF প্রিন্ট / সেভ করুন (Print Booklet & OMR)
+        🖨️ PDF প্রিন্ট / সেভ করুন (Print Booklet & Answer Sheet)
       </button>
     </div>
   </div>
@@ -222,7 +228,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- PAGE 2: OFFICIAL BPSC OMR SHEET WITH CORNER FINDERS & 200 BUBBLES -->
+  <!-- PAGE 2: OFFICIAL BPSC ANSWER SHEET WITH CORNER FINDERS & 200 BUBBLES -->
   <!-- ========================================================================= -->
   <div class="omr-sheet-a4" id="omrSheetPage">
     <!-- Machine-read area: corner squares + bubble grid are drawn in mm by renderOmrGrid().
@@ -231,8 +237,8 @@
 
     <div class="omr-sheet-head">
       <h2 id="omrPageOrgTitle" style="font-size: 12pt; font-weight: bold; letter-spacing: 0.5px;">BANGLADESH PUBLIC SERVICE COMMISSION</h2>
-      <h3 id="omrPageSubTitle" style="font-size: 9pt; font-weight: 600;">PRELIMINARY TEST OMR ANSWER SHEET (200 QUESTIONS)</h3>
-      <p style="font-size: 7.5pt;">উত্তরপত্র (OMR শিট) • মোবাইলে ছবি তুলে অ্যাপে ফলাফল দেখা যাবে</p>
+      <h3 id="omrPageSubTitle" style="font-size: 9pt; font-weight: 600;">PRELIMINARY TEST ANSWER SHEET (200 QUESTIONS)</h3>
+      <p style="font-size: 7.5pt;">উত্তরপত্র • মোবাইলে ছবি তুলে অ্যাপে ফলাফল দেখা যাবে</p>
     </div>
 
     <div class="omr-sheet-info">
@@ -334,7 +340,7 @@
         document.getElementById('bookletCodeDisplay').textContent = 'পদ: সহকারী শিক্ষক (সরকারি প্রাথমিক বিদ্যালয়)';
         document.getElementById('bookletPenaltyRule').innerHTML = 'প্রশ্নপত্রে প্রদত্ত প্রতিটি প্রশ্নের মান ১ (এক)। প্রতিটি ভুল উত্তরের জন্য <strong>০.২৫ নম্বর কাটা যাবে</strong>।';
         document.getElementById('omrPageOrgTitle').textContent = 'DIRECTORATE OF PRIMARY EDUCATION (DPE)';
-        document.getElementById('omrPageSubTitle').textContent = 'ASSISTANT TEACHER RECRUITMENT OMR ANSWER SHEET (80 QUESTIONS)';
+        document.getElementById('omrPageSubTitle').textContent = 'ASSISTANT TEACHER RECRUITMENT ANSWER SHEET (80 QUESTIONS)';
 
         if (examId && examId.startsWith('PRI_PRACTICE_')) {
           const priSets = (typeof window !== 'undefined' && window.primaryPracticeSets) || [];
@@ -361,7 +367,7 @@
         document.getElementById('bookletCodeDisplay').textContent = 'বিষয় কোড: ১০০ (সাধারণ ও পেশাগত)';
         document.getElementById('bookletPenaltyRule').innerHTML = 'প্রশ্নপত্রে প্রদত্ত প্রতিটি প্রশ্নের মান ১ (এক)। প্রতিটি ভুল উত্তরের জন্য <strong>০.৫০ (অর্ধেক) নম্বর কাটা যাবে</strong>।';
         document.getElementById('omrPageOrgTitle').textContent = 'BANGLADESH PUBLIC SERVICE COMMISSION';
-        document.getElementById('omrPageSubTitle').textContent = 'PRELIMINARY TEST OMR ANSWER SHEET (200 QUESTIONS)';
+        document.getElementById('omrPageSubTitle').textContent = 'PRELIMINARY TEST ANSWER SHEET (200 QUESTIONS)';
 
         if (examId && examId.startsWith('PRACTICE_SET_')) {
           const setNum = parseInt(examId.replace('PRACTICE_SET_', ''), 10) || 1;

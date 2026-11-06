@@ -235,7 +235,7 @@
       }
       document.getElementById('pTimeMeta').textContent = 'সময়: ১ ঘণ্টা (৬০ মিনিট)';
       document.getElementById('pMarksMeta').textContent = `পূর্ণমান: ${bn(activeQuestions.length)}`;
-      document.getElementById('pIns').innerHTML = `<b>বিশেষ দ্রষ্টব্য:</b> প্রতিটি প্রশ্নের মান ১। প্রতিটি ভুল উত্তরের জন্য <b>০.২৫ নম্বর কাটা যাবে</b>। সঠিক উত্তরের জন্য উত্তরপত্রে (OMR) সংশ্লিষ্ট বৃত্তটি কালো বলপয়েন্ট কলম দিয়ে সম্পূর্ণ ভরাট করুন।`;
+      document.getElementById('pIns').innerHTML = `<b>বিশেষ দ্রষ্টব্য:</b> প্রতিটি প্রশ্নের মান ১। প্রতিটি ভুল উত্তরের জন্য <b>০.২৫ নম্বর কাটা যাবে</b>। সঠিক উত্তরের জন্য উত্তরপত্রে সংশ্লিষ্ট বৃত্তটি কালো বলপয়েন্ট কলম দিয়ে সম্পূর্ণ ভরাট করুন।`;
     } else if (currentTrack !== 'BCS') {
       const rawCode = currentSetId.replace(/_SET$/, '');
       const archList = getArchiveList(currentTrack);
@@ -248,7 +248,7 @@
       setCode = 'ক';
       document.getElementById('pTimeMeta').textContent = `সময়: ${bn(Math.round(remainingSec / 60))} মিনিট`;
       document.getElementById('pMarksMeta').textContent = `পূর্ণমান: ${bn(activeQuestions.length)}`;
-      document.getElementById('pIns').innerHTML = `<b>বিশেষ দ্রষ্টব্য:</b> প্রতিটি প্রশ্নের মান ১। প্রতিটি ভুল উত্তরের জন্য <b>${bn(negativeRate.toFixed(2))} নম্বর কাটা যাবে</b>। সঠিক উত্তরের জন্য উত্তরপত্রে (OMR) সংশ্লিষ্ট বৃত্তটি কালো বলপয়েন্ট কলম দিয়ে সম্পূর্ণ ভরাট করুন।`;
+      document.getElementById('pIns').innerHTML = `<b>বিশেষ দ্রষ্টব্য:</b> প্রতিটি প্রশ্নের মান ১। প্রতিটি ভুল উত্তরের জন্য <b>${bn(negativeRate.toFixed(2))} নম্বর কাটা যাবে</b>। সঠিক উত্তরের জন্য উত্তরপত্রে সংশ্লিষ্ট বৃত্তটি কালো বলপয়েন্ট কলম দিয়ে সম্পূর্ণ ভরাট করুন।`;
     } else {
       negativeRate = 0.5;
       remainingSec = 7200;
@@ -269,7 +269,7 @@
       if (activeQuestions.length === 0) activeQuestions = all.slice(0, 200);
       document.getElementById('pTimeMeta').textContent = 'সময়: ২ ঘণ্টা';
       document.getElementById('pMarksMeta').textContent = `পূর্ণমান: ${bn(activeQuestions.length)}`;
-      document.getElementById('pIns').innerHTML = `<b>বিশেষ দ্রষ্টব্য:</b> প্রতিটি প্রশ্নের মান ১। প্রতিটি ভুল উত্তরের জন্য <b>০.৫০ নম্বর কাটা যাবে</b>। সঠিক উত্তরের জন্য উত্তরপত্রে (OMR) সংশ্লিষ্ট বৃত্তটি কালো বলপয়েন্ট কলম দিয়ে সম্পূর্ণ ভরাট করুন।`;
+      document.getElementById('pIns').innerHTML = `<b>বিশেষ দ্রষ্টব্য:</b> প্রতিটি প্রশ্নের মান ১। প্রতিটি ভুল উত্তরের জন্য <b>০.৫০ নম্বর কাটা যাবে</b>। সঠিক উত্তরের জন্য উত্তরপত্রে সংশ্লিষ্ট বৃত্তটি কালো বলপয়েন্ট কলম দিয়ে সম্পূর্ণ ভরাট করুন।`;
     }
 
     document.getElementById('selCode').value = setCode;
@@ -583,11 +583,11 @@
     document.getElementById('pExam').textContent = exam.title;
     document.getElementById('pTimeMeta').textContent = `সময়: ${bn(exam.durationMin)} মিনিট`;
     document.getElementById('pMarksMeta').textContent = `পূর্ণমান: ${bn(exam.totalQuestions)}`;
-    document.getElementById('pIns').innerHTML = `<b>বিশেষ দ্রষ্টব্য:</b> প্রতিটি প্রশ্নের মান ১। ${exam.negativeMark > 0 ? `প্রতিটি ভুল উত্তরের জন্য <b>${neg} নম্বর কাটা যাবে</b>।` : 'ভুল উত্তরের জন্য নম্বর কাটা যাবে না।'} সঠিক উত্তরের জন্য উত্তরপত্রে (OMR) সংশ্লিষ্ট বৃত্তটি কালো বলপয়েন্ট কলম দিয়ে সম্পূর্ণ ভরাট করুন। একটি প্রশ্নের একাধিক বৃত্ত ভরাট করলে উত্তরটি ভুল বলে গণ্য হবে।`;
+    document.getElementById('pIns').innerHTML = `<b>বিশেষ দ্রষ্টব্য:</b> প্রতিটি প্রশ্নের মান ১। ${exam.negativeMark > 0 ? `প্রতিটি ভুল উত্তরের জন্য <b>${neg} নম্বর কাটা যাবে</b>।` : 'ভুল উত্তরের জন্য নম্বর কাটা যাবে না।'} সঠিক উত্তরের জন্য উত্তরপত্রে সংশ্লিষ্ট বৃত্তটি কালো বলপয়েন্ট কলম দিয়ে সম্পূর্ণ ভরাট করুন। একটি প্রশ্নের একাধিক বৃত্ত ভরাট করলে উত্তরটি ভুল বলে গণ্য হবে।`;
     document.getElementById('startSetTitle').textContent = `${exam.title} • ${bn(exam.totalQuestions)}টি প্রশ্ন • ${liveTime(exam.startAt)}`;
     document.querySelector('#startOverlay .rules').innerHTML = `
       <li>মোট ${bn(exam.totalQuestions)}টি প্রশ্ন, সময় ${bn(exam.durationMin)} মিনিট। পরীক্ষা শেষ হবে <b>${liveTime(exam.endAt)}</b>; তখন উত্তরপত্র স্বয়ংক্রিয়ভাবে জমা হবে।</li>
-      <li>উত্তর শুধু ডান পাশের <b>OMR উত্তরপত্রে</b> বৃত্ত ভরাট করে দিতে হবে। প্রতিটি ভরাট সাথে সাথে সার্ভারে সংরক্ষিত হয়।</li>
+      <li>উত্তর শুধু ডান পাশের <b>উত্তরপত্রে</b> বৃত্ত ভরাট করে দিতে হবে। প্রতিটি ভরাট সাথে সাথে সার্ভারে সংরক্ষিত হয়।</li>
       <li>প্রশ্নপত্রের অপশনে ক্লিক করলে শুধু খসড়া টিক পড়বে, এটি নম্বরে গণ্য হবে না।</li>
       <li>${exam.negativeMark > 0 ? `প্রতিটি ভুল উত্তরে ${neg} নম্বর কাটা যাবে। ` : ''}একাধিক বৃত্ত ভরাট = ভুল। উত্তরপত্র একবারই জমা দেওয়া যাবে।</li>
       <li>পরীক্ষা শেষ হওয়ার সাথে সাথে ফলাফল ও মেধা তালিকা প্রকাশ হবে।</li>`;

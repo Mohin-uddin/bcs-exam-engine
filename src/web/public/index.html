@@ -397,6 +397,9 @@
     }
     .app-toast.show { opacity: 1; transform: translate(-50%, 0); }
     @media (min-width: 1024px) { .app-toast { bottom: 28px; } }
+    @media (max-width: 1023px) { body.has-dock .app-toast { bottom: 128px; } }
+    .lg-only { display: none; }
+    @media (min-width: 1024px) { .lg-only { display: inline; } }
 
     /* Home */
     .home-hero { background: linear-gradient(135deg, var(--green-tint), var(--surface) 70%); }
@@ -417,6 +420,58 @@
     .home-big { font-size: 30px; font-weight: 700; color: var(--green); line-height: 1.1; }
     .home-big small { font-size: 14px; color: var(--ink-soft); font-weight: 500; }
     .home-live-title { font-weight: 700; color: var(--ink); }
+
+    /* Phones/tablets: the answer sheet beside the questions becomes a pull-up panel,
+       opened from a bar that always shows how many answers are filled (same as the desktop side panel) */
+    .dock-bar { display: none; }
+    @media (max-width: 1023px) {
+      .answer-dock {
+        position: fixed !important; left: 0; right: 0; top: auto !important;
+        bottom: calc(112px + env(safe-area-inset-bottom)); z-index: 48;
+        max-height: min(72vh, 640px); overflow-y: auto; overscroll-behavior: contain;
+        padding: 12px; background: var(--paper); border-radius: 18px 18px 0 0;
+        box-shadow: 0 -12px 32px rgba(0,0,0,.22);
+        transform: translateY(140%); visibility: hidden; transition: transform .22s ease, visibility .22s;
+      }
+      body.dock-open .answer-dock { transform: none; visibility: visible; }
+      .answer-dock [class*="max-h-"] { max-height: none !important; }
+      body.has-dock .dock-bar {
+        display: flex; position: fixed; left: 10px; right: 10px; z-index: 49;
+        bottom: calc(62px + env(safe-area-inset-bottom));
+        align-items: center; gap: 10px; padding: 9px 12px; border-radius: 14px;
+        background: #d94662; color: #fff; font-weight: 700; font-size: 14.5px;
+        box-shadow: 0 6px 20px rgba(217,70,98,.35);
+      }
+      .dock-bar .dock-count-pill { margin-left: auto; background: #111827; color: #fcd34d; border-radius: 999px; padding: 2px 10px; font-size: 13px; }
+      body.dock-open .dock-bar { background: #111827; }
+      body.has-dock .back-to-top { bottom: 124px; }
+      body.has-dock .app-main { padding-bottom: 150px; }
+      body.dock-open .dock-shade { display: block; position: fixed; inset: 0; z-index: 47; background: rgba(15,23,42,.35); }
+    }
+    .dock-shade { display: none; }
+    /* Home: one "today" list, four shortcut tiles, progress only after the first test */
+    .todo-list { display: flex; flex-direction: column; }
+    .todo-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .todo-row:last-child { border-bottom: 0; padding-bottom: 2px; }
+    .todo-ic { font-size: 22px; width: 32px; text-align: center; flex: none; }
+    .todo-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.4; }
+    .todo-text b { color: var(--ink); font-size: 15px; }
+    .todo-text .muted { font-size: 13px; }
+    .todo-row .btn { flex: none; padding: 7px 14px; }
+    .home-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    @media (max-width: 900px) { .home-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
+    .home-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; text-align: left; padding: 14px; border-radius: 14px;
+      background: var(--surface); border: 1px solid var(--line); transition: border-color .12s, transform .12s; }
+    .home-tile:hover { border-color: var(--green); }
+    .home-tile:active { transform: scale(.98); }
+    .home-tile b { color: var(--ink); font-size: 15px; }
+    .home-tile .muted { font-size: 12.5px; line-height: 1.45; }
+    .home-tile-ic { font-size: 24px; }
+    .home-progress { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 900px) { .home-progress { grid-template-columns: 1fr; gap: 12px; } }
+    .install-item { display: none !important; }
+    html.can-install .install-item { display: flex !important; }
+    html.is-native-app .install-item { display: none !important; }
     .weak-row { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
     .weak-row:last-child { border-bottom: 0; }
     .weak-acc { font-weight: 700; } .weak-acc.bad { color: #be123c; } .weak-acc.mid { color: #b45309; } .weak-acc.good { color: #15803d; }
@@ -522,7 +577,13 @@
     html.theme-dark .q-card-seen { color: #f6c860; }
     html.theme-dark .topbar::after { opacity: .7; }
   </style>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="সোনার হরিণ">
   <script src="/native-app.js"></script>
+  <script src="/pwa.js" defer></script>
 </head>
 <body class="app-body font-sans antialiased">
 
@@ -548,7 +609,7 @@
         <a href="/exam-hall" class="btn btn-primary">
           <span>🏛️</span><span class="hidden sm:inline">পরীক্ষার হল</span>
         </a>
-        <a href="/omr-printable" target="_blank" class="btn btn-ghost md-up">
+        <a href="/print" target="_blank" class="btn btn-ghost md-up">
           <span>🖨️</span><span>প্রিন্ট</span>
         </a>
       </div>
@@ -570,6 +631,7 @@
 
       <div class="nav-group">
         <button type="button" onclick="switchTab('home')" id="tab-home" data-title="আজকের পড়া" class="tab-btn nav-item active"><span class="nav-ic">🏠</span><span>আজকের পড়া</span></button>
+        <button type="button" class="nav-item install-item" onclick="window.SonarInstall && SonarInstall(); toggleSideNav(false)"><span class="nav-ic">📲</span><span>অ্যাপটি ফোনে ইনস্টল করুন</span></button>
       </div>
 
       <div class="nav-group">
@@ -596,8 +658,8 @@
 
       <details class="nav-group nav-more">
         <summary class="nav-group-title">আরও টুলস</summary>
-        <button type="button" onclick="switchTab('omr')" id="tab-omr" data-title="উত্তরপত্র স্ক্যান করে ফলাফল" class="tab-btn nav-item"><span class="nav-ic">📷</span><span>উত্তরপত্র স্ক্যান করে ফলাফল</span></button>
-        <a href="/omr-printable" target="_blank" class="nav-item"><span class="nav-ic">🖨️</span><span>প্রশ্নপত্র ও উত্তরপত্র প্রিন্ট</span></a>
+        <button type="button" onclick="switchTab('omr')" id="tab-omr" data-title="ছবি তুলে খাতা দেখুন" class="tab-btn nav-item"><span class="nav-ic">📷</span><span>ছবি তুলে খাতা দেখুন</span></button>
+        <a href="/print" target="_blank" class="nav-item"><span class="nav-ic">🖨️</span><span>প্রশ্নপত্র ও উত্তরপত্র প্রিন্ট</span></a>
         <a href="/exam-hall" class="nav-item"><span class="nav-ic">🏛️</span><span>পূর্ণ পরীক্ষার হল</span></a>
         <button type="button" onclick="switchTab('primary-calc')" id="tab-primary-calc" data-title="প্রাইমারি নম্বর ক্যালকুলেটর" class="tab-btn nav-item"><span class="nav-ic">🧾</span><span>প্রাইমারি নম্বর ক্যালকুলেটর</span></button>
         <button type="button" onclick="switchTab('battle')" id="tab-battle" data-title="কুইজ খেলা" class="tab-btn nav-item"><span class="nav-ic">⚔️</span><span>কুইজ খেলা (কম্পিউটারের সাথে)</span></button>
@@ -642,7 +704,7 @@
       <div id="examTrackBanner" class="panel space-y-4">
         <div>
           <span class="section-label">২. একটি প্রশ্নসেট বেছে নিন</span>
-          <h2 id="examTrackHeading" class="text-lg font-bold text-slate-900 leading-snug">বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) হুবহু প্রশ্নপত্র ও OMR অনুশীলন কেন্দ্র</h2>
+          <h2 id="examTrackHeading" class="text-lg font-bold text-slate-900 leading-snug">বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) হুবহু প্রশ্নপত্র ও উত্তরপত্র অনুশীলন কেন্দ্র</h2>
           <p id="examTrackBadge" class="text-sm text-slate-500 mt-0.5">বিসিএস স্ট্যান্ডার্ড • ১,৫৪০টি ১০০% ইউনিক প্রশ্ন</p>
         </div>
 
@@ -702,7 +764,7 @@
         <p id="examStateNote" class="exam-note">প্রশ্ন দেখে নিন। "শুরু করুন" চাপলে (বা প্রথম উত্তর দাগালে) সময় গণনা শুরু হবে।</p>
 
         <div class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
-          <button onclick="printFullExamPackage('LIVE')" class="text-emerald-700 hover:underline font-medium">🖨️ প্রশ্নপত্র + OMR + উত্তরমালা প্রিন্ট করুন</button>
+          <button onclick="printFullExamPackage('LIVE')" class="text-emerald-700 hover:underline font-medium">🖨️ প্রশ্নপত্র + উত্তরপত্র + উত্তরমালা প্রিন্ট করুন</button>
           <a href="/exam-hall" class="text-emerald-700 hover:underline font-medium">🏛️ ফুল-স্ক্রিন পরীক্ষার হলে বসুন</a>
         </div>
       </div>
@@ -712,7 +774,7 @@
         <div class="lg:col-span-8 space-y-4" id="questionsContainer"></div>
 
         <!-- Right 4 cols: Real Pink/Red BPSC/DPE OMR Answer Sheet + Safety Meter -->
-        <div class="lg:col-span-4 sticky top-28 space-y-3">
+        <div class="lg:col-span-4 sticky top-28 space-y-3 answer-dock">
           <!-- 🎯 NEGATIVE MARKING SAFETY METER & 50:50 GUESS CONTROLLER -->
           <div id="liveSafetyMeterCard" class="bg-white border-2 border-emerald-300 rounded-2xl p-3.5 shadow-sm space-y-2">
             <div class="flex items-center justify-between text-xs">
@@ -752,9 +814,9 @@
             <div class="bg-[#d94662] text-white px-4 py-2.5 flex items-center justify-between">
               <div>
                 <h3 id="omrAuthorityHeading" class="text-sm font-bold tracking-wide">বাংলাদেশ সরকারি কর্ম কমিশন</h3>
-                <p id="omrAuthoritySub" class="text-[10px] opacity-90 font-mono">BPSC OMR ANSWER SHEET • কালো বলপয়েন্ট বৃত্ত ভরাট</p>
+                <p id="omrAuthoritySub" class="text-[10px] opacity-90 font-mono">BPSC ANSWER SHEET • কালো বলপয়েন্ট বৃত্ত ভরাট</p>
               </div>
-              <span id="answeredCounter" class="px-2.5 py-1 rounded-full bg-slate-950 text-amber-300 font-mono text-xs font-bold">০/২০০</span>
+              <span id="answeredCounter" class="dock-count px-2.5 py-1 rounded-full bg-slate-950 text-amber-300 font-mono text-xs font-bold">০/২০০</span>
             </div>
 
             <!-- Roll No & Set Code Header -->
@@ -838,7 +900,7 @@
           <button onclick="togglePastBankAnswerKey()" id="btnPastShowAnswers" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-400 text-amber-800 text-sm font-bold transition">
             👁️ উত্তর ও ব্যাখ্যা দেখান
           </button>
-          <button onclick="printFullExamPackage('PAST_BANK')" class="ml-auto text-sm text-emerald-700 hover:underline font-medium">🖨️ প্রশ্নপত্র + OMR প্রিন্ট</button>
+          <button onclick="printFullExamPackage('PAST_BANK')" class="ml-auto text-sm text-emerald-700 hover:underline font-medium">🖨️ প্রশ্নপত্র + উত্তরপত্র প্রিন্ট</button>
         </div>
         <!-- Filter Sub-bar -->
         <div id="pastBankFilters" class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200 text-xs">
@@ -1146,14 +1208,14 @@
         <div class="lg:col-span-5 space-y-4">
           <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
             <div>
-              <h3 class="text-base font-bold text-slate-900 mb-1">📷 উত্তরপত্র স্ক্যান করে ফলাফল দেখুন</h3>
+              <h3 class="text-base font-bold text-slate-900 mb-1">📷 ছবি তুলে খাতা দেখুন</h3>
               <p class="text-sm text-slate-600">
-                কাগজে পরীক্ষা দিলে খাতা দেখার ঝামেলা নেই। উত্তরপত্রের (OMR শিট) একটা ছবি তুলে দিন, অ্যাপ নিজেই দেখবে আপনি কোন বৃত্তগুলো ভরাট করেছেন। এরপর সঠিক, ভুল, নেগেটিভ মার্কিং সহ মোট নম্বর দেখাবে আর ভুলগুলো ভুল খাতায় তুলে রাখতে পারবেন।
+                কাগজে পরীক্ষা দিলে খাতা দেখার ঝামেলা নেই। উত্তরপত্রের একটা ছবি তুলে দিন, অ্যাপ নিজেই দেখবে আপনি কোন বৃত্তগুলো ভরাট করেছেন। এরপর সঠিক, ভুল, নেগেটিভ মার্কিং সহ মোট নম্বর দেখাবে আর ভুলগুলো ভুল খাতায় তুলে রাখতে পারবেন।
               </p>
             </div>
 
             <ol class="text-sm text-slate-700 space-y-1 list-decimal pl-5">
-              <li><a href="/omr-printable" target="_blank" class="text-emerald-700 font-semibold hover:underline">প্রশ্নপত্র ও উত্তরপত্র প্রিন্ট করুন</a> (নিচে যে প্রশ্নপত্র বেছে নেবেন, প্রিন্টেও সেটাই নিন)।</li>
+              <li><a href="/print" target="_blank" class="text-emerald-700 font-semibold hover:underline">প্রশ্নপত্র ও উত্তরপত্র প্রিন্ট করুন</a> (নিচে যে প্রশ্নপত্র বেছে নেবেন, প্রিন্টেও সেটাই নিন)।</li>
               <li>কালো বা নীল বলপয়েন্ট কলমে প্রতিটি প্রশ্নের একটি বৃত্ত পুরো ভরাট করুন।</li>
               <li>উত্তরপত্র সমতল জায়গায় রেখে উপর থেকে ছবি তুলুন, যেন চার কোণার চারটি কালো বর্গ ছবিতে পরিষ্কার আসে।</li>
             </ol>
@@ -1333,6 +1395,37 @@
   </div>
 
   <!-- Mobile bottom navigation (most used sections) -->
+  <!-- Phones: bar that opens the answer sheet of the open question paper (see .answer-dock) -->
+  <div class="dock-shade" onclick="toggleAnswerDock(false)"></div>
+  <button type="button" id="answerDockBar" class="dock-bar" onclick="toggleAnswerDock()">
+    <span id="dockBarLabel">📋 উত্তরপত্র ও ফলাফল দেখুন</span>
+    <span id="dockBarCount" class="dock-count-pill"></span>
+  </button>
+  <script>
+    // Finds the answer sheet of the page that is open now (model test, past questions, super-hot set)
+    function activeAnswerDock() {
+      const pane = document.querySelector('.tab-pane:not(.hidden)');
+      return pane ? pane.querySelector('.answer-dock') : null;
+    }
+    function refreshAnswerDockBar() {
+      const dock = window.innerWidth < 1024 ? activeAnswerDock() : null;
+      document.body.classList.toggle('has-dock', !!dock);
+      if (!dock) { document.body.classList.remove('dock-open'); return; }
+      const c = dock.querySelector('.dock-count');
+      const n = document.getElementById('dockBarCount');
+      const text = c ? c.textContent.trim() : '';
+      if (n.textContent !== text) n.textContent = text;
+      const open = document.body.classList.contains('dock-open');
+      document.getElementById('dockBarLabel').textContent = open ? '✕ প্রশ্নে ফিরে যান' : '📋 উত্তরপত্র ও ফলাফল দেখুন';
+    }
+    function toggleAnswerDock(force) {
+      const open = typeof force === 'boolean' ? force : !document.body.classList.contains('dock-open');
+      document.body.classList.toggle('dock-open', open);
+      refreshAnswerDockBar();
+    }
+    setInterval(refreshAnswerDockBar, 600);
+    window.addEventListener('resize', refreshAnswerDockBar);
+  </script>
   <nav class="bottom-nav lg-hide" aria-label="দ্রুত মেনু">
     <button type="button" data-tab="home" onclick="switchTab('home')"><span>🏠</span><span>আজ</span></button>
     <button type="button" data-tab="exam" onclick="switchTab('exam')"><span>📝</span><span>মডেল টেস্ট</span></button>

@@ -228,7 +228,7 @@
 
     const html = `
       <h3>🔒 ${exam ? esc(exam.title) : 'প্রিমিয়াম সেট'}</h3>
-      <div class="acc-sub">ফ্রিতে প্রতিটি পরীক্ষার ধরনে ${bn(config.freePerGroup)}টি মডেল সেট ও ${bn(config.freePerGroup)}টি বিগত সালের প্রশ্ন খোলা। প্রিমিয়ামে সব মডেল টেস্ট, সব বিগত প্রশ্ন, সুপার-হট সেট ও প্রিন্ট/OMR সব খুলে যাবে।</div>
+      <div class="acc-sub">ফ্রিতে প্রতিটি পরীক্ষার ধরনে ${bn(config.freePerGroup)}টি মডেল সেট ও ${bn(config.freePerGroup)}টি বিগত সালের প্রশ্ন খোলা। প্রিমিয়ামে সব মডেল টেস্ট, সব বিগত প্রশ্ন, সুপার-হট সেট ও প্রিন্ট করার সুবিধা সব খুলে যাবে।</div>
       ${pending.length ? `<div class="acc-ok">⏳ আপনার ${bn(pending.length)}টি পেমেন্ট যাচাই হচ্ছে (TrxID: ${pending.map(p => esc(p.trxId)).join(', ')})। অনুমোদন হলেই সব সেট খুলে যাবে, এই পেজ খোলা থাকলে নিজে থেকেই জানানো হবে।</div>` : ''}
       <div class="app-unlock-note acc-warn">আনলক করতে ওয়েবসাইটে একই মোবাইল নম্বর দিয়ে লগইন করুন। পেমেন্টের পর অ্যাপেও সব সেট খুলে যাবে।</div>
       <div class="acc-pay" data-payment>
