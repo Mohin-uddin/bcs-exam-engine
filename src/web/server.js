@@ -160,7 +160,15 @@ const PUBLIC_FILES = {
   '/admin-payments.js': 'application/javascript; charset=utf-8',
   '/native-app.js': 'application/javascript; charset=utf-8',
   '/content-guard.js': 'application/javascript; charset=utf-8',
-  '/logo.svg': 'image/svg+xml'
+  '/logo.svg': 'image/svg+xml',
+  // Install-as-app (PWA) files
+  '/pwa.js': 'application/javascript; charset=utf-8',
+  '/sw.js': 'application/javascript; charset=utf-8',
+  '/manifest.webmanifest': 'application/manifest+json; charset=utf-8',
+  '/icon-192.png': 'image/png',
+  '/icon-512.png': 'image/png',
+  '/icon-maskable-512.png': 'image/png',
+  '/apple-touch-icon.png': 'image/png'
 };
 const PAGES = {
   '/': 'index.html',
@@ -169,7 +177,8 @@ const PAGES = {
   '/exam-hall': 'exam-hall.html',
   '/live': 'live.html',
   '/admin': 'admin.html',
-  '/omr-printable': 'omr-sheet.html'
+  '/print': 'omr-sheet.html',
+  '/omr-printable': 'omr-sheet.html' // old link, kept so saved bookmarks still work
 };
 
 // Create HTTP Server
@@ -321,7 +330,7 @@ Promise.all([liveExams.ready(), accounts.ready(), reports.ready()]).then(() => s
   console.log(`================================================================`);
   console.log(`সোনার হরিণ - BCS & BD Competitive Exam Prep`);
   console.log(`Web App running locally at: http://localhost:${PORT}`);
-  console.log(`Printable 2-Column Booklet & OMR: http://localhost:${PORT}/omr-printable`);
+  console.log(`Printable question paper & answer sheet: http://localhost:${PORT}/print`);
   console.log(`Live Exams & Merit List: http://localhost:${PORT}/live  (Admin: /admin)`);
   console.log(`================================================================`);
 }), err => {

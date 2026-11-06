@@ -410,15 +410,23 @@
     const box = document.getElementById('homeLiveBox');
     if (!box) return;
     if (!liveCache) {
-      box.innerHTML = '<p class="muted">লাইভ পরীক্ষার তালিকা আনা হচ্ছে...</p>';
+      box.innerHTML = '<span class="muted">তালিকা আনা হচ্ছে...</span>';
       return;
     }
     const next = liveCache[0];
-    box.innerHTML = next
-      ? `<div class="home-live-title">${next.phase === 'LIVE' ? '🔴 এখন চলছে' : '⏳ আসন্ন'}: ${esc(next.title)}</div>
-         <p class="muted">${new Date(next.startAt).toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka', day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit' })} • ${bn(next.totalQuestions)} প্রশ্ন • ${bn(next.durationMin)} মিনিট</p>
-         <a href="/live" class="btn btn-primary mt-2">${next.phase === 'LIVE' ? 'পরীক্ষায় অংশ নিন' : 'নিবন্ধন করুন'} →</a>`
-      : `<p class="muted">এই মুহূর্তে কোনো লাইভ পরীক্ষার ঘোষণা নেই।</p><a href="/live" class="link">আগের পরীক্ষার মেধা তালিকা দেখুন →</a>`;
+    const meta = next
+      ? `${next.phase === 'LIVE' ? '🔴 এখন চলছে' : '⏳ আসন্ন'}: ${esc(next.title)} • ${new Date(next.startAt).toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka', day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit' })}`
+      : 'এখন কোনো লাইভ পরীক্ষা নেই। আগের মেধা তালিকা দেখতে পারেন।';
+    box.innerHTML = `<span class="muted">${meta}</span>`;
+    const btn = document.getElementById('homeLiveBtn');
+    if (btn) btn.textContent = next ? (next.phase === 'LIVE' ? 'অংশ নিন' : 'নিবন্ধন') : 'দেখুন';
+  }
+
+  // Track picker on the home page: shown until the user picks an exam, or when they tap "বদলান"
+  let homeTrackPickerOpen = false;
+  function toggleHomeTrackPicker() {
+    homeTrackPickerOpen = !homeTrackPickerOpen;
+    renderHome();
   }
 
   function renderHome() {
@@ -432,15 +440,25 @@
     const last = data.attempts[0];
     const weak = subjectStats(track || undefined).slice(0, 3);
     const user = window.Account && window.Account.user;
+    const searchValue = (document.getElementById('qSearchInput') || {}).value || '';
+    const showPicker = !track || homeTrackPickerOpen;
 
     const trackChips = core.TRACKS.map(t => `<button type="button" class="chip ${t === track ? 'chip-active' : ''}" onclick="Study.setTrack('${t}')">${TRACK_BN[t]}</button>`).join('');
+
+    // Shortcuts to the main parts of the app, each with one line on what it is for
+    const tiles = [
+      { ic: '📝', name: 'মডেল টেস্ট', what: 'আসল পরীক্ষার মতো সময় ধরে পুরো সেট', go: "switchTab('exam')" },
+      { ic: '📚', name: 'বিগত সালের প্রশ্ন', what: 'আগের বছরের আসল প্রশ্ন ও উত্তর', go: "switchTab('past-bank')" },
+      { ic: '📕', name: 'ভুল খাতা', what: 'যেগুলো ভুল করেছেন, আবার ঝালাই', go: "switchTab('mistakes')" },
+      { ic: '📷', name: 'ছবি তুলে খাতা দেখুন', what: 'কাগজে দাগানো উত্তরপত্রের ছবি দিলেই নম্বর', go: "switchTab('omr')" }
+    ];
 
     pane.innerHTML = `
       <div class="home-hero panel">
         <div class="home-hero-top">
           <div>
             <h2 class="home-title">${user ? `${esc(user.name.split(' ')[0])}, ` : ''}আজকের পড়া</h2>
-            <p class="muted">${new Date().toLocaleDateString('bn-BD', { timeZone: 'Asia/Dhaka', weekday: 'long', day: 'numeric', month: 'long' })}${track ? ` • লক্ষ্য: ${TRACK_BN[track]}` : ''}</p>
+            <p class="muted">${new Date().toLocaleDateString('bn-BD', { timeZone: 'Asia/Dhaka', weekday: 'long', day: 'numeric', month: 'long' })}${track ? ` • লক্ষ্য: <b>${TRACK_BN[track]}</b> <button type="button" class="link" onclick="Study.toggleHomeTrackPicker()">${homeTrackPickerOpen ? 'বন্ধ' : 'বদলান'}</button>` : ''}</p>
           </div>
           <div class="streak" title="টানা যতদিন অনুশীলন করেছেন">🔥 <b>${bn(streak)}</b> দিন</div>
         </div>
@@ -448,57 +466,53 @@
           <div class="goal-bar"><span style="width:${Math.min(100, pct(today, g))}%"></span></div>
           <span class="muted">আজ ${bn(today)} / ${bn(g)} প্রশ্ন</span>
         </div>
-        ${!track ? `<div class="mt-3"><span class="section-label">কোন পরীক্ষার প্রস্তুতি নিচ্ছেন? (একবার বেছে নিন)</span><div class="chip-row">${trackChips}</div></div>` : ''}
-        ${!user ? `<p class="home-login-note">💾 আপনার অগ্রগতি এই ব্রাউজারে সংরক্ষিত হচ্ছে। <button type="button" class="link" onclick="Account.openLogin()">লগইন করুন</button>, তাহলে ফোন ও কম্পিউটার দুই জায়গাতেই পাবেন।</p>` : ''}
+        ${showPicker ? `<div class="mt-3"><span class="section-label">${track ? 'অন্য পরীক্ষা বেছে নিন' : 'কোন পরীক্ষার প্রস্তুতি নিচ্ছেন? (একবার বেছে নিন)'}</span><div class="chip-row">${trackChips}</div></div>` : ''}
+        <input id="qSearchInput" type="search" class="search-input mt-3" placeholder="🔎 যেকোনো প্রশ্ন খুঁজুন: চর্যাপদ, সংবিধান, ঐকিক নিয়ম..." oninput="Study.search(this.value)" autocomplete="off" value="${esc(searchValue)}">
+        ${!user ? `<p class="home-login-note">💾 অগ্রগতি এই ব্রাউজারে রাখা হচ্ছে। <button type="button" class="link" onclick="Account.openLogin()">লগইন করুন</button>, তাহলে ফোন ও কম্পিউটার দুই জায়গাতেই পাবেন।</p>` : ''}
+      </div>
+      <div id="qSearchResults" class="space-y-3"></div>
+
+      <div class="panel">
+        <h3 class="panel-title">আজ যা করবেন</h3>
+        <div class="todo-list">
+          <div class="todo-row">
+            <span class="todo-ic">🎯</span>
+            <div class="todo-text"><b>আজকের ২০ প্রশ্ন</b><span class="muted">১৫ মিনিট • দুর্বল বিষয় আর নতুন প্রশ্ন মিলিয়ে</span></div>
+            <button type="button" class="btn btn-primary" onclick="Study.dailyQuiz()">শুরু</button>
+          </div>
+          <div class="todo-row">
+            <span class="todo-ic">🧠</span>
+            <div class="todo-text"><b>রিভিশন বাকি: ${bn(due)} টি</b><span class="muted">${due ? 'ভুল খাতা ও ফ্ল্যাশকার্ডের আজকের ঝালাই' : 'আজকের রিভিশন শেষ'}</span></div>
+            <button type="button" class="btn ${due ? 'btn-primary' : 'btn-ghost'}" onclick="switchTab('flashcards')">${due ? 'শুরু' : 'খুলুন'}</button>
+          </div>
+          <div class="todo-row">
+            <span class="todo-ic">🏆</span>
+            <div class="todo-text"><b>লাইভ পরীক্ষা</b><span id="homeLiveBox"></span></div>
+            <a href="/live" id="homeLiveBtn" class="btn btn-ghost">দেখুন</a>
+          </div>
+        </div>
       </div>
 
-      <div class="home-grid">
-        <div class="panel home-card">
-          <div class="home-card-ic">🧠</div>
-          <h3>রিভিশন বাকি</h3>
-          <div class="home-big">${bn(due)}<small> টি</small></div>
-          <p class="muted">${due ? 'ভুল খাতা ও ফ্ল্যাশকার্ডের যেগুলো আজ ঝালাই করার কথা।' : 'আজকের রিভিশন শেষ। নতুন কার্ড দেখতে পারেন।'}</p>
-          <button type="button" class="btn btn-primary" onclick="switchTab('flashcards')">${due ? 'রিভিশন শুরু' : 'ফ্ল্যাশকার্ড খুলুন'} →</button>
-        </div>
-        <div class="panel home-card">
-          <div class="home-card-ic">🎯</div>
-          <h3>আজকের ২০ প্রশ্ন</h3>
-          <div class="home-big">১৫<small> মিনিট</small></div>
-          <p class="muted">দুর্বল বিষয় আর এখনো না দেখা প্রশ্ন মিলিয়ে প্রতিদিন নতুন সেট।</p>
-          <button type="button" class="btn btn-primary" onclick="Study.dailyQuiz()">শুরু করুন →</button>
-        </div>
-        <div class="panel home-card">
-          <div class="home-card-ic">🏆</div>
-          <h3>লাইভ পরীক্ষা</h3>
-          <div id="homeLiveBox"></div>
-        </div>
+      <div class="home-tiles">
+        ${tiles.map(t => `<button type="button" class="home-tile" onclick="${t.go}"><span class="home-tile-ic">${t.ic}</span><b>${t.name}</b><span class="muted">${t.what}</span></button>`).join('')}
       </div>
 
-      <div class="home-grid two">
-        <div class="panel">
-          <h3 class="panel-title">📈 সর্বশেষ ফলাফল</h3>
-          ${last ? resultLine(last) : `<p class="muted">এখনো কোনো পরীক্ষা দেননি। একটি মডেল টেস্ট দিন, ফলাফল ও দুর্বল বিষয় এখানে দেখাবে।</p>
-            <button type="button" class="btn btn-primary mt-2" onclick="switchTab('exam')">মডেল টেস্ট দিন →</button>`}
-          ${last ? `<button type="button" class="link mt-2" onclick="switchTab('analytics')">সব ফলাফল ও বিশ্লেষণ →</button>` : ''}
-        </div>
-        <div class="panel">
-          <h3 class="panel-title">⚠️ দুর্বল বিষয়</h3>
-          ${weak.length ? weak.map(s => `
+      ${last ? `
+      <div class="panel">
+        <h3 class="panel-title">📈 আমার অগ্রগতি</h3>
+        <div class="home-progress">
+          <div>${resultLine(last)}<button type="button" class="link" onclick="switchTab('analytics')">সব ফলাফল ও বিশ্লেষণ →</button></div>
+          ${weak.length ? `<div><div class="section-label">দুর্বল বিষয়</div>${weak.map(s => `
             <div class="weak-row">
               <span>${esc(s.name)}</span>
               <span class="weak-acc ${s.acc < 50 ? 'bad' : s.acc < 70 ? 'mid' : 'good'}">${bn(s.acc)}%</span>
-              <button type="button" class="link" onclick="Study.practiceSubject('${esc(s.code)}')">২০ প্রশ্ন অনুশীলন</button>
-            </div>`).join('') : '<p class="muted">কয়েকটি পরীক্ষা দেওয়ার পর কোন বিষয়ে আপনি দুর্বল, তা এখানে দেখাবে।</p>'}
+              <button type="button" class="link" onclick="Study.practiceSubject('${esc(s.code)}')">অনুশীলন</button>
+            </div>`).join('')}</div>` : ''}
         </div>
-      </div>
-
-      <div class="panel">
-        <h3 class="panel-title">🔎 যেকোনো প্রশ্ন খুঁজুন</h3>
-        <input id="qSearchInput" type="search" class="search-input" placeholder="যেমন: চর্যাপদ, সংবিধান, ঐকিক নিয়ম..." oninput="Study.search(this.value)" autocomplete="off">
-        <div id="qSearchResults" class="space-y-3 mt-3"></div>
-      </div>`;
+      </div>` : ''}`;
     renderLiveBox();
     if (!liveCache) loadLive();
+    if (searchValue) search(searchValue);
   }
 
   function resultLine(a) {
@@ -693,6 +707,7 @@
   function setTrack(track) {
     setSetting('track', track);
     toast(`লক্ষ্য: ${TRACK_BN[track]}`);
+    homeTrackPickerOpen = false;
     renderHome();
   }
 
@@ -755,7 +770,7 @@
     recordAttempt, cutMarkFor, subjectStats, addActivity,
     pickQuestions, startSmartPractice, practiceSubject, practiceMistakes, practiceBookmarks, dailyQuiz,
     renderHome, renderResults, renderPracticeForm, search, questionCard,
-    openSettings, setSetting, setTrack, refresh, sync,
+    openSettings, setSetting, setTrack, toggleHomeTrackPicker, refresh, sync,
     onChange: fn => listeners.push(fn)
   };
 })();
