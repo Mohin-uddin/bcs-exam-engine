@@ -105,6 +105,32 @@
         </form>
       </section>
 
+      <section class="panel" id="weeklyArea">
+        <h2>🏆 সাপ্তাহিক লাইভ পরীক্ষা (নিজে থেকে তৈরি হয়)</h2>
+        <p style="color:#475569;font-size:14px;margin-bottom:10px">প্রতি সপ্তাহে এই দিন ও সময়ে একটি লাইভ পরীক্ষা নিজে থেকেই তৈরি হয়, প্রতি সপ্তাহে আলাদা প্রশ্নসেট। কেউ নিবন্ধন না করে থাকলে সময় বদলালে এই সপ্তাহের পরীক্ষাও নতুন সময়ে চলে যাবে।</p>
+        <div id="weeklyNext" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:14px"></div>
+        <form id="weeklyForm">
+          <div class="row2">
+            <label class="field">চালু?<select id="wEnabled"><option value="1">চালু</option><option value="0">বন্ধ</option></select></label>
+            <label class="field">পরীক্ষার ধরন<select id="wTrack"></select></label>
+          </div>
+          <div class="row2">
+            <label class="field">দিন<select id="wDay">
+              <option value="5">শুক্রবার</option><option value="6">শনিবার</option><option value="0">রবিবার</option><option value="1">সোমবার</option>
+              <option value="2">মঙ্গলবার</option><option value="3">বুধবার</option><option value="4">বৃহস্পতিবার</option></select></label>
+            <label class="field">সময় (বাংলাদেশ)<input id="wTime" type="time" required></label>
+          </div>
+          <div class="row2">
+            <label class="field">সময়সীমা (মিনিট, ০ = সেটের নিজের সময়)<input id="wDuration" type="number" min="0" max="600"></label>
+            <label class="field">ফ্রি অ্যাকাউন্টে কয়টি লাইভ পরীক্ষা<input id="wFree" type="number" min="0" max="100"></label>
+          </div>
+          <label class="field">এই সপ্তাহের লক্ষ্য (হোম পেজে আসল সংখ্যার পাশে দেখাবে, ০ = দেখাবে না)
+            <input id="wTarget" type="number" min="0" max="1000000">
+          </label>
+          <button class="btn primary" type="submit">সংরক্ষণ করুন</button>
+        </form>
+      </section>
+
       <section class="panel">
         <h2>📢 নতুন পরীক্ষা ঘোষণা করুন</h2>
         <form id="createForm">
@@ -193,5 +219,6 @@
   <script src="/admin-payments.js"></script>
   <script src="/admin-orders.js"></script>
   <script src="/admin-reports.js"></script>
+  <script src="/admin-weekly.js"></script>
 </body>
 </html>

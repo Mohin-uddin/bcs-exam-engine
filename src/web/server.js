@@ -50,7 +50,8 @@ const liveExams = createLiveExamEngine({
   availableExams,
   sampleQuestions,
   store: stateStore,
-  currentUser: accounts.currentUser
+  currentUser: accounts.currentUser,
+  isPremium: accounts.isPremium
 });
 
 // Study progress sync (Mistake Vault, bookmarks, flashcards, exam history) per account
@@ -159,6 +160,7 @@ const PUBLIC_FILES = {
   '/account.js': 'application/javascript; charset=utf-8',
   '/admin-payments.js': 'application/javascript; charset=utf-8',
   '/admin-orders.js': 'application/javascript; charset=utf-8',
+  '/admin-weekly.js': 'application/javascript; charset=utf-8',
   '/tour.js': 'application/javascript; charset=utf-8',
   '/native-app.js': 'application/javascript; charset=utf-8',
   '/content-guard.js': 'application/javascript; charset=utf-8',

@@ -692,6 +692,18 @@
     .sheet { border-radius: 22px 22px 0 0; box-shadow: var(--shadow-lg); }
     @media (min-width: 640px) { .sheet { border-radius: 22px; } }
     .app-toast { border-radius: 14px; }
+    /* Weekly live exam card (home) */
+    .weekly-card { background: radial-gradient(500px 200px at 100% 0%, color-mix(in srgb, var(--rose) 10%, transparent), transparent 70%), var(--surface); }
+    .weekly-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .weekly-head .panel-title { margin-bottom: 2px; }
+    .weekly-live { background: #fdecef; color: #be123c; border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .weekly-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; margin-top: 12px; }
+    @media (max-width: 640px) { .weekly-grid { grid-template-columns: 1fr; } }
+    .weekly-cd, .weekly-count { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 14px; background: var(--paper); }
+    .weekly-cd b { font-size: 30px; color: var(--green); font-variant-numeric: tabular-nums; letter-spacing: .02em; line-height: 1.2; }
+    .weekly-count b { font-size: 26px; color: var(--ink); line-height: 1.2; }
+    .weekly-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+    html.theme-dark .weekly-live { background: #3a1820; color: #ff8fa0; }
     @media (prefers-reduced-motion: reduce) {
       .btn, .home-card, .nav-item { transition: none; }
       .btn-primary:hover, .home-card:hover { transform: none; }

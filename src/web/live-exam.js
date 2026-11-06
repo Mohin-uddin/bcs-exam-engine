@@ -8,6 +8,10 @@
  * - Merit list: Net Score first, then the tie-breaker (1 - Time_Taken / Total_Duration)
  * - State is persisted to a JSON file (or Postgres via `store` when DATABASE_URL is set)
  *   so a server restart keeps exams & results
+ * - Weekly exam: every week (default Friday 9 PM Dhaka) an exam is created by itself from the
+ *   least-used question set of the chosen track. Admin can change day, time and track.
+ * - Free accounts may take `freeLimit` live exams (default 2); after that a subscription is needed.
+ *   Taking an exam (opening the paper) needs a login so the limit can be counted.
  */
 
 const fs = require('node:fs');
@@ -29,8 +33,20 @@ const TRACK_META = {
 };
 
 const STORE_KEY = 'live-exams';
+const DHAKA_OFFSET_MS = 6 * 3600000; // Bangladesh has no daylight saving
+const WEEKDAY_BN = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
+const DEFAULT_WEEKLY = {
+  enabled: true,
+  weekday: 5, // 0 = Sunday ... 5 = Friday
+  hour: 21,
+  minute: 0,
+  track: 'BCS',
+  durationMin: 0, // 0 = the question set's own duration
+  freeLimit: 2,
+  targetCount: 0 // shown on the home page as a goal next to the real count (0 = hidden)
+};
 
-function createLiveExamEngine({ availableExams, sampleQuestions, store = null, currentUser = () => null }) {
+function createLiveExamEngine({ availableExams, sampleQuestions, store = null, currentUser = () => null, isPremium = () => false }) {
   const questionById = new Map((sampleQuestions || []).map(q => [q.id, q]));
   const catalog = (availableExams || []).filter(e => Array.isArray(e.questionIds) && e.questionIds.length > 0);
   const catalogById = new Map(catalog.map(e => [e.id, e]));
@@ -79,6 +95,7 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
   load();
   if (!store) process.on('exit', () => { if (saveTimer) saveNow(); });
 
+
   // Call once before the server starts listening (no-op without a database)
   async function ready() {
     if (!store) return;
@@ -87,6 +104,7 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
       state = saved;
       if (!Array.isArray(state.exams)) state.exams = [];
     }
+    ensureWeekly();
   }
 
   // Write any pending change now (used on shutdown)
@@ -99,6 +117,81 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
   // Helpers
   // ---------------------------------------------------------------------------
   const newId = prefix => `${prefix}_${crypto.randomBytes(6).toString('hex')}`;
+
+  // ---------------------------------------------------------------------------
+  // Weekly exam, created by itself
+  // ---------------------------------------------------------------------------
+  const weeklyCfg = () => ({ ...DEFAULT_WEEKLY, ...(state.weekly || {}) });
+
+  function setDurationOf(set, cfg) {
+    return cfg.durationMin > 0 ? cfg.durationMin : (set.durationMin || 60);
+  }
+
+  // Start of this week's slot in Dhaka time, or next week's once this one has ended
+  function nextWeeklyStart(cfg, now = Date.now(), durationMin = 60) {
+    const local = new Date(now + DHAKA_OFFSET_MS);
+    const ahead = (cfg.weekday - local.getUTCDay() + 7) % 7;
+    let start = Date.UTC(local.getUTCFullYear(), local.getUTCMonth(), local.getUTCDate() + ahead, cfg.hour, cfg.minute) - DHAKA_OFFSET_MS;
+    if (start + durationMin * 60000 <= now) start += 7 * 86400000;
+    return start;
+  }
+
+  // Least-used set of the track, so every week gets a different paper
+  function pickWeeklySet(cfg) {
+    const sets = catalog.filter(e => e.examTrack === cfg.track);
+    if (!sets.length) return null;
+    const used = new Map();
+    state.exams.filter(e => e.auto).forEach(e => used.set(e.setId, (used.get(e.setId) || 0) + 1));
+    return sets.reduce((best, e) => ((used.get(e.id) || 0) < (used.get(best.id) || 0) ? e : best), sets[0]);
+  }
+
+  function ensureWeekly() {
+    const cfg = weeklyCfg();
+    if (!cfg.enabled) return null;
+    const set = pickWeeklySet(cfg);
+    if (!set) return null;
+    const startMs = nextWeeklyStart(cfg, Date.now(), setDurationOf(set, cfg));
+    const weekKey = new Date(startMs + DHAKA_OFFSET_MS).toISOString().slice(0, 10);
+    // A cancelled weekly exam counts too: admin cancelled this week on purpose
+    const existing = state.exams.find(e => e.auto && e.weekKey === weekKey);
+    if (existing) return existing;
+    const track = set.examTrack in TRACK_META ? set.examTrack : 'BCS';
+    const dateBn = new Date(startMs).toLocaleDateString('bn-BD', { timeZone: 'Asia/Dhaka', day: 'numeric', month: 'long' });
+    const exam = {
+      id: newId('lx'),
+      auto: true,
+      weekKey,
+      title: `সাপ্তাহিক লাইভ মডেল টেস্ট • ${dateBn}`,
+      track,
+      setId: set.id,
+      setCode: set.setCodeBn || 'ক',
+      questionIds: [...set.questionIds],
+      startAt: new Date(startMs).toISOString(),
+      durationMin: setDurationOf(set, cfg),
+      negativeMark: typeof set.negativeMark === 'number' ? set.negativeMark : TRACK_META[track].negativeMark,
+      noticeBn: `প্রতি ${WEEKDAY_BN[cfg.weekday]} লাইভ পরীক্ষা। পরীক্ষা শেষ হলেই উত্তর ও মেধা তালিকা প্রকাশ হবে।`,
+      createdAt: new Date().toISOString(),
+      nextRoll: 100001,
+      candidates: []
+    };
+    state.exams.push(exam);
+    saveNow();
+    return exam;
+  }
+
+  // How many live exams this account has already sat (opened the paper of), not counting `exceptExam`
+  function liveExamsTaken(user, exceptExam = null) {
+    if (!user) return 0;
+    return state.exams.filter(e => e !== exceptExam && !e.cancelled && e.candidates.some(c => c.userId === user.id && c.startedAt)).length;
+  }
+
+  function accessOf(user) {
+    const cfg = weeklyCfg();
+    if (!user) return { loggedIn: false, premium: false, freeLimit: cfg.freeLimit, used: 0, left: cfg.freeLimit };
+    const premium = Boolean(isPremium(user));
+    const used = liveExamsTaken(user);
+    return { loggedIn: true, premium, freeLimit: cfg.freeLimit, used, left: premium ? null : Math.max(0, cfg.freeLimit - used) };
+  }
 
   function phaseOf(exam, now = Date.now()) {
     if (exam.cancelled) return 'CANCELLED';
@@ -132,6 +225,7 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
       totalQuestions: exam.questionIds.length,
       noticeBn: exam.noticeBn || '',
       phase: phaseOf(exam),
+      weekly: Boolean(exam.auto),
       registeredCount: exam.candidates.length,
       submittedCount: exam.candidates.filter(c => c.submittedAt).length
     };
@@ -309,6 +403,33 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
         return true;
       }
 
+      if (pathname === '/api/live/admin/weekly' && method === 'GET') {
+        const next = ensureWeekly();
+        send(res, 200, { status: 'SUCCESS', weekly: weeklyCfg(), next: next ? publicExam(next) : null });
+        return true;
+      }
+
+      if (pathname === '/api/live/admin/weekly' && method === 'POST') {
+        const cfg = weeklyCfg();
+        const int = (v, lo, hi) => (v === undefined || v === '' ? undefined : Number.isInteger(Number(v)) && Number(v) >= lo && Number(v) <= hi ? Number(v) : NaN);
+        const upd = {
+          weekday: int(body.weekday, 0, 6), hour: int(body.hour, 0, 23), minute: int(body.minute, 0, 59),
+          durationMin: int(body.durationMin, 0, 600), freeLimit: int(body.freeLimit, 0, 100), targetCount: int(body.targetCount, 0, 1000000)
+        };
+        if (Object.values(upd).some(v => Number.isNaN(v))) return fail(res, 400, 'BAD_WEEKLY', 'দিন, সময়, মিনিট ও সংখ্যাগুলো সঠিকভাবে দিন।'), true;
+        if (body.track !== undefined && !(body.track in TRACK_META)) return fail(res, 400, 'BAD_TRACK', 'পরীক্ষার ধরন সঠিক নয়।'), true;
+        Object.entries(upd).forEach(([k, v]) => { if (v !== undefined) cfg[k] = v; });
+        if (body.track !== undefined) cfg.track = body.track;
+        if (body.enabled !== undefined) cfg.enabled = Boolean(body.enabled);
+        state.weekly = cfg;
+        // The coming weekly exam follows the new schedule while nobody has registered yet
+        state.exams = state.exams.filter(e => !(e.auto && phaseOf(e) === 'UPCOMING' && !e.candidates.length));
+        const next = ensureWeekly();
+        saveNow();
+        send(res, 200, { status: 'SUCCESS', weekly: cfg, next: next ? publicExam(next) : null });
+        return true;
+      }
+
       let m = pathname.match(/^\/api\/live\/admin\/exams\/([\w-]+)\/cancel$/);
       if (m && method === 'POST') {
         const exam = findExam(m[1]);
@@ -339,6 +460,20 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
     }
 
     // ---------------- Public ----------------
+    // Home page card: the coming weekly exam (same start time and count for everyone) + my free limit
+    if (pathname === '/api/live/weekly' && method === 'GET') {
+      const cfg = weeklyCfg();
+      const next = ensureWeekly();
+      send(res, 200, {
+        status: 'SUCCESS',
+        exam: next && !next.cancelled && phaseOf(next) !== 'ENDED' ? publicExam(next) : null,
+        schedule: { enabled: cfg.enabled, weekday: cfg.weekday, weekdayBn: WEEKDAY_BN[cfg.weekday], hour: cfg.hour, minute: cfg.minute },
+        targetCount: cfg.targetCount,
+        access: accessOf(currentUser(req))
+      });
+      return true;
+    }
+
     if (pathname === '/api/live/exams' && method === 'GET') {
       send(res, 200, {
         status: 'SUCCESS',
@@ -425,6 +560,17 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
       if (phase === 'ENDED') return fail(res, 410, 'ENDED', 'পরীক্ষার সময় শেষ।', { exam: publicExam(exam) }), true;
       if (candidate.submittedAt) return fail(res, 409, 'ALREADY_SUBMITTED', 'আপনি ইতিমধ্যে উত্তরপত্র জমা দিয়েছেন।', { exam: publicExam(exam) }), true;
       if (!candidate.startedAt) {
+        // Free limit is counted per account, so sitting the exam needs a login
+        const user = currentUser(req);
+        if (!user) return fail(res, 401, 'LOGIN_REQUIRED', 'লাইভ পরীক্ষা দিতে আগে লগইন করুন (অ্যাকাউন্ট না থাকলে ফ্রিতে খুলুন)।', { exam: publicExam(exam) }), true;
+        if (candidate.userId && candidate.userId !== user.id) {
+          return fail(res, 403, 'OTHER_ACCOUNT', 'এই রোল অন্য অ্যাকাউন্টের। যে অ্যাকাউন্ট দিয়ে নিবন্ধন করেছিলেন সেটিতে লগইন করুন।', { exam: publicExam(exam) }), true;
+        }
+        const limit = weeklyCfg().freeLimit;
+        if (!isPremium(user) && liveExamsTaken(user, exam) >= limit) {
+          return fail(res, 402, 'PREMIUM_REQUIRED', `ফ্রিতে ${limit}টি লাইভ পরীক্ষা দেওয়া যায়, আপনি সেগুলো দিয়ে ফেলেছেন। প্রতি সপ্তাহের লাইভ পরীক্ষা দিতে প্যাকেজ নিন।`, { exam: publicExam(exam) }), true;
+        }
+        candidate.userId = user.id;
         candidate.startedAt = new Date().toISOString();
         save();
       }
@@ -501,7 +647,11 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
     return fail(res, 404, 'NOT_FOUND', 'রুট পাওয়া যায়নি।'), true;
   }
 
-  return { handle, buildMerit, scoreAnswers, phaseOf, ready, flush, _state: () => state, _saveNow: saveNow };
+  // With a database the state arrives in ready(), which then creates the weekly exam
+  if (!store) ensureWeekly();
+  setInterval(ensureWeekly, 10 * 60000).unref();
+
+  return { handle, buildMerit, scoreAnswers, phaseOf, ready, flush, nextWeeklyStart, _state: () => state, _saveNow: saveNow };
 }
 
 module.exports = { createLiveExamEngine, TRACK_META };

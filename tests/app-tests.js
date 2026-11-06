@@ -276,6 +276,60 @@ async function serverTests() {
       assert.ok(list.json.orders.some(x => x.id === o.id && x.redeemedUser.phone === '01944444444'));
     });
 
+    await test('weekly live exam is created by itself; free accounts may sit 2, then need a plan', async () => {
+      const w = await call('GET', '/api/live/weekly');
+      assert.equal(w.status, 200, JSON.stringify(w.json));
+      assert.ok(w.json.exam && w.json.exam.weekly, 'weekly exam exists');
+      const start = new Date(w.json.exam.startAt);
+      assert.equal(start.getUTCDay(), 5); // Friday
+      assert.equal(start.getUTCHours(), 15); // 9 PM in Dhaka
+      assert.equal(w.json.access.freeLimit, 2);
+      // Same exam (same count, same start) for a second visitor
+      const w2 = await call('GET', '/api/live/weekly', { cookie: bob });
+      assert.equal(w2.json.exam.id, w.json.exam.id);
+      assert.equal(w2.json.access.left, 2);
+
+      const cat = await call('GET', '/api/live/admin/catalog', { admin: 'test-admin-key' });
+      const setId = cat.json.sets[0].id;
+      const liveNow = async () => (await call('POST', '/api/live/admin/exams', {
+        admin: 'test-admin-key', body: { setId, startAt: new Date(Date.now() - 60e3).toISOString(), durationMin: 30 }
+      })).json.exam.id;
+      const sit = async (id, cookie, phone) => {
+        const reg = await call('POST', `/api/live/exams/${id}/register`, { cookie, body: { name: 'Carol', phone } });
+        assert.equal(reg.status, 200, JSON.stringify(reg.json));
+        return call('GET', `/api/live/exams/${id}/paper?token=${reg.json.candidate.token}`, { cookie });
+      };
+      const carol = await signUp('Carol', '01933333333');
+      const ids = [await liveNow(), await liveNow(), await liveNow()];
+      const anon = await call('POST', `/api/live/exams/${ids[0]}/register`, { body: { name: 'Anon', phone: '01544444444' } });
+      assert.equal((await call('GET', `/api/live/exams/${ids[0]}/paper?token=${anon.json.candidate.token}`)).json.code, 'LOGIN_REQUIRED');
+      assert.equal((await sit(ids[0], carol, '01933333333')).status, 200);
+      assert.equal((await sit(ids[1], carol, '01933333333')).status, 200);
+      const third = await sit(ids[2], carol, '01933333333');
+      assert.equal(third.json.code, 'PREMIUM_REQUIRED');
+      // Opening an exam already started again does not count twice
+      assert.equal((await sit(ids[0], carol, '01933333333')).status, 200);
+      const left = await call('GET', '/api/live/weekly', { cookie: carol });
+      assert.equal(left.json.access.left, 0);
+
+      const users = await call('GET', '/api/admin/accounts/users?q=01933333333', { admin: 'test-admin-key' });
+      const u = (users.json.users || []).find(x => x.phone === '01933333333');
+      assert.equal((await call('POST', `/api/admin/accounts/users/${u.id}/grant`, { admin: 'test-admin-key', body: { days: 30 } })).status, 200);
+      assert.equal((await sit(ids[2], carol, '01933333333')).status, 200);
+    });
+
+    await test('admin can move the weekly exam; it follows while nobody has registered', async () => {
+      const r = await call('POST', '/api/live/admin/weekly', { admin: 'test-admin-key', body: { weekday: 6, hour: 20, minute: 30, targetCount: 2000 } });
+      assert.equal(r.status, 200, JSON.stringify(r.json));
+      const start = new Date(r.json.next.startAt);
+      assert.equal(start.getUTCDay(), 6);
+      assert.equal(`${start.getUTCHours()}:${start.getUTCMinutes()}`, '14:30');
+      const w = await call('GET', '/api/live/weekly');
+      assert.equal(w.json.exam.id, r.json.next.id);
+      assert.equal(w.json.targetCount, 2000);
+      assert.equal((await call('POST', '/api/live/admin/weekly', { admin: 'test-admin-key', body: { hour: 99 } })).status, 400);
+    });
+
     await test('admin can reset a password; old sessions stop working', async () => {
       const users = await call('GET', '/api/admin/accounts/users', { admin: 'test-admin-key' });
       const list = users.json.users || users.json.items || [];
