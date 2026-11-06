@@ -3336,7 +3336,17 @@ function renderConfusingHotTab() {
 // -----------------------------------------------------------------------------
 // 15. 1-CLICK OFFLINE PRINTABLE QUESTION BOOKLET + BLANK OMR + ANSWER KEY PDF
 // -----------------------------------------------------------------------------
+// Small "licensed to" line on every printed page, so a shared printout points back to the account
+function printOwnerMark() {
+  const u = typeof window !== 'undefined' && window.Account && window.Account.user;
+  if (!u) return '';
+  const who = String(u.phone || u.name || '').replace(/[<>&"']/g, '');
+  return `<div class="owner-mark">সোনার হরিণ • ${who} • ${new Date().toLocaleDateString('en-GB')}</div>`;
+}
+
 function printFullExamPackage(source = 'LIVE') {
+  // Print / PDF download is a premium feature (content-guard.js)
+  if (typeof window !== 'undefined' && window.ContentGuard && !window.ContentGuard.requirePrint()) return '';
   const bnOpt = { A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' };
   let printQuestions = questions || [];
   let orgTitle = currentOrgHeaderBn || 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC)';
@@ -3460,9 +3470,11 @@ function printFullExamPackage(source = 'LIVE') {
     .omr-b { width: 19px; height: 19px; border-radius: 50%; border: 1.5px solid #e11d48; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; color: #be123c; font-weight: bold; background: #fff; }
     .ak-grid { column-count: 2; column-gap: 18px; font-size: 12px; }
     .ak-item { break-inside: avoid; margin-bottom: 5px; border-bottom: 1px dashed #ccc; padding-bottom: 3px; }
+    .owner-mark { position: fixed; bottom: 2mm; right: 4mm; font-size: 9px; color: #64748b; }
   </style>
 </head>
 <body>
+  ${printOwnerMark()}
   <div class="no-print-bar">
     <span>🖨️ ১-ক্লিকে অফলাইন প্রিন্টেবল প্যাকেজ: (১) ২-কলাম প্রশ্নপত্র + (২) ফাঁকা OMR উত্তরপত্র + (৩) ব্যাখ্যাসহ উত্তরমালা</span>
     <button onclick="window.print()">এখনই প্রিন্ট / Save as PDF করুন</button>

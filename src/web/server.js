@@ -159,6 +159,7 @@ const PUBLIC_FILES = {
   '/account.js': 'application/javascript; charset=utf-8',
   '/admin-payments.js': 'application/javascript; charset=utf-8',
   '/native-app.js': 'application/javascript; charset=utf-8',
+  '/content-guard.js': 'application/javascript; charset=utf-8',
   '/logo.svg': 'image/svg+xml'
 };
 const PAGES = {
