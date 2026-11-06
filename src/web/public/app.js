@@ -3337,6 +3337,8 @@ function renderConfusingHotTab() {
 // 15. 1-CLICK OFFLINE PRINTABLE QUESTION BOOKLET + BLANK OMR + ANSWER KEY PDF
 // -----------------------------------------------------------------------------
 function printFullExamPackage(source = 'LIVE') {
+  // Download / print is part of the PREMIUM plan (account.js shows the plans otherwise)
+  if (typeof window !== 'undefined' && window.Account && !window.Account.allowPrint()) return '';
   const bnOpt = { A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' };
   let printQuestions = questions || [];
   let orgTitle = currentOrgHeaderBn || 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC)';

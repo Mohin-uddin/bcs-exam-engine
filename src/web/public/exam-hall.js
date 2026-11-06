@@ -183,6 +183,7 @@
     });
 
     document.getElementById('btnPrint').addEventListener('click', () => {
+      if (window.Account && !window.Account.allowPrint()) return;
       document.getElementById('printDialog').hidden = false;
     });
     document.getElementById('btnCancelPrint').addEventListener('click', () => {
