@@ -866,6 +866,9 @@
     decorate();
     new MutationObserver(queueDecorate).observe(document.body, { childList: true, subtree: true });
     const gwResult = new URLSearchParams(location.search).get('payment');
+    // Sent here from the live exam hall: ?live=login | unlock
+    const liveAsk = new URLSearchParams(location.search).get('live');
+    if (liveAsk) history.replaceState(null, '', location.pathname + location.hash);
     try {
       const data = await api('/api/auth/me');
       me = data.user;
@@ -873,6 +876,8 @@
       announce();
       applyPrintLock();
       if (gwResult) return showGatewayResult(gwResult);
+      if (liveAsk && !me) openLogin('লাইভ পরীক্ষা দিতে লগইন করুন। অ্যাকাউন্ট না থাকলে "নতুন অ্যাকাউন্ট" খুলুন, ফ্রি অ্যাকাউন্টেও লাইভ পরীক্ষা দেওয়া যায়।', () => { location.href = '/live'; });
+      else if (liveAsk === 'unlock' && !me.premium) openPlans({});
       // Logged in elsewhere or approved since this page loaded
       if (me && me.premium && !access.premium) reloadForPremium();
       startPolling();

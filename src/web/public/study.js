@@ -422,6 +422,102 @@
     if (btn) btn.textContent = next ? (next.phase === 'LIVE' ? 'অংশ নিন' : 'নিবন্ধন') : 'দেখুন';
   }
 
+  // ---------------------------------------------------------------------------
+  // Weekly live exam card: start time and registered count come from the server,
+  // and the countdown runs on the server's clock, so every visitor sees the same numbers
+  // ---------------------------------------------------------------------------
+  let weekly = null;
+  let weeklyOffset = 0; // serverNow - clientNow
+  let weeklyTimers = null;
+  const serverNow = () => Date.now() + weeklyOffset;
+
+  async function loadWeekly() {
+    try {
+      const res = await fetch('/api/live/weekly', { credentials: 'same-origin', cache: 'no-store' });
+      const out = await res.json();
+      if (out.serverNow) weeklyOffset = Date.parse(out.serverNow) - Date.now();
+      if (out.status === 'SUCCESS') weekly = out;
+    } catch { /* keep the last numbers */ }
+    renderWeekly();
+  }
+
+  function cdText(ms) {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const d = Math.floor(s / 86400);
+    const hms = [Math.floor((s % 86400) / 3600), Math.floor((s % 3600) / 60), s % 60].map(v => String(v).padStart(2, '0')).join(':');
+    return bn(d ? `${d} দিন ${hms}` : hms);
+  }
+
+  function weeklyPhase(e) {
+    const t = serverNow();
+    return t < Date.parse(e.startAt) ? 'UPCOMING' : t < Date.parse(e.endAt) ? 'LIVE' : 'ENDED';
+  }
+
+  function tickWeekly() {
+    const el = document.getElementById('weeklyCountdown');
+    if (!el || !weekly || !weekly.exam) return;
+    const e = weekly.exam;
+    const phase = weeklyPhase(e);
+    if (phase !== el.dataset.phase) return loadWeekly(); // started or ended: fetch fresh state
+    el.textContent = cdText(Date.parse(phase === 'LIVE' ? e.endAt : e.startAt) - serverNow());
+  }
+
+  function renderWeekly() {
+    const box = document.getElementById('homeWeekly');
+    if (!box) return;
+    if (!weeklyTimers) weeklyTimers = [setInterval(tickWeekly, 1000), setInterval(() => { if (document.getElementById('homeWeekly')) loadWeekly(); }, 30000)];
+    if (!weekly) {
+      box.innerHTML = '<p class="muted">লাইভ পরীক্ষার তথ্য আনা হচ্ছে...</p>';
+      return;
+    }
+    const e = weekly.exam;
+    const sc = weekly.schedule;
+    const a = weekly.access || {};
+    const at = iso => {
+      const d = new Date(iso);
+      const date = d.toLocaleDateString('bn-BD', { timeZone: 'Asia/Dhaka', weekday: 'long', day: 'numeric', month: 'long' });
+      const h = Number(d.toLocaleString('en-US', { timeZone: 'Asia/Dhaka', hour: 'numeric', hour12: false })) % 24;
+      const part = h < 5 ? 'রাত' : h < 12 ? 'সকাল' : h < 15 ? 'দুপুর' : h < 18 ? 'বিকাল' : h < 19 ? 'সন্ধ্যা' : 'রাত';
+      return `${date} ${part} ${bn(`${(h % 12) || 12}:${String(d.getUTCMinutes()).padStart(2, '0')}`)}টা`;
+    };
+    if (!e) {
+      box.innerHTML = `<h3 class="panel-title">🏆 সাপ্তাহিক লাইভ পরীক্ষা</h3><p class="muted">${sc.enabled ? 'পরের পরীক্ষার ঘোষণা শিগগির আসছে।' : 'এখন কোনো লাইভ পরীক্ষা নেই।'}</p>`;
+      return;
+    }
+    const phase = weeklyPhase(e);
+    const target = Number(weekly.targetCount) || 0;
+    let accessLine = '';
+    if (!a.loggedIn) accessLine = `<button type="button" class="link" onclick="Account.openLogin()">লগইন করুন</button>, ফ্রিতে ${bn(a.freeLimit)}টি লাইভ পরীক্ষা দিতে পারবেন।`;
+    else if (a.premium) accessLine = '⭐ আপনার প্যাকেজে প্রতি সপ্তাহের লাইভ পরীক্ষা খোলা।';
+    else if (a.left > 0) accessLine = `ফ্রিতে আর <b>${bn(a.left)}টি</b> লাইভ পরীক্ষা দিতে পারবেন।`;
+    else accessLine = `ফ্রি ${bn(a.freeLimit)}টি লাইভ পরীক্ষা দেওয়া শেষ। <button type="button" class="link" onclick="Account.openUnlock()">প্যাকেজ নিন</button>`;
+    box.innerHTML = `
+      <div class="weekly-head">
+        <div>
+          <h3 class="panel-title">🏆 সাপ্তাহিক লাইভ পরীক্ষা</h3>
+          <p class="muted">প্রতি ${esc(sc.weekdayBn)} • ${esc(e.title)}</p>
+        </div>
+        ${phase === 'LIVE' ? '<span class="weekly-live">🔴 এখন চলছে</span>' : ''}
+      </div>
+      <div class="weekly-grid">
+        <div class="weekly-cd">
+          <span class="muted">${phase === 'LIVE' ? 'শেষ হতে বাকি' : 'শুরু হতে বাকি'}</span>
+          <b id="weeklyCountdown" data-phase="${phase}">${cdText(Date.parse(phase === 'LIVE' ? e.endAt : e.startAt) - serverNow())}</b>
+          <span class="muted">📅 ${at(e.startAt)} • ${bn(e.durationMin)} মিনিট • ${bn(e.totalQuestions)} প্রশ্ন</span>
+        </div>
+        <div class="weekly-count">
+          <span class="muted">নিবন্ধন করেছেন</span>
+          <b>${bn(e.registeredCount)} জন</b>
+          ${target ? `<div class="goal-bar"><span style="width:${Math.min(100, Math.round((e.registeredCount / target) * 100))}%"></span></div><span class="muted">এই সপ্তাহের লক্ষ্য ${bn(target)} জন</span>` : ''}
+        </div>
+      </div>
+      <p class="muted mt-3">${accessLine}</p>
+      <div class="weekly-actions">
+        <a class="btn btn-primary" href="/live?exam=${encodeURIComponent(e.id)}">${phase === 'LIVE' ? 'এখনই অংশ নিন →' : 'নিবন্ধন করুন →'}</a>
+        <span class="muted">পরীক্ষা শেষ হলেই উত্তর ও মেধা তালিকা</span>
+      </div>`;
+  }
+
   // Track picker on the home page: shown until the user picks an exam, or when they tap "বদলান"
   let homeTrackPickerOpen = false;
   function toggleHomeTrackPicker() {
@@ -472,6 +568,8 @@
       </div>
       <div id="qSearchResults" class="space-y-3"></div>
 
+      <div class="panel weekly-card" id="homeWeekly"></div>
+
       <div class="panel">
         <h3 class="panel-title">আজ যা করবেন</h3>
         <div class="todo-list">
@@ -512,6 +610,8 @@
       </div>` : ''}`;
     renderLiveBox();
     if (!liveCache) loadLive();
+    renderWeekly();
+    if (!weekly) loadWeekly();
     if (searchValue) search(searchValue);
   }
 

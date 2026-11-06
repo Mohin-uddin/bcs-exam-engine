@@ -677,6 +677,12 @@
     } catch (e) {
       btnStart.disabled = false;
       if (['ALREADY_SUBMITTED', 'ENDED', 'NOT_STARTED'].includes(e.code)) return refreshLive();
+      // Login / subscription happen on the main site, which opens the right dialog
+      if (e.code === 'LOGIN_REQUIRED' || e.code === 'PREMIUM_REQUIRED') {
+        alert(e.message);
+        location.href = `/?live=${e.code === 'LOGIN_REQUIRED' ? 'login' : 'unlock'}`;
+        return;
+      }
       alert(e.message);
     }
   }
