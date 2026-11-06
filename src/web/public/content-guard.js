@@ -2,8 +2,7 @@
  * Question-set protection (website + Android app WebView).
  *
  * Mark any element that shows questions with class="cg-protect". Inside it:
- *  - A faint watermark with the logged-in user's phone number is tiled over the
- *    questions, so a leaked screenshot or phone photo points back to the account.
+ *  - No watermark on screen. Printed / PDF pages get a faint "সোনার হরিণ" watermark.
  *  - The questions blur when the tab/window loses focus (Snipping Tool, screen
  *    recorders, switching apps) and for a moment when PrintScreen / Win / Cmd+Shift
  *    is pressed. PrintScreen also wipes the clipboard.
@@ -12,10 +11,10 @@
  *    printed page is blank and window.print() opens the unlock dialog instead.
  *
  * In the Android app screenshots and screen recording are blocked by the OS
- * (FLAG_SECURE in MainActivity), so the watermark is skipped there.
+ * (FLAG_SECURE in MainActivity).
  *
  * A browser can never fully stop a screenshot (OS shortcuts and phone cameras are
- * outside the page), so on the web this is deterrence plus traceability.
+ * outside the page), so on the web this is deterrence only.
  *
  * Public API: window.ContentGuard.canPrint(), ContentGuard.requirePrint()
  */
@@ -29,8 +28,6 @@
     '.cg-protect{position:relative;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}' +
     '.cg-protect input,.cg-protect textarea,.cg-protect select{-webkit-user-select:text;user-select:text}' +
     '.cg-protect img{-webkit-user-drag:none;pointer-events:none}' +
-    'html.cg-wm .cg-protect::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:40;' +
-    'background-image:var(--cg-wm);background-repeat:repeat;background-size:260px 150px}' +
     '.cg-protect>*{transition:filter .12s}' +
     'html.cg-hide .cg-protect>*{filter:blur(16px)!important}' +
     '#cg-shield{position:fixed;inset:0;z-index:2147483646;display:none;align-items:center;justify-content:center;' +
@@ -41,7 +38,9 @@
     '@media print{html:not(.cg-can-print) .cg-protect{display:none!important}' +
     'html:not(.cg-can-print) body::before{content:"প্রিন্ট ও ডাউনলোড শুধু প্রিমিয়াম সদস্যদের জন্য — সোনার হরিণ";' +
     'display:block;padding:40px;text-align:center;font:600 18px sans-serif}' +
-    'html.cg-wm .cg-protect::after{-webkit-print-color-adjust:exact;print-color-adjust:exact}}';
+    'html.cg-wm .cg-protect::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:40;' +
+    'background-image:var(--cg-wm);background-repeat:repeat;background-size:260px 150px;' +
+    '-webkit-print-color-adjust:exact;print-color-adjust:exact}}';
   var style = document.createElement('style');
   style.id = 'cg-style';
   style.textContent = css;
@@ -49,7 +48,6 @@
 
   // ---------------------------------------------------------------- helpers
   function account() { return window.Account || null; }
-  function user() { var a = account(); return a && a.user; }
   // PREMIUM plan only (NORMAL plan = view only); Account.canPrint comes from the logged-in account
   function canPrint() { var a = account(); return Boolean(a && (a.canPrint ? a.canPrint() : a.isPremium && a.isPremium())); }
   function inProtected(node) {
@@ -83,29 +81,14 @@
   }
 
   // -------------------------------------------------------------- watermark
-  var wmText = '';
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' }[c];
-    });
-  }
+  // Site name only, and only on printed / downloaded pages (not on screen).
   function renderWatermark() {
-    if (isApp) return;
-    var u = user();
-    var who = u ? (u.phone || u.name || '') : '';
-    var d = new Date();
-    var stamp = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
-    var line1 = 'সোনার হরিণ' + (who ? ' • ' + who : '');
-    var line2 = who ? stamp : 'অনুমতি ছাড়া কপি নিষেধ';
-    var key = line1 + '|' + line2;
-    if (key === wmText) return;
-    wmText = key;
+    if (root.classList.contains('cg-wm')) return;
     var svg =
       '<svg xmlns="http://www.w3.org/2000/svg" width="260" height="150">' +
-      '<g transform="rotate(-24 130 75)" fill="#0f172a" fill-opacity="0.075" ' +
+      '<g transform="rotate(-24 130 75)" fill="#0f172a" fill-opacity="0.07" ' +
       'font-family="Noto Sans Bengali, sans-serif" font-weight="700" text-anchor="middle">' +
-      '<text x="130" y="72" font-size="17">' + esc(line1) + '</text>' +
-      '<text x="130" y="94" font-size="12">' + esc(line2) + '</text></g></svg>';
+      '<text x="130" y="80" font-size="20">সোনার হরিণ</text></g></svg>';
     root.style.setProperty('--cg-wm', 'url("data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg) + '")');
     root.classList.add('cg-wm');
   }
@@ -165,7 +148,7 @@
     if ((e.key || '').toLowerCase() !== 'printscreen') return;
     flashHide(1500);
     try { navigator.clipboard && navigator.clipboard.writeText(''); } catch (err) { /* not allowed */ }
-    toast('স্ক্রিনশট নেওয়া যাবে না — প্রতিটি প্রশ্নে আপনার নম্বর জলছাপ হিসেবে থাকে।');
+    toast('স্ক্রিনশট নেওয়া যাবে না।');
   }, true);
 
   // -------------------------------------------------- copy / menu / drag
@@ -212,7 +195,7 @@
     mountShield();
     refresh();
     // Account.js logs the user in asynchronously (and can log in/out later):
-    // keep the watermark and print permission in step. refresh() is a no-op when unchanged.
+    // keep the print permission in step.
     setInterval(refresh, 2000);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

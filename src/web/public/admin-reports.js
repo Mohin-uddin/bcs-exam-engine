@@ -28,7 +28,7 @@
     section.className = 'panel';
     section.id = 'reportsArea';
     section.innerHTML = `
-      <h2>🚩 প্রশ্নের ভুল রিপোর্ট <span class="badge UPCOMING" id="repBadge"></span></h2>
+      <h2>⚠️ প্রশ্নের ভুল রিপোর্ট <span class="badge UPCOMING" id="repBadge"></span></h2>
       <p style="color:#475569;font-size:14px;margin-bottom:10px">শিক্ষার্থীরা কোনো প্রশ্নে ভুল উত্তর, বানান বা পুরোনো তথ্য পেলে এখানে জানায়। একই প্রশ্নে বেশি রিপোর্ট থাকলে আগে দেখুন। প্রশ্ন ঠিক করার পর "ঠিক করা হয়েছে" চাপুন।</p>
       <div class="actions" style="margin-bottom:10px">
         <button class="btn primary sm" type="button" data-rstatus="OPEN">দেখা বাকি</button>

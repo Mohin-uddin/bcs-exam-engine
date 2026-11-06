@@ -945,7 +945,7 @@ function renderExamQuestions() {
             <div class="flex items-center gap-1 shrink-0">
               ${examSubmitted ? '' : `<button onclick="toggleGuess5050('${q.id}')" title="২টি অপশন বাদ দিয়ে 50:50 অনুমান চিহ্নিত করুন" class="px-1.5 py-0.5 rounded text-[10px] font-bold border transition ${is5050 ? 'bg-amber-400 text-slate-950 border-slate-900' : 'bg-white/80 text-slate-700 border-slate-400 hover:bg-amber-100'}">🎲 50:50</button>`}
               <button onclick="toggleBookmark('${q.id}')" title="বুকমার্ক" class="text-xs opacity-60 hover:opacity-100 shrink-0">${bookmarkedIds.has(q.id) ? '⭐' : '☆'}</button>
-              <button onclick="openReportModal('${q.id}')" title="প্রশ্নে ভুল থাকলে জানান" class="text-xs opacity-50 hover:opacity-100 shrink-0">🚩</button>
+              <button onclick="openReportModal('${q.id}')" title="প্রশ্নে ভুল থাকলে জানান" class="text-xs opacity-50 hover:opacity-100 shrink-0">⚠️</button>
             </div>
           </div>
           ${repeatBadgeHtml}
@@ -1019,7 +1019,7 @@ function renderExamQuestions() {
               ${isBookmarked ? '⭐' : '☆'}
             </button>
             <button onclick="openReportModal('${q.id}')" title="ভুল রিপোর্ট করুন" class="text-sm p-1 hover:text-rose-700 transition">
-              🚩
+              ⚠️
             </button>
           </div>
         </div>
@@ -2073,7 +2073,7 @@ function renderPastBank() {
               <span>${isBookmarked ? '⭐ সেভ করা আছে' : '☆ সেভ করুন'}</span>
             </button>
             <button onclick="openReportModal('${q.id}')" class="px-2 py-1 rounded bg-white hover:bg-slate-100 border border-slate-200 text-rose-700 text-xs">
-              🚩 রিপোর্ট
+              ⚠️ রিপোর্ট
             </button>
           </div>
         </div>
@@ -3338,12 +3338,9 @@ function renderConfusingHotTab() {
 // -----------------------------------------------------------------------------
 // 15. 1-CLICK OFFLINE PRINTABLE QUESTION BOOKLET + BLANK OMR + ANSWER KEY PDF
 // -----------------------------------------------------------------------------
-// Small "licensed to" line on every printed page, so a shared printout points back to the account
+// Faint site-name watermark on every printed / downloaded page
 function printOwnerMark() {
-  const u = typeof window !== 'undefined' && window.Account && window.Account.user;
-  if (!u) return '';
-  const who = String(u.phone || u.name || '').replace(/[<>&"']/g, '');
-  return `<div class="owner-mark">সোনার হরিণ • ${who} • ${new Date().toLocaleDateString('en-GB')}</div>`;
+  return '<div class="owner-mark">সোনার হরিণ</div>';
 }
 
 function printFullExamPackage(source = 'LIVE') {
@@ -3472,7 +3469,7 @@ function printFullExamPackage(source = 'LIVE') {
     .omr-b { width: 19px; height: 19px; border-radius: 50%; border: 1.5px solid #e11d48; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; color: #be123c; font-weight: bold; background: #fff; }
     .ak-grid { column-count: 2; column-gap: 18px; font-size: 12px; }
     .ak-item { break-inside: avoid; margin-bottom: 5px; border-bottom: 1px dashed #ccc; padding-bottom: 3px; }
-    .owner-mark { position: fixed; bottom: 2mm; right: 4mm; font-size: 9px; color: #64748b; }
+    .owner-mark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 90px; font-weight: 800; color: rgba(15, 23, 42, 0.06); pointer-events: none; white-space: nowrap; z-index: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   </style>
 </head>
 <body>
