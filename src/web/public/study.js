@@ -19,8 +19,7 @@
   const OPT_BN = { A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' };
   const TRACK_BN = {
     BCS: 'বিসিএস', PRIMARY: 'প্রাথমিক শিক্ষক', NTRCA: 'শিক্ষক নিবন্ধন', BANK: 'ব্যাংক',
-    MINISTRY: 'মন্ত্রণালয় ও অধিদপ্তর', NON_CADRE: 'নন-ক্যাডার ও দুদক', NURSING: 'নার্সিং',
-    ADMISSION: 'বিশ্ববিদ্যালয় ভর্তি'
+    MINISTRY: 'মন্ত্রণালয় ও অধিদপ্তর', NON_CADRE: 'নন-ক্যাডার ও দুদক', NURSING: 'নার্সিং'
   };
   const TRACK_NEG = { BCS: 0.5, NON_CADRE: 0.5, NURSING: 0.5 };
   const negOf = track => TRACK_NEG[track] || 0.25;

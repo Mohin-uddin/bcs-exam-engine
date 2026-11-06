@@ -131,16 +131,9 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     const locked = new Set();
     exams.forEach(e => {
       const g = groupOf(e);
-      let key = `${e.examTrack}|${g}`;
-      let limit = n;
-      // University admission: every unit (science, humanities, business, private) gets one free set of each kind,
-      // so each student can try a test of their own group
-      if (e.examTrack === 'ADMISSION' && e.unitType) {
-        key += `|${e.unitType}`;
-        limit = Math.min(n, 1);
-      }
+      const key = `${e.examTrack}|${g}`;
       seen[key] = (seen[key] || 0) + 1;
-      if (g === 'hot' || seen[key] > limit) locked.add(e.id);
+      if (g === 'hot' || seen[key] > n) locked.add(e.id);
     });
     return locked;
   }
