@@ -215,6 +215,42 @@ async function serverTests() {
       assert.ok(!after.json.reports.some(x => x.id === rep.id));
     });
 
+    await test('cash on delivery: printed-pack plans only, costs more, admin approves and ships', async () => {
+      const cfg = (await call('GET', '/api/payment/config')).json;
+      const digital = cfg.plans.find(p => !p.printPack);
+      const print = cfg.plans.find(p => p.printPack);
+      assert.ok(cfg.codEnabled && digital && print);
+      assert.equal(print.codPrice, print.price + cfg.codExtra);
+      const delivery = { name: 'Alice', phone: '01711111111', district: 'ঢাকা', address: 'বাসা ১২, রোড ৩, মিরপুর' };
+
+      assert.equal((await call('POST', '/api/payment/cod', { body: { planId: print.id, delivery } })).status, 401);
+      const noPack = await call('POST', '/api/payment/cod', { cookie: alice, body: { planId: digital.id, delivery } });
+      assert.equal(noPack.json.code, 'NO_PRINT_PACK');
+      const noAddr = await call('POST', '/api/payment/cod', { cookie: alice, body: { planId: print.id, delivery: { ...delivery, address: '' } } });
+      assert.equal(noAddr.json.code, 'BAD_ADDRESS');
+
+      const ok = await call('POST', '/api/payment/cod', { cookie: alice, body: { planId: print.id, delivery } });
+      assert.equal(ok.status, 200, JSON.stringify(ok.json));
+      assert.equal(ok.json.payment.amount, print.codPrice);
+      assert.equal(ok.json.payment.delivery.district, 'ঢাকা');
+      const twice = await call('POST', '/api/payment/cod', { cookie: alice, body: { planId: print.id, delivery } });
+      assert.equal(twice.json.code, 'COD_PENDING');
+
+      // Bank / bKash TrxID for a printed-pack plan also needs the address
+      const manual = await call('POST', '/api/payment/submit', { cookie: bob, body: { planId: print.id, method: 'bkash', senderNumber: '01822222222', trxId: 'ABC123XYZ' } });
+      assert.equal(manual.json.code, 'BAD_ADDRESS');
+
+      const toShip = await call('GET', '/api/admin/accounts/payments?status=SHIP', { admin: 'test-admin-key' });
+      assert.ok(toShip.json.payments.some(p => p.id === ok.json.payment.id));
+      const id = ok.json.payment.id;
+      assert.equal((await call('POST', `/api/admin/accounts/payments/${id}/shipped`, { admin: 'test-admin-key', body: {} })).status, 200);
+      const approved = await call('POST', `/api/admin/accounts/payments/${id}/approve`, { admin: 'test-admin-key', body: {} });
+      assert.equal(approved.status, 200, JSON.stringify(approved.json));
+      assert.equal(approved.json.payment.user.premiumUntil !== null, true);
+      const after = await call('GET', '/api/admin/accounts/payments?status=SHIP', { admin: 'test-admin-key' });
+      assert.ok(!after.json.payments.some(p => p.id === id));
+    });
+
     await test('admin can reset a password; old sessions stop working', async () => {
       const users = await call('GET', '/api/admin/accounts/users', { admin: 'test-admin-key' });
       const list = users.json.users || users.json.items || [];

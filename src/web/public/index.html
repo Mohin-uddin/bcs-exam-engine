@@ -576,6 +576,126 @@
     html.theme-dark .q-card-opts .right { color: #6fd6ab; }
     html.theme-dark .q-card-seen { color: #f6c860; }
     html.theme-dark .topbar::after { opacity: .7; }
+
+    /* ================================================================
+       Modern skin: softer surfaces, depth instead of hard borders,
+       glass top/bottom bars, rounder controls. Colours stay the same.
+       (Question paper and OMR sheet are untouched.)
+       ================================================================ */
+    :root {
+      --paper: #f3f5f2;
+      --line: #e3e8e4;
+      --radius: 18px;
+      --shadow-sm: 0 1px 2px rgba(16, 40, 30, .05);
+      --shadow: 0 1px 2px rgba(16, 40, 30, .04), 0 6px 20px -6px rgba(16, 40, 30, .10);
+      --shadow-lg: 0 2px 4px rgba(16, 40, 30, .05), 0 16px 36px -10px rgba(16, 40, 30, .18);
+      --grad-green: linear-gradient(135deg, #0a8a63 0%, #006a4e 55%, #00523c 100%);
+    }
+    html.theme-dark {
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3);
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -8px rgba(0, 0, 0, .5);
+      --shadow-lg: 0 2px 4px rgba(0, 0, 0, .3), 0 18px 40px -12px rgba(0, 0, 0, .6);
+      --grad-green: linear-gradient(135deg, #34b386 0%, #24946c 60%, #1c7a59 100%);
+    }
+    body.app-body {
+      background:
+        radial-gradient(1200px 500px at 100% -10%, rgba(0, 106, 78, .07), transparent 60%),
+        radial-gradient(900px 400px at -10% 0%, rgba(242, 183, 5, .06), transparent 55%),
+        var(--paper);
+      background-attachment: fixed;
+    }
+    /* Glass top bar */
+    .topbar {
+      background: color-mix(in srgb, var(--surface) 82%, transparent);
+      -webkit-backdrop-filter: saturate(160%) blur(14px);
+      backdrop-filter: saturate(160%) blur(14px);
+      border-bottom-color: color-mix(in srgb, var(--line) 70%, transparent);
+    }
+    .topbar::after { height: 2px; opacity: .85; }
+    .brand-logo { border-radius: 12px; box-shadow: var(--shadow-sm); }
+    .brand-name { letter-spacing: -.01em; }
+
+    /* Buttons */
+    .btn { border-radius: 12px; padding: 9px 16px; transition: transform .15s, box-shadow .15s, background .15s, border-color .15s; }
+    .btn-primary { background: var(--grad-green); box-shadow: 0 6px 16px -6px rgba(0, 106, 78, .55); }
+    .btn-primary:hover { background: var(--grad-green); transform: translateY(-1px); box-shadow: 0 10px 22px -8px rgba(0, 106, 78, .6); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-ghost { box-shadow: var(--shadow-sm); }
+    .btn-ghost:hover { border-color: var(--green); color: var(--green); background: var(--surface); }
+    .icon-btn { border-radius: 12px; }
+
+    /* Surfaces: one card style everywhere */
+    .panel { border-radius: var(--radius); border-color: transparent; box-shadow: var(--shadow); padding: 18px; }
+    html.theme-dark .panel { border-color: var(--line); }
+    .tab-pane .rounded-2xl, .tab-pane .rounded-3xl { border-radius: var(--radius); }
+    .tab-pane :is(.rounded-xl, .rounded-2xl, .rounded-3xl).border.bg-white:not(.bpsc-paper-sheet *) { border-color: transparent; box-shadow: var(--shadow); }
+    html.theme-dark .tab-pane :is(.rounded-xl, .rounded-2xl, .rounded-3xl).border.bg-white:not(.bpsc-paper-sheet *) { border-color: var(--line); }
+    .q-card { border-radius: 14px; border-color: transparent; box-shadow: var(--shadow); }
+    .search-input, .input, .mini-select { border-radius: 12px; box-shadow: var(--shadow-sm) inset; }
+    .search-input:focus, .input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 4px color-mix(in srgb, var(--green) 18%, transparent); }
+
+    /* Sidebar: soft pills instead of a hard edge */
+    .side-nav { background: color-mix(in srgb, var(--surface) 70%, transparent); border-right-color: transparent; }
+    @media (max-width: 1023px) { .side-nav { background: var(--surface); } }
+    .nav-group-title { font-size: 11.5px; text-transform: none; opacity: .85; }
+    .nav-item { border-radius: 12px; padding: 9px 12px; }
+    .nav-item:hover { background: color-mix(in srgb, var(--green) 7%, transparent); }
+    .nav-item.active { background: var(--surface); color: var(--green); box-shadow: var(--shadow); }
+    .nav-item.active .nav-ic {
+      background: var(--grad-green); color: #fff; border-radius: 8px; width: 26px; height: 26px;
+      display: inline-flex; align-items: center; justify-content: center; font-size: 14px;
+    }
+    .nav-item.active .nav-badge { background: var(--green-tint); }
+    .side-note { border-radius: 14px; background: var(--surface); box-shadow: var(--shadow-sm); }
+
+    /* Chips and section tabs */
+    .chip { padding: 8px 15px; box-shadow: var(--shadow-sm); }
+    .chip.chip-active { background: var(--grad-green); border-color: transparent; box-shadow: 0 6px 14px -6px rgba(0, 106, 78, .55); }
+    .seg.seg-active { border-bottom-width: 3px; border-radius: 2px; }
+
+    /* Home */
+    .home-hero {
+      position: relative; overflow: hidden;
+      background:
+        radial-gradient(600px 220px at 100% 0%, color-mix(in srgb, var(--amber) 18%, transparent), transparent 70%),
+        linear-gradient(135deg, var(--green-tint) 0%, var(--surface) 75%);
+    }
+    .home-title { font-size: 26px; letter-spacing: -.01em; }
+    .goal-bar { height: 12px; background: color-mix(in srgb, var(--green) 10%, var(--line)); }
+    .goal-bar span { background: var(--grad-green); }
+    .streak { box-shadow: var(--shadow-sm); }
+    .home-grid { gap: 18px; }
+    .home-card { transition: transform .18s, box-shadow .18s; }
+    .home-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .home-card-ic {
+      width: 48px; height: 48px; border-radius: 14px; font-size: 24px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--green-tint); margin-bottom: 4px;
+    }
+    .home-big { font-size: 34px; letter-spacing: -.02em; }
+    .stat b { letter-spacing: -.02em; }
+    .trend-bar { background: var(--grad-green); border-radius: 8px 8px 2px 2px; }
+
+    /* Glass bottom bar with an active pill */
+    .bottom-nav {
+      background: color-mix(in srgb, var(--surface) 86%, transparent);
+      -webkit-backdrop-filter: saturate(160%) blur(14px);
+      backdrop-filter: saturate(160%) blur(14px);
+      border-top-color: color-mix(in srgb, var(--line) 70%, transparent);
+      box-shadow: 0 -6px 20px -12px rgba(16, 40, 30, .25);
+    }
+    .bottom-nav button span:first-child { padding: 2px 14px; border-radius: 999px; transition: background .15s; }
+    .bottom-nav button.active span:first-child { background: var(--green-tint); }
+    .back-to-top { background: var(--grad-green); box-shadow: var(--shadow-lg); }
+
+    /* Sheets, toasts, modals */
+    .sheet { border-radius: 22px 22px 0 0; box-shadow: var(--shadow-lg); }
+    @media (min-width: 640px) { .sheet { border-radius: 22px; } }
+    .app-toast { border-radius: 14px; }
+    @media (prefers-reduced-motion: reduce) {
+      .btn, .home-card, .nav-item { transition: none; }
+      .btn-primary:hover, .home-card:hover { transform: none; }
+    }
   </style>
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -685,7 +805,7 @@
       <div id="homeBody" class="space-y-4"></div>
     </section>
 
-    <section id="pane-exam" class="tab-pane hidden space-y-4">
+    <section id="pane-exam" class="cg-protect tab-pane hidden space-y-4">
       <!-- Step 1: choose exam type -->
       <div class="panel">
         <span class="section-label">১. কোন পরীক্ষার প্রস্তুতি নিচ্ছেন?</span>
@@ -861,7 +981,7 @@
     <!-- ===================================================================== -->
     <!-- TAB 2: PAST YEAR QUESTION BANK (বিগত সালের প্রশ্নব্যাংক — বিসিএস ও প্রাইমারি আলাদা) -->
     <!-- ===================================================================== -->
-    <section id="pane-past-bank" class="tab-pane hidden space-y-4">
+    <section id="pane-past-bank" class="cg-protect tab-pane hidden space-y-4">
       <div class="panel space-y-4">
         <div>
           <span class="section-label">১. কোন পরীক্ষার বিগত প্রশ্ন দেখবেন?</span>
@@ -917,7 +1037,7 @@
     <!-- ===================================================================== -->
     <!-- TAB 3: CUSTOM QUIZ BUILDER (কাস্টম কুইজ ক্রিয়েটর) -->
     <!-- ===================================================================== -->
-    <section id="pane-custom-quiz" class="tab-pane hidden space-y-4">
+    <section id="pane-custom-quiz" class="cg-protect tab-pane hidden space-y-4">
       <div class="panel max-w-2xl mx-auto space-y-4">
         <div class="page-head">
           <h2>🎯 নিজের মতো অনুশীলন</h2>
@@ -959,7 +1079,7 @@
     <!-- ===================================================================== -->
     <!-- TAB 4: 1-VS-1 BATTLE QUIZ (গ্যামিফায়েড কুইজ ব্যাটল) -->
     <!-- ===================================================================== -->
-    <section id="pane-battle" class="tab-pane hidden space-y-6">
+    <section id="pane-battle" class="cg-protect tab-pane hidden space-y-6">
       <div class="max-w-2xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
         <div class="text-center space-y-2">
           <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-500/20 text-amber-700 flex items-center justify-center font-bold text-xl">
@@ -1078,7 +1198,7 @@
     <!-- ===================================================================== -->
     <!-- TAB 6: MISTAKE VAULT (ভুল খাতা / Cuotiben) -->
     <!-- ===================================================================== -->
-    <section id="pane-mistakes" class="tab-pane hidden space-y-4">
+    <section id="pane-mistakes" class="cg-protect tab-pane hidden space-y-4">
       <div class="panel space-y-3">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div class="page-head">
@@ -1106,7 +1226,7 @@
     <!-- ===================================================================== -->
     <!-- TAB 7: ACTIVE RECALL & SM-2 FLASHCARDS -->
     <!-- ===================================================================== -->
-    <section id="pane-flashcards" class="tab-pane hidden space-y-6">
+    <section id="pane-flashcards" class="cg-protect tab-pane hidden space-y-6">
       <div class="max-w-3xl mx-auto space-y-5">
         <div class="text-center space-y-1">
           <h2 class="text-2xl font-bold text-slate-900">🧠 ফ্ল্যাশকার্ড</h2>
@@ -1335,7 +1455,7 @@
     <!-- ===================================================================== -->
     <!-- TAB 12: BOOKMARKS / SAVED QUESTIONS -->
     <!-- ===================================================================== -->
-    <section id="pane-bookmarks" class="tab-pane hidden space-y-4">
+    <section id="pane-bookmarks" class="cg-protect tab-pane hidden space-y-4">
       <div class="panel flex flex-wrap items-start justify-between gap-3">
         <div class="page-head">
           <h2>⭐ বুকমার্ক করা প্রশ্ন</h2>
@@ -1350,7 +1470,7 @@
     <!-- ===================================================================== -->
     <!-- TAB 13: CONFUSING PAIR BUSTER & 5+ TIMES SUPER-HOT COMMON TRACKER -->
     <!-- ===================================================================== -->
-    <section id="pane-confusing-hot" class="tab-pane hidden space-y-4">
+    <section id="pane-confusing-hot" class="cg-protect tab-pane hidden space-y-4">
       <div class="panel">
         <div class="page-head">
           <h2>🔥 কনফিউজিং পেয়ার ও বারবার আসা কমন প্রশ্ন</h2>
@@ -1529,6 +1649,7 @@
   <script src="/progress-core.js"></script>
   <script src="/study.js"></script>
   <script src="/account.js"></script>
+  <script src="/content-guard.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>
