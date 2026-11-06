@@ -25,7 +25,8 @@ const {
   ntrcaExamsArchive,
   bankExamsArchive,
   ministryExamsArchive,
-  nonCadreExamsArchive
+  nonCadreExamsArchive,
+  admissionExamsArchive
 } = require('./seed-data');
 const { createLiveExamEngine } = require('./live-exam');
 const { createStateStore } = require('./state-store');
@@ -150,11 +151,13 @@ const PUBLIC_FILES = {
   '/app.css': 'text/css; charset=utf-8',
   '/exam-hall.css': 'text/css; charset=utf-8',
   '/live.css': 'text/css; charset=utf-8',
+  '/admission.css': 'text/css; charset=utf-8',
   '/app.js': 'application/javascript; charset=utf-8',
   '/study.js': 'application/javascript; charset=utf-8',
   '/progress-core.js': 'application/javascript; charset=utf-8',
   '/exam-hall.js': 'application/javascript; charset=utf-8',
   '/live.js': 'application/javascript; charset=utf-8',
+  '/admission.js': 'application/javascript; charset=utf-8',
   '/admin.js': 'application/javascript; charset=utf-8',
   '/admin-reports.js': 'application/javascript; charset=utf-8',
   '/account.js': 'application/javascript; charset=utf-8',
@@ -180,6 +183,9 @@ const PAGES = {
   '/dashboard': 'index.html',
   '/exam-hall': 'exam-hall.html',
   '/live': 'live.html',
+  // University admission portal (HSC students): same accounts, plans and progress as the main app
+  '/admission': 'admission.html',
+  '/admission/': 'admission.html',
   '/admin': 'admin.html',
   '/print': 'omr-sheet.html',
   '/omr-printable': 'omr-sheet.html' // old link, kept so saved bookmarks still work
@@ -286,7 +292,8 @@ const server = http.createServer(async (req, res) => {
       ntrca: ntrcaExamsArchive || [],
       bank: bankExamsArchive || [],
       ministry: ministryExamsArchive || [],
-      nonCadre: nonCadreExamsArchive || []
+      nonCadre: nonCadreExamsArchive || [],
+      admission: admissionExamsArchive || []
     });
   }
 
