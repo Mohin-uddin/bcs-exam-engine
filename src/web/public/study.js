@@ -561,7 +561,7 @@
         <span class="muted">${esc(q.subjectNameBn || '')}${q.topicNameBn ? ` • ${esc(q.topicNameBn)}` : ''}</span>
         <span>
           <button type="button" class="icon-mini" title="বুকমার্ক" onclick="toggleBookmark('${q.id}')">${isBookmarked(q.id) ? '⭐' : '☆'}</button>
-          <button type="button" class="icon-mini" title="ভুল রিপোর্ট করুন" onclick="openReportModal('${q.id}')">🚩</button>
+          <button type="button" class="icon-mini" title="ভুল রিপোর্ট করুন" onclick="openReportModal('${q.id}')">⚠️</button>
         </span>
       </div>
       <div class="q-card-stem">${esc(q.stemBn)}</div>
