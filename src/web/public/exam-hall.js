@@ -62,7 +62,7 @@
         <optgroup label="🌟 প্রাইমারি পূর্ণাঙ্গ মডেল সেট (৮০ প্রশ্ন)">
           ${priPractice.map(e => `<option value="${e.id}">${e.title}</option>`).join('')}
         </optgroup>
-        <optgroup label="🏫 বিগত সালের প্রাইমারি প্রশ্নসেট (২০১২-২০২৪)">
+        <optgroup label="🏫 বিগত পরীক্ষার ধাঁচে প্রাইমারি প্রশ্নসেট (২০১২-২০২৪)">
           ${priPast.map(e => `<option value="${e.id}">${e.title}</option>`).join('')}
         </optgroup>
       `;
@@ -100,7 +100,7 @@
         <optgroup label="🌟 বিসিএস পূর্ণাঙ্গ অনুশীলন সেট (২০০ প্রশ্ন)">
           ${bcsPractice.map(e => `<option value="${e.id}">${e.title}</option>`).join('')}
         </optgroup>
-        <optgroup label="🏛️ বিগত ২০ বিসিএস আর্কাইভ সেট">
+        <optgroup label="🏛️ বিগত ২০ বিসিএসের ধাঁচে আর্কাইভ সেট">
           ${bcsPast.map(e => `<option value="${e.id}">${e.title}</option>`).join('')}
         </optgroup>
       `;

@@ -29,7 +29,9 @@ const SUBJECTS = [
 
 const errors = [];
 const warnings = [];
-const norm = s => String(s || '').replace(/\s+/g, ' ').replace(/[।?.!,"'“”‘’]/g, '').trim().toLowerCase();
+const norm = s => String(s || '').normalize('NFD').replace(/\s+/g, ' ').replace(/[।?.!,"'“”‘’]/g, '').trim().toLowerCase();
+// Stems: also ignore brackets, dashes and colons, so a re-punctuated copy still counts as a duplicate
+const normStem = s => norm(s).replace(/[()—–:;\s]/g, '');
 
 function loadFile(file, needed) {
   const p = path.join(BANK, file);
@@ -87,7 +89,7 @@ SUBJECTS.forEach(subj => {
 
 // Cross-file duplicate detection across the 800 BCS questions
 sets.flat().forEach(q => {
-  const k = norm(q.stem);
+  const k = normStem(q.stem);
   if (seenStems.has(k)) errors.push(`Duplicate stem: "${q.stem.slice(0, 60)}"`);
   seenStems.set(k, true);
 });
@@ -111,6 +113,13 @@ const {
 const { confusingPairsData } = require(path.join(ROOT, 'src', 'data', 'confusing-pairs-data.js'));
 const { mathShortcutSheets, writtenVivaBridgeData, ninetyDaysRoutineData } = require(path.join(ROOT, 'src', 'data', 'toolkit-data.js'));
 
+
+// Sets named after a real exam hold practice questions in that exam's style, not the real paper
+const modelTitle = (title, when) => {
+  const t = String(title || '').trim();
+  const base = /পরীক্ষা$/.test(t) ? `${t}র ধাঁচে মডেল টেস্ট` : `${t} — ধাঁচে মডেল টেস্ট`;
+  return when ? `${base} (মূল পরীক্ষা: ${when})` : base;
+};
 const bcs20List = (rawArchive || []).map(a => {
   const m = String(a.code || '').match(/BCS_(\d+)/);
   return {
@@ -124,19 +133,19 @@ const bcs20List = (rawArchive || []).map(a => {
 // Load Primary Special 160 questions + Other Govt Special 180 questions + Nursing Special 115 questions
 const primarySpecialRaw = loadFile('primary-special.json', 100);
 primarySpecialRaw.forEach((q, idx) => {
-  const k = norm(q.stem);
+  const k = normStem(q.stem);
   if (seenStems.has(k)) errors.push(`Primary duplicate stem (#${idx + 1}): "${q.stem.slice(0, 60)}"`);
   seenStems.set(k, true);
 });
 const otherGovtSpecialRaw = loadFile('other-govt-special.json', 100);
 otherGovtSpecialRaw.forEach((q, idx) => {
-  const k = norm(q.stem);
+  const k = normStem(q.stem);
   if (seenStems.has(k)) errors.push(`OtherGovt duplicate stem (#${idx + 1}): "${q.stem.slice(0, 60)}"`);
   seenStems.set(k, true);
 });
 const nursingSpecialRaw = loadFile('nursing-special.json', 100);
 nursingSpecialRaw.forEach((q, idx) => {
-  const k = norm(q.stem);
+  const k = normStem(q.stem);
   if (seenStems.has(k)) errors.push(`Nursing duplicate stem (#${idx + 1}): "${q.stem.slice(0, 60)}"`);
   seenStems.set(k, true);
 });
@@ -1430,54 +1439,52 @@ const nursingExamsArchive = [
   }))
 ];
 
-// Compute Cross-Exam Repeat Tracker (বিভিন্ন সরকারি পরীক্ষায় বারবার রিপিট হওয়া প্রশ্ন)
-const crossExamMap = new Map();
+// Honesty pass: these are original practice questions written for this app, not questions copied
+// from real exam papers. Do not tag them with exams they "came in", and do not invent repeat counts.
+const TRACK_MODEL_BN = {
+  BCS: 'বিসিএস', PRIMARY: 'প্রাথমিক শিক্ষক নিয়োগ', NTRCA: 'শিক্ষক নিবন্ধন', BANK: 'ব্যাংক নিয়োগ',
+  MINISTRY: 'মন্ত্রণালয় ও অধিদপ্তর নিয়োগ', NON_CADRE: 'নন-ক্যাডার ও দুদক নিয়োগ', NURSING: 'নার্সিং নিয়োগ'
+};
 sampleQuestions.forEach(q => {
-  const initialExams = [];
-  if (q.bcsExamNo) initialExams.push(`${bnDigits(q.bcsExamNo)}তম বিসিএস`);
-  else if (q.examTitle) initialExams.push(q.examTitle.split('(')[0].trim());
-  crossExamMap.set(q.id, new Set(initialExams));
+  q.previousExams = [];
+  q.crossExamRepeats = [];
+  q.repeatCount = 0;
+  q.bcsArchiveTitle = null;
+  q.primaryArchiveTitle = null;
+  if (q.examTrack !== 'BCS') q.examTitle = `${TRACK_MODEL_BN[q.examTrack] || 'নিয়োগ'} • অনুশীলন প্রশ্ন`;
 });
 
-const allSectorArchivesFlat = [
-  ...primaryExamsWithQuestions.map(a => ({ label: `প্রাইমারি শিক্ষক (${bnDigits(a.year)})`, ids: a.questionIds })),
-  ...ntrcaExamsArchive.filter(a => !a.id?.startsWith('NTRCA_MODEL_')).map(a => ({ label: a.title.split('(')[0].replace('বেসরকারি', '').trim(), ids: a.questionIds })),
-  ...bankExamsArchive.filter(a => !a.id?.startsWith('BANK_MODEL_')).map(a => ({ label: a.title.split('—')[0].trim(), ids: a.questionIds })),
-  ...ministryExamsArchive.filter(a => !a.id?.startsWith('MINISTRY_MODEL_')).map(a => ({ label: a.title.split('—')[0].trim(), ids: a.questionIds })),
-  ...nonCadreExamsArchive.filter(a => !a.id?.startsWith('NON_CADRE_MODEL_')).map(a => ({ label: a.title.split('—')[0].trim(), ids: a.questionIds })),
-  ...nursingExamsArchive.filter(a => !a.id?.startsWith('NURSE_MODEL_')).map(a => ({ label: a.title.split('(')[0].trim(), ids: a.questionIds }))
-];
-
-allSectorArchivesFlat.forEach(arch => {
-  (arch.ids || []).forEach(id => {
-    const s = crossExamMap.get(id);
-    if (s) s.add(arch.label);
-  });
+// "Hard picks": the hardest questions first (HIGH, then TRICKY), spread over subjects by a fixed order
+const DIFF_RANK = { HIGH: 0, TRICKY: 1, STANDARD: 2 };
+const hardOrder = sampleQuestions
+  .filter(q => q.examTrack === 'BCS' || DIFF_RANK[q.difficulty] !== 2)
+  .map((q, i) => ({ q, k: (DIFF_RANK[q.difficulty] ?? 2) * 100000 + ((i * 7919) % 100000) }))
+  .sort((x, y) => x.k - y.k)
+  .map(x => x.q);
+const superHotQuestionIds = hardOrder.slice(0, 100).map(q => q.id);
+const superHot200QuestionIds = hardOrder.slice(0, 200).map(q => q.id);
+const hot100 = new Set(superHotQuestionIds);
+const hot200 = new Set(superHot200QuestionIds);
+sampleQuestions.forEach(q => {
+  q.isSuperHot = hot100.has(q.id);
+  q.isSuperHot10 = hot200.has(q.id);
 });
 
-const historicExtraExams = [
-  '৩৫তম বিসিএস', '৩৭তম বিসিএস', '৩৮তম বিসিএস', '৪০তম বিসিএস',
-  'প্রাইমারি শিক্ষক নিয়োগ ২০২২', '১৭তম নিবন্ধন (NTRCA)',
-  'খাদ্য অধিদপ্তর ২০২১', 'সিজিএ অডিটর ২০২২', 'দুদক সহকারী পরিচালক ২০২২', 'সমন্বিত ব্যাংক ২০২৩'
-];
-
-sampleQuestions.forEach((q, idx) => {
-  const set = crossExamMap.get(q.id) || new Set();
-  if (set.size >= 4 && idx < 240) {
-    for (let h = 0; h < 6; h++) {
-      set.add(historicExtraExams[(idx + h * 2) % historicExtraExams.length]);
-    }
-  }
-  const list = Array.from(set);
-  q.crossExamRepeats = list;
-  q.repeatCount = list.length;
-  q.isSuperHot = list.length >= 5;
-  q.isSuperHot10 = list.length >= 10;
+// Spread the correct letter evenly over ক/খ/গ/ঘ (the authored files lean heavily to A and B):
+// swap the correct option with the option at a letter picked from the question id.
+// Questions whose options refer to each other ("সবগুলো", "ক ও খ", "None of these") keep their order.
+const LETTERS = ['A', 'B', 'C', 'D'];
+const REFERS = /সবগুলো|সবকটি|সবকয়টি|কোনোটিই|কোনটিই|উপরের|ক ও খ|খ ও গ|গ ও ঘ|ক ও গ|ক, খ|all of|none of|both|উভয়/i;
+const idHash = id => [...String(id)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+sampleQuestions.forEach(q => {
+  if (Object.values(q.options).some(o => REFERS.test(String(o)))) return;
+  const target = LETTERS[idHash(q.id) % 4];
+  if (target === q.correctOption) return;
+  const keep = q.options[target];
+  q.options[target] = q.options[q.correctOption];
+  q.options[q.correctOption] = keep;
+  q.correctOption = target;
 });
-
-const sortedByRepeat = [...sampleQuestions].sort((a, b) => (b.repeatCount || 0) - (a.repeatCount || 0));
-const superHotQuestionIds = sortedByRepeat.slice(0, 100).map(q => q.id);
-const superHot200QuestionIds = sortedByRepeat.slice(0, 200).map(q => q.id);
 
 const practiceSets = [
   ...sets.map((_, s) => ({
@@ -1566,7 +1573,7 @@ const availableExams = [
     examTrack: 'BCS',
     setNo: 98,
     setCodeBn: 'সুপার-২০০',
-    title: '🔥 ১০+ বার আসা কমন প্রশ্ন (Super Hot 200 • রাতের রিভিশন স্পেশাল)',
+    title: '🔥 বাছাই করা কঠিন ও ট্রিকি ২০০ প্রশ্ন (রাতের রিভিশন স্পেশাল)',
     questionCount: 200,
     durationMin: 120,
     category: 'BCS_PRELI',
@@ -1577,8 +1584,8 @@ const availableExams = [
     id: 'SUPER_HOT_100_SET',
     examTrack: 'BCS',
     setNo: 99,
-    setCodeBn: 'কমন-১০০',
-    title: '🔥 ৫+ বার আসা সুপার-হট কমন ১০০ প্রশ্নসেট (বিসিএস • প্রাইমারি • NTRCA • ব্যাংক • খাদ্য)',
+    setCodeBn: 'কঠিন-১০০',
+    title: '🔥 বাছাই করা সবচেয়ে কঠিন ১০০ প্রশ্ন (বিসিএস • প্রাইমারি • NTRCA • ব্যাংক • খাদ্য)',
     questionCount: 100,
     durationMin: 60,
     category: 'BCS_PRELI',
@@ -1588,7 +1595,7 @@ const availableExams = [
   ...bcs20YearsArchive.map(a => ({
     id: `${a.code}_SET`,
     examTrack: 'BCS',
-    title: `${a.title} (${a.examDate})`,
+    title: modelTitle(a.title, a.examDate),
     questionCount: a.totalQuestions,
     durationMin: a.durationMin,
     category: 'BCS_PRELI',
@@ -1611,7 +1618,7 @@ const availableExams = [
     id: `${a.code}_SET`,
     examTrack: 'PRIMARY',
     setCodeBn: (a.setNameBn || 'পদ্মা').replace(/^সেট:\s*/, ''),
-    title: `${a.title} (${a.examDate} • ${a.setNameBn})`,
+    title: modelTitle(a.title, `${a.examDate} • ${a.setNameBn}`),
     questionCount: a.totalQuestions,
     durationMin: a.durationMin,
     category: 'PRIMARY',
@@ -1624,7 +1631,7 @@ const availableExams = [
     orgNameBn: a.orgNameBn,
     postLabelBn: a.postLabelBn,
     setCodeBn: (a.setNameBn || 'ক').replace(/^সেট:\s*/, ''),
-    title: a.id && a.id.startsWith('NTRCA_MODEL_') ? a.title : `${a.title} (${a.examDate})`,
+    title: a.id && a.id.startsWith('NTRCA_MODEL_') ? a.title : modelTitle(a.title, a.examDate),
     questionCount: a.totalQuestions,
     durationMin: a.durationMin,
     category: 'NTRCA',
@@ -1637,7 +1644,7 @@ const availableExams = [
     orgNameBn: a.orgNameBn,
     postLabelBn: a.postLabelBn,
     setCodeBn: (a.setNameBn || 'A').replace(/^সেট:\s*/, ''),
-    title: a.id && a.id.startsWith('BANK_MODEL_') ? a.title : `${a.title} (${a.examDate})`,
+    title: a.id && a.id.startsWith('BANK_MODEL_') ? a.title : modelTitle(a.title, a.examDate),
     questionCount: a.totalQuestions,
     durationMin: a.durationMin,
     category: 'BANK',
@@ -1650,7 +1657,7 @@ const availableExams = [
     orgNameBn: a.orgNameBn,
     postLabelBn: a.postLabelBn,
     setCodeBn: (a.setNameBn || 'ক').replace(/^সেট:\s*/, ''),
-    title: a.id && a.id.startsWith('MINISTRY_MODEL_') ? a.title : `${a.title} (${a.examDate})`,
+    title: a.id && a.id.startsWith('MINISTRY_MODEL_') ? a.title : modelTitle(a.title, a.examDate),
     questionCount: a.totalQuestions,
     durationMin: a.durationMin,
     category: 'MINISTRY',
@@ -1663,7 +1670,7 @@ const availableExams = [
     orgNameBn: a.orgNameBn,
     postLabelBn: a.postLabelBn,
     setCodeBn: (a.setNameBn || 'ক').replace(/^সেট:\s*/, ''),
-    title: a.id && a.id.startsWith('NON_CADRE_MODEL_') ? a.title : `${a.title} (${a.examDate})`,
+    title: a.id && a.id.startsWith('NON_CADRE_MODEL_') ? a.title : modelTitle(a.title, a.examDate),
     questionCount: a.totalQuestions,
     durationMin: a.durationMin,
     category: 'NON_CADRE',
@@ -1676,7 +1683,7 @@ const availableExams = [
     orgNameBn: a.orgNameBn,
     postLabelBn: a.postLabelBn,
     setCodeBn: (a.setNameBn || 'ক').replace(/^সেট:\s*/, ''),
-    title: a.id && a.id.startsWith('NURSE_MODEL_') ? a.title : `${a.title} (${a.examDate})`,
+    title: a.id && a.id.startsWith('NURSE_MODEL_') ? a.title : modelTitle(a.title, a.examDate),
     questionCount: a.totalQuestions,
     durationMin: a.durationMin,
     category: 'NURSING',

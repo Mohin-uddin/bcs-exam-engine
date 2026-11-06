@@ -544,7 +544,7 @@
     // Shortcuts to the main parts of the app, each with one line on what it is for
     const tiles = [
       { ic: '📝', name: 'মডেল টেস্ট', what: 'আসল পরীক্ষার মতো সময় ধরে পুরো সেট', go: "switchTab('exam')" },
-      { ic: '📚', name: 'বিগত সালের প্রশ্ন', what: 'আগের বছরের আসল প্রশ্ন ও উত্তর', go: "switchTab('past-bank')" },
+      { ic: '📚', name: 'বিগত পরীক্ষার ধাঁচে প্রশ্ন', what: 'আগের পরীক্ষার ধাঁচে প্রশ্ন ও উত্তর', go: "switchTab('past-bank')" },
       { ic: '📕', name: 'ভুল খাতা', what: 'যেগুলো ভুল করেছেন, আবার ঝালাই', go: "switchTab('mistakes')" },
       { ic: '📷', name: 'ছবি তুলে খাতা দেখুন', what: 'কাগজে দাগানো উত্তরপত্রের ছবি দিলেই নম্বর', go: "switchTab('omr')" }
     ];
