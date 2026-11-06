@@ -701,12 +701,12 @@
   },
   {
     "topicBn": "Jonathan Swift — Gulliver’s Travels Satire (Medium)",
-    "stem": "Jonathan Swift’s masterpiece “Gulliver’s Travels” (1726) is primarily a sharp political and human satire divided into how many voyages?",
+    "stem": "Jonathan Swift’s “Gulliver’s Travels” (1726) is divided into how many voyages?",
     "options": {
-      "A": "Two voyages",
-      "B": "Four voyages (Lilliput, Brobdingnag, Laputa, Houyhnhnms)",
-      "C": "Three voyages",
-      "D": "Seven voyages"
+      "B": "Four",
+      "A": "Two",
+      "C": "Three",
+      "D": "Seven"
     },
     "answer": "B",
     "difficulty": "TRICKY",
@@ -717,7 +717,7 @@
     "topicBn": "Lord Byron — Rebel Poet & Don Juan (Medium)",
     "stem": "Who is known as the “Rebel Poet” in English Romantic literature and wrote the satirical epic “Don Juan” and “Childe Harold’s Pilgrimage”?",
     "options": {
-      "A": "Lord Byron (George Gordon Byron)",
+      "A": "Lord Byron",
       "B": "P.B. Shelley",
       "C": "William Blake",
       "D": "Robert Southey"
@@ -787,8 +787,8 @@
     "topicBn": "W.B. Yeats — Irish Poet & Gitanjali Introduction (Medium)",
     "stem": "Which Irish Nobel Laureate poet wrote the introduction to Rabindranath Tagore’s English “Gitanjali” (Song Offerings) and authored “The Second Coming” and “The Lake Isle of Innisfree”?",
     "options": {
+      "B": "W.B. Yeats",
       "A": "James Joyce",
-      "B": "William Butler Yeats (W.B. Yeats)",
       "C": "Samuel Beckett",
       "D": "Seamus Heaney"
     },
@@ -841,37 +841,37 @@
   },
   {
     "topicBn": "Old & Middle English — Geoffrey Chaucer & Canterbury Tales (Medium)",
-    "stem": "Who is universally acclaimed as the “Father of English Poetry” (and the morning star of the Renaissance/Reformation is John Wycliffe) and what is his masterpiece?",
+    "stem": "Who wrote “The Canterbury Tales”?",
     "options": {
-      "A": "Geoffrey Chaucer — “The Canterbury Tales” (written in Middle English)",
-      "B": "Caedmon — “Beowulf”",
-      "C": "William Langland — “Piers Plowman”",
-      "D": "Sir Thomas Malory — “Morte d’Arthur”"
+      "A": "Geoffrey Chaucer",
+      "B": "William Langland",
+      "C": "John Gower",
+      "D": "Thomas Malory"
     },
     "answer": "A",
     "difficulty": "TRICKY",
-    "explanationBn": "চতুর্দশ শতাব্দীর কবি Geoffrey Chaucer-কে ‘Father of English Poetry’ এবং ‘Father of English Language’ বলা হয়; তাঁর শ্রেষ্ঠ কাব্যগ্রন্থ ‘The Canterbury Tales’। (অন্যদিকে অ্যাংলো-স্যাক্সন বা Old English যুগের মহাকাব্য হলো ‘Beowulf’ এবং বাইবেলের প্রথম ইংরেজি অনুবাদক John Wycliffe-কে Morning Star of the Reformation বলা হয়)।",
+    "explanationBn": "“The Canterbury Tales” লিখেছেন Geoffrey Chaucer, মধ্য ইংরেজিতে (Middle English)। তাঁকে ইংরেজি কবিতার জনক বলা হয়। Langland লিখেছেন “Piers Plowman”, Malory লিখেছেন “Le Morte d’Arthur”।",
     "source": "৪৩তম ও ৩৭তম বিসিএস"
   },
   {
     "topicBn": "Elizabethan Period — University Wits (Hard)",
-    "stem": "Which group of 16th-century Elizabethan playwrights and pamphleteers educated at Oxford or Cambridge was known as the “University Wits”?",
+    "stem": "Which of the following was NOT one of the “University Wits”?",
     "options": {
-      "A": "Christopher Marlowe, Thomas Kyd, Robert Greene, Thomas Nashe, George Peele, John Lyly, and Thomas Lodge (Note: William Shakespeare was NOT one of them!)",
-      "B": "William Shakespeare, Ben Jonson, and Francis Bacon",
-      "C": "John Milton, John Donne, and Andrew Marvell",
-      "D": "John Dryden, Alexander Pope, and Jonathan Swift"
+      "A": "William Shakespeare",
+      "B": "Christopher Marlowe",
+      "C": "Thomas Kyd",
+      "D": "Robert Greene"
     },
     "answer": "A",
     "difficulty": "HIGH",
-    "explanationBn": "অক্সফোর্ড (John Lyly, George Peele, Thomas Lodge) এবং কেমব্রিজ (Christopher Marlowe, Robert Greene, Thomas Nashe) বিশ্ববিদ্যালয়ে শিক্ষিত ৬ জন নাট্যকার ও Thomas Kyd—এই ৭ জনকে একত্রে ‘University Wits’ বলা হয়। শেক্সপিয়ার বা বেন জনসন এর অন্তর্ভুক্ত ছিলেন না!",
+    "explanationBn": "University Wits ছিলেন অক্সফোর্ড বা কেমব্রিজে পড়া এলিজাবেথীয় নাট্যকারেরা: Marlowe, Kyd, Greene, Nashe, Peele, Lyly ও Lodge। Shakespeare বিশ্ববিদ্যালয়ে পড়েননি, তিনি এই দলে ছিলেন না।",
     "source": "৪৪তম ও ৩৮তম বিসিএস"
   },
   {
     "topicBn": "William Shakespeare — Famous Soliloquies & Quotations (Hard)",
     "stem": "“All the world’s a stage, / And all the men and women merely players”—in which comedy of William Shakespeare does the melancholic character Jaques speak these lines?",
     "options": {
-      "A": "As You Like It (spoken by Jaques in the Forest of Arden)",
+      "A": "As You Like It",
       "B": "Twelfth Night",
       "C": "The Merchant of Venice",
       "D": "A Midsummer Night’s Dream"
@@ -885,7 +885,7 @@
     "topicBn": "William Shakespeare — The Tempest & Measure for Measure (Medium)",
     "stem": "Which play is widely regarded as William Shakespeare’s “Swan Song” (his last standalone play), featuring the characters Prospero, Miranda, Ariel, and Caliban?",
     "options": {
-      "A": "The Tempest (a Tragi-comedy / Dramatic Romance)",
+      "A": "The Tempest",
       "B": "The Winter’s Tale",
       "C": "Measure for Measure",
       "D": "King Lear"
@@ -939,23 +939,23 @@
   },
   {
     "topicBn": "Augustan / Neoclassical Age — Daniel Defoe & Jonathan Swift (Medium)",
-    "stem": "“Man Friday” is a famous character in which adventure novel by Daniel Defoe, and what are the four voyages in Jonathan Swift’s satire “Gulliver’s Travels”?",
+    "stem": "“Man Friday” is a character in which novel by Daniel Defoe?",
     "options": {
-      "A": "Novel: “Robinson Crusoe” (1719); Voyages in Gulliver’s Travels: Lilliput (dwarfs), Brobdingnag (giants), Laputa, and the land of the Houyhnhnms",
-      "B": "Novel: “Treasure Island”; Voyages: Utopia and Atlantis",
-      "C": "Novel: “Gulliver’s Travels”; Voyages: Crusoe’s Island",
-      "D": "Novel: “Tom Jones”; Voyages: Eldorado"
+      "A": "Robinson Crusoe",
+      "B": "Treasure Island",
+      "C": "Tom Jones",
+      "D": "Gulliver’s Travels"
     },
     "answer": "A",
     "difficulty": "TRICKY",
-    "explanationBn": "Daniel Defoe-এর ‘Robinson Crusoe’ (১৭১৯) উপন্যাসের বিখ্যাত চরিত্র ‘Man Friday’। আর Jonathan Swift-এর রাজনৈতিক ব্যঙ্গাত্মক উপন্যাস ‘Gulliver’s Travels’ (১৭২৬)-এর ৪টি খণ্ড হলো: Lilliput, Brobdingnag, Laputa এবং Houyhnhnms (বুদ্ধিমান ঘোড়াদের দেশ)।",
+    "explanationBn": "Man Friday হলো Daniel Defoe-র “Robinson Crusoe” (1719) উপন্যাসে Crusoe-র বিশ্বস্ত সঙ্গী।",
     "source": "৪০তম ও ৩৫তম বিসিএস"
   },
   {
     "topicBn": "Pre-Romantic / Graveyard Poets — Thomas Gray’s Elegy (Medium)",
     "stem": "“Where ignorance is bliss, ’tis folly to be wise” and “Full many a flower is born to blush unseen”—these immortal lines are from which poem by Thomas Gray?",
     "options": {
-      "A": "Elegy Written in a Country Churchyard (and Ode on a Distant Prospect of Eton College)",
+      "A": "Elegy Written in a Country Churchyard",
       "B": "The Rime of the Ancient Mariner",
       "C": "Ode to the West Wind",
       "D": "Tintern Abbey"
@@ -997,10 +997,10 @@
     "topicBn": "Victorian Women Novelists — Brontë Sisters & George Eliot (Hard)",
     "stem": "Match the Victorian masterpieces with their female authors: (1) “Jane Eyre”, (2) “Wuthering Heights”, and (3) “Silas Marner / Middlemarch”.",
     "options": {
-      "A": "(1) Charlotte Brontë, (2) Emily Brontë (character: Heathcliff), and (3) George Eliot (pen name of Mary Ann Evans)",
-      "B": "(1) Jane Austen, (2) Charlotte Brontë, and (3) Virginia Woolf",
-      "C": "(1) Emily Brontë, (2) Anne Brontë, and (3) Elizabeth Barrett Browning",
-      "D": "(1) George Eliot, (2) Jane Austen, and (3) Emily Dickinson"
+      "A": "Charlotte Brontë, Emily Brontë, George Eliot",
+      "B": "Jane Austen, Charlotte Brontë, Emily Brontë",
+      "C": "Emily Brontë, Anne Brontë, Jane Austen",
+      "D": "George Eliot, Jane Austen, Emily Brontë"
     },
     "answer": "A",
     "difficulty": "HIGH",
@@ -1025,7 +1025,7 @@
     "topicBn": "Modern Drama — George Bernard Shaw & Drama of Ideas (Medium)",
     "stem": "Who wrote the famous satirical plays “Arms and the Man”, “Man and Superman”, “Pygmalion”, and “Saint Joan”, and received the Nobel Prize in Literature in 1925?",
     "options": {
-      "A": "George Bernard Shaw (G.B. Shaw — Father of Modern English Drama)",
+      "A": "George Bernard Shaw",
       "B": "Henrik Ibsen",
       "C": "John Galsworthy",
       "D": "Oscar Wilde"
@@ -1039,10 +1039,10 @@
     "topicBn": "Post-Colonial & World Literature — Chinua Achebe, Gabriel García Márquez & Toni Morrison (Hard)",
     "stem": "Match the following world literature classics with their Nobel/renowned authors: (1) “Things Fall Apart”, (2) “One Hundred Years of Solitude”, and (3) “Beloved”.",
     "options": {
-      "A": "(1) Chinua Achebe (Nigeria — character: Okonkwo), (2) Gabriel García Márquez (Colombia — Magic Realism), and (3) Toni Morrison (USA)",
-      "B": "(1) Wole Soyinka, (2) Pablo Neruda, and (3) Ernest Hemingway",
-      "C": "(1) Nelson Mandela, (2) Jorge Luis Borges, and (3) Alice Walker",
-      "D": "(1) Ngũgĩ wa Thiong’o, (2) Salman Rushdie, and (3) Virginia Woolf"
+      "A": "Chinua Achebe, G. García Márquez, Toni Morrison",
+      "B": "Wole Soyinka, Pablo Neruda, Alice Walker",
+      "C": "Ngũgĩ wa Thiong’o, J. L. Borges, Maya Angelou",
+      "D": "Nelson Mandela, Salman Rushdie, Toni Morrison"
     },
     "answer": "A",
     "difficulty": "HIGH",
@@ -1053,7 +1053,7 @@
     "topicBn": "Elizabethan Literature — Shakespeare's Four Great Tragedies (Critical)",
     "stem": "Which of the following represents William Shakespeare's four great tragedies arranged in correct chronological order of composition?",
     "options": {
-      "A": "Hamlet (1601), Othello (1603), King Lear (1605), Macbeth (1606)",
+      "A": "Hamlet, Othello, King Lear, Macbeth",
       "B": "Macbeth, King Lear, Othello, Hamlet",
       "C": "Othello, Hamlet, Macbeth, King Lear",
       "D": "King Lear, Hamlet, Othello, Macbeth"
@@ -1109,10 +1109,10 @@
     "topicBn": "Victorian Literature — Dramatic Monologue & Browning (Critical)",
     "stem": "Robert Browning is pre-eminently celebrated in Victorian literature for mastering which poetic form?",
     "options": {
-      "A": "Pastoral Elegy",
-      "B": "Dramatic Monologue (seen in 'My Last Duchess' and 'Fra Lippo Lippi')",
-      "C": "Spenserian Stanza",
-      "D": "Blank Verse Epic"
+      "B": "Dramatic monologue",
+      "A": "Pastoral elegy",
+      "C": "Spenserian stanza",
+      "D": "Blank verse epic"
     },
     "answer": "B",
     "difficulty": "HIGH",
@@ -1193,9 +1193,9 @@
     "topicBn": "American Literature — Ernest Hemingway & Nobel Prize (Critical)",
     "stem": "Ernest Hemingway was awarded the 1954 Nobel Prize in Literature primarily for his mastery of narrative art demonstrated in which novella?",
     "options": {
+      "C": "The Old Man and the Sea",
       "A": "A Farewell to Arms",
       "B": "For Whom the Bell Tolls",
-      "C": "The Old Man and the Sea (featuring Cuban fisherman Santiago)",
       "D": "The Sun Also Rises"
     },
     "answer": "C",

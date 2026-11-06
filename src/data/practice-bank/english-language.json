@@ -955,9 +955,9 @@
     "topicBn": "Participle vs Gerund Identification (Hard)",
     "stem": "In the sentence “A rolling stone gathers no moss”, what part of speech is the word “rolling”?",
     "options": {
+      "B": "Present participle",
       "A": "Gerund",
-      "B": "Present Participle (functioning as an Adjective)",
-      "C": "Verbal Noun",
+      "C": "Verbal noun",
       "D": "Infinitive"
     },
     "answer": "B",
@@ -1037,16 +1037,16 @@
   },
   {
     "topicBn": "Idioms & Phrases — Achilles heel & Swan song (Medium)",
-    "stem": "What do the idioms “Achilles’ heel” and “Maiden speech” mean respectively?",
+    "stem": "The idiom “Achilles’ heel” means:",
     "options": {
-      "A": "A fatal weakness (দুর্বলতম স্থান) and First speech (প্রথম বক্তৃতা)",
-      "B": "Strongest point and Final speech",
-      "C": "Fast runner and Female speaker",
-      "D": "Secret weapon and Melodious song"
+      "A": "A weak point",
+      "B": "A strong point",
+      "C": "A fast runner",
+      "D": "A secret weapon"
     },
     "answer": "A",
     "difficulty": "TRICKY",
-    "explanationBn": "Achilles’ heel = দুর্বলতম স্থান (A weak or vulnerable point); Maiden speech = প্রথম বক্তৃতা (First speech); আর Swan song = শেষ রচনা বা কাজ (Last work)।",
+    "explanationBn": "Achilles’ heel মানে দুর্বলতম স্থান বা মারাত্মক দুর্বলতা। গ্রিক বীর একিলিসের শরীরে একমাত্র গোড়ালিই ছিল অরক্ষিত।",
     "source": "৪৪তম বিসিএস ও প্রাইমারি নিয়োগ"
   },
   {
@@ -1065,16 +1065,16 @@
   },
   {
     "topicBn": "High-Frequency BCS Vocabulary — Ephemeral & Ubiquitous (Hard)",
-    "stem": "The word “EPHEMERAL” (ক্ষণস্থায়ী) is closest in meaning to ______, and opposite in meaning to ______.",
+    "stem": "The word “EPHEMERAL” is closest in meaning to:",
     "options": {
-      "A": "Transient / Short-lived; Perennial / Eternal",
-      "B": "Permanent; Temporary",
-      "C": "Ubiquitous; Scarce",
-      "D": "Lucid; Ambiguous"
+      "A": "Transient",
+      "B": "Permanent",
+      "C": "Ubiquitous",
+      "D": "Lucid"
     },
     "answer": "A",
     "difficulty": "HIGH",
-    "explanationBn": "Ephemeral বা Transient অর্থ ক্ষণস্থায়ী (lasting for a very short time); এর বিপরীত শব্দ Eternal, Perpetual বা Perennial (চিরস্থায়ী)।",
+    "explanationBn": "Ephemeral মানে ক্ষণস্থায়ী; সমার্থক Transient, Short-lived। বিপরীত শব্দ Perennial, Eternal, Permanent।",
     "source": "৪৬তম বিসিএস ও বাংলাদেশ ব্যাংক AD"
   },
   {
@@ -1107,16 +1107,16 @@
   },
   {
     "topicBn": "Foreign Phrases in English — Sine die & Modus operandi (Hard)",
-    "stem": "The Latin phrase “Sine die” means ______ and “Prima facie” means ______.",
+    "stem": "The Latin phrase “Sine die” means:",
     "options": {
-      "A": "Indefinitely (অনির্দিষ্টকালের জন্য); At first sight (প্রথম দর্শনে)",
-      "B": "Every day; Final verdict",
-      "C": "In secret; Good faith",
-      "D": "Without condition; Way of working"
+      "A": "Indefinitely",
+      "B": "Every day",
+      "C": "In good faith",
+      "D": "At first sight"
     },
     "answer": "A",
     "difficulty": "HIGH",
-    "explanationBn": "Sine die = অনির্দিষ্টকালের জন্য (The meeting was adjourned sine die); Prima facie = প্রথম দর্শনে; Bona fide = খাঁটি/সৎ বিশ্বাসে; De facto = কার্যত; Lingua franca = সাধারণ যোগাযোগের ভাষা।",
+    "explanationBn": "Sine die মানে অনির্দিষ্টকালের জন্য (যেমন সংসদ অধিবেশন sine die মুলতবি)। Prima facie মানে প্রথম দর্শনে, Bona fide মানে সরল বিশ্বাসে।",
     "source": "৪৪তম, ৪০তম বিসিএস ও ব্যাংক পরীক্ষা"
   },
   {
@@ -1151,10 +1151,10 @@
     "topicBn": "Subject-Verb Agreement — Many a / More than one (Medium)",
     "stem": "Fill in the blanks with the right verbs: (1) “Many a candidate ______ made this common mistake” and (2) “More than one officer ______ present at the audit meeting.”",
     "options": {
-      "A": "(1) has and (2) was (both take singular noun and singular verb)",
-      "B": "(1) have and (2) were",
-      "C": "(1) has and (2) were",
-      "D": "(1) have and (2) was"
+      "A": "has, was",
+      "B": "have, were",
+      "C": "has, were",
+      "D": "have, was"
     },
     "answer": "A",
     "difficulty": "TRICKY",
@@ -1165,10 +1165,10 @@
     "topicBn": "Subject-Verb Agreement — Fractional Expressions & Percentages (Hard)",
     "stem": "Choose the correct pair of verbs: (1) “Two-thirds of the work ______ been completed” and (2) “Two-thirds of the candidates ______ passed the preliminary test.”",
     "options": {
-      "A": "(1) has (uncountable noun “work”) and (2) have (plural countable noun “candidates”)",
-      "B": "(1) have and (2) has",
-      "C": "(1) has and (2) has",
-      "D": "(1) have and (2) have"
+      "A": "has, have",
+      "B": "have, has",
+      "C": "has, has",
+      "D": "have, have"
     },
     "answer": "A",
     "difficulty": "HIGH",
@@ -1179,10 +1179,10 @@
     "topicBn": "Verb Followed by Gerund — Cannot help vs Cannot but (Medium)",
     "stem": "Select the correct pair to complete: (1) “I could not help ______ at his absurd excuse” and (2) “I could not but ______ at his absurd excuse.”",
     "options": {
-      "A": "(1) laughing (cannot help + V-ing) and (2) laugh (cannot but + V1)",
-      "B": "(1) laugh and (2) laughing",
-      "C": "(1) to laugh and (2) laughed",
-      "D": "(1) laughing and (2) laughing"
+      "A": "laughing, laugh",
+      "B": "laugh, laughing",
+      "C": "to laugh, laughed",
+      "D": "laughing, laughing"
     },
     "answer": "A",
     "difficulty": "TRICKY",
@@ -1193,7 +1193,7 @@
     "topicBn": "Gerund vs Infinitive — Used to vs Be/Get used to (Medium)",
     "stem": "Complete the sentence: “Previously he used to ______ late at night, but now he is used to ______ early in the morning.”",
     "options": {
-      "A": "study (used to + V1), rising (be/get used to + V-ing)",
+      "A": "study, rising",
       "B": "studying, rise",
       "C": "study, rise",
       "D": "studied, rising"
@@ -1207,7 +1207,7 @@
     "topicBn": "Participle Adjective — Boring vs Bored / Interesting vs Interested (Medium)",
     "stem": "Choose the correct participial adjectives: “The lecture on macroeconomics was so ______ that half of the audience became ______.”",
     "options": {
-      "A": "boring (causes the feeling), bored (experiences the feeling)",
+      "A": "boring, bored",
       "B": "bored, boring",
       "C": "bore, boringly",
       "D": "bored, bore"
@@ -1263,7 +1263,7 @@
     "topicBn": "Double Comparative — The more..., the more... (Medium)",
     "stem": "Complete the proportional comparative structure: “The higher you climb up a mountain, ______ it becomes to breathe.”",
     "options": {
-      "A": "the harder (or the more difficult)",
+      "A": "the harder",
       "B": "harder",
       "C": "the hardest",
       "D": "more harder"
@@ -1291,10 +1291,10 @@
     "topicBn": "Appropriate Preposition — Die of vs Die from vs Die for (Medium)",
     "stem": "Choose the right sequence of prepositions: (1) “He died ______ cholera”, (2) “He died ______ overeating/overwork”, and (3) “The freedom fighters died ______ their motherland.”",
     "options": {
-      "A": "(1) of (disease), (2) from (external cause/overwork), (3) for (noble cause/country)",
-      "B": "(1) from, (2) of, (3) by",
-      "C": "(1) of, (2) of, (3) in",
-      "D": "(1) by, (2) from, (3) for"
+      "A": "of, from, for",
+      "B": "from, of, by",
+      "C": "of, of, in",
+      "D": "by, from, for"
     },
     "answer": "A",
     "difficulty": "TRICKY",
@@ -1305,10 +1305,10 @@
     "topicBn": "Appropriate Preposition — Deal in vs Deal with (Medium)",
     "stem": "Distinguish between the phrasal prepositions: (1) “His uncle deals ______ garments and jute products” and (2) “A magistrate must deal fairly ______ all citizens.”",
     "options": {
-      "A": "(1) in (conduct trade/business in) and (2) with (behave towards / handle)",
-      "B": "(1) with and (2) in",
-      "C": "(1) on and (2) at",
-      "D": "(1) by and (2) with"
+      "A": "in, with",
+      "B": "with, in",
+      "C": "on, at",
+      "D": "by, with"
     },
     "answer": "A",
     "difficulty": "TRICKY",
@@ -1319,7 +1319,7 @@
     "topicBn": "Voice Change — Quasi-Passive Verbs (Honey tastes sweet) (Medium)",
     "stem": "What is the correct passive form of the quasi-passive sentence: “Green mangoes taste sour”?",
     "options": {
-      "A": "Green mangoes are sour when they are tasted (or Green mangoes are tasted sour).",
+      "A": "Green mangoes are sour when tasted.",
       "B": "Sour is tasted by green mangoes.",
       "C": "Green mangoes were sour when tasted.",
       "D": "Taste of green mangoes is sour."
@@ -1345,16 +1345,16 @@
   },
   {
     "topicBn": "Narration — Indirect Speech of “Let us” vs “Let him/me” (Hard)",
-    "stem": "Compare the indirect forms of: (1) He said to me, “Let us organize a book fair” and (2) He said to the guard, “Let the visitor come in.”",
+    "stem": "Choose the correct indirect form: He said to the guard, “Let the visitor come in.”",
     "options": {
-      "A": "(1) He proposed to me that we should organize a book fair; (2) He ordered/told the guard to let the visitor come in (or that the visitor might be allowed to come in).",
-      "B": "Both use “proposed that we should”",
-      "C": "Both use “requested to let”",
-      "D": "(1) He told me to let us organize; (2) He proposed the guard that visitor should come."
+      "A": "He told the guard to let the visitor come in.",
+      "B": "He told the guard that let the visitor come in.",
+      "C": "He requested the guard to come the visitor in.",
+      "D": "He said the guard let the visitor came in."
     },
     "answer": "A",
     "difficulty": "HIGH",
-    "explanationBn": "‘Let us (Let’s)’ দ্বারা প্রস্তাব বোঝায়, তাই ‘proposed to / suggested + that + we/they should + V1’ হয়। কিন্তু ‘Let me / Let him / Let the visitor’ দ্বারা প্রস্তাব বোঝায় না (অনুমতি বা আদেশ বোঝায়), তাই ‘told/requested/wished + to let...’ বা ‘might be allowed to’ হয়!",
+    "explanationBn": "Let দিয়ে শুরু বাক্যে Let মানে অনুমতি/আদেশ হলে indirect-এ told/ordered + to let ব্যবহৃত হয়: He told the guard to let the visitor come in। আর “Let us …” (প্রস্তাব) হলে proposed that we should … হয়।",
     "source": "৪৪তম বিসিএস ও ব্যাংক নিয়োগ"
   },
   {
@@ -1375,10 +1375,10 @@
     "topicBn": "One-Word Substitution — Governance & Philosophy (Hard)",
     "stem": "What is the one-word substitution for: (1) “A person who is indifferent to pleasure and pain” and (2) “A government run by the richest/wealthy class”?",
     "options": {
-      "A": "(1) Stoic (স্থিতধী/নির্লিপ্ত) and (2) Plutocracy (ধনিকতন্ত্র)",
-      "B": "(1) Epicurean and (2) Aristocracy",
-      "C": "(1) Cynic and (2) Theocracy",
-      "D": "(1) Altruist and (2) Oligarchy"
+      "A": "Stoic, Plutocracy",
+      "B": "Epicurean, Aristocracy",
+      "C": "Cynic, Theocracy",
+      "D": "Altruist, Oligarchy"
     },
     "answer": "A",
     "difficulty": "HIGH",
@@ -1387,16 +1387,16 @@
   },
   {
     "topicBn": "Idioms & Phrases — Achilles’ heel vs Swan song vs Maiden speech (Medium)",
-    "stem": "Match the following three classic idioms with their accurate meanings: (1) “Achilles’ heel”, (2) “Maiden speech”, and (3) “Swan song”.",
+    "stem": "The idiom “Swan song” means:",
     "options": {
-      "A": "(1) A small but fatal weakness/vulnerable point, (2) First speech in parliament/public, (3) Last work or final performance before death/retirement",
-      "B": "(1) Strongest weapon, (2) Speech of a bride, (3) Sweet music of a bird",
-      "C": "(1) Foot injury, (2) Last speech, (3) First poem",
-      "D": "(1) Secret plan, (2) Angry speech, (3) Victory song"
+      "A": "A final performance",
+      "B": "A first performance",
+      "C": "A love song",
+      "D": "A sad piece of news"
     },
     "answer": "A",
     "difficulty": "TRICKY",
-    "explanationBn": "Achilles’ heel = মর্মস্থল বা মারাত্মক দুর্বল দিক; Maiden speech = প্রথম বক্তৃতা; এবং Swan song = কোনো কবি, শিল্পী বা ব্যক্তির জীবনের শেষ কর্ম বা বিদায়ী রচনা।",
+    "explanationBn": "Swan song মানে কারও শেষ কাজ বা শেষ পরিবেশনা (অবসর বা মৃত্যুর আগে)। Maiden speech মানে প্রথম বক্তৃতা।",
     "source": "৪৫তম, ৪০তম ও ৩৫তম বিসিএস"
   },
   {
@@ -1669,10 +1669,10 @@
     "topicBn": "Vocabulary — Synonyms with Administrative Connotation (Critical)",
     "stem": "The word 'PRAGMATIC' in policymaking means:",
     "options": {
-      "A": "Idealistic and visionary without empirical basis",
-      "B": "Dealing with problems sensibly and realistically based on practical considerations",
-      "C": "Rigid and dogmatic in ideological stance",
-      "D": "Procrastinating and hesitant"
+      "B": "Practical and realistic",
+      "A": "Idealistic and visionary",
+      "C": "Rigid and dogmatic",
+      "D": "Hesitant and slow"
     },
     "answer": "B",
     "difficulty": "TRICKY",
