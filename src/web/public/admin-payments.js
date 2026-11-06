@@ -91,7 +91,7 @@
         <tr>
           <td><b>${esc(u.name)}</b><br><small>${esc(u.phone)}</small></td>
           <td>${fmt(u.createdAt)}</td>
-          <td>${u.premium ? `<span class="badge" style="background:#dcfce7;color:#166534">⭐ প্রিমিয়াম</span><br><small>${fmt(u.premiumUntil)} পর্যন্ত</small>` : '<span class="badge ENDED">ফ্রি</span>'}</td>
+          <td>${u.premium ? `<span class="badge" style="background:#dcfce7;color:#166534">${u.canPrint ? '⭐ প্রিমিয়াম' : 'সাধারণ (প্রিন্ট নেই)'}</span><br><small>${fmt(u.premiumUntil)} পর্যন্ত</small>` : '<span class="badge ENDED">ফ্রি</span>'}</td>
           <td style="white-space:nowrap">
             <button class="btn ghost sm" data-grant="${u.id}">+ দিন যোগ</button>
             ${u.premium ? `<button class="btn ghost sm" data-revoke="${u.id}">প্রিমিয়াম বন্ধ</button>` : ''}
@@ -223,9 +223,10 @@
         toast(payment.status === 'APPROVED' ? 'গেটওয়েতে পেমেন্ট সফল পাওয়া গেছে, প্রিমিয়াম চালু হয়েছে।' : 'গেটওয়েতে এই পেমেন্ট সফল হিসেবে পাওয়া যায়নি।');
       }
       if (t.dataset.grant) {
-        const days = prompt('কত দিনের প্রিমিয়াম যোগ করবেন?', '30');
+        const days = prompt('কত দিনের প্যাকেজ যোগ করবেন?', '30');
         if (!days) return;
-        await api(`/api/admin/accounts/users/${t.dataset.grant}/grant`, { days: Number(days) });
+        const premium = confirm('কোন প্যাকেজ?\nOK = প্রিমিয়াম (দেখা + ডাউনলোড / প্রিন্ট)\nCancel = সাধারণ (শুধু দেখা)');
+        await api(`/api/admin/accounts/users/${t.dataset.grant}/grant`, { days: Number(days), tier: premium ? 'PREMIUM' : 'NORMAL' });
         toast('প্রিমিয়াম যোগ হয়েছে।');
       }
       if (t.dataset.revoke) {

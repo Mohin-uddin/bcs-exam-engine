@@ -25,6 +25,8 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const zlib = require('node:zlib');
 const gateways = require('./payment-gateways');
+const { createCodRoutes, DEFAULT_COD_SETTINGS } = require('./cod-orders');
+const { smsConfig } = require('./sms');
 const { isAdmin } = require('./admin-auth');
 
 const DATA_FILE = process.env.ACCOUNTS_DATA_FILE || path.join(__dirname, '..', '..', 'data', 'accounts.json');
@@ -55,11 +57,15 @@ const DEFAULT_SETTINGS = {
   freePerGroup: 2,
   // Manual "Send Money + TrxID" option (admin approves). Online gateway is set with env variables.
   manualEnabled: true,
+  // Cash on Delivery: printed question set + access code (cod-orders.js)
+  ...DEFAULT_COD_SETTINGS,
+  // Locked sets: how many questions of each a visitor can look at before buying
+  previewPerSet: 5,
   noticeBn: 'টাকা পাঠানোর পর TrxID দিন। সাধারণত ১-৬ ঘণ্টার মধ্যে যাচাই করে প্রিমিয়াম চালু করা হয়।'
 };
 
 function createAccountsEngine({ store = null, seed, seedFile }) {
-  let state = { users: [], sessions: [], payments: [], settings: null };
+  let state = { users: [], sessions: [], payments: [], orders: [], settings: null };
   let writeChain = Promise.resolve();
 
   // ---------------------------------------------------------------------------
@@ -67,7 +73,7 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
   // ---------------------------------------------------------------------------
   function normalizeState(s) {
     const out = s && typeof s === 'object' ? s : {};
-    for (const k of ['users', 'sessions', 'payments']) if (!Array.isArray(out[k])) out[k] = [];
+    for (const k of ['users', 'sessions', 'payments', 'orders']) if (!Array.isArray(out[k])) out[k] = [];
     out.settings = { ...DEFAULT_SETTINGS, ...(out.settings || {}) };
     // Plans saved before printed packs existed: 6 months or longer come with the pack
     out.settings.plans = out.settings.plans.map(p => ({ ...p, printPack: p.printPack !== undefined ? Boolean(p.printPack) : p.days >= 180 }));
@@ -145,18 +151,23 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
   function rebuildBundles() {
     lockedExamIds = computeLocked();
     const freeQ = new Set();
+    const previewQ = new Set();
+    const perSet = Math.max(0, Math.min(20, Math.floor(Number(state.settings.previewPerSet) || 0)));
     exams.forEach(e => {
       if (!lockedExamIds.has(e.id)) (e.questionIds || []).forEach(id => freeQ.add(id));
+      else (e.questionIds || []).slice(0, perSet).forEach(id => previewQ.add(id));
     });
+    // Visitors see what a locked set looks like: its first few questions come with the free data
+    const sentQ = new Set([...freeQ, ...previewQ]);
     const parts = ['/* Free bundle: questions of locked sets are only sent to premium accounts. */', '(function (global) {'];
     for (const [key, value] of Object.entries(seed)) {
-      const v = key === 'sampleQuestions' ? value.filter(q => freeQ.has(q.id)) : value;
+      const v = key === 'sampleQuestions' ? value.filter(q => sentQ.has(q.id)) : value;
       parts.push(`  global.${key} = ${JSON.stringify(v)};`);
     }
     parts.push('})(window);');
     const version = bundles.version + 1;
     const lockedList = JSON.stringify([...lockedExamIds]);
-    const access = premium => `\n;window.APP_ACCESS = ${JSON.stringify({ premium })};window.APP_ACCESS.lockedExamIds = ${lockedList};\n`;
+    const access = premium => `\n;window.APP_ACCESS = ${JSON.stringify({ premium, previewPerSet: premium ? 0 : perSet })};window.APP_ACCESS.lockedExamIds = ${lockedList};\n`;
     const full = Buffer.concat([fs.readFileSync(seedFile), Buffer.from(access(true))]);
     const free = Buffer.from(parts.join('\n') + access(false));
     bundles = {
@@ -255,6 +266,11 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
   }
 
   const isPremium = user => Boolean(user && user.premiumUntil && Date.parse(user.premiumUntil) > Date.now());
+  // Download / print: PREMIUM plan only. Accounts from before the two plans (no printUntil yet)
+  // keep printing while their premium lasts.
+  const canPrint = user => isPremium(user)
+    && (user.printUntil === undefined || Boolean(user.printUntil && Date.parse(user.printUntil) > Date.now()));
+  const tierOf = user => (canPrint(user) ? 'PREMIUM' : isPremium(user) ? 'NORMAL' : 'FREE');
 
   function createSession(res, req, user) {
     const token = crypto.randomBytes(32).toString('hex');
@@ -284,6 +300,9 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
       phone: user.phone,
       premium: isPremium(user),
       premiumUntil: user.premiumUntil || null,
+      tier: tierOf(user),
+      canPrint: canPrint(user),
+      printUntil: canPrint(user) ? (user.printUntil || user.premiumUntil) : null,
       pendingPayments: pending.length,
       createdAt: user.createdAt
     };
@@ -359,6 +378,16 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     user.premiumUntil = new Date(base + days * DAY).toISOString();
   }
 
+  // NORMAL: all sets online (view only). PREMIUM: all sets + download / print.
+  function applyPlan(user, { days, tier = 'PREMIUM' }) {
+    if (user.printUntil === undefined) user.printUntil = canPrint(user) ? user.premiumUntil : null;
+    extendPremium(user, days);
+    if (tier !== 'NORMAL') {
+      const base = Math.max(Date.now(), Date.parse(user.printUntil || 0) || 0);
+      user.printUntil = new Date(base + days * DAY).toISOString();
+    }
+  }
+
   // Shared by manual approval now and by a gateway IPN later
   function activatePayment(payment, reviewer = 'admin') {
     if (payment.status === 'APPROVED') return;
@@ -367,7 +396,7 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     payment.status = 'APPROVED';
     payment.reviewedAt = new Date().toISOString();
     payment.reviewedBy = reviewer;
-    extendPremium(user, payment.days);
+    applyPlan(user, { days: payment.days, tier: payment.tier || 'PREMIUM' });
   }
 
   // ---------------------------------------------------------------------------
@@ -449,27 +478,39 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     return {
       gateway: gw && !gw.error ? { provider: gw.provider, sandbox: gw.sandbox } : null,
       manualEnabled: s.manualEnabled !== false,
-      codEnabled: s.codEnabled !== false && s.plans.some(p => p.printPack),
+      // Cash on delivery now goes through the OTP + access-code order (cod-orders.js, cod field below)
+      codEnabled: false,
       codExtra: s.codExtra,
       plans: s.plans.map(p => ({ ...p, codPrice: p.printPack ? codPrice(p) : null })),
       methods: s.methods.filter(m => m.enabled !== false).map(m => ({ id: m.id, nameBn: m.nameBn, number: m.number, accountType: m.accountType })),
       noticeBn: s.noticeBn,
-      freePerGroup: s.freePerGroup
+      freePerGroup: s.freePerGroup,
+      cod: cod.publicConfig()
     };
   }
+
+  const cod = createCodRoutes({
+    state: () => state, saveNow, send, fail, normalizePhone, applyPlan, publicUser,
+    clientIp, tooManyAttempts, noteAttempt, newId
+  });
 
   // ---------------------------------------------------------------------------
   // Routes: /api/auth/*, /api/payment/*, /api/admin/accounts/*
   // Returns true when it handled the request.
   // ---------------------------------------------------------------------------
   async function handle(req, res, pathname, searchParams) {
-    if (!/^\/api\/(auth|payment|admin\/accounts)\//.test(pathname)) return false;
+    if (!/^\/api\/(auth|payment|cod|admin\/accounts)\//.test(pathname)) return false;
     const method = req.method;
     let body = {};
     if (method === 'POST') {
       try { body = await readBody(req); } catch { return fail(res, 400, 'BAD_JSON', 'অনুরোধটি সঠিক নয়।'); }
     }
     const user = currentUser(req);
+
+    // ---------------- Cash on Delivery orders ----------------
+    if (pathname.startsWith('/api/cod/') || pathname.startsWith('/api/admin/accounts/orders')) {
+      return cod.handle(req, res, pathname, searchParams, body, user, isAdmin(req));
+    }
 
     // ---------------- Auth ----------------
     if (pathname === '/api/auth/register' && method === 'POST') {
@@ -680,6 +721,9 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
         return fail(res, 403, 'USE_WEBSITE', 'অ্যাপে পেমেন্ট নেওয়া হয় না। ওয়েবসাইটে লগইন করে আনলক করুন।');
       }
       if (!user) return fail(res, 401, 'LOGIN_REQUIRED', 'আগে লগইন করুন।');
+      // Replaced by /api/cod/order (phone OTP, location check, access code in the packet)
+      return fail(res, 410, 'USE_COD_ORDER', 'ক্যাশ অন ডেলিভারির জন্য "প্যাকেজ দেখুন" থেকে অর্ডার ফর্মটি ব্যবহার করুন।');
+      // eslint-disable-next-line no-unreachable
       if (state.settings.codEnabled === false) return fail(res, 403, 'COD_OFF', 'ক্যাশ অন ডেলিভারি এখন বন্ধ আছে।');
       const plan = state.settings.plans.find(p => p.id === body.planId);
       if (!plan) return fail(res, 400, 'BAD_PLAN', 'প্যাকেজ বাছাই করুন।');
@@ -808,9 +852,10 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
         if (mm[2] === 'grant') {
           const days = Math.round(Number(body.days) || 0);
           if (days < 1 || days > 3650) return fail(res, 400, 'BAD_DAYS', '১ থেকে ৩৬৫০ দিনের মধ্যে দিন।');
-          extendPremium(u, days);
+          applyPlan(u, { days, tier: body.tier === 'NORMAL' ? 'NORMAL' : 'PREMIUM' });
         } else {
           u.premiumUntil = null;
+          u.printUntil = null;
         }
         await saveNow();
         send(res, 200, { status: 'SUCCESS', user: publicUser(u) });
@@ -819,8 +864,10 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
 
       if (pathname === '/api/admin/accounts/settings' && method === 'GET') {
         const gw = gateways.gatewayConfig();
+        const sms = smsConfig();
         send(res, 200, {
           status: 'SUCCESS', settings: state.settings, lockedCount: lockedExamIds.size, totalExams: exams.length,
+          sms: sms ? { provider: sms.provider, ready: !sms.error, error: sms.error || null } : null,
           gateway: gw ? { provider: gw.provider, sandbox: gw.sandbox, error: gw.error || null } : null
         });
         return true;
@@ -865,6 +912,13 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
           if (!(n >= 0 && n <= 5000)) return fail(res, 400, 'BAD_COD_EXTRA', 'ক্যাশ অন ডেলিভারির বাড়তি টাকা ০ থেকে ৫০০০ এর মধ্যে দিন।');
           s.codExtra = n;
         }
+        if (body.previewPerSet !== undefined) {
+          const n = Math.round(Number(body.previewPerSet));
+          if (!(n >= 0 && n <= 20)) return fail(res, 400, 'BAD_PREVIEW', 'প্রিভিউ প্রশ্ন ০ থেকে ২০ এর মধ্যে দিন।');
+          s.previewPerSet = n;
+        }
+        const codErr = cod.applySettings(body);
+        if (codErr) return fail(res, 400, 'BAD_COD', codErr);
         rebuildBundles();
         await saveNow();
         send(res, 200, { status: 'SUCCESS', settings: s, lockedCount: lockedExamIds.size, totalExams: exams.length });
@@ -886,6 +940,7 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     visibleQuestions,
     currentUser,
     isPremium,
+    canPrint,
     resolveExamId,
     activatePayment,
     isLocked: id => lockedExamIds.has(resolveExamId(id)),

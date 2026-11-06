@@ -158,6 +158,8 @@ const PUBLIC_FILES = {
   '/admin-reports.js': 'application/javascript; charset=utf-8',
   '/account.js': 'application/javascript; charset=utf-8',
   '/admin-payments.js': 'application/javascript; charset=utf-8',
+  '/admin-orders.js': 'application/javascript; charset=utf-8',
+  '/tour.js': 'application/javascript; charset=utf-8',
   '/native-app.js': 'application/javascript; charset=utf-8',
   '/content-guard.js': 'application/javascript; charset=utf-8',
   '/logo.svg': 'image/svg+xml',
@@ -217,7 +219,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 0b. Accounts, premium access & payments (/api/auth/..., /api/payment/..., /api/admin/accounts/...)
-  if (/^\/api\/(auth|payment|admin\/accounts)\//.test(pathname)) {
+  if (/^\/api\/(auth|payment|cod|admin\/accounts)\//.test(pathname)) {
     try {
       if (await accounts.handle(req, res, pathname, parsedUrl.searchParams)) return;
     } catch (e) {

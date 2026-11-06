@@ -5,6 +5,10 @@
  *   otherwise opens the unlock dialog and returns false
  * - Locked <option>s and set buttons get a 🔒 automatically
  * - Inside the Android app the payment part is hidden (data-payment); the app only logs in
+ * - Plans: FREE (a few sets), NORMAL (all sets, view only), PREMIUM (all sets + download / print)
+ * - Cash on Delivery: order form with SMS OTP + location check, then the access code that comes
+ *   inside the printed question-set packet is typed in openRedeem()
+ * - Account.allowPrint(): print / save-as-PDF only for PREMIUM; window.print and Ctrl+P are blocked otherwise
  */
 (function () {
   const bn = n => String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
@@ -98,6 +102,26 @@
   .app-unlock-note{display:none}
   .is-native-app .app-unlock-note{display:block!important}
   .is-native-app [data-payment]{display:none!important}
+  .acc-cmp{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 12px}
+  .acc-cmp th,.acc-cmp td{border:1px solid #e2e8f0;padding:6px 5px;text-align:center;vertical-align:middle}
+  .acc-cmp th:first-child,.acc-cmp td:first-child{text-align:left}
+  .acc-cmp thead th{background:#f8fafc}
+  .acc-cmp .hl{background:#fffbeb}
+  .acc-plancard{border:2px solid #e2e8f0;border-radius:14px;padding:12px;margin-bottom:10px}
+  .acc-plancard.prem{border-color:#f59e0b;background:#fffbeb}
+  .acc-plancard h4{margin:0;font-size:16px;font-weight:700;display:flex;justify-content:space-between;gap:8px}
+  .acc-plancard p{margin:4px 0 8px;color:#475569;font-size:13px}
+  .acc-link{background:none;border:0;color:#006a4e;font:600 14px 'Noto Sans Bengali',sans-serif;text-decoration:underline;cursor:pointer;padding:4px 0}
+  .acc-row{display:flex;gap:8px;align-items:flex-end}
+  .acc-row .acc-field{flex:1}
+  .acc-row .acc-btn{width:auto;white-space:nowrap;padding:10px 12px;margin:0 0 10px}
+  .acc-sum{background:#f8fafc;border-radius:10px;padding:8px 12px;font-size:13px;margin:6px 0 10px}
+  .acc-sum div{display:flex;justify-content:space-between}
+  .acc-sum .t{font-weight:700;font-size:15px;border-top:1px solid #cbd5e1;margin-top:4px;padding-top:4px}
+  .acc-code{font:700 22px monospace;letter-spacing:3px;text-align:center;text-transform:uppercase}
+  .acc-preview{max-height:300px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;padding:8px 10px;margin-bottom:12px;font-size:13px}
+  .acc-preview li{margin-bottom:8px}
+  .acc-preview .o{color:#475569}
   .acc-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:10001;background:#0f172a;color:#fff;padding:10px 16px;border-radius:10px;font:500 14px 'Noto Sans Bengali',sans-serif;max-width:90vw}
   `;
   const style = document.createElement('style');
@@ -185,6 +209,7 @@
         me = data.user;
         renderPill();
         announce();
+        applyPrintLock();
         // Premium content comes with the page data, so reload once to get it
         if (me.premium && !access.premium && reloadForPremium()) return;
         close();
@@ -201,10 +226,10 @@
   // ---------------------------------------------------------------------------
   // Unlock (paywall) + payment form
   // ---------------------------------------------------------------------------
-  async function openUnlock(examId) {
+  async function openOnlinePay(examId) {
     const exam = (window.availableExams || []).find(e => e.id === resolve(examId));
     if (!me) {
-      return openLogin(`${exam ? `"${exam.title}" ` : 'এই সেটটি '}প্রিমিয়াম। আনলক করতে আগে লগইন বা নতুন অ্যাকাউন্ট খুলুন।`, () => openUnlock(examId));
+      return openLogin('অনলাইনে পেমেন্ট করতে আগে লগইন বা নতুন অ্যাকাউন্ট খুলুন।', () => openOnlinePay(examId));
     }
     // Premium on the server but this page was loaded before: reload for the data
     if (me.premium && reloadForPremium()) return;
@@ -403,6 +428,248 @@
     });
   }
 
+
+  // ---------------------------------------------------------------------------
+  // Plans, Cash on Delivery order (OTP + location) and access code
+  // ---------------------------------------------------------------------------
+  let codConfig = null;
+  async function loadCod() {
+    if (!codConfig) codConfig = await api('/api/cod/config');
+    return codConfig;
+  }
+  const TIER_BN = { FREE: 'ফ্রি', NORMAL: 'সাধারণ প্যাকেজ', PREMIUM: 'প্রিমিয়াম প্যাকেজ' };
+  const tierOfMe = () => (me && me.tier) || (me && me.premium ? 'PREMIUM' : 'FREE');
+
+  // A few questions of a locked set, so a visitor can see what is inside
+  function previewHtml(examId) {
+    const exam = (window.availableExams || []).find(e => e.id === resolve(examId));
+    if (!exam || !access.previewPerSet) return '';
+    const byId = new Map((window.sampleQuestions || []).map(q => [q.id, q]));
+    const qs = (exam.questionIds || []).slice(0, access.previewPerSet).map(id => byId.get(id)).filter(Boolean);
+    if (!qs.length) return '';
+    const letters = { A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' };
+    return `<details class="acc-prev-wrap"><summary style="cursor:pointer;font-weight:600;margin-bottom:8px">👀 এই সেটের প্রথম ${bn(qs.length)}টি প্রশ্ন দেখুন (মোট ${bn(exam.questionCount || exam.questionIds.length)}টি)</summary>
+      <ol class="acc-preview">${qs.map(q => `<li><b>${esc(q.stemBn || q.stem || '')}</b><div class="o">${Object.entries(q.options || {}).map(([k, v]) => `(${letters[k] || k}) ${esc(v)}`).join(' &nbsp; ')}</div></li>`).join('')}</ol></details>`;
+  }
+
+  async function hasOtherPayment() {
+    try {
+      if (!config) config = await api('/api/payment/config');
+    } catch { return false; }
+    const realNumber = config.methods.some(m => !/X/i.test(m.number));
+    return Boolean(config.gateway || (config.manualEnabled && realNumber));
+  }
+
+  async function openPlans(opts = {}) {
+    const exam = opts.examId ? (window.availableExams || []).find(e => e.id === resolve(opts.examId)) : null;
+    const box = modal('<h3>আমাদের প্যাকেজ</h3><div class="acc-sub">লোড হচ্ছে...</div>');
+    let cfg;
+    try { cfg = await loadCod(); } catch (e) { box.querySelector('.acc-sub').textContent = e.message; return; }
+    const other = await hasOtherPayment();
+    const tier = tierOfMe();
+    const plans = cfg.plans || [];
+    const head = exam
+      ? `<h3>🔒 ${esc(exam.title)}</h3><div class="acc-sub">এই প্রশ্নসেটটি ফ্রি নয়। নিচের যেকোনো প্যাকেজ নিলে সব সেট খুলে যাবে।</div>${previewHtml(exam.id)}`
+      : `<h3>📦 আমাদের প্যাকেজ</h3><div class="acc-sub">${esc(opts.reasonBn || 'ফ্রিতে সব ফিচার ঘুরে দেখুন। সব প্রশ্নসেট খুলতে একটি প্যাকেজ নিন।')}</div>`;
+    const html = `${head}
+      ${tier !== 'FREE' ? `<div class="acc-ok">আপনার এখন <b>${TIER_BN[tier]}</b> চালু আছে${me && me.premiumUntil ? ` (${fmtDate(me.premiumUntil)} পর্যন্ত)` : ''}।</div>` : ''}
+      <table class="acc-cmp">
+        <thead><tr><th></th><th>ফ্রি</th><th>সাধারণ</th><th class="hl">প্রিমিয়াম</th></tr></thead>
+        <tbody>
+          <tr><td>সব ফিচার ঘুরে দেখা</td><td>✅</td><td>✅</td><td class="hl">✅</td></tr>
+          <tr><td>প্রতি বিভাগে কয়েকটি ফ্রি সেট</td><td>✅</td><td>✅</td><td class="hl">✅</td></tr>
+          <tr><td>সব মডেল টেস্ট ও বিগত প্রশ্ন</td><td>—</td><td>✅</td><td class="hl">✅</td></tr>
+          <tr><td>ছাপানো প্রশ্নসেট বাসায়</td><td>—</td><td>✅</td><td class="hl">✅</td></tr>
+          <tr><td>প্রশ্নসেট ডাউনলোড ও প্রিন্ট</td><td>—</td><td>—</td><td class="hl">✅</td></tr>
+        </tbody>
+      </table>
+      <div class="app-unlock-note acc-warn">অর্ডার ও কোড দিতে ওয়েবসাইটে একই মোবাইল নম্বর দিয়ে লগইন করুন। কোড চালু হলে অ্যাপেও সব সেট খুলে যাবে।</div>
+      <div data-payment>
+        ${cfg.enabled ? plans.map(p => `
+          <div class="acc-plancard ${p.tier === 'PREMIUM' ? 'prem' : ''}">
+            <h4><span>${p.tier === 'PREMIUM' ? '⭐ ' : ''}${esc(p.nameBn)}</span><span>৳${bn(p.price)}</span></h4>
+            <p>${esc(p.featuresBn || '')} • মেয়াদ ${bn(p.days)} দিন</p>
+            <button type="button" class="acc-btn" data-cod="${esc(p.id)}">🚚 ক্যাশ অন ডেলিভারিতে অর্ডার করুন</button>
+          </div>`).join('') : '<div class="acc-warn">ক্যাশ অন ডেলিভারি এখন বন্ধ আছে।</div>'}
+        <div style="text-align:center;margin-top:4px">
+          <button type="button" class="acc-link" data-act="redeem">🔑 প্রশ্নসেটের সাথে কোড পেয়েছেন? এখানে দিন</button>
+          ${other ? `<br><button type="button" class="acc-link" data-act="online">💳 অনলাইনে / বিকাশে পেমেন্ট করতে চান?</button>` : ''}
+        </div>
+      </div>`;
+    const b = modal(html);
+    b.addEventListener('click', ev => {
+      const c = ev.target.closest('[data-cod]');
+      if (c) return openCodOrder(c.dataset.cod);
+      const t = ev.target.closest('[data-act]');
+      if (!t) return;
+      if (t.dataset.act === 'redeem') openRedeem();
+      if (t.dataset.act === 'online') openOnlinePay(opts.examId || null);
+    });
+  }
+
+  function getLocation() {
+    return new Promise(resolveGeo => {
+      if (!navigator.geolocation) return resolveGeo({ error: 'ব্রাউজারে লোকেশন নেই' });
+      navigator.geolocation.getCurrentPosition(
+        p => resolveGeo({ geo: { lat: p.coords.latitude, lng: p.coords.longitude, accuracy: p.coords.accuracy } }),
+        e => resolveGeo({ error: e.code === 1 ? 'অনুমতি দেয়নি' : 'লোকেশন পাওয়া যায়নি' }),
+        { enableHighAccuracy: false, timeout: 12000, maximumAge: 300000 }
+      );
+    });
+  }
+
+  async function openCodOrder(planId) {
+    const cfg = await loadCod();
+    const plans = cfg.plans || [];
+    const sel = plans.find(p => p.id === planId) || plans[plans.length - 1];
+    const b = modal(`
+      <h3>🚚 ক্যাশ অন ডেলিভারি অর্ডার</h3>
+      <div class="acc-sub">প্রশ্নসেট হাতে পেয়ে টাকা দেবেন। প্যাকেটের ভেতরে একটি অ্যাক্সেস কোড থাকবে, সেটি ওয়েবসাইটে দিলেই অনলাইনে সব সেট খুলে যাবে।</div>
+      ${cfg.otpReady ? '' : '<div class="acc-warn">OTP পাঠানোর ব্যবস্থা এখনো চালু হয়নি, তাই এই মুহূর্তে অর্ডার নেওয়া যাচ্ছে না। একটু পরে চেষ্টা করুন।</div>'}
+      <form class="acc-cod">
+        <div class="acc-plans">${plans.map(p => `
+          <label class="acc-plan ${p.id === sel.id ? 'on' : ''}"><input type="radio" name="planId" value="${esc(p.id)}" ${p.id === sel.id ? 'checked' : ''}>
+            ${esc(p.nameBn)}<b>৳${bn(p.price)}</b></label>`).join('')}
+        </div>
+        <label class="acc-field">আপনার নাম<input name="name" autocomplete="name" maxlength="80" required value="${esc(me ? me.name : '')}"></label>
+        <div class="acc-row">
+          <label class="acc-field">মোবাইল নম্বর<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX" required value="${esc(me ? me.phone : '')}"></label>
+          <button type="button" class="acc-btn ghost" data-act="otp">OTP পাঠান</button>
+        </div>
+        <label class="acc-field" data-otp hidden>SMS এ আসা ৬ সংখ্যার OTP<input name="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"></label>
+        <label class="acc-field">জেলা<select name="districtId" required><option value="">জেলা বাছাই করুন</option>${cfg.districts.map(d => `<option value="${esc(d.id)}">${esc(d.nameBn)}</option>`).join('')}</select></label>
+        <label class="acc-field">থানা / উপজেলা<input name="area" maxlength="100" required></label>
+        <label class="acc-field">পুরো ঠিকানা (বাসা / গ্রাম / রোড)<input name="address" maxlength="300" required></label>
+        <label class="acc-field">নোট (ঐচ্ছিক)<input name="note" maxlength="300" placeholder="যেমন: বিকেলে ফোন দেবেন"></label>
+        <div class="acc-sum"></div>
+        <div class="acc-sub" style="margin:0 0 8px">📍 অর্ডার নিশ্চিত করার সময় আপনার বর্তমান লোকেশন চাওয়া হবে। এটি শুধু ঠিকানা যাচাইয়ে ব্যবহার হয়, যাতে ভুয়া অর্ডার না হয়।</div>
+        <div class="acc-err"></div>
+        <button class="acc-btn" type="submit" ${cfg.otpReady ? '' : 'disabled'}>✅ অর্ডার নিশ্চিত করুন</button>
+      </form>`);
+    const form = b.querySelector('form');
+    const err = form.querySelector('.acc-err');
+    function summary() {
+      const p = plans.find(x => x.id === (form.querySelector('input[name=planId]:checked') || {}).value) || sel;
+      const d = form.districtId.value;
+      const charge = d ? (d === 'dhaka' ? cfg.delivery.insideDhaka : cfg.delivery.outsideDhaka) : null;
+      form.querySelector('.acc-sum').innerHTML = `<div><span>${esc(p.nameBn)}</span><span>৳${bn(p.price)}</span></div>
+        <div><span>ডেলিভারি চার্জ ${d === 'dhaka' ? '(ঢাকা)' : d ? '(ঢাকার বাইরে)' : ''}</span><span>${charge === null ? 'জেলা বাছাই করুন' : `৳${bn(charge)}`}</span></div>
+        <div class="t"><span>প্রশ্নসেট হাতে পেয়ে দেবেন</span><span>${charge === null ? '—' : `৳${bn(p.price + charge)}`}</span></div>`;
+      form.querySelectorAll('.acc-plan').forEach(l => l.classList.toggle('on', l.querySelector('input').checked));
+    }
+    form.addEventListener('change', summary);
+    summary();
+
+    const otpBtn = form.querySelector('[data-act=otp]');
+    let otpTimer = null;
+    otpBtn.addEventListener('click', async () => {
+      err.textContent = '';
+      otpBtn.disabled = true;
+      try {
+        await api('/api/cod/otp', { phone: form.phone.value });
+        form.querySelector('[data-otp]').hidden = false;
+        form.otp.required = true;
+        form.otp.focus();
+        toast('OTP পাঠানো হয়েছে। SMS দেখুন।');
+        let left = 60;
+        otpTimer = setInterval(() => {
+          left -= 1;
+          otpBtn.textContent = left > 0 ? `আবার (${bn(left)})` : 'আবার OTP পাঠান';
+          if (left <= 0) { clearInterval(otpTimer); otpBtn.disabled = false; }
+        }, 1000);
+      } catch (e) {
+        err.textContent = e.message;
+        otpBtn.disabled = false;
+      }
+    });
+
+    form.addEventListener('submit', async ev => {
+      ev.preventDefault();
+      err.textContent = '';
+      if (form.querySelector('[data-otp]').hidden) {
+        err.textContent = 'আগে "OTP পাঠান" চাপুন, তারপর SMS এর কোডটি দিন।';
+        return;
+      }
+      const btn = form.querySelector('button[type=submit]');
+      btn.disabled = true;
+      btn.textContent = '📍 লোকেশন নেওয়া হচ্ছে...';
+      const loc = await getLocation();
+      btn.textContent = 'অর্ডার পাঠানো হচ্ছে...';
+      try {
+        const data = await api('/api/cod/order', {
+          planId: (form.querySelector('input[name=planId]:checked') || {}).value,
+          name: form.name.value, phone: form.phone.value, otp: form.otp.value,
+          districtId: form.districtId.value, area: form.area.value, address: form.address.value, note: form.note.value,
+          geo: loc.geo || null, geoError: loc.error || ''
+        });
+        clearInterval(otpTimer);
+        const o = data.order;
+        const done = modal(`<h3>🎉 অর্ডার নেওয়া হয়েছে</h3>
+          <div class="acc-ok">অর্ডার নম্বর <b>${esc(o.orderNo)}</b> • ${esc(o.planNameBn)} • প্রশ্নসেট হাতে পেয়ে দেবেন <b>৳${bn(o.total)}</b></div>
+          <p>আমরা শিগগির ফোন করে অর্ডার নিশ্চিত করব।</p>
+          <div class="acc-warn">🔑 <b>আপনার অ্যাক্সেস কোড প্রশ্নসেটের সাথে প্যাকেটে আসবে।</b> প্রশ্নসেট হাতে পেলে এই ওয়েবসাইটে লগইন করে "কোড দিন" এ কোডটি লিখুন, সাথে সাথে অনলাইনে সব সেট খুলে যাবে।</div>
+          <button type="button" class="acc-btn" data-act="redeem">কোড দেওয়ার জায়গা দেখুন</button>
+          <button type="button" class="acc-btn ghost acc-x" style="position:static">ঠিক আছে</button>`);
+        done.querySelector('[data-act=redeem]').addEventListener('click', () => openRedeem());
+      } catch (e) {
+        err.textContent = e.message;
+        btn.disabled = false;
+        btn.textContent = '✅ অর্ডার নিশ্চিত করুন';
+      }
+    });
+  }
+
+  function openRedeem() {
+    if (!me) return openLogin('প্রশ্নসেটের সাথে পাওয়া কোড দিতে আগে লগইন করুন, অ্যাকাউন্ট না থাকলে "নতুন অ্যাকাউন্ট" খুলুন।', openRedeem);
+    const b = modal(`
+      <h3>🔑 অ্যাক্সেস কোড দিন</h3>
+      <div class="acc-sub">ক্যাশ অন ডেলিভারিতে পাওয়া প্রশ্নসেটের প্যাকেটে ৮ অক্ষরের একটি কোড আছে (যেমন 7KQM-X2PD)। কোডটি নিচে লিখুন।</div>
+      <form>
+        <label class="acc-field">কোড<input name="code" class="acc-code" autocomplete="off" maxlength="12" placeholder="XXXX-XXXX" required></label>
+        <div class="acc-err"></div>
+        <button class="acc-btn" type="submit">কোড চালু করুন</button>
+      </form>
+      <div class="acc-sub" style="margin-top:8px">কোডটি এই অ্যাকাউন্টে (${esc(me.phone)}) চালু হবে। একটি কোড একবারই ব্যবহার করা যায়।</div>`);
+    const form = b.querySelector('form');
+    form.code.focus();
+    form.addEventListener('submit', async ev => {
+      ev.preventDefault();
+      const btn = form.querySelector('.acc-btn');
+      const err = form.querySelector('.acc-err');
+      err.textContent = '';
+      btn.disabled = true;
+      try {
+        const data = await api('/api/cod/redeem', { code: form.code.value });
+        me = data.user;
+        renderPill();
+        announce();
+        applyPrintLock();
+        modal(`<h3>🎉 প্যাকেজ চালু হয়েছে</h3><div class="acc-ok">${esc(data.messageBn)}</div>
+          <button type="button" class="acc-btn" onclick="location.reload()">সব সেট খুলুন</button>`);
+      } catch (e) {
+        err.textContent = e.message;
+        btn.disabled = false;
+      }
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Download / print: PREMIUM only
+  // ---------------------------------------------------------------------------
+  const canPrint = () => Boolean(me && me.canPrint);
+  function allowPrint() {
+    if (canPrint()) return true;
+    showPrintPlans();
+    return false;
+  }
+  function showPrintPlans() {
+    openPlans({ reasonBn: me && me.premium
+      ? 'আপনার সাধারণ প্যাকেজে প্রশ্নসেট দেখা ও পরীক্ষা দেওয়া যায়। ডাউনলোড ও প্রিন্ট করতে প্রিমিয়াম প্যাকেজ নিন।'
+      : 'প্রশ্নসেট ডাউনলোড ও প্রিন্ট শুধু প্রিমিয়াম প্যাকেজে পাওয়া যায়।' });
+  }
+  // Printing itself is blocked by content-guard.js (window.print, Ctrl+P, blank printout)
+  const applyPrintLock = () => { if (window.ContentGuard) window.ContentGuard.refresh(); };
+
   const STATUS_BN = { PENDING: 'যাচাই হচ্ছে', APPROVED: 'সফল', REJECTED: 'বাতিল', INITIATED: 'অসম্পূর্ণ', FAILED: 'ব্যর্থ', CANCELLED: 'বাতিল করেছেন' };
   function paymentRow(p) {
     return `<li><span class="acc-badge ${p.status}">${STATUS_BN[p.status] || p.status}</span>
@@ -422,16 +689,22 @@
       <h3>👤 ${esc(me.name)}</h3>
       <div class="acc-sub">${esc(me.phone)}</div>
       ${me.premium
-        ? `<div class="acc-ok">⭐ প্রিমিয়াম চালু আছে — ${fmtDate(me.premiumUntil)} পর্যন্ত।</div>`
-        : `<div class="acc-warn">ফ্রি অ্যাকাউন্ট। ${bn(locked.size)}টি প্রিমিয়াম সেট লক করা আছে।</div>
-           <button type="button" class="acc-btn" data-act="unlock" data-payment>🔓 সব সেট আনলক করুন</button>
+        ? `<div class="acc-ok">⭐ ${TIER_BN[tierOfMe()]} চালু আছে — ${fmtDate(me.premiumUntil)} পর্যন্ত।${me.canPrint ? ' ডাউনলোড ও প্রিন্টও খোলা।' : ' (ডাউনলোড / প্রিন্ট প্রিমিয়াম প্যাকেজে)'}</div>`
+        : `<div class="acc-warn">ফ্রি অ্যাকাউন্ট। ${bn(locked.size)}টি সেট লক করা আছে।</div>
            <div class="app-unlock-note acc-sub">আনলক করতে ওয়েবসাইটে একই নম্বর দিয়ে লগইন করুন।</div>`}
+      <div data-payment>
+        ${tierOfMe() !== 'PREMIUM' ? '<button type="button" class="acc-btn" data-act="unlock">📦 প্যাকেজ দেখুন ও অর্ডার করুন</button>' : ''}
+        <button type="button" class="acc-btn ghost" data-act="redeem">🔑 প্রশ্নসেটের সাথে পাওয়া কোড দিন</button>
+      </div>
+      ${window.Tour ? '<button type="button" class="acc-btn ghost" data-act="tour">🧭 ওয়েবসাইট গাইড আবার দেখুন</button>' : ''}
       ${mine.payments.length ? `<details style="margin-top:12px" data-payment><summary style="cursor:pointer;font-weight:600">আমার পেমেন্ট (${bn(mine.payments.length)})</summary><ul class="acc-list">${mine.payments.map(paymentRow).join('')}</ul></details>` : ''}
       <button type="button" class="acc-btn ghost" data-act="logout" style="margin-top:12px">লগআউট</button>`);
     b.addEventListener('click', async ev => {
       const t = ev.target.closest('[data-act]');
       if (!t) return;
-      if (t.dataset.act === 'unlock') openUnlock(null);
+      if (t.dataset.act === 'unlock') openPlans();
+      if (t.dataset.act === 'redeem') openRedeem();
+      if (t.dataset.act === 'tour') { close(); window.Tour.start(); }
       if (t.dataset.act === 'logout') {
         try { await api('/api/auth/logout', {}); } catch { /* cookie cleared anyway */ }
         location.reload();
@@ -513,10 +786,16 @@
   window.Account = {
     get user() { return me; },
     isPremium: () => Boolean(access.premium),
+    canPrint,
+    allowPrint,
+    showPrintPlans,
+    openPlans,
+    openRedeem,
+    openCodOrder,
     isLocked,
     allow(examId) {
       if (!isLocked(examId)) return true;
-      openUnlock(examId);
+      openPlans({ examId });
       return false;
     },
     // First set in a <select> that this user may open (prefers `preferred`)
@@ -542,12 +821,13 @@
       return `<div class="acc-lockcard">
         <div style="font-size:40px">🔒</div>
         <h3 style="font-size:18px;font-weight:700;margin:6px 0">${esc(exam ? exam.title : 'প্রিমিয়াম সেট')}</h3>
-        <p style="color:#475569;margin-bottom:14px">এই প্রশ্নসেটটি প্রিমিয়াম। বিকাশ / নগদ / রকেটে পেমেন্ট করে সব সেট আনলক করুন।</p>
+        <p style="color:#475569;margin-bottom:14px">এই প্রশ্নসেটটি ফ্রি নয়। ক্যাশ অন ডেলিভারিতে প্যাকেজ নিয়ে সব সেট খুলুন। প্রথম কয়েকটি প্রশ্ন ফ্রিতে দেখতে পারবেন।</p>
         <button type="button" class="acc-btn" onclick="Account.allow('${esc(examId)}')">🔓 আনলক করুন</button>
       </div>`;
     },
     openLogin: () => openLogin(),
-    openUnlock
+    openUnlock: examId => openPlans({ examId }),
+    openOnlinePay
   };
 
   // ---------------------------------------------------------------------------
@@ -591,6 +871,7 @@
       me = data.user;
       renderPill();
       announce();
+      applyPrintLock();
       if (gwResult) return showGatewayResult(gwResult);
       // Logged in elsewhere or approved since this page loaded
       if (me && me.premium && !access.premium) reloadForPremium();

@@ -50,7 +50,8 @@
   // ---------------------------------------------------------------- helpers
   function account() { return window.Account || null; }
   function user() { var a = account(); return a && a.user; }
-  function canPrint() { var a = account(); return Boolean(a && a.isPremium && a.isPremium()); }
+  // PREMIUM plan only (NORMAL plan = view only); Account.canPrint comes from the logged-in account
+  function canPrint() { var a = account(); return Boolean(a && (a.canPrint ? a.canPrint() : a.isPremium && a.isPremium())); }
   function inProtected(node) {
     var el = node && (node.nodeType === 1 ? node : node.parentElement);
     return Boolean(el && el.closest && el.closest('.cg-protect'));
@@ -192,9 +193,10 @@
   function requirePrint() {
     syncPrintClass();
     if (canPrint()) return true;
-    toast('প্রিন্ট ও PDF ডাউনলোড শুধু প্রিমিয়াম সদস্যদের জন্য।');
+    toast('প্রিন্ট ও PDF ডাউনলোড শুধু প্রিমিয়াম প্যাকেজে।');
     var a = account();
-    if (a && a.openUnlock) a.openUnlock();
+    if (a && a.showPrintPlans) a.showPrintPlans();
+    else if (a && a.openUnlock) a.openUnlock();
     return false;
   }
   var nativePrint = window.print ? window.print.bind(window) : null;

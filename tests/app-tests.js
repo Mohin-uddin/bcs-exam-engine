@@ -105,7 +105,9 @@ async function startServer() {
     ACCOUNTS_DATA_FILE: path.join(dir, 'accounts.json'),
     LIVE_DATA_FILE: path.join(dir, 'live.json'),
     REPORTS_DATA_FILE: path.join(dir, 'reports.json'),
-    PROGRESS_DATA_DIR: path.join(dir, 'progress')
+    PROGRESS_DATA_DIR: path.join(dir, 'progress'),
+    // OTP codes are written to the server log instead of being sent by SMS
+    SMS_PROVIDER: 'console'
   };
   delete env.DATABASE_URL;
   const child = spawn(process.execPath, [path.join(__dirname, '..', 'src', 'web', 'server.js')], { env, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -116,7 +118,7 @@ async function startServer() {
   for (let i = 0; i < 100; i++) {
     try {
       const r = await fetch(`${base}/api/live/exams`);
-      if (r.ok) return { base, child, dir };
+      if (r.ok) return { base, child, dir, getLog: () => log };
     } catch { /* not up yet */ }
     await new Promise(r => setTimeout(r, 100));
   }
@@ -126,7 +128,7 @@ async function startServer() {
 
 async function serverTests() {
   console.log('\n--- SERVER ---');
-  const { base, child, dir } = await startServer();
+  const { base, child, dir, getLog } = await startServer();
   const call = async (method, url, { body, cookie, admin, headers = {} } = {}) => {
     const res = await fetch(base + url, {
       method,
@@ -215,40 +217,63 @@ async function serverTests() {
       assert.ok(!after.json.reports.some(x => x.id === rep.id));
     });
 
-    await test('cash on delivery: printed-pack plans only, costs more, admin approves and ships', async () => {
+    await test('printed-pack plans need an address and show up in the shipping list', async () => {
       const cfg = (await call('GET', '/api/payment/config')).json;
-      const digital = cfg.plans.find(p => !p.printPack);
       const print = cfg.plans.find(p => p.printPack);
-      assert.ok(cfg.codEnabled && digital && print);
-      assert.equal(print.codPrice, print.price + cfg.codExtra);
-      const delivery = { name: 'Alice', phone: '01711111111', district: 'ঢাকা', address: 'বাসা ১২, রোড ৩, মিরপুর' };
+      assert.ok(print);
+      // Old one-click cash on delivery is replaced by the OTP order form
+      assert.equal(cfg.codEnabled, false);
+      assert.ok(cfg.cod && cfg.cod.enabled);
+      const old = await call('POST', '/api/payment/cod', { cookie: alice, body: { planId: print.id } });
+      assert.equal(old.json.code, 'USE_COD_ORDER');
 
-      assert.equal((await call('POST', '/api/payment/cod', { body: { planId: print.id, delivery } })).status, 401);
-      const noPack = await call('POST', '/api/payment/cod', { cookie: alice, body: { planId: digital.id, delivery } });
-      assert.equal(noPack.json.code, 'NO_PRINT_PACK');
-      const noAddr = await call('POST', '/api/payment/cod', { cookie: alice, body: { planId: print.id, delivery: { ...delivery, address: '' } } });
+      const noAddr = await call('POST', '/api/payment/submit', { cookie: bob, body: { planId: print.id, method: 'bkash', senderNumber: '01822222222', trxId: 'ABC123XYZ' } });
       assert.equal(noAddr.json.code, 'BAD_ADDRESS');
-
-      const ok = await call('POST', '/api/payment/cod', { cookie: alice, body: { planId: print.id, delivery } });
+      const delivery = { name: 'Alice', phone: '01711111111', district: 'ঢাকা', address: 'বাসা ১২, রোড ৩, মিরপুর' };
+      const ok = await call('POST', '/api/payment/submit', { cookie: alice, body: { planId: print.id, method: 'bkash', senderNumber: '01711111111', trxId: 'PACK12345', delivery } });
       assert.equal(ok.status, 200, JSON.stringify(ok.json));
-      assert.equal(ok.json.payment.amount, print.codPrice);
-      assert.equal(ok.json.payment.delivery.district, 'ঢাকা');
-      const twice = await call('POST', '/api/payment/cod', { cookie: alice, body: { planId: print.id, delivery } });
-      assert.equal(twice.json.code, 'COD_PENDING');
-
-      // Bank / bKash TrxID for a printed-pack plan also needs the address
-      const manual = await call('POST', '/api/payment/submit', { cookie: bob, body: { planId: print.id, method: 'bkash', senderNumber: '01822222222', trxId: 'ABC123XYZ' } });
-      assert.equal(manual.json.code, 'BAD_ADDRESS');
-
-      const toShip = await call('GET', '/api/admin/accounts/payments?status=SHIP', { admin: 'test-admin-key' });
-      assert.ok(toShip.json.payments.some(p => p.id === ok.json.payment.id));
       const id = ok.json.payment.id;
+      await call('POST', `/api/admin/accounts/payments/${id}/approve`, { admin: 'test-admin-key', body: {} });
+      const toShip = await call('GET', '/api/admin/accounts/payments?status=SHIP', { admin: 'test-admin-key' });
+      assert.ok(toShip.json.payments.some(p => p.id === id));
       assert.equal((await call('POST', `/api/admin/accounts/payments/${id}/shipped`, { admin: 'test-admin-key', body: {} })).status, 200);
-      const approved = await call('POST', `/api/admin/accounts/payments/${id}/approve`, { admin: 'test-admin-key', body: {} });
-      assert.equal(approved.status, 200, JSON.stringify(approved.json));
-      assert.equal(approved.json.payment.user.premiumUntil !== null, true);
       const after = await call('GET', '/api/admin/accounts/payments?status=SHIP', { admin: 'test-admin-key' });
       assert.ok(!after.json.payments.some(p => p.id === id));
+    });
+
+    await test('cash on delivery: OTP, far-location flag, access code unlocks a view-only plan once', async () => {
+      const cod = (await call('GET', '/api/cod/config')).json;
+      assert.ok(cod.enabled && cod.otpReady);
+      const normal = cod.plans.find(p => p.tier === 'NORMAL');
+      const phone = '01933333333';
+      assert.equal((await call('POST', '/api/cod/otp', { body: { phone } })).status, 200);
+      const otp = [...getLog().matchAll(/OTP: (\d{6})/g)].pop()[1];
+      const order = { planId: normal.id, name: 'Karim', phone, districtId: 'rajshahi', area: 'Boalia', address: 'House 1, Road 2', geo: { lat: 23.81, lng: 90.41, accuracy: 30 } };
+      const bad = await call('POST', '/api/cod/order', { body: { ...order, otp: otp === '000000' ? '111111' : '000000' } });
+      assert.equal(bad.json.code, 'BAD_OTP');
+      const ok = await call('POST', '/api/cod/order', { body: { ...order, otp } });
+      assert.equal(ok.status, 200, JSON.stringify(ok.json));
+      assert.equal(ok.json.order.accessCode, undefined, 'code never goes to the customer');
+      // OTP works once
+      assert.equal((await call('POST', '/api/cod/order', { body: { ...order, otp } })).json.code, 'OTP_EXPIRED');
+
+      const far = await call('GET', '/api/admin/accounts/orders?status=FAR', { admin: 'test-admin-key' });
+      const o = far.json.orders.find(x => x.id === ok.json.order.id);
+      assert.ok(o && o.location.status === 'FAR' && o.location.distanceKm > 100);
+      assert.equal((await call('POST', `/api/admin/accounts/orders/${o.id}/location-ok`, { admin: 'test-admin-key', body: {} })).status, 200);
+
+      assert.equal((await call('POST', '/api/cod/redeem', { body: { code: o.accessCode } })).status, 401);
+      const carol = await signUp('Carol', '01944444444');
+      const wrong = await call('POST', '/api/cod/redeem', { cookie: carol, body: { code: 'AAAA-BBBB' } });
+      assert.equal(wrong.json.code, 'BAD_CODE');
+      const used = await call('POST', '/api/cod/redeem', { cookie: carol, body: { code: o.accessCode.toLowerCase().replace('-', '') } });
+      assert.equal(used.status, 200, JSON.stringify(used.json));
+      assert.equal(used.json.user.tier, 'NORMAL');
+      assert.equal(used.json.user.premium, true);
+      assert.equal(used.json.user.canPrint, false);
+      assert.equal((await call('POST', '/api/cod/redeem', { cookie: carol, body: { code: o.accessCode } })).json.code, 'CODE_USED');
+      const list = await call('GET', '/api/admin/accounts/orders?status=DELIVERED', { admin: 'test-admin-key' });
+      assert.ok(list.json.orders.some(x => x.id === o.id && x.redeemedUser.phone === '01944444444'));
     });
 
     await test('admin can reset a password; old sessions stop working', async () => {
