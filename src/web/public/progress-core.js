@@ -22,7 +22,7 @@
   const LIMITS = { mistakes: 3000, bookmarks: 3000, cards: 5000, attempts: 200, days: 400 };
   const TAGS = ['SILLY_MISTAKE', 'CONCEPT_GAP', 'TIME_PRESSURE', 'UNREAD_STEM'];
   const OPTS = ['A', 'B', 'C', 'D'];
-  const TRACKS = ['BCS', 'PRIMARY', 'NTRCA', 'BANK', 'MINISTRY', 'NON_CADRE', 'NURSING', 'ADMISSION'];
+  const TRACKS = ['BCS', 'PRIMARY', 'NTRCA', 'BANK', 'MINISTRY', 'NON_CADRE', 'NURSING'];
 
   function empty() {
     return { v: 1, mistakes: {}, bookmarks: {}, cards: {}, attempts: [], days: {}, settings: {} };

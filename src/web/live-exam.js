@@ -29,8 +29,7 @@ const TRACK_META = {
   BANK: { labelBn: 'ব্যাংক নিয়োগ', orgBn: 'ব্যাংকার্স সিলেকশন কমিটি', negativeMark: 0.25 },
   MINISTRY: { labelBn: 'মন্ত্রণালয় ও অধিদপ্তর', orgBn: 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার', negativeMark: 0.25 },
   NON_CADRE: { labelBn: 'পিএসসি নন-ক্যাডার', orgBn: 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC)', negativeMark: 0.5 },
-  NURSING: { labelBn: 'নার্সিং নিয়োগ', orgBn: 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার', negativeMark: 0.25 },
-  ADMISSION: { labelBn: 'বিশ্ববিদ্যালয় ভর্তি', orgBn: 'বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি • সোনার হরিণ', negativeMark: 0.25 }
+  NURSING: { labelBn: 'নার্সিং নিয়োগ', orgBn: 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার', negativeMark: 0.25 }
 };
 
 const STORE_KEY = 'live-exams';
