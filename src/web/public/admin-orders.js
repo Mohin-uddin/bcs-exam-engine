@@ -11,7 +11,7 @@
   const bn = n => String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const fmt = iso => (iso ? new Date(iso).toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : '—');
-  const STATUS_BN = { OPEN: 'চলমান', FAR: '📍 লোকেশন যাচাই বাকি', NEW: 'নতুন', CONFIRMED: 'ফোনে নিশ্চিত', SHIPPED: 'পাঠানো হয়েছে', DELIVERED: 'ডেলিভারি হয়েছে', CANCELLED: 'বাতিল', ALL: 'সব' };
+  const STATUS_BN = { OPEN: 'চলমান', FAR: '☎️ যাচাই বাকি', NEW: 'নতুন', CONFIRMED: 'ফোনে নিশ্চিত', SHIPPED: 'পাঠানো হয়েছে', DELIVERED: 'ডেলিভারি হয়েছে', CANCELLED: 'বাতিল', ALL: 'সব' };
   const STATUS_COLOR = { NEW: '#fef3c7;color:#92400e', CONFIRMED: '#dbeafe;color:#1e40af', SHIPPED: '#e0e7ff;color:#3730a3', DELIVERED: '#dcfce7;color:#166534', CANCELLED: '#fee2e2;color:#991b1b' };
   const TIER_BN = { NORMAL: 'সাধারণ (শুধু দেখা)', PREMIUM: '⭐ প্রিমিয়াম (ডাউনলোড + প্রিন্ট)' };
   let key = '';
@@ -100,7 +100,7 @@
           </div>
           <div class="row2">
             <label class="field">লক করা সেটে ফ্রিতে কয়টি প্রশ্ন দেখা যাবে (প্রিভিউ)<input id="codPreview" type="number" min="0" max="20"></label>
-            <div></div>
+            <label class="field">WhatsApp নম্বর (OTP না থাকলে এখানে অর্ডার নিশ্চিত করবে)<input id="codWa" type="tel" inputmode="numeric" placeholder="8801711XXXXXX বা 8190XXXXXXXX"></label>
           </div>
           <div id="codPlans"></div>
           <div id="codSmsInfo" style="font-size:13px;color:#475569;margin:6px 0 10px"></div>
@@ -139,9 +139,11 @@
   function locationCell(o) {
     const l = o.location || {};
     const map = o.geo ? ` <a href="https://www.google.com/maps?q=${o.geo.lat},${o.geo.lng}" target="_blank" rel="noopener">ম্যাপে দেখুন</a>` : '';
-    if (l.status === 'OK') return `<span class="badge" style="background:#dcfce7;color:#166534">✅ ঠিকানার কাছে</span><br><small>${bn(l.distanceKm)} কিমি${map}</small>`;
+    const phoneBtn = !o.phoneVerifiedAt && ['NEW', 'CONFIRMED', 'SHIPPED'].includes(o.status)
+      ? `<br><button class="btn ghost sm" data-locok="${o.id}" style="margin-top:4px">☎️ যাচাই করেছি</button>` : '';
+    if (l.status === 'OK') return `<span class="badge" style="background:#dcfce7;color:#166534">✅ ঠিকানার কাছে</span><br><small>${bn(l.distanceKm)} কিমি${map}</small>${phoneBtn}`;
     const checked = o.locationVerifiedAt
-      ? `<br><span class="badge" style="background:#dcfce7;color:#166534">☎️ যাচাই করা হয়েছে</span>`
+      ? (phoneBtn || `<br><span class="badge" style="background:#dcfce7;color:#166534">☎️ যাচাই করা হয়েছে</span>`)
       : (['NEW', 'CONFIRMED', 'SHIPPED'].includes(o.status) ? `<br><button class="btn ghost sm" data-locok="${o.id}" style="margin-top:4px">☎️ যাচাই করেছি</button>` : '');
     return `<span class="badge" style="background:#fee2e2;color:#991b1b">⚠️ ${l.status === 'FAR' ? 'লোকেশন দূরে' : 'লোকেশন নেই'}</span><br><small>${esc(l.status === 'FAR' ? `প্রায় ${bn(l.distanceKm)} কিমি দূরে` : (o.geoErrorBn || l.reasonBn || ''))}${map}</small>${checked}`;
   }
@@ -150,7 +152,7 @@
     $('ordRows').innerHTML = orders.length ? orders.map(o => `
       <tr>
         <td><b>${esc(o.orderNo)}</b><br><small>${fmt(o.createdAt)}</small></td>
-        <td><b>${esc(o.name)}</b><br><a href="tel:${esc(o.phone)}">${esc(o.phone)}</a> <small title="OTP দিয়ে যাচাই করা">✔️ OTP</small>${o.samePhoneOrders ? `<br><small>এই নম্বরে আরও ${bn(o.samePhoneOrders)}টি অর্ডার</small>` : ''}</td>
+        <td><b>${esc(o.name)}</b><br><a href="tel:${esc(o.phone)}">${esc(o.phone)}</a> ${o.phoneVerifiedAt ? `<small title="নম্বর যাচাই করা">✔️ ${o.verifyBy === 'WHATSAPP' ? 'যাচাই' : 'OTP'}</small>` : '<small style="color:#b45309" title="OTP ছাড়া অর্ডার: WhatsApp মেসেজ এসেছে কিনা বা ফোন করে দেখুন">⏳ WhatsApp যাচাই বাকি</small>'}${o.samePhoneOrders ? `<br><small>এই নম্বরে আরও ${bn(o.samePhoneOrders)}টি অর্ডার</small>` : ''}</td>
         <td><b>${esc(o.districtBn)}</b>, ${esc(o.area)}<br><small>${esc(o.address)}</small>${o.noteBn ? `<br><small>📝 ${esc(o.noteBn)}</small>` : ''}</td>
         <td>${locationCell(o)}</td>
         <td>${esc(TIER_BN[o.tier] || o.planNameBn)}<br><b>৳${bn(o.total)}</b> <small>(${bn(o.price)} + ডেলিভারি ${bn(o.deliveryCharge)})</small></td>
@@ -246,6 +248,7 @@
       $('codDhaka').value = settings.codDelivery.insideDhaka;
       $('codOutside').value = settings.codDelivery.outsideDhaka;
       $('codPreview').value = settings.previewPerSet;
+      $('codWa').value = settings.codWhatsapp || '';
       $('codPlans').innerHTML = settings.codPlans.map((p, i) => `
         <fieldset data-codplan="${i}" style="border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-bottom:10px">
           <legend style="font-weight:700">${esc(TIER_BN[p.tier] || p.tier)}</legend>
@@ -284,7 +287,9 @@
     const name = sms ? NAMES[sms.provider] || sms.provider : '';
     $('codSmsInfo').innerHTML = ready
       ? `✅ OTP SMS চালু: <b>${esc(name)}</b>`
-      : `⚠️ OTP SMS চালু নেই${sms && sms.error ? ` (${esc(sms.error)})` : ''}। উপরের "📱 OTP SMS সেটিংস" থেকে চালু করুন, না হলে কেউ অর্ডার দিতে পারবে না।`;
+      : `⚠️ OTP SMS চালু নেই${sms && sms.error ? ` (${esc(sms.error)})` : ''}। ${settings && settings.codWhatsapp
+        ? 'তাই OTP ছাড়াই অর্ডার নেওয়া হচ্ছে, অর্ডারের পর কাস্টমার WhatsApp এ মেসেজ দিয়ে নিশ্চিত করবে। তালিকায় "⏳ WhatsApp যাচাই বাকি" দেখলে মেসেজ মিলিয়ে "☎️ যাচাই করেছি" চাপুন।'
+        : 'নিচে WhatsApp নম্বর দিন (তাহলে OTP ছাড়া WhatsApp দিয়ে নিশ্চিত হবে), অথবা উপরের "📱 OTP SMS সেটিংস" থেকে SMS চালু করুন। না হলে কেউ অর্ডার দিতে পারবে না।'}`;
     $('smsBadge').innerHTML = ready ? '<span class="badge" style="background:#dcfce7;color:#166534">চালু</span>' : '<span class="badge" style="background:#fee2e2;color:#991b1b">বন্ধ</span>';
     const envSet = sms && !sms.fromAdmin;
     if (!$('smsProvider').dataset.touched) {
@@ -307,6 +312,7 @@
         codEnabled: $('codOn').value === '1',
         codFarKm: Number($('codFar').value),
         previewPerSet: Number($('codPreview').value),
+        codWhatsapp: $('codWa').value,
         codDelivery: { insideDhaka: Number($('codDhaka').value), outsideDhaka: Number($('codOutside').value) },
         codPlans: [...document.querySelectorAll('[data-codplan]')].map(f => ({
           id: f.querySelector('[data-cid]').value,

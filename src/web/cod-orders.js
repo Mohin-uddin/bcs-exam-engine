@@ -29,6 +29,11 @@ const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 
 const DEFAULT_COD_SETTINGS = {
   codEnabled: true,
+  // WhatsApp number (digits with country code, e.g. 8801711... or 8190...). While no SMS service
+  // works, orders are taken without OTP and the customer confirms by a WhatsApp message here.
+  // WhatsApp number (country code, digits only). Used to confirm orders while no OTP SMS service is set.
+  // Can be changed in /admin -> Cash on Delivery settings.
+  codWhatsapp: '819097261452',
   codPlans: [
     {
       id: 'cod_normal', tier: 'NORMAL', nameBn: 'সাধারণ প্যাকেজ', price: 499, days: 180,
@@ -97,6 +102,10 @@ function createCodRoutes(ctx) {
     return { status: 'OK', distanceKm: km, accuracyKm, reasonBn: 'ঠিকানার কাছাকাছি' };
   }
 
+  // Open order the admin should check: location far / unknown, or phone not confirmed yet
+  const needsCheck = o => OPEN_STATUSES.includes(o.status)
+    && ((o.location.status !== 'OK' && !o.locationVerifiedAt) || !o.phoneVerifiedAt);
+
   function publicOrderForUser(o) {
     return {
       id: o.id, orderNo: o.orderNo, planNameBn: o.planNameBn, tier: o.tier, total: o.total,
@@ -114,12 +123,17 @@ function createCodRoutes(ctx) {
     };
   }
 
+  const otpReady = () => { const c = smsConfig(); return Boolean(c && !c.error); };
+  // No SMS service but a WhatsApp number: take the order without OTP, confirm on WhatsApp
+  const skipOtp = () => !otpReady() && Boolean(s().codWhatsapp);
+  const waLink = o => `https://wa.me/${s().codWhatsapp}?text=${encodeURIComponent(`আসসালামু আলাইকুম, আমার অর্ডার ${o.orderNo} নিশ্চিত করছি। নাম: ${o.name}, মোবাইল: ${o.phone}`)}`;
+
   function publicConfig() {
     const st = s();
-    const sms = smsConfig();
     return {
       enabled: st.codEnabled !== false,
-      otpReady: Boolean(sms && !sms.error),
+      otpReady: otpReady(),
+      noOtp: skipOtp(),
       plans: st.codPlans,
       delivery: st.codDelivery,
       districts: DISTRICTS.map(d => ({ id: d.id, nameBn: d.nameBn }))
@@ -184,14 +198,18 @@ function createCodRoutes(ctx) {
       if (area.length < 2) return fail(res, 400, 'BAD_AREA', 'থানা / উপজেলা লিখুন।');
       if (address.length < 6) return fail(res, 400, 'BAD_ADDRESS', 'বাসা / গ্রাম / রোডসহ পুরো ঠিকানা লিখুন।');
 
-      const otp = otps.get(phone);
-      if (!otp || otp.expiresAt < Date.now()) return fail(res, 400, 'OTP_EXPIRED', 'OTP এর মেয়াদ শেষ। নতুন OTP নিন।');
-      if (otp.tries >= OTP_MAX_TRIES) {
+      const noOtp = skipOtp();
+      const ip = clientIp(req);
+      // Without OTP: limit orders per connection so the list cannot be flooded
+      if (noOtp && tooManyAttempts(`ordip:${ip}`, 5)) return fail(res, 429, 'TOO_MANY', 'অনেকগুলো অর্ডার দেওয়া হয়েছে। ১৫ মিনিট পর আবার চেষ্টা করুন।');
+      const otp = noOtp ? null : otps.get(phone);
+      if (!noOtp && (!otp || otp.expiresAt < Date.now())) return fail(res, 400, 'OTP_EXPIRED', 'OTP এর মেয়াদ শেষ। নতুন OTP নিন।');
+      if (otp && otp.tries >= OTP_MAX_TRIES) {
         otps.delete(phone);
         return fail(res, 429, 'OTP_LOCKED', 'অনেকবার ভুল OTP দেওয়া হয়েছে। নতুন OTP নিন।');
       }
       const given = sha256(`${phone}:${String(body.otp || '').replace(/\D/g, '')}`);
-      if (!crypto.timingSafeEqual(Buffer.from(given, 'hex'), Buffer.from(otp.hash, 'hex'))) {
+      if (otp && !crypto.timingSafeEqual(Buffer.from(given, 'hex'), Buffer.from(otp.hash, 'hex'))) {
         otp.tries += 1;
         return fail(res, 400, 'BAD_OTP', 'OTP সঠিক নয়। SMS এ পাওয়া ৬ সংখ্যার কোডটি দিন।');
       }
@@ -199,6 +217,7 @@ function createCodRoutes(ctx) {
         return fail(res, 429, 'TOO_MANY_ORDERS', 'এই নম্বরে ৩টি অর্ডার ডেলিভারির অপেক্ষায় আছে। প্রয়োজনে আমাদের সাথে যোগাযোগ করুন।');
       }
       otps.delete(phone);
+      if (noOtp) noteAttempt(`ordip:${ip}`);
 
       const geo = body.geo && typeof body.geo === 'object' ? {
         lat: Number(body.geo.lat), lng: Number(body.geo.lng), accuracy: Math.round(Number(body.geo.accuracy) || 0)
@@ -217,7 +236,9 @@ function createCodRoutes(ctx) {
         total: plan.price + charge,
         name,
         phone,
-        phoneVerifiedAt: now,
+        // null = taken without OTP: confirmed later on WhatsApp / phone by the admin
+        phoneVerifiedAt: noOtp ? null : now,
+        verifyBy: noOtp ? 'WHATSAPP' : 'OTP',
         districtId: district.id,
         districtBn: district.nameBn,
         area,
@@ -241,6 +262,7 @@ function createCodRoutes(ctx) {
       send(res, 200, {
         status: 'SUCCESS',
         order: publicOrderForUser(order),
+        whatsappUrl: noOtp ? waLink(order) : null,
         messageBn: 'অর্ডার নেওয়া হয়েছে। আপনার অ্যাক্সেস কোড প্রশ্নসেটের সাথে প্যাকেটে আসবে। প্রশ্নসেট হাতে পেয়ে টাকা দিন, তারপর ওয়েবসাইটে লগইন করে কোডটি দিন।'
       });
       return true;
@@ -303,7 +325,7 @@ function createCodRoutes(ctx) {
         const all = orders();
         let list = all.filter(o => f === 'ALL'
           || (f === 'OPEN' && OPEN_STATUSES.includes(o.status))
-          || (f === 'FAR' && OPEN_STATUSES.includes(o.status) && o.location.status !== 'OK' && !o.locationVerifiedAt)
+          || (f === 'FAR' && needsCheck(o))
           || o.status === f);
         if (q) {
           const digits = q.replace(/\D/g, '');
@@ -311,7 +333,7 @@ function createCodRoutes(ctx) {
         }
         const counts = { OPEN: all.filter(o => OPEN_STATUSES.includes(o.status)).length };
         STATUSES.forEach(st => { counts[st] = all.filter(o => o.status === st).length; });
-        counts.FAR = all.filter(o => OPEN_STATUSES.includes(o.status) && o.location.status !== 'OK' && !o.locationVerifiedAt).length;
+        counts.FAR = all.filter(needsCheck).length;
         send(res, 200, { status: 'SUCCESS', counts, orders: list.slice(-300).reverse().map(publicOrderForAdmin) });
         return true;
       }
@@ -324,6 +346,8 @@ function createCodRoutes(ctx) {
         if (!STATUSES.includes(next)) return fail(res, 400, 'BAD_STATUS', 'সঠিক অবস্থা বাছাই করুন।');
         if (o.redeemedAt && next === 'CANCELLED') return fail(res, 409, 'REDEEMED', 'কোড ইতিমধ্যে ব্যবহার হয়েছে, এই অর্ডার বাতিল করা যাবে না।');
         o.status = next;
+        // Confirmed by the admin (WhatsApp message / call) = the number is real
+        if (next === 'CONFIRMED' && !o.phoneVerifiedAt) o.phoneVerifiedAt = new Date().toISOString();
         o.history.push({ at: new Date().toISOString(), status: next, by: 'admin', noteBn: String(body.noteBn || '').slice(0, 300) });
         if (body.noteBn) o.adminNoteBn = String(body.noteBn).slice(0, 300);
         await saveNow();
@@ -336,6 +360,7 @@ function createCodRoutes(ctx) {
         const o = orders().find(x => x.id === m[1]);
         if (!o) return fail(res, 404, 'NOT_FOUND', 'অর্ডার পাওয়া যায়নি।');
         o.locationVerifiedAt = new Date().toISOString();
+        if (!o.phoneVerifiedAt) o.phoneVerifiedAt = o.locationVerifiedAt;
         o.history.push({ at: o.locationVerifiedAt, status: o.status, by: 'admin', noteBn: 'ফোনে ঠিকানা যাচাই করা হয়েছে' });
         await saveNow();
         send(res, 200, { status: 'SUCCESS', order: publicOrderForAdmin(o) });
@@ -375,6 +400,14 @@ function createCodRoutes(ctx) {
       st.codFarKm = km;
     }
     if (body.codEnabled !== undefined) st.codEnabled = Boolean(body.codEnabled);
+    if (body.codWhatsapp !== undefined) {
+      let w = String(body.codWhatsapp).replace(/\D/g, '');
+      if (/^01[3-9]\d{8}$/.test(w)) w = `88${w}`;
+      // Japanese numbers typed as +81 090... : the 0 after the country code is dropped
+      if (/^810[789]0\d{8}$/.test(w)) w = `81${w.slice(3)}`;
+      if (w && !/^\d{8,15}$/.test(w)) return 'WhatsApp নম্বর দেশের কোডসহ দিন (যেমন 8801711XXXXXX বা 8190XXXXXXXX)।';
+      st.codWhatsapp = w;
+    }
     return null;
   }
 

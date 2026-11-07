@@ -525,7 +525,7 @@
     const b = modal(`
       <h3>🚚 ক্যাশ অন ডেলিভারি অর্ডার</h3>
       <div class="acc-sub">প্রশ্নসেট হাতে পেয়ে টাকা দেবেন। প্যাকেটের ভেতরে একটি অ্যাক্সেস কোড থাকবে, সেটি ওয়েবসাইটে দিলেই অনলাইনে সব সেট খুলে যাবে।</div>
-      ${cfg.otpReady ? '' : '<div class="acc-warn">OTP পাঠানোর ব্যবস্থা এখনো চালু হয়নি, তাই এই মুহূর্তে অর্ডার নেওয়া যাচ্ছে না। একটু পরে চেষ্টা করুন।</div>'}
+      ${cfg.otpReady || cfg.noOtp ? '' : '<div class="acc-warn">OTP পাঠানোর ব্যবস্থা এখনো চালু হয়নি, তাই এই মুহূর্তে অর্ডার নেওয়া যাচ্ছে না। একটু পরে চেষ্টা করুন।</div>'}
       <form class="acc-cod">
         <div class="acc-plans">${plans.map(p => `
           <label class="acc-plan ${p.id === sel.id ? 'on' : ''}"><input type="radio" name="planId" value="${esc(p.id)}" ${p.id === sel.id ? 'checked' : ''}>
@@ -534,8 +534,9 @@
         <label class="acc-field">আপনার নাম<input name="name" autocomplete="name" maxlength="80" required value="${esc(me ? me.name : '')}"></label>
         <div class="acc-row">
           <label class="acc-field">মোবাইল নম্বর<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX" required value="${esc(me ? me.phone : '')}"></label>
-          <button type="button" class="acc-btn ghost" data-act="otp">OTP পাঠান</button>
+          ${cfg.noOtp ? '' : '<button type="button" class="acc-btn ghost" data-act="otp">OTP পাঠান</button>'}
         </div>
+        ${cfg.noOtp ? '<div class="acc-sub" style="margin:0 0 8px">📲 অর্ডারের পর WhatsApp এ একটি মেসেজ দিয়ে অর্ডারটি নিশ্চিত করবেন।</div>' : ''}
         <label class="acc-field" data-otp hidden>SMS এ আসা ৬ সংখ্যার OTP<input name="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"></label>
         <label class="acc-field">জেলা<select name="districtId" required><option value="">জেলা বাছাই করুন</option>${cfg.districts.map(d => `<option value="${esc(d.id)}">${esc(d.nameBn)}</option>`).join('')}</select></label>
         <label class="acc-field">থানা / উপজেলা<input name="area" maxlength="100" required></label>
@@ -544,7 +545,7 @@
         <div class="acc-sum"></div>
         <div class="acc-sub" style="margin:0 0 8px">📍 অর্ডার নিশ্চিত করার সময় আপনার বর্তমান লোকেশন চাওয়া হবে। এটি শুধু ঠিকানা যাচাইয়ে ব্যবহার হয়, যাতে ভুয়া অর্ডার না হয়।</div>
         <div class="acc-err"></div>
-        <button class="acc-btn" type="submit" ${cfg.otpReady ? '' : 'disabled'}>✅ অর্ডার নিশ্চিত করুন</button>
+        <button class="acc-btn" type="submit" ${cfg.otpReady || cfg.noOtp ? '' : 'disabled'}>✅ অর্ডার নিশ্চিত করুন</button>
       </form>`);
     const form = b.querySelector('form');
     const err = form.querySelector('.acc-err');
@@ -562,7 +563,7 @@
 
     const otpBtn = form.querySelector('[data-act=otp]');
     let otpTimer = null;
-    otpBtn.addEventListener('click', async () => {
+    if (otpBtn) otpBtn.addEventListener('click', async () => {
       err.textContent = '';
       otpBtn.disabled = true;
       try {
@@ -586,7 +587,7 @@
     form.addEventListener('submit', async ev => {
       ev.preventDefault();
       err.textContent = '';
-      if (form.querySelector('[data-otp]').hidden) {
+      if (!cfg.noOtp && form.querySelector('[data-otp]').hidden) {
         err.textContent = 'আগে "OTP পাঠান" চাপুন, তারপর SMS এর কোডটি দিন।';
         return;
       }
@@ -606,7 +607,8 @@
         const o = data.order;
         const done = modal(`<h3>🎉 অর্ডার নেওয়া হয়েছে</h3>
           <div class="acc-ok">অর্ডার নম্বর <b>${esc(o.orderNo)}</b> • ${esc(o.planNameBn)} • প্রশ্নসেট হাতে পেয়ে দেবেন <b>৳${bn(o.total)}</b></div>
-          <p>আমরা শিগগির ফোন করে অর্ডার নিশ্চিত করব।</p>
+          ${data.whatsappUrl ? `<p><b>শেষ ধাপ:</b> নিচের বাটনে চাপ দিয়ে WhatsApp এ মেসেজটি পাঠান, তাহলেই অর্ডার নিশ্চিত হবে।</p>
+          <a class="acc-btn" style="display:block;text-align:center;background:#25d366;text-decoration:none" href="${esc(data.whatsappUrl)}" target="_blank" rel="noopener">📲 WhatsApp এ অর্ডার নিশ্চিত করুন</a>` : '<p>আমরা শিগগির ফোন করে অর্ডার নিশ্চিত করব।</p>'}
           <div class="acc-warn">🔑 <b>আপনার অ্যাক্সেস কোড প্রশ্নসেটের সাথে প্যাকেটে আসবে।</b> প্রশ্নসেট হাতে পেলে এই ওয়েবসাইটে লগইন করে "কোড দিন" এ কোডটি লিখুন, সাথে সাথে অনলাইনে সব সেট খুলে যাবে।</div>
           <button type="button" class="acc-btn" data-act="redeem">কোড দেওয়ার জায়গা দেখুন</button>
           <button type="button" class="acc-btn ghost acc-x" style="position:static">ঠিক আছে</button>`);

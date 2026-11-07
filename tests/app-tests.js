@@ -95,7 +95,7 @@ function freePort() {
   });
 }
 
-async function startServer() {
+async function startServer(extraEnv = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'sh-test-'));
   const port = await freePort();
   const env = {
@@ -107,7 +107,8 @@ async function startServer() {
     REPORTS_DATA_FILE: path.join(dir, 'reports.json'),
     PROGRESS_DATA_DIR: path.join(dir, 'progress'),
     // OTP codes are written to the server log instead of being sent by SMS
-    SMS_PROVIDER: 'console'
+    SMS_PROVIDER: 'console',
+    ...extraEnv
   };
   delete env.DATABASE_URL;
   const child = spawn(process.execPath, [path.join(__dirname, '..', 'src', 'web', 'server.js')], { env, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -355,9 +356,48 @@ async function serverTests() {
   }
 }
 
+// No SMS company set: orders are taken without OTP and confirmed on WhatsApp
+async function noOtpTests() {
+  const { base, child, dir } = await startServer({ SMS_PROVIDER: '' });
+  const call = async (method, url, { body, admin } = {}) => {
+    const res = await fetch(base + url, {
+      method,
+      headers: { 'Content-Type': 'application/json', ...(admin ? { 'X-Admin-Key': admin } : {}) },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    return { status: res.status, json: await res.json().catch(() => null) };
+  };
+  try {
+    await test('without SMS, orders skip OTP and are confirmed on WhatsApp', async () => {
+      const set = await call('POST', '/api/admin/accounts/settings', { admin: 'test-admin-key', body: { codWhatsapp: '+81 090 9726 1452' } });
+      assert.equal(set.status, 200, JSON.stringify(set.json));
+      const cfg = (await call('GET', '/api/cod/config')).json;
+      assert.equal(cfg.otpReady, false);
+      assert.equal(cfg.noOtp, true);
+      const plan = cfg.plans[0];
+      const ok = await call('POST', '/api/cod/order', { body: { planId: plan.id, name: 'Rahim', phone: '01955555555', districtId: 'dhaka', area: 'Mirpur', address: 'House 1', geo: { lat: 23.81, lng: 90.41, accuracy: 30 } } });
+      assert.equal(ok.status, 200, JSON.stringify(ok.json));
+      assert.ok(ok.json.whatsappUrl.startsWith('https://wa.me/819097261452?text='), ok.json.whatsappUrl);
+      const pending = await call('GET', '/api/admin/accounts/orders?status=FAR', { admin: 'test-admin-key' });
+      const o = pending.json.orders.find(x => x.id === ok.json.order.id);
+      assert.ok(o && !o.phoneVerifiedAt && o.verifyBy === 'WHATSAPP');
+      assert.equal((await call('POST', `/api/admin/accounts/orders/${o.id}/location-ok`, { admin: 'test-admin-key', body: {} })).status, 200);
+      const after = await call('GET', '/api/admin/accounts/orders?status=FAR', { admin: 'test-admin-key' });
+      assert.ok(!after.json.orders.some(x => x.id === o.id));
+      // Without a WhatsApp number either, orders stay closed
+      await call('POST', '/api/admin/accounts/settings', { admin: 'test-admin-key', body: { codWhatsapp: '' } });
+      assert.equal((await call('GET', '/api/cod/config')).json.noOtp, false);
+    });
+  } finally {
+    child.kill();
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
 (async () => {
   await coreTests();
   await serverTests();
+  await noOtpTests();
   const failed = results.filter(ok => !ok).length;
   console.log(`\n${results.length - failed}/${results.length} app tests passed`);
   if (failed) process.exit(1);
