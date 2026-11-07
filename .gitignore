@@ -23,3 +23,8 @@ data/
 *.aab
 _android_import.tgz
 _sync_for_github.tgz
+
+# Server auto-update (deploy/oracle/auto-update.sh)
+auto-update.log
+.auto-update.lock
+.auto-update.bad

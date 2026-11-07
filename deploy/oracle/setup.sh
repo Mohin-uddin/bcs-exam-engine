@@ -75,6 +75,12 @@ pm2 save >/dev/null
 for _ in $(seq 1 20); do curl -fs -o /dev/null "http://127.0.0.1:$PORT/" && break; sleep 1; done
 curl -fs -o /dev/null "http://127.0.0.1:$PORT/" && echo "app answers on 127.0.0.1:$PORT" || { warn "App did not start. See: pm2 logs sonarhorin"; exit 1; }
 
+say "Auto-update: merged changes on GitHub go live within 2 minutes"
+chmod +x deploy/oracle/auto-update.sh
+CRON_LINE="*/2 * * * * PATH=$PATH bash $APP_DIR/deploy/oracle/auto-update.sh >/dev/null 2>&1"
+( crontab -l 2>/dev/null | grep -v 'deploy/oracle/auto-update.sh' ; echo "$CRON_LINE" ) | crontab -
+echo "cron installed (log: $APP_DIR/auto-update.log)"
+
 say "5/6 Nginx site for $DOMAIN"
 # Our own file only (sites-available/sonarhorin), rewritten on every run so it always matches
 # the domain and the certificate. Certbot only fetches certificates; it never edits nginx here.

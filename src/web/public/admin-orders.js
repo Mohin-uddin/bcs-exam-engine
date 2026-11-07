@@ -59,6 +59,34 @@
           <tbody id="ordRows"></tbody>
         </table>
       </div>
+      <details style="margin-top:14px" id="smsBox">
+        <summary style="cursor:pointer;font-weight:700">📱 OTP SMS সেটিংস <span id="smsBadge"></span></summary>
+        <form id="smsForm" style="margin-top:10px">
+          <label class="field">কোন মাধ্যমে OTP যাবে
+            <select id="smsProvider">
+              <option value="">— বন্ধ —</option>
+              <option value="greenweb">GreenWeb (greenweb.com.bd) — ৳০.৩০-০.৩৬ / SMS</option>
+              <option value="bulksmsbd">BulkSMSBD (bulksmsbd.net) — ৳০.২৮-০.৩৫ / SMS</option>
+              <option value="smsnetbd">Alpha SMS (sms.net.bd)</option>
+              <option value="android">নিজের Android ফোন + সিম (SMS Gateway অ্যাপ, প্রায় ফ্রি)</option>
+            </select>
+          </label>
+          <div id="smsHelp" style="font-size:14px;color:#334155;margin:4px 0 10px"></div>
+          <div class="row2" data-sms="android">
+            <label class="field">Username (অ্যাপ থেকে)<input id="smsUser" autocomplete="off" maxlength="100"></label>
+            <label class="field">Password (অ্যাপ থেকে)<input id="smsPass" type="password" autocomplete="new-password" maxlength="200"></label>
+          </div>
+          <div class="row2" data-sms="greenweb bulksmsbd smsnetbd">
+            <label class="field">API Key / Token (কোম্পানির ড্যাশবোর্ড থেকে)<input id="smsKey" type="password" autocomplete="new-password" maxlength="300"></label>
+            <label class="field" data-sms="bulksmsbd smsnetbd">Sender ID<input id="smsSender" autocomplete="off" maxlength="30" placeholder="BulkSMSBD তে বাধ্যতামূলক"></label>
+          </div>
+          <button class="btn primary" type="submit">সংরক্ষণ</button>
+        </form>
+        <form id="smsTestForm" class="row2" style="margin-top:6px">
+          <label class="field">টেস্ট SMS কোন নম্বরে যাবে<input id="smsTestPhone" type="tel" inputmode="numeric" placeholder="01XXXXXXXXX"></label>
+          <div class="field" style="justify-content:flex-end"><button class="btn ghost" type="submit">📨 টেস্ট SMS পাঠান</button></div>
+        </form>
+      </details>
       <details style="margin-top:14px">
         <summary style="cursor:pointer;font-weight:700">⚙️ ক্যাশ অন ডেলিভারি সেটিংস (দাম, ডেলিভারি চার্জ)</summary>
         <form id="codSettingsForm" style="margin-top:10px">
@@ -84,6 +112,28 @@
     section.addEventListener('click', onClick);
     $('ordSearchForm').addEventListener('submit', ev => { ev.preventDefault(); load(); });
     $('codSettingsForm').addEventListener('submit', saveSettings);
+    $('smsForm').addEventListener('submit', async ev => {
+      ev.preventDefault();
+      try {
+        const { sms } = await api('/api/admin/accounts/sms', {
+          provider: $('smsProvider').value, user: $('smsUser').value, password: $('smsPass').value,
+          apiKey: $('smsKey').value, senderId: $('smsSender').value
+        });
+        $('smsPass').value = '';
+        $('smsKey').value = '';
+        delete $('smsProvider').dataset.touched;
+        showSms(sms);
+        toast(sms && sms.ready ? 'SMS সেটিংস সংরক্ষণ হয়েছে। এখন টেস্ট SMS পাঠিয়ে দেখুন।' : 'SMS সেটিংস মুছে ফেলা হয়েছে।');
+      } catch (e) { toast(e.message); }
+    });
+    $('smsProvider').addEventListener('change', () => { $('smsProvider').dataset.touched = '1'; showSmsFields(); });
+    $('smsTestForm').addEventListener('submit', async ev => {
+      ev.preventDefault();
+      try {
+        await api('/api/admin/accounts/sms-test', { phone: $('smsTestPhone').value });
+        toast('SMS ফোনের অ্যাপে পাঠানো হয়েছে। কয়েক সেকেন্ডের মধ্যে আসার কথা।');
+      } catch (e) { toast(e.message); }
+    });
   }
 
   function locationCell(o) {
@@ -209,13 +259,45 @@
           </div>
           <label class="field">কী কী পাবে (ইউজার দেখবে)<input data-cfeat value="${esc(p.featuresBn || '')}" maxlength="200"></label>
         </fieldset>`).join('');
-      const sms = data.sms;
-      $('codSmsInfo').innerHTML = sms && sms.ready
-        ? `✅ OTP SMS চালু: <b>${esc(sms.provider)}</b>`
-        : `⚠️ OTP SMS চালু নেই${sms && sms.error ? ` (${esc(sms.error)})` : ''}। সার্ভারে SMS_PROVIDER ও SMS_API_KEY সেট না করা পর্যন্ত ইউজার অর্ডার দিতে পারবে না।`;
+      showSms(data.sms);
     } catch (e) {
       toast(e.message);
     }
+  }
+
+
+  const SMS_HELP = {
+    '': 'OTP বন্ধ থাকলে কেউ ক্যাশ অন ডেলিভারি অর্ডার দিতে পারবে না।',
+    greenweb: '<ol style="margin:0 0 0 18px;padding:0"><li><a href="https://greenweb.com.bd" target="_blank" rel="noopener">greenweb.com.bd</a> এ অ্যাকাউন্ট খুলে Non-Masking SMS কিনুন (২৫০টি ≈ ৳৯০)।</li><li>ড্যাশবোর্ডের <b>API / Token</b> অংশ থেকে Token কপি করে নিচে দিন।</li><li>সংরক্ষণ করে নিজের নম্বরে টেস্ট SMS পাঠান।</li></ol>',
+    bulksmsbd: '<ol style="margin:0 0 0 18px;padding:0"><li><a href="https://bulksmsbd.net" target="_blank" rel="noopener">bulksmsbd.net</a> এ অ্যাকাউন্ট খুলে SMS কিনুন।</li><li>ড্যাশবোর্ড থেকে <b>API Key</b> আর <b>Sender ID</b> কপি করে নিচে দিন।</li><li>সংরক্ষণ করে টেস্ট SMS পাঠান।</li></ol>',
+    smsnetbd: '<ol style="margin:0 0 0 18px;padding:0"><li><a href="https://sms.net.bd" target="_blank" rel="noopener">sms.net.bd</a> এ অ্যাকাউন্ট খুলে রিচার্জ করুন।</li><li>ড্যাশবোর্ড থেকে <b>API Key</b> কপি করে নিচে দিন (Sender ID ঐচ্ছিক)।</li><li>সংরক্ষণ করে টেস্ট SMS পাঠান।</li></ol>',
+    android: '<ol style="margin:0 0 0 18px;padding:0"><li>যে ফোনের সিম থেকে OTP যাবে, তাতে <a href="https://sms-gate.app" target="_blank" rel="noopener"><b>SMS Gateway for Android</b></a> অ্যাপ ইনস্টল করুন।</li><li>অ্যাপে SMS এর অনুমতি দিন, <b>Cloud server</b> চালু করে উপরের <b>Online</b> সুইচ চালু করুন।</li><li>অ্যাপে দেখানো <b>Username</b> ও <b>Password</b> নিচে দিন, সংরক্ষণ করে টেস্ট SMS পাঠান।</li></ol><small>ফোনটি সবসময় চালু, চার্জে ও ইন্টারনেটে রাখুন; ব্যাটারি সেভার থেকে অ্যাপটি বাদ দিন। সিমে SMS প্যাক থাকলে খরচ খুব কম। দিনে অনেক SMS গেলে অপারেটর সিম আটকে দিতে পারে।</small>'
+  };
+  function showSmsFields() {
+    const p = $('smsProvider').value;
+    $('smsHelp').innerHTML = SMS_HELP[p] || '';
+    document.querySelectorAll('[data-sms]').forEach(el => { el.hidden = !p || !el.dataset.sms.split(' ').includes(p); });
+  }
+  function showSms(sms) {
+    const ready = sms && sms.ready;
+    const NAMES = { android: 'নিজের ফোন (SMS Gateway অ্যাপ)', greenweb: 'GreenWeb', bulksmsbd: 'BulkSMSBD', smsnetbd: 'Alpha SMS (sms.net.bd)' };
+    const name = sms ? NAMES[sms.provider] || sms.provider : '';
+    $('codSmsInfo').innerHTML = ready
+      ? `✅ OTP SMS চালু: <b>${esc(name)}</b>`
+      : `⚠️ OTP SMS চালু নেই${sms && sms.error ? ` (${esc(sms.error)})` : ''}। উপরের "📱 OTP SMS সেটিংস" থেকে চালু করুন, না হলে কেউ অর্ডার দিতে পারবে না।`;
+    $('smsBadge').innerHTML = ready ? '<span class="badge" style="background:#dcfce7;color:#166534">চালু</span>' : '<span class="badge" style="background:#fee2e2;color:#991b1b">বন্ধ</span>';
+    const envSet = sms && !sms.fromAdmin;
+    if (!$('smsProvider').dataset.touched) {
+      $('smsProvider').value = sms ? sms.provider : '';
+      $('smsUser').value = (sms && sms.user) || '';
+      $('smsSender').value = (sms && sms.senderId) || '';
+    }
+    $('smsPass').placeholder = sms && sms.hasPassword ? 'সংরক্ষিত আছে (বদলাতে নতুন দিন)' : '';
+    $('smsKey').placeholder = sms && sms.hasApiKey ? 'সংরক্ষিত আছে (বদলাতে নতুন দিন)' : '';
+    showSmsFields();
+    if (!ready) $('smsBox').open = true;
+    $('smsForm').querySelectorAll('input,select,button').forEach(el => { el.disabled = envSet; });
+    if (envSet) $('smsHelp').innerHTML = 'সার্ভারের .env ফাইলে SMS_PROVIDER দেওয়া আছে, তাই এখান থেকে বদলানো যাবে না।';
   }
 
   async function saveSettings(ev) {

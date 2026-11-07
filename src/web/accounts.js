@@ -26,7 +26,7 @@ const crypto = require('node:crypto');
 const zlib = require('node:zlib');
 const gateways = require('./payment-gateways');
 const { createCodRoutes, DEFAULT_COD_SETTINGS } = require('./cod-orders');
-const { smsConfig } = require('./sms');
+const sms = require('./sms');
 const { isAdmin } = require('./admin-auth');
 
 const DATA_FILE = process.env.ACCOUNTS_DATA_FILE || path.join(__dirname, '..', '..', 'data', 'accounts.json');
@@ -74,6 +74,8 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
   function normalizeState(s) {
     const out = s && typeof s === 'object' ? s : {};
     for (const k of ['users', 'sessions', 'payments', 'orders']) if (!Array.isArray(out[k])) out[k] = [];
+    // Android SMS Gateway login typed in /admin (kept out of settings so it is never sent back)
+    if (!out.smsGateway || typeof out.smsGateway !== 'object') out.smsGateway = { provider: '' };
     out.settings = { ...DEFAULT_SETTINGS, ...(out.settings || {}) };
     // Plans saved before printed packs existed: 6 months or longer come with the pack
     out.settings.plans = out.settings.plans.map(p => ({ ...p, printPack: p.printPack !== undefined ? Boolean(p.printPack) : p.days >= 180 }));
@@ -489,9 +491,21 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     };
   }
 
+  const smsConfig = () => sms.smsConfig(state.smsGateway);
+  function smsStatus() {
+    const c = smsConfig();
+    const g = state.smsGateway || {};
+    return c ? {
+      provider: c.provider, ready: !c.error, error: c.error || null, fromAdmin: Boolean(c.fromAdmin),
+      // Saved values for the form; secrets only as "set / not set"
+      user: c.fromAdmin ? g.user || '' : '', senderId: c.fromAdmin ? g.senderId || '' : '',
+      hasPassword: Boolean(c.fromAdmin && g.password), hasApiKey: Boolean(c.fromAdmin && g.apiKey)
+    } : null;
+  }
+
   const cod = createCodRoutes({
     state: () => state, saveNow, send, fail, normalizePhone, applyPlan, publicUser,
-    clientIp, tooManyAttempts, noteAttempt, newId
+    clientIp, tooManyAttempts, noteAttempt, newId, smsConfig
   });
 
   // ---------------------------------------------------------------------------
@@ -862,12 +876,50 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
         return true;
       }
 
+      // Android SMS Gateway app login (cheapest OTP: your own phone + SIM), set from /admin
+      if (pathname === '/api/admin/accounts/sms' && method === 'POST') {
+        const provider = String(body.provider || '').trim().toLowerCase();
+        if (!provider) {
+          state.smsGateway = { provider: '' };
+        } else {
+          if (!sms.PROVIDERS.includes(provider)) return fail(res, 400, 'BAD_SMS', 'SMS কোম্পানি বাছাই করুন।');
+          const prev = state.smsGateway && state.smsGateway.provider === provider ? state.smsGateway : {};
+          // Empty secret field = keep the saved one (it is never sent back to the browser)
+          const next = {
+            provider,
+            user: String(body.user || '').trim().slice(0, 100),
+            password: String(body.password || '').trim().slice(0, 200) || prev.password || '',
+            apiKey: String(body.apiKey || '').trim().slice(0, 300) || prev.apiKey || '',
+            senderId: String(body.senderId || '').trim().slice(0, 30)
+          };
+          const check = sms.smsConfig(next);
+          if (check.error) return fail(res, 400, 'BAD_SMS', `SMS সেটিংস অসম্পূর্ণ: ${check.error}`);
+          state.smsGateway = next;
+        }
+        await saveNow();
+        send(res, 200, { status: 'SUCCESS', sms: smsStatus() });
+        return true;
+      }
+
+      if (pathname === '/api/admin/accounts/sms-test' && method === 'POST') {
+        const phone = normalizePhone(body.phone);
+        if (!phone) return fail(res, 400, 'BAD_PHONE', 'সঠিক মোবাইল নম্বর দিন।');
+        const cfg = smsConfig();
+        if (!cfg || cfg.error) return fail(res, 400, 'SMS_OFF', 'আগে SMS সেটিংস দিন।');
+        try {
+          await sms.sendSms(cfg, phone, 'Sonar Horin: test SMS. OTP thik moto jacche.');
+        } catch (e) {
+          return fail(res, 502, 'SMS_FAIL', `SMS যায়নি: ${e.message}`);
+        }
+        send(res, 200, { status: 'SUCCESS' });
+        return true;
+      }
+
       if (pathname === '/api/admin/accounts/settings' && method === 'GET') {
         const gw = gateways.gatewayConfig();
-        const sms = smsConfig();
         send(res, 200, {
           status: 'SUCCESS', settings: state.settings, lockedCount: lockedExamIds.size, totalExams: exams.length,
-          sms: sms ? { provider: sms.provider, ready: !sms.error, error: sms.error || null } : null,
+          sms: smsStatus(),
           gateway: gw ? { provider: gw.provider, sandbox: gw.sandbox, error: gw.error || null } : null
         });
         return true;
