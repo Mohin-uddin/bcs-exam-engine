@@ -513,13 +513,18 @@
       navigator.geolocation.getCurrentPosition(
         p => resolveGeo({ geo: { lat: p.coords.latitude, lng: p.coords.longitude, accuracy: p.coords.accuracy } }),
         e => resolveGeo({ error: e.code === 1 ? 'অনুমতি দেয়নি' : 'লোকেশন পাওয়া যায়নি' }),
-        { enableHighAccuracy: false, timeout: 12000, maximumAge: 300000 }
+        { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
       );
     });
   }
 
+  // The last order's name / phone / address are kept on this device, so a second order is one tap
+  const COD_SAVE_KEY = 'sh_cod_last_v1';
+  const lastCod = () => { try { return JSON.parse(localStorage.getItem(COD_SAVE_KEY)) || {}; } catch { return {}; } };
+
   async function openCodOrder(planId) {
     const cfg = await loadCod();
+    const last = lastCod();
     const plans = cfg.plans || [];
     const sel = plans.find(p => p.id === planId) || plans[plans.length - 1];
     const b = modal(`
@@ -531,16 +536,16 @@
           <label class="acc-plan ${p.id === sel.id ? 'on' : ''}"><input type="radio" name="planId" value="${esc(p.id)}" ${p.id === sel.id ? 'checked' : ''}>
             ${esc(p.nameBn)}<b>৳${bn(p.price)}</b></label>`).join('')}
         </div>
-        <label class="acc-field">আপনার নাম<input name="name" autocomplete="name" maxlength="80" required value="${esc(me ? me.name : '')}"></label>
+        <label class="acc-field">আপনার নাম<input name="name" autocomplete="name" maxlength="80" required value="${esc(last.name || (me ? me.name : ''))}"></label>
         <div class="acc-row">
-          <label class="acc-field">মোবাইল নম্বর<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX" required value="${esc(me ? me.phone : '')}"></label>
+          <label class="acc-field">মোবাইল নম্বর<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX" required value="${esc(last.phone || (me ? me.phone : ''))}"></label>
           ${cfg.noOtp ? '' : '<button type="button" class="acc-btn ghost" data-act="otp">OTP পাঠান</button>'}
         </div>
         ${cfg.noOtp ? '<div class="acc-sub" style="margin:0 0 8px">📲 অর্ডারের পর WhatsApp এ একটি মেসেজ দিয়ে অর্ডারটি নিশ্চিত করবেন।</div>' : ''}
         <label class="acc-field" data-otp hidden>SMS এ আসা ৬ সংখ্যার OTP<input name="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"></label>
-        <label class="acc-field">জেলা<select name="districtId" required><option value="">জেলা বাছাই করুন</option>${cfg.districts.map(d => `<option value="${esc(d.id)}">${esc(d.nameBn)}</option>`).join('')}</select></label>
-        <label class="acc-field">থানা / উপজেলা<input name="area" maxlength="100" required></label>
-        <label class="acc-field">পুরো ঠিকানা (বাসা / গ্রাম / রোড)<input name="address" maxlength="300" required></label>
+        <label class="acc-field">জেলা<select name="districtId" required><option value="">জেলা বাছাই করুন</option>${cfg.districts.map(d => `<option value="${esc(d.id)}" ${d.id === last.districtId ? 'selected' : ''}>${esc(d.nameBn)}</option>`).join('')}</select></label>
+        <label class="acc-field">থানা / উপজেলা<input name="area" maxlength="100" required value="${esc(last.area || '')}"></label>
+        <label class="acc-field">পুরো ঠিকানা (বাসা / গ্রাম / রোড)<input name="address" maxlength="300" required value="${esc(last.address || '')}"></label>
         <label class="acc-field">নোট (ঐচ্ছিক)<input name="note" maxlength="300" placeholder="যেমন: বিকেলে ফোন দেবেন"></label>
         <div class="acc-sum"></div>
         <div class="acc-sub" style="margin:0 0 8px">📍 অর্ডার নিশ্চিত করার সময় আপনার বর্তমান লোকেশন চাওয়া হবে। এটি শুধু ঠিকানা যাচাইয়ে ব্যবহার হয়, যাতে ভুয়া অর্ডার না হয়।</div>
@@ -604,10 +609,15 @@
           geo: loc.geo || null, geoError: loc.error || ''
         });
         clearInterval(otpTimer);
+        try {
+          localStorage.setItem(COD_SAVE_KEY, JSON.stringify({
+            name: form.name.value, phone: form.phone.value, districtId: form.districtId.value, area: form.area.value, address: form.address.value
+          }));
+        } catch { /* private mode */ }
         const o = data.order;
         const done = modal(`<h3>🎉 অর্ডার নেওয়া হয়েছে</h3>
           <div class="acc-ok">অর্ডার নম্বর <b>${esc(o.orderNo)}</b> • ${esc(o.planNameBn)} • প্রশ্নসেট হাতে পেয়ে দেবেন <b>৳${bn(o.total)}</b></div>
-          ${data.whatsappUrl ? `<p><b>শেষ ধাপ:</b> নিচের বাটনে চাপ দিয়ে WhatsApp এ মেসেজটি পাঠান, তাহলেই অর্ডার নিশ্চিত হবে।</p>
+          ${data.whatsappUrl ? `<p>আপনার অর্ডার জমা হয়ে গেছে। দ্রুত পাঠাতে চাইলে নিচের বাটনে চাপ দিন, মেসেজ লেখাই থাকবে, শুধু "Send" চাপবেন। না পাঠালেও সমস্যা নেই, আমরা ফোন করে নেব।</p>
           <a class="acc-btn" style="display:block;text-align:center;background:#25d366;text-decoration:none" href="${esc(data.whatsappUrl)}" target="_blank" rel="noopener">📲 WhatsApp এ অর্ডার নিশ্চিত করুন</a>` : '<p>আমরা শিগগির ফোন করে অর্ডার নিশ্চিত করব।</p>'}
           <div class="acc-warn">🔑 <b>আপনার অ্যাক্সেস কোড প্রশ্নসেটের সাথে প্যাকেটে আসবে।</b> প্রশ্নসেট হাতে পেলে এই ওয়েবসাইটে লগইন করে "কোড দিন" এ কোডটি লিখুন, সাথে সাথে অনলাইনে সব সেট খুলে যাবে।</div>
           <button type="button" class="acc-btn" data-act="redeem">কোড দেওয়ার জায়গা দেখুন</button>
