@@ -16,7 +16,7 @@
  */
 
 const crypto = require('node:crypto');
-const { smsConfig, sendSms } = require('./sms');
+const { sendSms } = require('./sms');
 const { DISTRICTS, districtById, distanceKm, inBangladesh } = require('./bd-districts');
 
 const OTP_TTL = 5 * 60000;
@@ -45,7 +45,7 @@ const DEFAULT_COD_SETTINGS = {
 };
 
 function createCodRoutes(ctx) {
-  const { state, saveNow, send, fail, normalizePhone, applyPlan, publicUser, clientIp, tooManyAttempts, noteAttempt, newId } = ctx;
+  const { state, saveNow, send, fail, normalizePhone, applyPlan, publicUser, clientIp, tooManyAttempts, noteAttempt, newId, smsConfig } = ctx;
   const otps = new Map(); // phone -> { hash, expiresAt, sentAt, tries }
   setInterval(() => {
     const now = Date.now();
