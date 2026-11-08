@@ -55,6 +55,11 @@
   .acc-pill.premium{background:#fef3c7;border-color:#f59e0b;color:#92400e}
   .acc-pill.guest{background:#006a4e;border-color:#006a4e;color:#fff;font-weight:700;box-shadow:0 0 0 3px rgba(0,106,78,.18)}
   .acc-pill.guest:hover{background:#004d38}
+  .acc-item{background:#ecfdf5;border:1.5px solid #6ee7b7;border-radius:12px;padding:10px 12px;margin-bottom:12px}
+  .acc-item-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;color:#065f46;font-weight:600}
+  .acc-item-text{display:block;font-size:16px;color:#064e3b;margin:4px 0 2px;line-height:1.45}
+  .acc-item-chg{background:none;border:0;color:#047857;font:700 13.5px 'Noto Sans Bengali',sans-serif;text-decoration:underline;cursor:pointer}
+  .acc-item-edit{margin-top:8px}
   @media (max-width:440px){.acc-pill.guest .acc-extra{display:none}}
   .acc-welcome{display:flex;gap:10px;align-items:flex-start;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:13.5px}
   .acc-welcome b{display:block;font-size:15px}
@@ -62,6 +67,7 @@
   .acc-floating{position:fixed;right:14px;bottom:14px;z-index:9000;box-shadow:0 4px 14px rgba(0,0,0,.15)}
   .acc-overlay{position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.55);display:flex;align-items:flex-start;justify-content:center;padding:24px 12px;overflow-y:auto}
   .acc-overlay[hidden]{display:none}
+  .acc-modal [hidden]{display:none!important}
   .acc-modal{background:#fff;color:#0f172a;border-radius:16px;width:100%;max-width:460px;padding:20px;font:400 14px/1.55 'Noto Sans Bengali',system-ui,sans-serif;box-shadow:0 20px 50px rgba(0,0,0,.3);position:relative}
   .acc-modal h3{font-size:18px;font-weight:700;margin:0 0 4px}
   .acc-modal .acc-sub{color:#475569;font-size:13px;margin-bottom:14px}
@@ -479,6 +485,7 @@
   }
 
   async function openPlans(opts = {}) {
+    buyCtx = opts.examId ? ctxFromExam(opts.examId) : null;
     if (!me) return openLogin('প্যাকেজ কিনতে আগে ফ্রি অ্যাকাউন্ট খুলুন বা লগইন করুন।', () => openPlans(opts));
     const exam = opts.examId ? (window.availableExams || []).find(e => e.id === resolve(opts.examId)) : null;
     const box = modal('<h3>আমাদের প্যাকেজ</h3><div class="acc-sub">লোড হচ্ছে...</div>');
@@ -541,14 +548,44 @@
   const COD_SAVE_KEY = 'sh_cod_last_v1';
   const lastCod = () => { try { return JSON.parse(localStorage.getItem(COD_SAVE_KEY)) || {}; } catch { return {}; } };
 
-  // The exam the user prepares for (chosen on the first screen) is pre-selected on the order form
-  function myExam() {
-    const t = window.Study && Study.data && Study.data.settings.track;
-    if (t !== 'ADMISSION') return t || '';
-    let pick = {};
-    try { pick = JSON.parse(localStorage.getItem('admissionPick') || '{}') || {}; } catch { /* storage blocked */ }
-    return /মেডিকেল|ডেন্টাল|AFMC/i.test(String(pick.uni || '')) ? 'ADMISSION_MED' : 'ADMISSION_UNI';
+  // ---- What the order is for ----
+  // Captured where the user decided to buy: the locked set they tapped (exam, university, unit, year),
+  // else their own exam and last chosen university / unit. Shown on the order form, can be changed there.
+  const TRACK_ORDER = { BCS: 'BCS', PRIMARY: 'PRIMARY', NTRCA: 'NTRCA', BANK: 'BANK', MINISTRY: 'MINISTRY', NON_CADRE: 'NON_CADRE', NURSING: 'NURSING' };
+  let buyCtx = null;
+  const shortTitle = t => String(t || '').replace(/^📚\s*/, '').replace(/\s*\(.*?\)\s*$/, '').slice(0, 70);
+  function admCtx(code) {
+    const found = window.AdmPick && code && AdmPick.locate(code);
+    if (!found) return null;
+    const { ent, unit, set } = found;
+    return {
+      exam: ent.type === 'medical' ? 'ADMISSION_MED' : 'ADMISSION_UNI',
+      uniKey: ent.key, uniBn: ent.name,
+      unitKey: ent.units.length > 1 ? unit.key : '', unitBn: ent.units.length > 1 ? unit.label : '',
+      setLabel: set ? AdmPick.yearLabel(set) : ''
+    };
   }
+  function ctxFromExam(examId) {
+    const e = (window.availableExams || []).find(x => x.id === resolve(examId));
+    if (!e) return null;
+    if (e.examTrack === 'ADMISSION') {
+      const c = e.isPastStyle && admCtx(e.id);
+      if (c) return c;
+      return { ...defaultCtx(), setLabel: shortTitle(e.title) };
+    }
+    return TRACK_ORDER[e.examTrack] ? { exam: e.examTrack, setLabel: shortTitle(e.title) } : null;
+  }
+  function defaultCtx() {
+    const t = window.Study && Study.data && Study.data.settings.track;
+    if (t === 'ADMISSION') {
+      const c = window.AdmPick && admCtx(AdmPick.current());
+      if (c) return { ...c, setLabel: '' };
+      return { exam: 'ADMISSION_UNI' };
+    }
+    return { exam: TRACK_ORDER[t] || '' };
+  }
+  const itemText = (c, exams) => [((exams || []).find(x => x.id === c.exam) || {}).nameBn, c.uniBn, c.unitBn, c.setLabel]
+    .filter(Boolean).filter((x, i, arr) => arr.indexOf(x) === i).join(' • ');
 
   async function openCodOrder(planId) {
     if (!me) return openLogin('অর্ডার করতে আগে ফ্রি অ্যাকাউন্ট খুলুন বা লগইন করুন।', () => openCodOrder(planId));
@@ -565,7 +602,15 @@
           <label class="acc-plan ${p.id === sel.id ? 'on' : ''}"><input type="radio" name="planId" value="${esc(p.id)}" ${p.id === sel.id ? 'checked' : ''}>
             ${esc(p.nameBn)}<b>৳${bn(p.price)}</b></label>`).join('')}
         </div>
-        ${(cfg.exams || []).length ? `<label class="acc-field">কোন পরীক্ষার প্রশ্নসেট চান?<select name="exam" required><option value="">পরীক্ষা বাছাই করুন</option>${cfg.exams.map(x => `<option value="${esc(x.id)}" ${x.id === myExam() ? 'selected' : ''}>${esc(x.nameBn)}</option>`).join('')}</select></label>` : ''}
+        ${(cfg.exams || []).length ? `<div class="acc-item">
+          <div class="acc-item-head"><span>📦 আপনার অর্ডারে যা পাঠানো হবে</span><button type="button" class="acc-item-chg" data-act="chg">বদলান</button></div>
+          <b class="acc-item-text"></b>
+          <div class="acc-item-edit" hidden>
+            <label class="acc-field">পরীক্ষা<select name="exam" required><option value="">পরীক্ষা বাছাই করুন</option>${cfg.exams.map(x => `<option value="${esc(x.id)}">${esc(x.nameBn)}</option>`).join('')}</select></label>
+            <label class="acc-field" data-uni hidden>বিশ্ববিদ্যালয় / পরীক্ষা<select name="uni"></select></label>
+            <label class="acc-field" data-unit hidden>বিভাগ / ইউনিট<select name="unit"></select></label>
+          </div>
+        </div>` : ''}
         <label class="acc-field">আপনার নাম<input name="name" autocomplete="name" maxlength="80" required value="${esc(last.name || (me ? me.name : ''))}"></label>
         <div class="acc-row">
           <label class="acc-field">মোবাইল নম্বর<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX" required value="${esc(last.phone || (me ? me.phone : ''))}"></label>
@@ -584,6 +629,43 @@
       </form>`);
     const form = b.querySelector('form');
     const err = form.querySelector('.acc-err');
+    // What the order is for: from where the user decided to buy; "বদলান" opens the same choices, filled in
+    const item = { ...(buyCtx || defaultCtx()) };
+    const box = form.querySelector('.acc-item');
+    function drawItem() {
+      if (!box) return;
+      box.querySelector('.acc-item-text').textContent = itemText(item, cfg.exams) || 'পরীক্ষা বাছাই করুন';
+      form.exam.value = item.exam || '';
+      const adm = /^ADMISSION_/.test(item.exam) && window.AdmPick;
+      const unis = adm ? AdmPick.list(item.exam === 'ADMISSION_MED') : [];
+      box.querySelector('[data-uni]').hidden = !unis.length;
+      form.uni.innerHTML = '<option value="">বাছাই করুন</option>' + unis.map(u => `<option value="${esc(u.key)}" ${u.key === item.uniKey ? 'selected' : ''}>${esc(u.name)}</option>`).join('');
+      const uni = unis.find(u => u.key === item.uniKey);
+      const units = uni ? uni.units : [];
+      box.querySelector('[data-unit]').hidden = !units.length;
+      form.unit.innerHTML = '<option value="">বাছাই করুন</option>' + units.map(u => `<option value="${esc(u.key)}" ${u.key === item.unitKey ? 'selected' : ''}>${esc(u.label)}</option>`).join('');
+    }
+    if (box) {
+      box.querySelector('[data-act=chg]').addEventListener('click', () => {
+        const ed = box.querySelector('.acc-item-edit');
+        ed.hidden = !ed.hidden;
+      });
+      // Changing a choice clears the more specific ones under it (and the year / set seen when buying)
+      form.exam.addEventListener('change', () => { Object.assign(item, { exam: form.exam.value, uniKey: '', uniBn: '', unitKey: '', unitBn: '', setLabel: '' }); drawItem(); });
+      form.uni.addEventListener('change', () => {
+        const u = AdmPick.list(item.exam === 'ADMISSION_MED').find(x => x.key === form.uni.value);
+        Object.assign(item, { uniKey: u ? u.key : '', uniBn: u ? u.name : '', unitKey: '', unitBn: '', setLabel: '' });
+        drawItem();
+      });
+      form.unit.addEventListener('change', () => {
+        const u = AdmPick.list(item.exam === 'ADMISSION_MED').find(x => x.key === item.uniKey);
+        const un = u && u.units.find(x => x.key === form.unit.value);
+        Object.assign(item, { unitKey: un ? un.key : '', unitBn: un ? un.label : '', setLabel: '' });
+        drawItem();
+      });
+      drawItem();
+      if (!item.exam) box.querySelector('.acc-item-edit').hidden = false;
+    }
     function summary() {
       const p = plans.find(x => x.id === (form.querySelector('input[name=planId]:checked') || {}).value) || sel;
       const d = form.districtId.value;
@@ -635,6 +717,7 @@
         const data = await api('/api/cod/order', {
           planId: (form.querySelector('input[name=planId]:checked') || {}).value,
           exam: form.exam ? form.exam.value : '',
+          uniBn: item.uniBn || '', unitBn: item.unitBn || '', setLabel: item.setLabel || '',
           name: form.name.value, phone: form.phone.value, otp: form.otp.value,
           districtId: form.districtId.value, area: form.area.value, address: form.address.value, note: form.note.value,
           geo: loc.geo || null, geoError: loc.error || ''
@@ -647,7 +730,7 @@
         } catch { /* private mode */ }
         const o = data.order;
         const done = modal(`<h3>🎉 অর্ডার নেওয়া হয়েছে</h3>
-          <div class="acc-ok">অর্ডার নম্বর <b>${esc(o.orderNo)}</b> • ${o.examBn ? `${esc(o.examBn)} প্রশ্নসেট • ` : ''}${esc(o.planNameBn)} • প্রশ্নসেট হাতে পেয়ে দেবেন <b>৳${bn(o.total)}</b></div>
+          <div class="acc-ok">অর্ডার নম্বর <b>${esc(o.orderNo)}</b> • ${o.itemBn ? `${esc(o.itemBn)} • ` : ''}${esc(o.planNameBn)} • প্রশ্নসেট হাতে পেয়ে দেবেন <b>৳${bn(o.total)}</b></div>
           ${data.whatsappUrl ? `<p>আপনার অর্ডার জমা হয়ে গেছে। দ্রুত পাঠাতে চাইলে নিচের বাটনে চাপ দিন, মেসেজ লেখাই থাকবে, শুধু "Send" চাপবেন। না পাঠালেও সমস্যা নেই, আমরা ফোন করে নেব।</p>
           <a class="acc-btn" style="display:block;text-align:center;background:#25d366;text-decoration:none" href="${esc(data.whatsappUrl)}" target="_blank" rel="noopener">📲 WhatsApp এ অর্ডার নিশ্চিত করুন</a>` : '<p>আমরা শিগগির ফোন করে অর্ডার নিশ্চিত করব।</p>'}
           <div class="acc-warn">🔑 <b>আপনার অ্যাক্সেস কোড প্রশ্নসেটের সাথে প্যাকেটে আসবে।</b> প্রশ্নসেট হাতে পেলে এই ওয়েবসাইটে লগইন করে "কোড দিন" এ কোডটি লিখুন, সাথে সাথে অনলাইনে সব সেট খুলে যাবে।</div>

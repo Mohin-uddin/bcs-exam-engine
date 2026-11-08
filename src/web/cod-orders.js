@@ -115,7 +115,7 @@ function createCodRoutes(ctx) {
 
   function publicOrderForUser(o) {
     return {
-      id: o.id, orderNo: o.orderNo, planNameBn: o.planNameBn, examBn: o.examBn || '', tier: o.tier, total: o.total,
+      id: o.id, orderNo: o.orderNo, planNameBn: o.planNameBn, itemBn: o.itemBn || '', tier: o.tier, total: o.total,
       status: o.status, createdAt: o.createdAt, redeemed: Boolean(o.redeemedAt)
     };
   }
@@ -133,7 +133,7 @@ function createCodRoutes(ctx) {
   const otpReady = () => { const c = smsConfig(); return Boolean(c && !c.error); };
   // No SMS service but a WhatsApp number: take the order without OTP, confirm on WhatsApp
   const skipOtp = () => !otpReady() && Boolean(s().codWhatsapp);
-  const waLink = o => `https://wa.me/${s().codWhatsapp}?text=${encodeURIComponent(`আসসালামু আলাইকুম, আমার অর্ডার ${o.orderNo} নিশ্চিত করছি। প্রশ্নসেট: ${o.examBn || '-'} (${o.planNameBn})। নাম: ${o.name}, মোবাইল: ${o.phone}`)}`;
+  const waLink = o => `https://wa.me/${s().codWhatsapp}?text=${encodeURIComponent(`আসসালামু আলাইকুম, আমার অর্ডার ${o.orderNo} নিশ্চিত করছি। প্রশ্নসেট: ${o.itemBn || '-'} (${o.planNameBn})। নাম: ${o.name}, মোবাইল: ${o.phone}`)}`;
 
   function publicConfig() {
     const st = s();
@@ -202,6 +202,13 @@ function createCodRoutes(ctx) {
       if (!plan) return fail(res, 400, 'BAD_PLAN', 'প্যাকেজ বাছাই করুন।');
       const exam = Object.prototype.hasOwnProperty.call(ORDER_EXAMS, body.exam) ? body.exam : null;
       if (!exam) return fail(res, 400, 'BAD_EXAM', 'কোন পরীক্ষার প্রশ্নসেট চান, বাছাই করুন।');
+      // What the customer was looking at when they chose to buy (filled in by the page, can be changed there)
+      const clean = v => String(v || '').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 80);
+      const isAdm = exam.startsWith('ADMISSION_');
+      const uniBn = isAdm ? clean(body.uniBn) : '';
+      const unitBn = isAdm ? clean(body.unitBn) : '';
+      const setLabel = clean(body.setLabel);
+      const itemBn = [ORDER_EXAMS[exam], uniBn, unitBn, setLabel].filter(Boolean).filter((x, i, a) => a.indexOf(x) === i).join(' • ');
       if (name.length < 2) return fail(res, 400, 'BAD_NAME', 'আপনার নাম লিখুন।');
       if (!phone) return fail(res, 400, 'BAD_PHONE', 'সঠিক মোবাইল নম্বর দিন।');
       if (!district) return fail(res, 400, 'BAD_DISTRICT', 'জেলা বাছাই করুন।');
@@ -239,8 +246,12 @@ function createCodRoutes(ctx) {
         orderNo: nextOrderNo(),
         planId: plan.id,
         planNameBn: plan.nameBn,
-        exam,
-        examBn: ORDER_EXAMS[exam],
+        examTrack: exam,
+        examTrackBn: ORDER_EXAMS[exam],
+        uniBn,
+        unitBn,
+        setLabel,
+        itemBn,
         tier: plan.tier === 'NORMAL' ? 'NORMAL' : 'PREMIUM',
         days: plan.days,
         price: plan.price,
@@ -340,7 +351,7 @@ function createCodRoutes(ctx) {
           || (f === 'FAR' && needsCheck(o))
           || o.status === f);
         const exam = searchParams.get('exam') || '';
-        if (exam) list = list.filter(o => o.exam === exam);
+        if (exam) list = list.filter(o => o.examTrack === exam);
         if (q) {
           const digits = q.replace(/\D/g, '');
           list = list.filter(o => o.orderNo.includes(q) || o.accessCode.replace('-', '').includes(q.replace(/[^A-Z0-9]/g, '')) || (digits.length >= 4 && o.phone.includes(digits)) || o.name.toUpperCase().includes(q));

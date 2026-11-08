@@ -139,5 +139,12 @@
     if (e) { pick = { uni: e.key }; save(); }
   }
 
-  window.AdmPick = { html, bind, current, isYearSet, locate, preset };
+  // For the order form: universities (medical ones or the rest) with their units
+  function list(medical) {
+    return build().filter(e => (e.type === 'medical') === !!medical)
+      .map(e => ({ key: e.key, name: e.name, units: e.units.length > 1 ? e.units.map(u => ({ key: u.key, label: u.label })) : [] }));
+  }
+  const yearLabel = yearText;
+
+  window.AdmPick = { html, bind, current, isYearSet, locate, preset, list, yearLabel };
 })();

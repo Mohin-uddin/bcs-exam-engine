@@ -163,7 +163,7 @@
         <td><b>${esc(o.name)}</b><br><a href="tel:${esc(o.phone)}">${esc(o.phone)}</a> ${o.phoneVerifiedAt ? `<small title="নম্বর যাচাই করা">✔️ ${o.verifyBy === 'WHATSAPP' ? 'যাচাই' : 'OTP'}</small>` : '<small style="color:#b45309" title="OTP ছাড়া অর্ডার: WhatsApp মেসেজ এসেছে কিনা বা ফোন করে দেখুন">⏳ WhatsApp যাচাই বাকি</small>'}${o.samePhoneOrders ? `<br><small>এই নম্বরে আরও ${bn(o.samePhoneOrders)}টি অর্ডার</small>` : ''}</td>
         <td><b>${esc(o.districtBn)}</b>, ${esc(o.area)}<br><small>${esc(o.address)}</small>${o.noteBn ? `<br><small>📝 ${esc(o.noteBn)}</small>` : ''}</td>
         <td>${locationCell(o)}</td>
-        <td><b style="font-size:15px;color:#065f46">📘 ${esc(o.examBn || '—')}</b><br>${esc(TIER_BN[o.tier] || o.planNameBn)}<br><b>৳${bn(o.total)}</b> <small>(${bn(o.price)} + ডেলিভারি ${bn(o.deliveryCharge)})</small></td>
+        <td><b style="font-size:15px;color:#065f46">📘 ${esc(o.itemBn || '—')}</b><br>${esc(TIER_BN[o.tier] || o.planNameBn)}<br><b>৳${bn(o.total)}</b> <small>(${bn(o.price)} + ডেলিভারি ${bn(o.deliveryCharge)})</small></td>
         <td><code style="font-size:15px;font-weight:700;letter-spacing:1px">${esc(o.accessCode)}</code><br>
           ${o.redeemedAt ? `<small>✅ চালু হয়েছে ${fmt(o.redeemedAt)}${o.redeemedUser ? ` • ${esc(o.redeemedUser.name)} (${esc(o.redeemedUser.phone)})` : ''}</small>` : `<button class="btn ghost sm" data-slip="${o.id}" style="margin-top:4px">🖨️ কোড স্লিপ</button>`}</td>
         <td><span class="badge" style="background:${STATUS_COLOR[o.status] || '#e2e8f0'}">${STATUS_BN[o.status] || o.status}</span><br>
@@ -205,7 +205,7 @@
       h2{margin:0 0 6px;font-size:18px}.code{font:700 30px monospace;letter-spacing:4px;border:2px solid #0f172a;border-radius:8px;padding:8px;text-align:center;margin:10px 0}
       ol{padding-left:18px;margin:6px 0;font-size:14px}small{color:#475569}</style></head><body>
       <div class="slip"><h2>সোনার হরিণ • আপনার অ্যাক্সেস কোড</h2>
-      <small>অর্ডার ${esc(o.orderNo)} • ${esc(o.name)} • ${o.examBn ? `${esc(o.examBn)} • ` : ''}${esc(TIER_BN[o.tier] || o.planNameBn)}</small>
+      <small>অর্ডার ${esc(o.orderNo)} • ${esc(o.name)} • ${o.itemBn ? `${esc(o.itemBn)} • ` : ''}${esc(TIER_BN[o.tier] || o.planNameBn)}</small>
       <div class="code">${esc(o.accessCode)}</div>
       <ol><li>${esc(site)} ওয়েবসাইটে যান।</li><li>লগইন করুন (অ্যাকাউন্ট না থাকলে মোবাইল নম্বর দিয়ে নতুন অ্যাকাউন্ট খুলুন)।</li>
       <li>উপরে "👤" বাটন চাপুন → "প্রশ্নসেটের সাথে পাওয়া কোড দিন" → কোডটি লিখুন।</li></ol>
