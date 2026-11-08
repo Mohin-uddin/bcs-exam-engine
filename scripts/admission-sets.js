@@ -78,6 +78,48 @@ const UNIVERSITIES = [
     noteBn: 'ভর্তি পরীক্ষায় সাধারণত ইংরেজি ও গণিত থাকে।' }
 ];
 
+// Year-wise admission questions (src/data/admission/year-style/*.json), shown like the BCS bank:
+// one set per exam and session, titled "… • বিগত পরীক্ষার ধাঁচে". Each set belongs to one admission target
+// (medical, engineering, science, humanities, business), the same keys as admission.js / goal.js.
+const YEAR_DIR = path.join(DIR, 'year-style');
+const YEAR_EXAMS = {
+  'MEDICAL|MBBS': { nameBn: 'মেডিকেল (MBBS)', admType: 'medical', uniId: '', unitBn: 'মেডিকেল (MBBS)', target: 'medical', unitType: 'SCIENCE', neg: 0.25, perQ: 0.6 },
+  'MEDICAL|BDS': { nameBn: 'ডেন্টাল (BDS)', admType: 'medical', uniId: '', unitBn: 'ডেন্টাল (BDS)', target: 'medical', unitType: 'SCIENCE', neg: 0.25, perQ: 0.6 },
+  'BUET_ENGG|PRELI': { nameBn: 'বুয়েট প্রাক-নির্বাচনী', admType: 'engineering', uniId: '', unitBn: 'বুয়েট প্রাক-নির্বাচনী', target: 'engineering', unitType: 'SCIENCE', neg: 0.25, perQ: 0.8 },
+  'BUET_ENGG|ENGG': { nameBn: 'বুয়েট ও প্রকৌশল', admType: 'engineering', uniId: '', unitBn: 'বুয়েট ও প্রকৌশল', target: 'engineering', unitType: 'SCIENCE', neg: 0.25, perQ: 0.8 },
+  'BUET_ENGG|CKRUET': { nameBn: 'প্রকৌশল গুচ্ছ (চুয়েট, কুয়েট, রুয়েট)', admType: 'engineering', uniId: '', unitBn: 'প্রকৌশল গুচ্ছ (চুয়েট, কুয়েট, রুয়েট)', target: 'engineering', unitType: 'SCIENCE', neg: 0.25, perQ: 0.8 },
+  'DU|KA': { nameBn: 'ঢাবি ক ইউনিট (বিজ্ঞান)', admType: 'university', uniId: 'du', unitBn: 'ক ইউনিট (বিজ্ঞান)', target: 'science', unitType: 'SCIENCE', neg: 0.25, perQ: 0.75 },
+  'JU|A': { nameBn: 'জাবি A ইউনিট (গাণিতিক ও পদার্থ)', admType: 'university', uniId: 'ju', unitBn: 'A ইউনিট (গাণিতিক ও পদার্থ)', target: 'science', unitType: 'SCIENCE', neg: 0.25, perQ: 0.75 },
+  'JU|D': { nameBn: 'জাবি D ইউনিট (জীববিজ্ঞান)', admType: 'university', uniId: 'ju', unitBn: 'D ইউনিট (জীববিজ্ঞান)', target: 'science', unitType: 'SCIENCE', neg: 0.25, perQ: 0.75 },
+  'RU|C': { nameBn: 'রাবি C ইউনিট (বিজ্ঞান)', admType: 'university', uniId: 'ru', unitBn: 'C ইউনিট (বিজ্ঞান)', target: 'science', unitType: 'SCIENCE', neg: 0.25, perQ: 0.75 },
+  'CU|A': { nameBn: 'চবি A ইউনিট (বিজ্ঞান)', admType: 'university', uniId: 'cu', unitBn: 'A ইউনিট (বিজ্ঞান)', target: 'science', unitType: 'SCIENCE', neg: 0.25, perQ: 0.75 },
+  'GST|A': { nameBn: 'গুচ্ছ A ইউনিট (বিজ্ঞান)', admType: 'cluster', uniId: '', unitBn: 'গুচ্ছ A ইউনিট (বিজ্ঞান)', target: 'science', unitType: 'SCIENCE', neg: 0.25, perQ: 0.75 },
+  'AGRI|AGRI': { nameBn: 'কৃষি গুচ্ছ', admType: 'cluster', uniId: '', unitBn: 'কৃষি গুচ্ছ', target: 'science', unitType: 'SCIENCE', neg: 0.25, perQ: 0.75 },
+  'AGRI|AGRI_CLUSTER': { nameBn: 'কৃষি গুচ্ছ', admType: 'cluster', uniId: '', unitBn: 'কৃষি গুচ্ছ', target: 'science', unitType: 'SCIENCE', neg: 0.25, perQ: 0.75 },
+  'BUP|FST': { nameBn: 'বিইউপি FST (বিজ্ঞান)', admType: 'university', uniId: 'bup', unitBn: 'FST (বিজ্ঞান)', target: 'science', unitType: 'SCIENCE', neg: 0.25, perQ: 0.75 },
+  'DU|KHA': { nameBn: 'ঢাবি খ ইউনিট (কলা, আইন ও সামাজিক বিজ্ঞান)', admType: 'university', uniId: 'du', unitBn: 'খ ইউনিট (কলা, আইন ও সামাজিক বিজ্ঞান)', target: 'humanities', unitType: 'HUMANITIES', neg: 0.25, perQ: 0.6 },
+  'GST|B': { nameBn: 'গুচ্ছ B ইউনিট (মানবিক)', admType: 'cluster', uniId: '', unitBn: 'গুচ্ছ B ইউনিট (মানবিক)', target: 'humanities', unitType: 'HUMANITIES', neg: 0.25, perQ: 0.6 },
+  'JU|B': { nameBn: 'জাবি B ইউনিট (কলা ও মানবিকী)', admType: 'university', uniId: 'ju', unitBn: 'B ইউনিট (কলা ও মানবিকী)', target: 'humanities', unitType: 'HUMANITIES', neg: 0.25, perQ: 0.6 },
+  'RU|A': { nameBn: 'রাবি A ইউনিট (মানবিক)', admType: 'university', uniId: 'ru', unitBn: 'A ইউনিট (মানবিক)', target: 'humanities', unitType: 'HUMANITIES', neg: 0.25, perQ: 0.6 },
+  'CU|B': { nameBn: 'চবি B ইউনিট (কলা ও মানবিকী)', admType: 'university', uniId: 'cu', unitBn: 'B ইউনিট (কলা ও মানবিকী)', target: 'humanities', unitType: 'HUMANITIES', neg: 0.25, perQ: 0.6 },
+  'CU|D': { nameBn: 'চবি D ইউনিট', admType: 'university', uniId: 'cu', unitBn: 'D ইউনিট', target: 'humanities', unitType: 'HUMANITIES', neg: 0.25, perQ: 0.6 },
+  'BUP|FASS': { nameBn: 'বিইউপি FASS (কলা ও সামাজিক বিজ্ঞান)', admType: 'university', uniId: 'bup', unitBn: 'FASS (কলা ও সামাজিক বিজ্ঞান)', target: 'humanities', unitType: 'HUMANITIES', neg: 0.25, perQ: 0.6 },
+  'DU|GA': { nameBn: 'ঢাবি গ ইউনিট (ব্যবসায় শিক্ষা)', admType: 'university', uniId: 'du', unitBn: 'গ ইউনিট (ব্যবসায় শিক্ষা)', target: 'business', unitType: 'BUSINESS', neg: 0.25, perQ: 0.6 },
+  'GST|C': { nameBn: 'গুচ্ছ C ইউনিট (ব্যবসায় শিক্ষা)', admType: 'cluster', uniId: '', unitBn: 'গুচ্ছ C ইউনিট (ব্যবসায় শিক্ষা)', target: 'business', unitType: 'BUSINESS', neg: 0.25, perQ: 0.6 },
+  'BUP|FBS': { nameBn: 'বিইউপি FBS (ব্যবসায় শিক্ষা)', admType: 'university', uniId: 'bup', unitBn: 'FBS (ব্যবসায় শিক্ষা)', target: 'business', unitType: 'BUSINESS', neg: 0.25, perQ: 0.6 }
+};
+// Subject names in the year-wise file -> portal subject codes
+const YEAR_SUBJECT = {
+  PHYSICS: 'ADM_PHYSICS', CHEMISTRY: 'ADM_CHEMISTRY', MATH: 'ADM_HIGHER_MATH', BIOLOGY: 'ADM_BIOLOGY',
+  BANGLA: 'ADM_BANGLA', ENGLISH: 'ADM_ENGLISH', ACCOUNTING: 'ADM_ACCOUNTING',
+  BUSINESS: 'ADM_BUSINESS', FINANCE: 'ADM_BUSINESS', MARKETING: 'ADM_BUSINESS', MANAGEMENT: 'ADM_BUSINESS',
+  GK: 'ADM_GK', GENERAL_KNOWLEDGE: 'ADM_GK', ICT: 'ADM_GK', ECONOMICS: 'ADM_GK', MENTAL_ABILITY: 'ADM_GK'
+};
+const GK_SUBJECT = { code: 'ADM_GK', nameBn: 'সাধারণ জ্ঞান ও আইসিটি', key: 'gk' };
+const toLatin = s => String(s || '').replace(/[০-৯]/g, d => '০১২৩৪৫৬৭৮৯'.indexOf(d));
+// Sessions with fewer questions than this are put together as "আগের সালগুলো" for that exam
+const MIN_YEAR_SET = 8;
+
 const GROUPS_BN = {
   PUBLIC: 'পাবলিক বিশ্ববিদ্যালয়',
   CLUSTER: 'গুচ্ছ ভর্তি পরীক্ষা',
@@ -228,6 +270,178 @@ function buildAdmission({ existing, normStem, seenStems, errors, startSerial }) 
   }
 
   // Reused general questions from the main bank (stable facts only), for GK and private-university sets
+  const yearArchive = [];
+  if (fs.existsSync(YEAR_DIR)) {
+    const raw = [];
+    fs.readdirSync(YEAR_DIR).filter(f => f.endsWith('.json')).sort().forEach(file => {
+      try { JSON.parse(fs.readFileSync(path.join(YEAR_DIR, file), 'utf8')).forEach((q, i) => raw.push({ q, where: `year-style/${file}#${i + 1}` })); }
+      catch (e) { errors.push(`year-style/${file}: ${e.message}`); }
+    });
+    const groups = new Map();
+    let skipped = 0;
+    raw.forEach(({ q, where }) => {
+      const exam = YEAR_EXAMS[`${q.university}|${q.unit}`];
+      const subjCode = YEAR_SUBJECT[q.subject];
+      const ok = q.stem && ['A', 'B', 'C', 'D'].includes(q.answer) && ['A', 'B', 'C', 'D'].every(k => q.options && String(q.options[k] || '').trim());
+      if (!exam || !subjCode || !ok) { errors.push(`${where}: unknown exam/subject or incomplete question (${q.university}|${q.unit}|${q.subject})`); return; }
+      const k = normStem(q.stem);
+      if (seenStems.has(k)) { skipped++; return; } // same question already in the bank
+      seenStems.set(k, where);
+      const session = toLatin(q.session).trim();
+      const gkey = `${exam.nameBn}|${session}`;
+      if (!groups.has(gkey)) groups.set(gkey, { exam, session, list: [] });
+      groups.get(gkey).list.push({ q, subjCode });
+    });
+    // Small sessions of one exam go together, so every set is worth opening
+    const byExam = new Map();
+    groups.forEach(g => {
+      const key = g.exam.nameBn;
+      if (!byExam.has(key)) byExam.set(key, []);
+      byExam.get(key).push(g);
+    });
+    let yearSerial = 0;
+    // Rows on the page follow YEAR_EXAMS order: medical, dental, BUET, engineering cluster, DU, clusters, JU, RU, CU, BUP
+    const order = [...new Set(['MEDICAL|MBBS', 'MEDICAL|BDS', 'BUET_ENGG|PRELI', 'BUET_ENGG|ENGG', 'BUET_ENGG|CKRUET', 'DU|KA', 'DU|KHA', 'DU|GA',
+      'GST|A', 'GST|B', 'GST|C', 'AGRI|AGRI', 'JU|A', 'JU|D', 'JU|B', 'RU|C', 'RU|A', 'CU|A', 'CU|B', 'CU|D', 'BUP|FST', 'BUP|FASS', 'BUP|FBS']
+      .map(k => YEAR_EXAMS[k].nameBn))];
+    [...byExam.entries()].sort((x, y) => order.indexOf(x[0]) - order.indexOf(y[0])).forEach(([, list]) => {
+      list.sort((a, b) => b.session.localeCompare(a.session));
+      const big = list.filter(g => g.list.length >= MIN_YEAR_SET);
+      const small = list.filter(g => g.list.length < MIN_YEAR_SET);
+      const merged = small.length ? [{ exam: small[0].exam, session: small.map(g => g.session).sort().join(', '), older: small.length > 1, list: small.flatMap(g => g.list) }] : [];
+      [...big, ...merged].forEach(g => {
+        yearSerial++;
+        // Too few to be a set of its own: the questions still go to subject practice and "সব প্রশ্ন"
+        const ownSet = g.list.length >= 3;
+        const code = `ADM_YEAR_${yearSerial}`;
+        const sessionBn = g.older ? 'আগের সাল' : `${bnDigits(g.session)}`;
+        const label = g.older ? `${g.exam.nameBn} আগের সালগুলো (${bnDigits(g.session)})` : `${g.exam.nameBn} ${sessionBn}`;
+        const ids = g.list.map(({ q, subjCode }, i) => {
+          const subject = SUBJECTS.find(x => x.code === subjCode) || GK_SUBJECT;
+          const out = toQuestion(q, {
+            id: `adm_y${yearSerial}_q${i + 1}`,
+            subject,
+            serialNo: ++serial,
+            qNo: i + 1,
+            reference: `বিগত পরীক্ষার ধাঁচে • ${label}`,
+            examTitle: `${label} • বিগত পরীক্ষার ধাঁচে`,
+            year: Number(String(g.session).slice(0, 4)) + 1 || 2026
+          });
+          out.isPastStyle = true;
+          out.pastStyleLabelBn = label;
+          questions.push(out);
+          return out.id;
+        });
+        if (!ownSet) return;
+        // One year can hold hundreds of questions: split it into small sets a student can finish,
+        // by subject (জীববিজ্ঞান, রসায়ন ...), at most PART_MAX each; tiny subjects go together
+        // One complete paper per year, like the BCS years (the owner asked for year -> paper, nothing more)
+        const PART_MAX = 100000;
+        const subjName = code => (SUBJECTS.find(x => x.code === code) || GK_SUBJECT).nameBn.replace(/\s*\(.*\)$/, '');
+        const parts = [];
+        if (ids.length <= PART_MAX) parts.push({ name: 'পূর্ণ সেট', ids });
+        else {
+          const bySubj = new Map();
+          g.list.forEach(({ subjCode }, i) => { if (!bySubj.has(subjCode)) bySubj.set(subjCode, []); bySubj.get(subjCode).push(ids[i]); });
+          const mixed = [];
+          // Same subject order everywhere: the subject list above, general knowledge last
+          const rank = code => { const i = SUBJECTS.findIndex(x => x.code === code); return i < 0 ? 99 : i; };
+          [...bySubj.entries()].sort((x, y) => rank(x[0]) - rank(y[0])).forEach(([code, list]) => {
+            if (list.length < 10) { mixed.push(...list); return; }
+            const n = Math.ceil(list.length / PART_MAX);
+            const size = Math.ceil(list.length / n);
+            for (let k = 0; k < n; k++) parts.push({ name: n > 1 ? `${subjName(code)} (${bnDigits(k + 1)})` : subjName(code), ids: list.slice(k * size, (k + 1) * size) });
+          });
+          if (mixed.length >= 3) parts.push({ name: 'অন্যান্য বিষয়', ids: mixed });
+          else if (mixed.length && parts.length) parts[parts.length - 1].ids.push(...mixed);
+        }
+        parts.forEach((part, k) => {
+          const pid = `${code}_${k + 1}`;
+          yearArchive.push({
+            id: pid, code: pid, examTrack: 'ADMISSION', isVerifiedPast: false, isPastStyle: true,
+            admTarget: g.exam.target, unitType: g.exam.unitType, examNameBn: g.exam.nameBn, sessionBn,
+            olderSessionsBn: g.older ? bnDigits(g.session) : null,
+            admType: g.exam.admType, uniId: g.exam.uniId || null, unitBn: g.exam.unitBn,
+          uniNameBn: { du: 'ঢাকা বিশ্ববিদ্যালয় (ঢাবি)', ju: 'জাহাঙ্গীরনগর বিশ্ববিদ্যালয় (জাবি)', ru: 'রাজশাহী বিশ্ববিদ্যালয় (রাবি)', cu: 'চট্টগ্রাম বিশ্ববিদ্যালয় (চবি)', bup: 'বাংলাদেশ ইউনিভার্সিটি অব প্রফেশনালস (বিইউপি)' }[g.exam.uniId] || null,
+            yearKey: code, partBn: part.name, partNo: k + 1, yearTotal: ids.length,
+            orgNameBn: g.exam.nameBn, postLabelBn: `বিগত পরীক্ষার ধাঁচে • ${sessionBn} • ${part.name}`, setNameBn: 'সেট: ক',
+            title: `📚 ${label} • ${part.name} (${bnDigits(part.ids.length)} প্রশ্ন)`,
+            examDate: sessionBn, year: Number(String(g.session).slice(0, 4)) + 1 || null,
+            totalQuestions: part.ids.length,
+            durationMin: Math.max(10, Math.round(part.ids.length * g.exam.perQ)),
+            negativeMark: g.exam.neg,
+            questionIds: part.ids
+          });
+        });
+      });
+    });
+    if (skipped) console.log(`admission year-style: ${skipped} question(s) already in the bank, not added twice`);
+  }
+
+  // Universities we have no questions of our own for (src/data/admission/exam-patterns.json: the exam
+  // format only). Each unit gets one model test that follows that format: same number of questions,
+  // time, negative mark and subject split, filled from the admission bank. No year is claimed.
+  const patternArchive = [];
+  const PATTERN_FILE = path.join(DIR, 'exam-patterns.json');
+  if (fs.existsSync(PATTERN_FILE)) {
+    let units = [];
+    try { units = JSON.parse(fs.readFileSync(PATTERN_FILE, 'utf8')); } catch (e) { errors.push(`exam-patterns.json: ${e.message}`); }
+    const pools = {};
+    questions.forEach(q => { (pools[q.subjectCode] = pools[q.subjectCode] || []).push(q.id); });
+    const used = {};
+    const take = (code, n) => {
+      const pool = pools[code] || [];
+      if (!pool.length || n <= 0) return [];
+      const start = used[code] || 0;
+      const out = [];
+      for (let i = 0; i < Math.min(n, pool.length); i++) out.push(pool[(start + i) % pool.length]);
+      used[code] = (start + out.length) % pool.length; // the next unit starts where this one stopped
+      return out;
+    };
+    const SUBJECT_WORDS = [
+      [/উচ্চতর গণিত|গণিত|Mathematics/i, 'ADM_HIGHER_MATH'], [/পদার্থ|Physics/i, 'ADM_PHYSICS'], [/রসায়ন|Chemistry/i, 'ADM_CHEMISTRY'],
+      [/জীববিজ্ঞান/, 'ADM_BIOLOGY'], [/হিসাববিজ্ঞান|অ্যাকাউন্টিং/, 'ADM_ACCOUNTING'], [/ব্যবসায়|ম্যানেজমেন্ট/, 'ADM_BUSINESS'],
+      [/বাংলা/, 'ADM_BANGLA'], [/ইংরেজি|English/i, 'ADM_ENGLISH'], [/সাধারণ জ্ঞান|Analytical|আইন/i, 'ADM_GK']
+    ];
+    // "পদার্থবিজ্ঞান ২৫, রসায়ন ২৫, গণিত ২৫ ও জীববিজ্ঞান ২৫" -> [[PHYSICS, 25], ...]
+    const parse = text => {
+      const out = [];
+      String(text || '').split(/,|।|\sও\s|\sand\s/).forEach(part => {
+        const m = toLatin(part).match(/(\d+)/);
+        const hit = SUBJECT_WORDS.find(([rx]) => rx.test(part));
+        if (m && hit && !/ড্রয়িং|অঙ্কন/.test(part)) out.push([hit[1], Number(m[1])]);
+      });
+      return out;
+    };
+    const TYPE_OF = { AFMC: 'medical', BUTEX: 'engineering', IUT: 'engineering', MIST: 'engineering', BSMRAAU: 'engineering', BSMRMU: 'engineering', DU_TECH: 'engineering' };
+    units.forEach(u => {
+      // MIST architecture: only the 40-mark MCQ part (maths and science) can be practised; drawing cannot
+      const OVERRIDE = { 'MIST|B': [['ADM_HIGHER_MATH', 20], ['ADM_PHYSICS', 20]] };
+      const split = OVERRIDE[`${u.university}|${u.unit}`] || parse(u.patternBn);
+      const want = split.reduce((n, [, k]) => n + k, 0);
+      if (!split.length) { errors.push(`exam-patterns: ${u.university} ${u.unit}: could not read the subject split "${u.patternBn}"`); return; }
+      const ids = [...new Set(split.flatMap(([code, n]) => take(code, n)))];
+      if (ids.length < 10) { errors.push(`exam-patterns: ${u.university} ${u.unit}: too few questions (${ids.length})`); return; }
+      const admType = TYPE_OF[u.university] || 'university';
+      const uniName = u.orgNameBn;
+      const unitBn = admType === 'university' ? u.postLabelBn : `${uniName}${u.unit && !['ENGG', 'MBBS', 'TECH'].includes(u.unit) ? ` • ${u.unit}` : ''}`;
+      const code = `ADM_PAT_${u.university}_${u.unit}`;
+      patternArchive.push({
+        id: code, code, examTrack: 'ADMISSION', isVerifiedPast: false, isPastStyle: true, isPatternModel: true,
+        admType, uniId: admType === 'university' ? u.university.toLowerCase() : null, uniNameBn: uniName, unitBn,
+        unitType: /SCIENCE|ENGG|TECH|MBBS|FEOS/.test(u.unit) || split.some(([c]) => ['ADM_PHYSICS', 'ADM_CHEMISTRY', 'ADM_BIOLOGY'].includes(c)) ? 'SCIENCE'
+          : split.some(([c]) => c === 'ADM_ACCOUNTING') ? 'BUSINESS' : 'HUMANITIES',
+        examNameBn: uniName, sessionBn: '', yearKey: null, partBn: 'মডেল টেস্ট (পরীক্ষার মানবণ্টন অনুযায়ী)', partNo: 1,
+        orgNameBn: uniName, postLabelBn: `${u.postLabelBn} • মডেল টেস্ট`, setNameBn: 'সেট: ক',
+        title: `📝 ${uniName} • ${u.postLabelBn} • মডেল টেস্ট (${bnDigits(ids.length)} প্রশ্ন)`,
+        patternBn: u.patternBn, examDate: 'মডেল টেস্ট', year: null,
+        totalQuestions: ids.length, durationMin: u.durationMin || Math.round(ids.length * 0.6),
+        negativeMark: typeof u.negativeMark === 'number' ? u.negativeMark : NEG,
+        questionIds: ids, wantQuestions: want
+      });
+    });
+  }
+
   const reuse = code => existing.filter(q => q.examTrack === 'BCS' && q.subjectCode === code && !q.isDynamicInfo);
   const gkBd = reuse('BANGLADESH_AFFAIRS');
   const gkInt = reuse('INT_AFFAIRS');
@@ -312,7 +526,7 @@ function buildAdmission({ existing, normStem, seenStems, errors, startSerial }) 
     durationMin: s.durationMin,
     negativeMark: NEG,
     questionIds: s.questionIds
-  })).concat(pastArchive);
+  })).concat(pastArchive, yearArchive, patternArchive);
 
   const exams = archive.map(a => ({
     id: a.id,
@@ -327,6 +541,13 @@ function buildAdmission({ existing, normStem, seenStems, errors, startSerial }) 
     negativeMark: a.negativeMark,
     unitType: a.unitType,
     isVerifiedPast: a.isVerifiedPast,
+    isPastStyle: Boolean(a.isPastStyle),
+    admTarget: a.admTarget || null,
+    uniId: a.uniId || null,
+    unitBn: a.unitBn || null,
+    yearKey: a.yearKey || null,
+    uniNameBn: a.uniNameBn || null,
+    isPatternModel: Boolean(a.isPatternModel),
     questionIds: a.questionIds
   }));
 
@@ -334,7 +555,8 @@ function buildAdmission({ existing, normStem, seenStems, errors, startSerial }) 
     units: UNITS,
     groups: GROUPS_BN,
     universities: UNIVERSITIES,
-    subjects: SUBJECTS.map(s => ({ code: s.code, nameBn: s.nameBn, count: S[s.code].length })),
+    subjects: [...SUBJECTS, GK_SUBJECT].map(s => ({ code: s.code, nameBn: s.nameBn, count: questions.filter(q => q.subjectCode === s.code).length })),
+    yearStyleCount: yearArchive.length,
     practiceLabelBn: PRACTICE_LABEL,
     verifiedPastCount: pastArchive.length,
     negativeMark: NEG

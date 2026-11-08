@@ -12,6 +12,10 @@
   <meta name="theme-color" content="#006a4e">
   <!-- Tailwind classes are pre-built into app.css (npm run css:build), no CDN at runtime -->
   <link rel="stylesheet" href="/app.css">
+  <!-- Math in questions ($\frac{2}{5}MR^2$ and the like): KaTeX, drawn by /math.js -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
   <style>
     .flip-card { perspective: 1000px; }
     .flip-card-inner {
@@ -467,6 +471,76 @@
     .home-tile b { color: var(--ink); font-size: 15px; }
     .home-tile .muted { font-size: 12.5px; line-height: 1.45; }
     .home-tile-ic { font-size: 24px; }
+    .purpose { font-size: 14px; line-height: 1.55; color: var(--ink-soft); background: var(--surface); border: 1px dashed var(--line); border-radius: 14px; padding: 10px 14px; }
+    .purpose b { color: var(--ink); }
+    /* Home: one big start button and four big doors (2 x 2 on phones) */
+    .home-cta { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; padding: 18px; border-radius: 18px;
+      background: var(--grad-green, #047857); color: #fff; box-shadow: var(--shadow-lg, 0 10px 30px rgba(4,120,87,.25)); text-decoration: none; }
+    .home-cta:active { transform: scale(.985); }
+    .home-cta-ic { flex: none; width: 48px; height: 48px; border-radius: 999px; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .home-cta-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.4; }
+    .home-cta-text b { font-size: 18px; color: #fff; }
+    .home-cta-text span { font-size: 13.5px; color: rgba(255,255,255,.85); }
+    .home-cta-go { font-size: 22px; font-weight: 700; }
+    .home-cta + .home-cta { margin-top: 12px; }
+    .home-cta-alt { background: var(--surface); color: var(--ink); border: 2px solid var(--green, #047857); box-shadow: none; }
+    .home-cta-alt .home-cta-ic { background: var(--green-tint, #ecfdf5); color: var(--green, #047857); }
+    .home-cta-alt .home-cta-text b { color: var(--ink); }
+    .home-cta-alt .home-cta-text span { color: var(--ink-soft); }
+    .home-cta-alt .home-cta-go { color: var(--green, #047857); }
+    /* Not logged in: a clear "free account" card above everything else */
+    .home-join { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 16px; border-radius: 18px;
+      background: #fffbeb; border: 2px solid #fbbf24; }
+    .home-join-ic { font-size: 28px; flex: none; }
+    .home-join-text { flex: 1; min-width: 200px; display: flex; flex-direction: column; line-height: 1.45; }
+    .home-join-text b { font-size: 17px; color: #78350f; }
+    .home-join-text span { font-size: 13.5px; color: #92400e; }
+    .home-join-btns { display: flex; gap: 8px; flex: none; }
+    @media (max-width: 600px) { .home-join-btns { width: 100%; } .home-join-btns button { flex: 1; } }
+    .home-join-main { padding: 11px 18px; border-radius: 12px; background: #006a4e; color: #fff; font-weight: 800; font-size: 15px; }
+    .home-join-alt { padding: 11px 18px; border-radius: 12px; background: #fff; color: #006a4e; border: 1.5px solid #006a4e; font-weight: 700; font-size: 15px; }
+    .home-doors { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    @media (max-width: 900px) { .home-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
+    .home-door { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; padding: 16px 14px; min-height: 128px;
+      border-radius: 18px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,.05)); }
+    .home-door:active { transform: scale(.98); }
+    .home-door b { color: var(--ink); font-size: 17px; }
+    .home-door .muted { font-size: 13px; line-height: 1.45; }
+    .home-door-ic { font-size: 30px; line-height: 1.2; }
+    .home-door.hot { border-color: var(--green); background: var(--green-tint); }
+    /* Home sections: special tools (coloured cards) vs ordinary practice (plain rows) */
+    .home-sec-title { font-size: 18px; font-weight: 800; color: var(--ink); margin: 6px 2px 0; }
+    .home-sec-sub { font-size: 13.5px; color: var(--ink-soft); margin: 2px 2px 10px; }
+    .home-sec .practice-list { margin-top: 10px; }
+    .special-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    @media (max-width: 900px) { .special-list { grid-template-columns: 1fr; gap: 10px; } }
+    .special-card { --sc: #047857; --sc-bg: #ecfdf5; display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+      padding: 16px 14px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line);
+      border-left: 6px solid var(--sc); box-shadow: 0 6px 18px -10px rgba(15, 23, 42, .25); }
+    .special-card:active { transform: scale(.985); }
+    .special-ic { position: relative; flex: none; width: 52px; height: 52px; border-radius: 16px; background: var(--sc-bg);
+      display: flex; align-items: center; justify-content: center; font-size: 26px; }
+    .special-badge { position: absolute; top: -6px; right: -6px; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px;
+      background: #dc2626; color: #fff; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+    .special-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.4; }
+    .special-pain { font-size: 13px; font-weight: 700; color: var(--sc); }
+    .special-text b { font-size: 17px; color: var(--ink); }
+    .special-what { font-size: 13px; color: var(--ink-soft); }
+    .special-go { font-size: 26px; color: var(--sc); font-weight: 700; }
+    .sc-red { --sc: #dc2626; --sc-bg: #fef2f2; }
+    .sc-blue { --sc: #2563eb; --sc-bg: #eff6ff; }
+    .sc-gold { --sc: #b45309; --sc-bg: #fffbeb; }
+    .sc-purple { --sc: #7c3aed; --sc-bg: #f5f3ff; }
+    .sc-orange { --sc: #ea580c; --sc-bg: #fff7ed; }
+    .theme-dark .special-ic { background: color-mix(in srgb, var(--sc) 18%, transparent); }
+    .practice-list { padding: 4px 14px; }
+    .practice-row { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .practice-row:last-child { border-bottom: 0; }
+    .practice-ic { font-size: 22px; width: 30px; text-align: center; flex: none; }
+    .practice-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.4; }
+    .practice-text b { font-size: 15.5px; color: var(--ink); }
+    .practice-text .muted { font-size: 13px; }
+    .practice-go { font-size: 22px; color: var(--ink-soft); }
     .home-progress { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 900px) { .home-progress { grid-template-columns: 1fr; gap: 12px; } }
     .install-item { display: none !important; }
@@ -684,7 +758,7 @@
       border-top-color: color-mix(in srgb, var(--line) 70%, transparent);
       box-shadow: 0 -6px 20px -12px rgba(16, 40, 30, .25);
     }
-    .bottom-nav button span:first-child { padding: 2px 14px; border-radius: 999px; transition: background .15s; }
+    .bottom-nav button span:first-child { padding: 2px 12px; border-radius: 999px; transition: background .15s; }
     .bottom-nav button.active span:first-child { background: var(--green-tint); }
     .back-to-top { background: var(--grad-green); box-shadow: var(--shadow-lg); }
 
@@ -768,11 +842,10 @@
 
       <div class="nav-group">
         <div class="nav-group-title">পরীক্ষা দিন</div>
+        <button type="button" onclick="switchTab('past-bank')" id="tab-past-bank" data-title="বিগত সালের প্রশ্ন" class="tab-btn nav-item"><span class="nav-ic">📚</span><span>বিগত সালের প্রশ্ন</span></button>
         <button type="button" onclick="switchTab('exam')" id="tab-exam" data-title="মডেল টেস্ট" class="tab-btn nav-item"><span class="nav-ic">📝</span><span>মডেল টেস্ট</span></button>
-        <button type="button" onclick="switchTab('past-bank')" id="tab-past-bank" data-title="বিগত পরীক্ষার ধাঁচে প্রশ্ন" class="tab-btn nav-item"><span class="nav-ic">📚</span><span>বিগত পরীক্ষার ধাঁচে প্রশ্ন</span></button>
         <button type="button" onclick="switchTab('custom-quiz')" id="tab-custom-quiz" data-title="নিজের মতো অনুশীলন" class="tab-btn nav-item"><span class="nav-ic">🎯</span><span>নিজের মতো অনুশীলন</span></button>
         <a href="/live" class="nav-item"><span class="nav-ic">🏆</span><span>লাইভ পরীক্ষা ও মেধা তালিকা</span></a>
-        <a href="/admission" class="nav-item"><span class="nav-ic">🎓</span><span>বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি</span></a>
       </div>
 
       <div class="nav-group">
@@ -819,8 +892,9 @@
     </section>
 
     <section id="pane-exam" class="cg-protect tab-pane hidden space-y-4">
-      <!-- Step 1: choose exam type -->
-      <div class="panel">
+      <p class="purpose">📝 <b>এখানে কী পাবেন:</b> পুরো প্রশ্নসেটে আসল পরীক্ষার মতো সময় ধরে পরীক্ষা। জমা দিলেই নম্বর, সঠিক উত্তর আর ব্যাখ্যা; ভুলগুলো নিজে থেকেই ভুল খাতায় যায়।</p>
+      <!-- Step 1: choose exam type (hidden once the user has picked their exam, see goal.js) -->
+      <div class="panel" id="examTrackPicker">
         <span class="section-label">১. কোন পরীক্ষার প্রস্তুতি নিচ্ছেন?</span>
         <div class="chip-row">
           <button onclick="selectExamTrack('BCS')" id="btnTrackBCS" class="chip chip-active">🏛️ বিসিএস <span class="chip-meta">২০০ নম্বর</span></button>
@@ -837,7 +911,7 @@
       <!-- Step 2: choose a set, then start -->
       <div id="examTrackBanner" class="panel space-y-4">
         <div>
-          <span class="section-label">২. একটি প্রশ্নসেট বেছে নিন</span>
+          <span class="section-label">একটি প্রশ্নসেট বেছে নিন</span>
           <h2 id="examTrackHeading" class="text-lg font-bold text-slate-900 leading-snug">বাংলাদেশ সরকারি কর্ম কমিশন (BPSC) প্রশ্নপত্রের ফরম্যাটে অনুশীলন কেন্দ্র</h2>
           <p id="examTrackBadge" class="text-sm text-slate-500 mt-0.5">বিসিএস স্ট্যান্ডার্ড • ১,৫৪০টি ১০০% ইউনিক প্রশ্ন</p>
         </div>
@@ -871,7 +945,7 @@
 
         <!-- Exam control bar -->
         <div class="flex flex-wrap items-end gap-3 pt-3 border-t border-slate-200">
-          <div class="flex-1 min-w-[240px]">
+          <div class="flex-1 min-w-[240px]" id="examDropdownBox">
             <label id="examDropdownLabel" for="examCategorySelect" class="section-label !mb-1">অথবা তালিকা থেকে বেছে নিন</label>
             <select id="examCategorySelect" onchange="changeExamCategory()" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-600">
               <option value="PRACTICE_SET_1" selected>বিসিএস প্রিলিমিনারি পূর্ণাঙ্গ অনুশীলন সেট-১ (২০০ প্রশ্ন)</option>
@@ -996,8 +1070,9 @@
     <!-- TAB 2: PAST YEAR QUESTION BANK (বিগত পরীক্ষার ধাঁচে প্রশ্নব্যাংক — বিসিএস ও প্রাইমারি আলাদা) -->
     <!-- ===================================================================== -->
     <section id="pane-past-bank" class="cg-protect tab-pane hidden space-y-4">
+      <p class="purpose">📚 <b>এখানে কী পাবেন:</b> আগের পরীক্ষাগুলোর ধাঁচে প্রশ্ন, সাল বা বিষয় অনুযায়ী সাজানো। সময়ের চাপ ছাড়া পড়ুন, উত্তর আর ব্যাখ্যা দেখে নিন।</p>
       <div class="panel space-y-4">
-        <div>
+        <div id="pastTrackPicker">
           <span class="section-label">১. কোন পরীক্ষার ধাঁচে প্রশ্ন দেখবেন?</span>
           <div class="chip-row">
             <button onclick="setPastBankTrack('BCS')" id="btnPastTrackBCS" class="chip chip-active">🏛️ বিসিএস <span class="chip-meta">৪৬–২৭তম</span></button>
@@ -1083,7 +1158,7 @@
           </label>
           <label class="field-l">প্রতি ভুলে কাটা যাবে
             <select id="spNeg" class="input" onchange="this.dataset.touched=1">
-              <option value="0.5">০.৫০ (বিসিএস / পিএসসি)</option><option value="0.25">০.২৫ (প্রাথমিক / ব্যাংক)</option><option value="0">কাটা যাবে না</option>
+              <option value="0.5">প্রতি ভুলে ০.৫০</option><option value="0.25">প্রতি ভুলে ০.২৫</option><option value="0">কাটা যাবে না</option>
             </select>
           </label>
         </div>
@@ -1495,7 +1570,7 @@
         <div class="seg-row mt-3">
           <button onclick="setConfusingHotSubView('PAIRS')" id="btnSubViewPairs" class="seg seg-active">⚡ কনফিউজিং পেয়ার ও ট্র্যাপ কুইজ</button>
           <button onclick="setConfusingHotSubView('SUPER_HOT')" id="btnSubViewSuperHot" class="seg">🔥 কঠিন ২০০ প্রশ্ন</button>
-          <button onclick="launchSuperHot100Exam()" class="ml-auto self-center px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition">📝 এই ২০০ প্রশ্নে পরীক্ষা দিন →</button>
+          <button onclick="launchSuperHot100Exam()" id="btnSuperHotExam" class="ml-auto self-center px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition">📝 এই ২০০ প্রশ্নে পরীক্ষা দিন →</button>
         </div>
         <!-- Subject Filter Pills -->
         <div class="mt-3 flex flex-wrap items-center justify-between gap-2">
@@ -1563,8 +1638,8 @@
   </script>
   <nav class="bottom-nav lg-hide" aria-label="দ্রুত মেনু">
     <button type="button" data-tab="home" onclick="switchTab('home')"><span>🏠</span><span>আজ</span></button>
+    <button type="button" data-tab="past-bank" onclick="switchTab('past-bank')"><span>📚</span><span>বিগত প্রশ্ন</span></button>
     <button type="button" data-tab="exam" onclick="switchTab('exam')"><span>📝</span><span>মডেল টেস্ট</span></button>
-    <button type="button" data-tab="past-bank" onclick="switchTab('past-bank')"><span>📚</span><span>প্রশ্নব্যাংক</span></button>
     <button type="button" data-tab="mistakes" onclick="switchTab('mistakes')"><span>📕</span><span>ভুল খাতা</span></button>
     <button type="button" onclick="toggleSideNav(true)"><span>☰</span><span>আরও</span></button>
   </nav>
@@ -1666,6 +1741,9 @@
   <script src="/account.js"></script>
   <script src="/content-guard.js"></script>
   <script src="/app.js"></script>
+  <script src="/adm-pick.js"></script>
+  <script src="/goal.js"></script>
+  <script src="/math.js"></script>
   <script src="/tour.js"></script>
 </body>
 </html>

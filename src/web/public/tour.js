@@ -1,7 +1,8 @@
 /**
  * First-visit guided tour (Bangla): points at each section of the website and explains
- * what it is for, then shows the plans. Runs once per browser; "Tour.start()" runs it again
- * (account menu has a button for it).
+ * what it is for, then shows the plans. Runs by itself only once, on the very first visit, after the
+ * exam choice and the free-account box (goal.js calls Tour.startOnce()). The small "🧭 গাইড" button is
+ * shown only until the tour has been seen; after that it lives in the account menu ("গাইড আবার দেখুন").
  * Steps whose element is missing on the page are skipped, so it keeps working when the
  * layout changes. On phones the side menu is opened for the menu steps.
  */
@@ -10,10 +11,10 @@
   const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
 
   const STEPS = [
-    { center: true, title: '🦌 সোনার হরিণে স্বাগতম!', text: 'বিসিএস, প্রাথমিক, শিক্ষক নিবন্ধন, ব্যাংকসহ সব সরকারি চাকরির প্রস্তুতি এক জায়গায়। চলুন ১ মিনিটে দেখে নিই কোথায় কী আছে। সব ফিচার ফ্রিতে ঘুরে দেখতে পারবেন।', next: 'দেখান কোথায় কী আছে', skip: 'পরে দেখব' },
+    { center: true, title: '🦌 সোনার হরিণে স্বাগতম!', text: 'বিসিএস, প্রাথমিক, শিক্ষক নিবন্ধন, ব্যাংকসহ সরকারি চাকরি আর বিশ্ববিদ্যালয় ও মেডিকেল ভর্তির প্রস্তুতি এক জায়গায়। চলুন ১ মিনিটে দেখে নিই কোথায় কী আছে। সব ফিচার ফ্রিতে ঘুরে দেখতে পারবেন।', next: 'দেখান কোথায় কী আছে', skip: 'পরে দেখব' },
     { sel: '#tab-home', nav: true, title: '🏠 আজকের পড়া', text: 'প্রতিদিন এখান থেকে শুরু করুন। আজ কোন প্রশ্নগুলো রিভিশন দেওয়ার সময় হয়েছে, কতটুকু এগোলেন — সব এক নজরে দেখাবে।' },
+    { sel: '#tab-past-bank', nav: true, title: '📚 বিগত সালের প্রশ্ন', text: 'আগের পরীক্ষাগুলোর ধাঁচে বানানো অনুশীলন প্রশ্ন, পরীক্ষা ও বিষয় অনুযায়ী সাজানো। প্রতিটি প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা দেখতে পারবেন।' },
     { sel: '#tab-exam', nav: true, title: '📝 মডেল টেস্ট', text: 'আসল পরীক্ষার প্রশ্নপত্রের মতো পূর্ণ মডেল টেস্ট। সময় ধরে পরীক্ষা দিন, ভুলে নম্বর কাটবে (বিসিএসে ০.৫০, প্রাথমিকে ০.২৫), শেষে সাথে সাথে ফলাফল।' },
-    { sel: '#tab-past-bank', nav: true, title: '📚 বিগত পরীক্ষার ধাঁচে প্রশ্ন', text: 'আগের পরীক্ষাগুলোর ধাঁচে বানানো অনুশীলন প্রশ্ন, পরীক্ষা ও বিষয় অনুযায়ী সাজানো। প্রতিটি প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা দেখতে পারবেন।' },
     { sel: '#tab-custom-quiz', nav: true, title: '🎯 নিজের মতো অনুশীলন', text: 'যে বিষয় বা অধ্যায় দুর্বল, শুধু সেটা থেকে নিজের পছন্দমতো প্রশ্ন সংখ্যা নিয়ে ছোট পরীক্ষা দিন।' },
     { sel: '.side-nav a[href="/live"]', nav: true, title: '🏆 লাইভ পরীক্ষা ও মেধা তালিকা', text: 'নির্দিষ্ট সময়ে সবাই একসাথে পরীক্ষা দেয়। পরীক্ষা শেষে মেধা তালিকায় দেখবেন সারা দেশে আপনার অবস্থান।' },
     { sel: '#tab-mistakes', nav: true, title: '📕 ভুল খাতা', text: 'পরীক্ষায় যে প্রশ্নগুলো ভুল করেন সেগুলো নিজে থেকেই এখানে জমা হয়। "অসাবধানতা" না "বুঝিনি" — চিহ্ন দিয়ে রাখুন, আবার অনুশীলন করে ঠিক করুন।' },
@@ -71,8 +72,14 @@
     document.removeEventListener('keydown', onKey);
   }
 
-  function finish(openPlans) {
+  const markDone = () => {
     try { localStorage.setItem(DONE_KEY, '1'); } catch { /* storage blocked */ }
+    document.querySelectorAll('.tour-help').forEach(b => b.remove());
+  };
+  const isDone = () => { try { return localStorage.getItem(DONE_KEY) === '1'; } catch { return true; } };
+
+  function finish(openPlans) {
+    markDone();
     cleanup();
     if (openPlans && window.Account && window.Account.openPlans) window.Account.openPlans();
   }
@@ -157,9 +164,11 @@
   }
 
   function start() {
+    // Seen once = done, even if the page is closed half-way: it never starts by itself again
+    markDone();
     cleanup();
     // Skip items that are not on this page (keeps welcome + final)
-    steps = STEPS.filter(s => s.center || document.querySelector(s.sel));
+    steps = STEPS.filter(s => { if (s.center) return true; const el = document.querySelector(s.sel); return el && getComputedStyle(el).display !== 'none'; });
     shade = document.createElement('div');
     shade.className = 'tour-shade';
     hole = document.createElement('div');
@@ -174,10 +183,11 @@
     go(0);
   }
 
-  window.Tour = { start };
+  window.Tour = { start, startOnce: () => { if (!isDone()) start(); } };
 
   function init() {
-    // "Guide" button to run the tour again
+    // New visitors only: a small "গাইড" button until they have seen the tour once
+    if (isDone()) return;
     const help = document.createElement('button');
     help.type = 'button';
     help.className = 'tour-help';
@@ -185,11 +195,6 @@
     help.title = 'ওয়েবসাইটে কোথায় কী আছে দেখুন';
     help.onclick = start;
     document.body.appendChild(help);
-
-    let done = false;
-    try { done = localStorage.getItem(DONE_KEY) === '1'; } catch { done = true; }
-    const busy = /[?&]payment=/.test(location.search);
-    if (!done && !busy) setTimeout(() => { if (!document.querySelector('.acc-overlay:not([hidden])')) start(); }, 1200);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

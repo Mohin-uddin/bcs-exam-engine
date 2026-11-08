@@ -131,15 +131,16 @@
     if (syncing) return;
     syncing = true;
     try {
-      // Not logged in: skip the request (it would only answer 401)
-      const guest = window.Account && !window.Account.user;
-      const res = guest ? { status: 401 } : await fetch('/api/progress', { credentials: 'same-origin' });
+      // Always ask the server: right after a refresh account.js has not loaded the user yet, and treating
+      // that moment as "logged out" wiped the saved exam choice (the "কিসের প্রস্তুতি?" screen came back)
+      const res = await fetch('/api/progress', { credentials: 'same-origin' });
       if (res.status === 401) {
         loggedIn = false;
         // The previous person on this browser logged out: don't show them their progress
         if (owner) {
           owner = null;
-          data = core.empty();
+          // Their practice goes, but the exam choice / theme stay: the "কিসের প্রস্তুতি?" screen must not come back
+          data = { ...core.empty(), settings: data.settings };
           writeLocal();
           emit();
         }
@@ -161,6 +162,8 @@
 
   readLocal();
   window.addEventListener('account:change', sync);
+  // Logged in / out: the home page shows or hides the "free account" card
+  window.addEventListener('account:change', () => { if (typeof refresh === 'function') setTimeout(refresh, 0); });
   window.addEventListener('pagehide', () => { if (pushTimer) push(true); });
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && pushTimer) push(true); });
 
@@ -338,7 +341,7 @@
   // ---------------------------------------------------------------------------
   // source: ALL | WEAK | MISTAKES | BOOKMARKS | UNSEEN ; subject: code or ALL
   function pickQuestions({ track, subject = 'ALL', source = 'ALL', count = 20 }) {
-    let pool = allQuestions().filter(q => !track || q.examTrack === track);
+    let pool = allQuestions().filter(q => (!track || q.examTrack === track));
     if (subject !== 'ALL') pool = pool.filter(q => q.subjectCode === subject);
     if (source === 'MISTAKES') {
       const ids = new Set(Object.values(data.mistakes).filter(m => m.status !== 'MASTERED').map(m => m.qid));
@@ -373,6 +376,7 @@
       toast('এই শর্তে কোনো প্রশ্ন পাওয়া যায়নি।');
       return;
     }
+    if (window.Account && !Account.requireLogin(null, () => startPractice({ title, list, track, neg, minutes }))) return;
     window.startQuestionSet({
       examId: 'CUSTOM',
       title,
@@ -522,8 +526,7 @@
   // Track picker on the home page: shown until the user picks an exam, or when they tap "বদলান"
   let homeTrackPickerOpen = false;
   function toggleHomeTrackPicker() {
-    homeTrackPickerOpen = !homeTrackPickerOpen;
-    renderHome();
+    if (window.Goal) Goal.open();
   }
 
   function renderHome() {
@@ -538,16 +541,32 @@
     const weak = subjectStats(track || undefined).slice(0, 3);
     const user = window.Account && window.Account.user;
     const searchValue = (document.getElementById('qSearchInput') || {}).value || '';
-    const showPicker = !track || homeTrackPickerOpen;
 
-    const trackChips = core.TRACKS.map(t => `<button type="button" class="chip ${t === track ? 'chip-active' : ''}" onclick="Study.setTrack('${t}')">${TRACK_BN[t]}</button>`).join('');
-
-    // Shortcuts to the main parts of the app, each with one line on what it is for
-    const tiles = [
-      { ic: '📝', name: 'মডেল টেস্ট', what: 'আসল পরীক্ষার মতো সময় ধরে পুরো সেট', go: "switchTab('exam')" },
-      { ic: '📚', name: 'বিগত পরীক্ষার ধাঁচে প্রশ্ন', what: 'আগের পরীক্ষার ধাঁচে প্রশ্ন ও উত্তর', go: "switchTab('past-bank')" },
-      { ic: '📕', name: 'ভুল খাতা', what: 'যেগুলো ভুল করেছেন, আবার ঝালাই', go: "switchTab('mistakes')" },
-      { ic: '📷', name: 'ছবি তুলে খাতা দেখুন', what: 'কাগজে দাগানো উত্তরপত্রের ছবি দিলেই নম্বর', go: "switchTab('omr')" }
+    // What other question apps do not have: each card names the problem it solves.
+    // Shown first and in their own colours, so they never blend in with ordinary practice.
+    const isAdmission = track === 'ADMISSION';
+    const hasLive = !track || track === 'BCS' || (liveCache || []).some(e => e.track === track);
+    const specials = [
+      { ic: '📕', c: 'red', name: 'ভুল খাতা', pain: 'পড়েন, কিন্তু পরীক্ষায় মনে পড়ে না?',
+        what: due ? `আজ রিভিশন বাকি ${bn(due)} টি প্রশ্ন` : 'ভুল প্রশ্ন ১ দিন, ৬ দিন পরে নিজে থেকে ফিরে আসে, যতদিন না মনে থাকে',
+        go: due ? "switchTab('flashcards')" : "switchTab('mistakes')", badge: due ? bn(due) : '' },
+      // Print booklets exist for BCS and primary only; the weekly live exam is BCS (others only if the server lists one)
+      ...(['BCS', 'PRIMARY'].includes(track || 'BCS') ? [{ ic: '🖨️', c: 'blue', name: 'প্রিন্ট করে বাসায় পরীক্ষা', pain: 'হলে গিয়ে ঘাবড়ে যান?',
+        what: `হুবহু ${track === 'PRIMARY' ? 'DPE' : 'BPSC'} ফরম্যাটের প্রশ্নপত্র ও OMR শিট। ছবি তুললেই নম্বর`,
+        go: `window.open('/print?track=${track || 'BCS'}','_blank')` }] : []),
+      ...(hasLive ? [{ ic: '🏆', c: 'gold', name: 'শুক্রবারের লাইভ পরীক্ষা', pain: 'সারা দেশে আপনি কততম?',
+        what: 'প্রতি শুক্রবার রাত ৯টা, পরীক্ষা শেষেই মেধা তালিকা', go: "location.href='/live'" }] : []),
+      { ic: '📊', c: 'purple', name: 'পাস করবেন কিনা আগেই জানুন', pain: 'কোন বিষয়ে পিছিয়ে আছেন?',
+        what: isAdmission ? 'প্রতিটা পরীক্ষার পরে বিষয়ভিত্তিক হিসাব, কোথায় বেশি পড়তে হবে' : 'দুর্বল বিষয় আর গত বছরের কাট-মার্কের সাথে আপনার নম্বরের তুলনা', go: "switchTab('analytics')" },
+      // Confusing pairs are job-exam general knowledge: not for admission students
+      ...(isAdmission ? [] : [{ ic: '🔥', c: 'orange', name: 'যেখানে সবাই ভুল করে', pain: 'সঞ্চিতা না সঞ্চয়িতা?',
+        what: 'কাছাকাছি তথ্যগুলো পাশাপাশি, আর বাছাই করা কঠিন প্রশ্ন', go: "switchTab('confusing-hot')" }])
+    ];
+    // Ordinary practice: plain rows, so it is clearly a different kind of thing
+    const practice = [
+      // Past papers are the first big button above: what everyone looks for first
+      { ic: '📝', name: 'মডেল টেস্ট', what: 'পুরো সেট, আসল পরীক্ষার মতো সময় ধরে', go: "switchTab('exam')" },
+      { ic: '🎯', name: 'নিজের মতো অনুশীলন', what: 'বিষয় ও প্রশ্নসংখ্যা নিজে বেছে নিন', go: "switchTab('custom-quiz')" }
     ];
 
     pane.innerHTML = `
@@ -555,7 +574,7 @@
         <div class="home-hero-top">
           <div>
             <h2 class="home-title">${user ? `${esc(user.name.split(' ')[0])}, ` : ''}আজকের পড়া</h2>
-            <p class="muted">${new Date().toLocaleDateString('bn-BD', { timeZone: 'Asia/Dhaka', weekday: 'long', day: 'numeric', month: 'long' })}${track ? ` • লক্ষ্য: <b>${TRACK_BN[track]}</b> <button type="button" class="link" onclick="Study.toggleHomeTrackPicker()">${homeTrackPickerOpen ? 'বন্ধ' : 'বদলান'}</button>` : ''}</p>
+            <p class="muted">${track ? `📌 <b>${TRACK_BN[track]}</b> <button type="button" class="link" onclick="Goal.open()">বদলান</button>` : `<button type="button" class="link" onclick="Goal.open()">কিসের প্রস্তুতি নিচ্ছেন? বেছে নিন</button>`}</p>
           </div>
           <div class="streak" title="টানা যতদিন অনুশীলন করেছেন">🔥 <b>${bn(streak)}</b> দিন</div>
         </div>
@@ -563,38 +582,49 @@
           <div class="goal-bar"><span style="width:${Math.min(100, pct(today, g))}%"></span></div>
           <span class="muted">আজ ${bn(today)} / ${bn(g)} প্রশ্ন</span>
         </div>
-        ${showPicker ? `<div class="mt-3"><span class="section-label">${track ? 'অন্য পরীক্ষা বেছে নিন' : 'কোন পরীক্ষার প্রস্তুতি নিচ্ছেন? (একবার বেছে নিন)'}</span><div class="chip-row">${trackChips}</div></div>` : ''}
-        <input id="qSearchInput" type="search" class="search-input mt-3" placeholder="🔎 যেকোনো প্রশ্ন খুঁজুন: চর্যাপদ, সংবিধান, ঐকিক নিয়ম..." oninput="Study.search(this.value)" autocomplete="off" value="${esc(searchValue)}">
-        ${!user ? `<p class="home-login-note">💾 অগ্রগতি এই ব্রাউজারে রাখা হচ্ছে। <button type="button" class="link" onclick="Account.openLogin()">লগইন করুন</button>, তাহলে ফোন ও কম্পিউটার দুই জায়গাতেই পাবেন।</p>` : ''}
       </div>
-      <div id="qSearchResults" class="space-y-3"></div>
 
-      <div class="panel weekly-card" id="homeWeekly"></div>
+      ${!user && window.Account && Account.loaded ? `
+      <div class="home-join">
+        <span class="home-join-ic">🎁</span>
+        <span class="home-join-text"><b>ফ্রি অ্যাকাউন্ট খুলুন</b><span>পরীক্ষা দিতে, ফলাফল আর ভুল খাতা রাখতে অ্যাকাউন্ট লাগবে। ৩০ সেকেন্ডে হয়ে যাবে।</span></span>
+        <span class="home-join-btns">
+          <button type="button" class="home-join-main" onclick="Account.openLogin('মোবাইল নম্বর আর একটা পাসওয়ার্ড দিন, ব্যস।', null, {mode:'register'})">নিবন্ধন করুন</button>
+          <button type="button" class="home-join-alt" onclick="Account.openLogin(null, null, {mode:'login'})">লগইন</button>
+        </span>
+      </div>` : ''}
 
-      <div class="panel">
-        <h3 class="panel-title">আজ যা করবেন</h3>
-        <div class="todo-list">
-          <div class="todo-row">
-            <span class="todo-ic">🎯</span>
-            <div class="todo-text"><b>আজকের ২০ প্রশ্ন</b><span class="muted">১৫ মিনিট • দুর্বল বিষয় আর নতুন প্রশ্ন মিলিয়ে</span></div>
-            <button type="button" class="btn btn-primary" onclick="Study.dailyQuiz()">শুরু</button>
-          </div>
-          <div class="todo-row">
-            <span class="todo-ic">🧠</span>
-            <div class="todo-text"><b>রিভিশন বাকি: ${bn(due)} টি</b><span class="muted">${due ? 'ভুল খাতা ও ফ্ল্যাশকার্ডের আজকের ঝালাই' : 'আজকের রিভিশন শেষ'}</span></div>
-            <button type="button" class="btn ${due ? 'btn-primary' : 'btn-ghost'}" onclick="switchTab('flashcards')">${due ? 'শুরু' : 'খুলুন'}</button>
-          </div>
-          <div class="todo-row">
-            <span class="todo-ic">🏆</span>
-            <div class="todo-text"><b>লাইভ পরীক্ষা</b><span id="homeLiveBox"></span></div>
-            <a href="/live" id="homeLiveBtn" class="btn btn-ghost">দেখুন</a>
-          </div>
+      <button type="button" class="home-cta" onclick="switchTab('past-bank')">
+        <span class="home-cta-ic">📚</span>
+        <span class="home-cta-text"><b>বিগত সালের প্রশ্ন</b><span>${isAdmission ? 'বিশ্ববিদ্যালয় → ইউনিট → সাল বেছে পুরো প্রশ্নসেট, উত্তর ও ব্যাখ্যাসহ' : 'সাল অনুযায়ী আগের পরীক্ষার ধাঁচে প্রশ্ন, উত্তর ও ব্যাখ্যাসহ'}</span></span>
+        <span class="home-cta-go">→</span>
+      </button>
+
+      <button type="button" class="home-cta home-cta-alt" onclick="Study.dailyQuiz()">
+        <span class="home-cta-ic">▶</span>
+        <span class="home-cta-text"><b>আজকের ২০ প্রশ্ন শুরু করুন</b><span>১৫ মিনিট • দুর্বল বিষয় আর নতুন প্রশ্ন মিলিয়ে</span></span>
+        <span class="home-cta-go">→</span>
+      </button>
+
+      <section class="home-sec">
+        <h3 class="home-sec-title">✨ শুধু প্রশ্ন না, পাস করার পদ্ধতি</h3>
+        <p class="home-sec-sub">যা সাধারণ প্রশ্নের অ্যাপে পাবেন না</p>
+        <div class="special-list">
+          ${specials.map(t => `<button type="button" class="special-card sc-${t.c}" onclick="${t.go}">
+            <span class="special-ic">${t.ic}${t.badge ? `<span class="special-badge">${t.badge}</span>` : ''}</span>
+            <span class="special-text"><span class="special-pain">${t.pain}</span><b>${t.name}</b><span class="special-what">${t.what}</span></span>
+            <span class="special-go">›</span></button>`).join('')}
         </div>
-      </div>
+      </section>
 
-      <div class="home-tiles">
-        ${tiles.map(t => `<button type="button" class="home-tile" onclick="${t.go}"><span class="home-tile-ic">${t.ic}</span><b>${t.name}</b><span class="muted">${t.what}</span></button>`).join('')}
-      </div>
+      <section class="home-sec">
+        <h3 class="home-sec-title">📚 প্রশ্ন অনুশীলন</h3>
+        <div class="practice-list panel">
+          ${practice.map(t => `<button type="button" class="practice-row" onclick="${t.go}"><span class="practice-ic">${t.ic}</span><span class="practice-text"><b>${t.name}</b><span class="muted">${t.what}</span></span><span class="practice-go">›</span></button>`).join('')}
+        </div>
+      </section>
+
+      ${hasLive ? '<div class="panel weekly-card" id="homeWeekly"></div>' : ''}
 
       ${last ? `
       <div class="panel">
@@ -608,7 +638,12 @@
               <button type="button" class="link" onclick="Study.practiceSubject('${esc(s.code)}')">অনুশীলন</button>
             </div>`).join('')}</div>` : ''}
         </div>
-      </div>` : ''}`;
+      </div>` : ''}
+
+      <div class="panel">
+        <input id="qSearchInput" type="search" class="search-input" placeholder="🔎 যেকোনো প্রশ্ন খুঁজুন: চর্যাপদ, সংবিধান, ঐকিক নিয়ম..." oninput="Study.search(this.value)" autocomplete="off" value="${esc(searchValue)}">
+      </div>
+      <div id="qSearchResults" class="space-y-3"></div>`;
     renderLiveBox();
     if (!liveCache) loadLive();
     renderWeekly();
@@ -741,8 +776,10 @@
     const trackSel = document.getElementById('spTrack');
     const subjSel = document.getElementById('spSubject');
     if (!trackSel || !subjSel) return;
-    if (!trackSel.options.length) {
-      trackSel.innerHTML = core.TRACKS.map(t => `<option value="${t}">${TRACK_BN[t]}</option>`).join('');
+    // Once the user has picked an exam, this form offers only that exam
+    const mine = data.settings.track ? [data.settings.track] : core.TRACKS;
+    if (trackSel.options.length !== mine.length || (data.settings.track && trackSel.value !== data.settings.track)) {
+      trackSel.innerHTML = mine.map(t => `<option value="${t}">${TRACK_BN[t]}</option>`).join('');
       trackSel.value = data.settings.track || 'BCS';
     }
     const cur = subjSel.value;

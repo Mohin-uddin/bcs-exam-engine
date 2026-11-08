@@ -141,6 +141,9 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
         key += `|${e.unitType}`;
         limit = Math.min(n, 1);
       }
+      // Year-wise admission sets: each target (medical, engineering, science ...) gets its newest set free
+      // Year-wise admission sets: every exam / unit (MBBS, গুচ্ছ A, ঢাবি খ ...) gets its newest year free
+      if (e.examTrack === 'ADMISSION' && e.isPastStyle) { key = `ADMISSION|year|${e.uniId || ''}|${e.unitBn || e.admTarget}`; limit = Math.min(n, 1); }
       seen[key] = (seen[key] || 0) + 1;
       if (g === 'hot' || seen[key] > limit) locked.add(e.id);
     });

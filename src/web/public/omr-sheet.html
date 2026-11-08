@@ -265,6 +265,10 @@
   <script src="/content-guard.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // /print?track=PRIMARY opens on that exam (link from the home page of a primary-teacher user)
+      const want = new URLSearchParams(location.search).get('track');
+      const sel = document.getElementById('selectBookletTrack');
+      if (want && sel && [...sel.options].some(o => o.value === want)) sel.value = want;
       switchBookletTrack();
     });
 
