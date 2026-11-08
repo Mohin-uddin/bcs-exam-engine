@@ -30,21 +30,41 @@ const TRACK_META = {
   MINISTRY: { labelBn: 'মন্ত্রণালয় ও অধিদপ্তর', orgBn: 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার', negativeMark: 0.25 },
   NON_CADRE: { labelBn: 'পিএসসি নন-ক্যাডার', orgBn: 'বাংলাদেশ সরকারি কর্ম কমিশন (BPSC)', negativeMark: 0.5 },
   NURSING: { labelBn: 'নার্সিং নিয়োগ', orgBn: 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার', negativeMark: 0.25 },
-  ADMISSION: { labelBn: 'বিশ্ববিদ্যালয় ভর্তি', orgBn: 'বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি • সোনার হরিণ', negativeMark: 0.25 }
+  ADMISSION: { labelBn: 'বিশ্ববিদ্যালয় ভর্তি', orgBn: 'বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি • সোনার হরিণ', negativeMark: 0.25 },
+  ADMISSION_UNI: { labelBn: 'বিশ্ববিদ্যালয় ভর্তি', orgBn: 'বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি • সোনার হরিণ', negativeMark: 0.25 },
+  ADMISSION_MED: { labelBn: 'মেডিকেল ও ডেন্টাল ভর্তি', orgBn: 'মেডিকেল ভর্তি প্রস্তুতি • সোনার হরিণ', negativeMark: 0.25 }
 };
+
+// Weekly live exam of each exam type: its question bank and the size of the real exam
+// (sets of exactly that size are used in turn; medical is drawn from the medical papers)
+const WEEKLY_TRACKS = {
+  BCS: { questions: 200, durationMin: 120 },
+  PRIMARY: { questions: 80, durationMin: 60 },
+  NTRCA: { questions: 100, durationMin: 60 },
+  BANK: { questions: 100, durationMin: 60 },
+  MINISTRY: { questions: 70, durationMin: 60 },
+  NON_CADRE: { questions: 100, durationMin: 60 },
+  NURSING: { questions: 100, durationMin: 60 },
+  ADMISSION_UNI: { questions: 100, durationMin: 60 },
+  ADMISSION_MED: { questions: 100, durationMin: 60 }
+};
+const isMedicalSet = e => e.admTarget === 'medical' || /মেডিকেল|ডেন্টাল|AFMC/.test(`${e.unitBn || ''}`);
 
 const STORE_KEY = 'live-exams';
 const DHAKA_OFFSET_MS = 6 * 3600000; // Bangladesh has no daylight saving
 const WEEKDAY_BN = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
+// Shared by every exam type
 const DEFAULT_WEEKLY = {
+  freeLimit: 2,
+  targetCount: 0 // admin's own goal for registrations (only the admin sees counts)
+};
+// Each exam type's schedule (admin can change it per type)
+const DEFAULT_SLOT = {
   enabled: true,
   weekday: 5, // 0 = Sunday ... 5 = Friday
   hour: 21,
   minute: 0,
-  track: 'BCS',
-  durationMin: 0, // 0 = the question set's own duration
-  freeLimit: 2,
-  targetCount: 0 // shown on the home page as a goal next to the real count (0 = hidden)
+  durationMin: 0 // 0 = the exam's own length
 };
 
 function createLiveExamEngine({ availableExams, sampleQuestions, store = null, currentUser = () => null, isPremium = () => false }) {
@@ -122,11 +142,23 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
   // ---------------------------------------------------------------------------
   // Weekly exam, created by itself
   // ---------------------------------------------------------------------------
-  const weeklyCfg = () => ({ ...DEFAULT_WEEKLY, ...(state.weekly || {}) });
-
-  function setDurationOf(set, cfg) {
-    return cfg.durationMin > 0 ? cfg.durationMin : (set.durationMin || 60);
+  const weeklyCfg = () => ({ ...DEFAULT_WEEKLY, freeLimit: (state.weekly || {}).freeLimit ?? DEFAULT_WEEKLY.freeLimit, targetCount: (state.weekly || {}).targetCount ?? 0 });
+  // Older data had one schedule (state.weekly: weekday, hour, minute, track) for the BCS exam: it becomes BCS's slot
+  function slots() {
+    if (!state.weeklyTracks) {
+      const old = state.weekly || {};
+      state.weeklyTracks = {};
+      if (old.weekday !== undefined) {
+        state.weeklyTracks[old.track && WEEKLY_TRACKS[old.track] ? old.track : 'BCS'] = {
+          enabled: old.enabled !== false, weekday: old.weekday, hour: old.hour, minute: old.minute, durationMin: old.durationMin || 0
+        };
+      }
+    }
+    return state.weeklyTracks;
   }
+  const slotOf = t => ({ ...DEFAULT_SLOT, ...(slots()[t] || {}) });
+  // Weekly exams made before exam types had their own: they were all of their set's track
+  const weeklyTrackOf = e => e.weeklyTrack || e.track;
 
   // Start of this week's slot in Dhaka time, or next week's once this one has ended
   function nextWeeklyStart(cfg, now = Date.now(), durationMin = 60) {
@@ -137,47 +169,84 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
     return start;
   }
 
-  // Least-used set of the track, so every week gets a different paper
-  function pickWeeklySet(cfg) {
-    const sets = catalog.filter(e => e.examTrack === cfg.track);
-    if (!sets.length) return null;
-    const used = new Map();
-    state.exams.filter(e => e.auto).forEach(e => used.set(e.setId, (used.get(e.setId) || 0) + 1));
-    return sets.reduce((best, e) => ((used.get(e.id) || 0) < (used.get(best.id) || 0) ? e : best), sets[0]);
+  // Seeded shuffle: the same week always gets the same paper
+  function seeded(list, seed) {
+    let h = 2166136261;
+    for (const ch of seed) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
+    const out = [...list];
+    for (let i = out.length - 1; i > 0; i--) {
+      h = Math.imul(h ^ (h >>> 15), 2246822507) >>> 0;
+      const j = h % (i + 1);
+      [out[i], out[j]] = [out[j], out[i]];
+    }
+    return out;
   }
 
-  function ensureWeekly() {
-    const cfg = weeklyCfg();
+  // This exam type's paper for the week: the least-used set of the real exam's size,
+  // or (medical, or no set of that size) questions drawn from the type's own bank
+  function pickWeeklyPaper(t, weekKey) {
+    const pat = WEEKLY_TRACKS[t];
+    // Medical: only the medical year papers (the AFMC pattern test borrows questions from other banks)
+    const bank = t === 'ADMISSION_MED' ? catalog.filter(e => e.examTrack === 'ADMISSION' && e.admTarget === 'medical')
+      : t === 'ADMISSION_UNI' ? catalog.filter(e => e.examTrack === 'ADMISSION' && !isMedicalSet(e) && !e.isSubjectDrill && !/^ADM_SUBJECT_/.test(e.id))
+        : catalog.filter(e => e.examTrack === t);
+    if (!bank.length) return null;
+    const full = t === 'ADMISSION_MED' ? [] : bank.filter(e => e.questionIds.length === pat.questions);
+    if (full.length) {
+      const used = new Map();
+      state.exams.filter(e => e.auto).forEach(e => used.set(e.setId, (used.get(e.setId) || 0) + 1));
+      const set = full.reduce((best, e) => ((used.get(e.id) || 0) < (used.get(best.id) || 0) ? e : best), full[0]);
+      return { setId: set.id, setCode: set.setCodeBn || 'ক', questionIds: [...set.questionIds], negativeMark: set.negativeMark };
+    }
+    const ids = [...new Set(bank.flatMap(e => e.questionIds))].filter(id => questionById.has(id));
+    if (!ids.length) return null;
+    return { setId: `${t}_DRAW`, setCode: 'ক', questionIds: seeded(ids, `${t}|${weekKey}`).slice(0, pat.questions), negativeMark: undefined };
+  }
+
+  function ensureWeeklyFor(t) {
+    const cfg = slotOf(t);
     if (!cfg.enabled) return null;
-    const set = pickWeeklySet(cfg);
-    if (!set) return null;
-    const startMs = nextWeeklyStart(cfg, Date.now(), setDurationOf(set, cfg));
+    const durationMin = cfg.durationMin > 0 ? cfg.durationMin : WEEKLY_TRACKS[t].durationMin;
+    const mine = state.exams.filter(e => e.auto && weeklyTrackOf(e) === t);
+    // An exam the admin moved to a date of their own stays until it has ended
+    const moved = mine.find(e => e.movedByAdmin && !e.cancelled && phaseOf(e) !== 'ENDED');
+    if (moved) return moved;
+    const startMs = nextWeeklyStart(cfg, Date.now(), durationMin);
     const weekKey = new Date(startMs + DHAKA_OFFSET_MS).toISOString().slice(0, 10);
     // A cancelled weekly exam counts too: admin cancelled this week on purpose
-    const existing = state.exams.find(e => e.auto && e.weekKey === weekKey);
+    const existing = mine.find(e => e.weekKey === weekKey);
     if (existing) return existing;
-    const track = set.examTrack in TRACK_META ? set.examTrack : 'BCS';
+    const paper = pickWeeklyPaper(t, weekKey);
+    if (!paper) return null;
+    const meta = TRACK_META[t];
     const dateBn = new Date(startMs).toLocaleDateString('bn-BD', { timeZone: 'Asia/Dhaka', day: 'numeric', month: 'long' });
     const exam = {
       id: newId('lx'),
       auto: true,
+      weeklyTrack: t,
       weekKey,
-      title: `সাপ্তাহিক লাইভ মডেল টেস্ট • ${dateBn}`,
-      track,
-      setId: set.id,
-      setCode: set.setCodeBn || 'ক',
-      questionIds: [...set.questionIds],
+      title: `${meta.labelBn}: সাপ্তাহিক লাইভ পরীক্ষা • ${dateBn}`,
+      track: t,
+      setId: paper.setId,
+      setCode: paper.setCode,
+      questionIds: paper.questionIds,
       startAt: new Date(startMs).toISOString(),
-      durationMin: setDurationOf(set, cfg),
-      negativeMark: typeof set.negativeMark === 'number' ? set.negativeMark : TRACK_META[track].negativeMark,
+      durationMin,
+      negativeMark: typeof paper.negativeMark === 'number' ? paper.negativeMark : meta.negativeMark,
       noticeBn: `প্রতি ${WEEKDAY_BN[cfg.weekday]} লাইভ পরীক্ষা। পরীক্ষা শেষ হলেই উত্তর ও মেধা তালিকা প্রকাশ হবে।`,
       createdAt: new Date().toISOString(),
       nextRoll: 100001,
       candidates: []
     };
     state.exams.push(exam);
-    saveNow();
+    save();
     return exam;
+  }
+
+  function ensureWeekly() {
+    const out = {};
+    Object.keys(WEEKLY_TRACKS).forEach(t => { out[t] = ensureWeeklyFor(t); });
+    return out;
   }
 
   // How many live exams this account has already sat (opened the paper of), not counting `exceptExam`
@@ -227,10 +296,15 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
       noticeBn: exam.noticeBn || '',
       phase: phaseOf(exam),
       weekly: Boolean(exam.auto),
-      registeredCount: exam.candidates.length,
-      submittedCount: exam.candidates.filter(c => c.submittedAt).length
+      weeklyTrack: exam.auto ? weeklyTrackOf(exam) : null
     };
   }
+  // Counts are for the admin only
+  const adminExam = exam => ({
+    ...publicExam(exam),
+    registeredCount: exam.candidates.length,
+    submittedCount: exam.candidates.filter(c => c.submittedAt).length
+  });
 
   function findExam(id) {
     return state.exams.find(e => e.id === id && !e.cancelled);
@@ -333,6 +407,19 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
   // ---------------------------------------------------------------------------
   // Route handler. Returns true when it handled the request.
   // ---------------------------------------------------------------------------
+  // Admin view: shared settings + every exam type's schedule and coming exam (with counts)
+  function weeklyOverview() {
+    const next = ensureWeekly();
+    return {
+      weekly: weeklyCfg(),
+      tracks: Object.keys(WEEKLY_TRACKS).map(t => ({
+        id: t, labelBn: TRACK_META[t].labelBn, ...slotOf(t),
+        defaultDurationMin: WEEKLY_TRACKS[t].durationMin,
+        next: next[t] && !next[t].cancelled ? adminExam(next[t]) : null
+      }))
+    };
+  }
+
   async function handle(req, res, pathname, searchParams) {
     if (!pathname.startsWith('/api/live/')) return false;
     const method = req.method;
@@ -365,7 +452,7 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
       if (pathname === '/api/live/admin/exams' && method === 'GET') {
         send(res, 200, {
           status: 'SUCCESS',
-          exams: state.exams.filter(e => !e.cancelled).map(publicExam).sort((a, b) => b.startAt.localeCompare(a.startAt))
+          exams: state.exams.filter(e => !e.cancelled).map(adminExam).sort((a, b) => b.startAt.localeCompare(a.startAt))
         });
         return true;
       }
@@ -400,34 +487,53 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
         };
         state.exams.push(exam);
         saveNow();
-        send(res, 200, { status: 'SUCCESS', exam: publicExam(exam) });
+        send(res, 200, { status: 'SUCCESS', exam: adminExam(exam) });
         return true;
       }
 
       if (pathname === '/api/live/admin/weekly' && method === 'GET') {
-        const next = ensureWeekly();
-        send(res, 200, { status: 'SUCCESS', weekly: weeklyCfg(), next: next ? publicExam(next) : null });
+        send(res, 200, { status: 'SUCCESS', ...weeklyOverview() });
         return true;
       }
 
+      // Shared settings (freeLimit, targetCount) and / or one exam type's schedule:
+      // { track, enabled, weekday, hour, minute, durationMin } and optionally startAt = move this week's exam
       if (pathname === '/api/live/admin/weekly' && method === 'POST') {
-        const cfg = weeklyCfg();
         const int = (v, lo, hi) => (v === undefined || v === '' ? undefined : Number.isInteger(Number(v)) && Number(v) >= lo && Number(v) <= hi ? Number(v) : NaN);
-        const upd = {
-          weekday: int(body.weekday, 0, 6), hour: int(body.hour, 0, 23), minute: int(body.minute, 0, 59),
-          durationMin: int(body.durationMin, 0, 600), freeLimit: int(body.freeLimit, 0, 100), targetCount: int(body.targetCount, 0, 1000000)
-        };
-        if (Object.values(upd).some(v => Number.isNaN(v))) return fail(res, 400, 'BAD_WEEKLY', 'দিন, সময়, মিনিট ও সংখ্যাগুলো সঠিকভাবে দিন।'), true;
-        if (body.track !== undefined && !(body.track in TRACK_META)) return fail(res, 400, 'BAD_TRACK', 'পরীক্ষার ধরন সঠিক নয়।'), true;
-        Object.entries(upd).forEach(([k, v]) => { if (v !== undefined) cfg[k] = v; });
-        if (body.track !== undefined) cfg.track = body.track;
-        if (body.enabled !== undefined) cfg.enabled = Boolean(body.enabled);
-        state.weekly = cfg;
-        // The coming weekly exam follows the new schedule while nobody has registered yet
-        state.exams = state.exams.filter(e => !(e.auto && phaseOf(e) === 'UPCOMING' && !e.candidates.length));
-        const next = ensureWeekly();
+        const shared = { freeLimit: int(body.freeLimit, 0, 100), targetCount: int(body.targetCount, 0, 1000000) };
+        const slot = { weekday: int(body.weekday, 0, 6), hour: int(body.hour, 0, 23), minute: int(body.minute, 0, 59), durationMin: int(body.durationMin, 0, 600) };
+        if ([...Object.values(shared), ...Object.values(slot)].some(v => Number.isNaN(v))) return fail(res, 400, 'BAD_WEEKLY', 'দিন, সময়, মিনিট ও সংখ্যাগুলো সঠিকভাবে দিন।'), true;
+        const t = body.track;
+        if (t !== undefined && !WEEKLY_TRACKS[t]) return fail(res, 400, 'BAD_TRACK', 'পরীক্ষার ধরন সঠিক নয়।'), true;
+        const moveTo = body.startAt ? Date.parse(body.startAt) : null;
+        if (body.startAt && (!Number.isFinite(moveTo) || moveTo < Date.now() - 60000)) return fail(res, 400, 'BAD_TIME', 'নতুন তারিখ ও সময় সঠিকভাবে দিন (এখনকার পরের সময়)।'), true;
+        state.weekly = { ...weeklyCfg() };
+        Object.entries(shared).forEach(([k, v]) => { if (v !== undefined) state.weekly[k] = v; });
+        if (t) {
+          const cfg = slotOf(t);
+          Object.entries(slot).forEach(([k, v]) => { if (v !== undefined) cfg[k] = v; });
+          if (body.enabled !== undefined) cfg.enabled = Boolean(body.enabled);
+          slots()[t] = cfg;
+          const coming = state.exams.filter(e => e.auto && weeklyTrackOf(e) === t && !e.cancelled && phaseOf(e) === 'UPCOMING');
+          if (moveTo) {
+            // Move this week's exam to the admin's date and time (registrations stay)
+            const exam = coming[0] || ensureWeeklyFor(t);
+            if (exam) { exam.startAt = new Date(moveTo).toISOString(); exam.movedByAdmin = true; }
+          } else {
+            // New weekly schedule: the coming exam follows it (registrations stay)
+            const durationMin = cfg.durationMin > 0 ? cfg.durationMin : WEEKLY_TRACKS[t].durationMin;
+            coming.forEach(e => {
+              if (!cfg.enabled && !e.candidates.length) { state.exams = state.exams.filter(x => x !== e); return; }
+              e.startAt = new Date(nextWeeklyStart(cfg, Date.now(), durationMin)).toISOString();
+              e.weekKey = new Date(Date.parse(e.startAt) + DHAKA_OFFSET_MS).toISOString().slice(0, 10);
+              e.durationMin = durationMin;
+              e.movedByAdmin = false;
+              e.noticeBn = `প্রতি ${WEEKDAY_BN[cfg.weekday]} লাইভ পরীক্ষা। পরীক্ষা শেষ হলেই উত্তর ও মেধা তালিকা প্রকাশ হবে।`;
+            });
+          }
+        }
         saveNow();
-        send(res, 200, { status: 'SUCCESS', weekly: cfg, next: next ? publicExam(next) : null });
+        send(res, 200, { status: 'SUCCESS', ...weeklyOverview() });
         return true;
       }
 
@@ -447,7 +553,7 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
         if (!exam) return fail(res, 404, 'NOT_FOUND', 'পরীক্ষাটি পাওয়া যায়নি।'), true;
         send(res, 200, {
           status: 'SUCCESS',
-          exam: publicExam(exam),
+          exam: adminExam(exam),
           candidates: exam.candidates.map(c => ({
             roll: c.roll, name: c.name, phone: c.phone, registeredAt: c.registeredAt,
             startedAt: c.startedAt || null, submittedAt: c.submittedAt || null
@@ -461,24 +567,31 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
     }
 
     // ---------------- Public ----------------
-    // Home page card: the coming weekly exam (same start time and count for everyone) + my free limit
+    // Home page card: the coming weekly exam of the user's exam type (?track=BCS | ADMISSION_MED ...) + my free limit.
+    // No counts: users only see the exam, its time and their own access.
     if (pathname === '/api/live/weekly' && method === 'GET') {
-      const cfg = weeklyCfg();
-      const next = ensureWeekly();
+      const t = WEEKLY_TRACKS[searchParams.get('track')] ? searchParams.get('track') : 'BCS';
+      const cfg = slotOf(t);
+      const next = ensureWeeklyFor(t);
       send(res, 200, {
         status: 'SUCCESS',
+        track: t,
+        trackLabelBn: TRACK_META[t].labelBn,
         exam: next && !next.cancelled && phaseOf(next) !== 'ENDED' ? publicExam(next) : null,
         schedule: { enabled: cfg.enabled, weekday: cfg.weekday, weekdayBn: WEEKDAY_BN[cfg.weekday], hour: cfg.hour, minute: cfg.minute },
-        targetCount: cfg.targetCount,
-        access: accessOf(currentUser(req))
+        access: accessOf(currentUser(req)),
+        serverNow: new Date().toISOString()
       });
       return true;
     }
 
+    // ?track=: only that exam type's live exams (weekly ones of the type + the admin's own ones of its question bank)
     if (pathname === '/api/live/exams' && method === 'GET') {
+      const t = searchParams.get('track');
+      const mineOnly = t && WEEKLY_TRACKS[t] ? e => (e.auto ? weeklyTrackOf(e) === t : e.track === t || (t.startsWith('ADMISSION_') && e.track === 'ADMISSION')) : () => true;
       send(res, 200, {
         status: 'SUCCESS',
-        exams: state.exams.filter(e => !e.cancelled).map(publicExam).sort((a, b) => a.startAt.localeCompare(b.startAt))
+        exams: state.exams.filter(e => !e.cancelled && mineOnly(e)).map(publicExam).sort((a, b) => a.startAt.localeCompare(b.startAt))
       });
       return true;
     }

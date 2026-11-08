@@ -319,16 +319,77 @@ async function serverTests() {
       assert.equal((await sit(ids[2], carol, '01933333333')).status, 200);
     });
 
-    await test('admin can move the weekly exam; it follows while nobody has registered', async () => {
-      const r = await call('POST', '/api/live/admin/weekly', { admin: 'test-admin-key', body: { weekday: 6, hour: 20, minute: 30, targetCount: 2000 } });
+    await test('every exam type has its own weekly live exam, sized like the real exam; users never see counts', async () => {
+      const sizes = { BCS: 200, PRIMARY: 80, NTRCA: 100, BANK: 100, MINISTRY: 70, NON_CADRE: 100, NURSING: 100, ADMISSION_UNI: 100, ADMISSION_MED: 100 };
+      const ids = new Set();
+      for (const [t, n] of Object.entries(sizes)) {
+        const w = await call('GET', `/api/live/weekly?track=${t}`);
+        assert.equal(w.status, 200, JSON.stringify(w.json));
+        assert.ok(w.json.exam, `${t}: weekly exam exists`);
+        assert.equal(w.json.exam.weeklyTrack, t);
+        assert.equal(w.json.exam.totalQuestions, n, `${t}: ${n} questions`);
+        assert.equal(w.json.exam.registeredCount, undefined, `${t}: no count for users`);
+        assert.equal(w.json.targetCount, undefined);
+        ids.add(w.json.exam.id);
+      }
+      assert.equal(ids.size, Object.keys(sizes).length, 'one exam per type');
+      // The list for one type has only that type's exams, and no counts
+      const list = await call('GET', '/api/live/exams?track=ADMISSION_MED');
+      assert.ok(list.json.exams.length && list.json.exams.every(e => e.track === 'ADMISSION_MED' || e.track === 'ADMISSION'));
+      assert.ok(list.json.exams.every(e => e.registeredCount === undefined && e.submittedCount === undefined));
+      // The pages users see have no count either
+      for (const f of ['/live.js', '/study.js']) {
+        const js = await (await fetch(base + f)).text();
+        assert.ok(!/registeredCount|submittedCount|নিবন্ধিত:|নিবন্ধন করেছেন/.test(js), `${f} shows no count`);
+      }
+      // Admin still sees them
+      const admin = await call('GET', '/api/live/admin/weekly', { admin: 'test-admin-key' });
+      assert.ok(admin.json.tracks.every(t => t.next && typeof t.next.registeredCount === 'number'));
+    });
+
+    await test('weekly questions come only from that exam type\'s bank', async () => {
+      process.env.LIVE_DATA_FILE = path.join(os.tmpdir(), `live-${Date.now()}.json`);
+      const seed = require('../src/web/seed-data');
+      const { createLiveExamEngine } = require('../src/web/live-exam');
+      const engine = createLiveExamEngine({ availableExams: seed.availableExams, sampleQuestions: seed.sampleQuestions });
+      // A type's bank = the questions of that type's own papers (job papers share general-knowledge questions)
+      const bankOf = t => new Set(seed.availableExams.filter(e => e.examTrack === t && e.questionIds).flatMap(e => e.questionIds));
+      const medical = new Set(seed.availableExams.filter(e => e.examTrack === 'ADMISSION' && e.admTarget === 'medical').flatMap(e => e.questionIds));
+      for (const e of engine._state().exams.filter(x => x.auto)) {
+        const want = e.weeklyTrack.startsWith('ADMISSION') ? 'ADMISSION' : e.weeklyTrack;
+        const bank = bankOf(want);
+        assert.ok(e.questionIds.every(id => bank.has(id)), `${e.weeklyTrack}: only ${want} papers' questions`);
+        if (e.weeklyTrack === 'ADMISSION_MED') assert.ok(e.questionIds.every(id => medical.has(id)), 'medical: only medical papers');
+        assert.equal(new Set(e.questionIds).size, e.questionIds.length, `${e.weeklyTrack}: no repeats`);
+      }
+      fs.rmSync(process.env.LIVE_DATA_FILE, { force: true });
+    });
+
+    await test('admin sets each exam type\'s day and time, or moves this week\'s exam; users see the new time', async () => {
+      const before = (await call('GET', '/api/live/weekly?track=BCS')).json.exam;
+      const r = await call('POST', '/api/live/admin/weekly', { admin: 'test-admin-key', body: { track: 'ADMISSION_MED', weekday: 3, hour: 18, minute: 30, targetCount: 2000 } });
       assert.equal(r.status, 200, JSON.stringify(r.json));
-      const start = new Date(r.json.next.startAt);
-      assert.equal(start.getUTCDay(), 6);
-      assert.equal(`${start.getUTCHours()}:${start.getUTCMinutes()}`, '14:30');
-      const w = await call('GET', '/api/live/weekly');
-      assert.equal(w.json.exam.id, r.json.next.id);
-      assert.equal(w.json.targetCount, 2000);
-      assert.equal((await call('POST', '/api/live/admin/weekly', { admin: 'test-admin-key', body: { hour: 99 } })).status, 400);
+      const med = (await call('GET', '/api/live/weekly?track=ADMISSION_MED')).json;
+      const start = new Date(med.exam.startAt);
+      assert.equal(start.getUTCDay(), 3); // Wednesday
+      assert.equal(`${start.getUTCHours()}:${start.getUTCMinutes()}`, '12:30'); // 6:30 PM Dhaka
+      assert.equal(med.schedule.weekdayBn, 'বুধবার');
+      // Other types keep their own time
+      assert.equal((await call('GET', '/api/live/weekly?track=BCS')).json.exam.startAt, before.startAt);
+      // Move this week's BCS exam to a date of the admin's choice; registrations stay
+      const bob2 = await signUp('Reg', '01866666666');
+      await call('POST', `/api/live/exams/${before.id}/register`, { cookie: bob2, body: { name: 'Reg', phone: '01866666666' } });
+      const when = new Date(Date.now() + 3 * 86400000); when.setUTCSeconds(0, 0);
+      const mv = await call('POST', '/api/live/admin/weekly', { admin: 'test-admin-key', body: { track: 'BCS', startAt: when.toISOString() } });
+      assert.equal(mv.status, 200, JSON.stringify(mv.json));
+      const moved = (await call('GET', '/api/live/weekly?track=BCS')).json.exam;
+      assert.equal(moved.id, before.id);
+      assert.equal(moved.startAt, when.toISOString());
+      const adminView = (await call('GET', '/api/live/admin/weekly', { admin: 'test-admin-key' })).json;
+      assert.equal(adminView.tracks.find(t => t.id === 'BCS').next.registeredCount, 1);
+      assert.equal(adminView.weekly.targetCount, 2000);
+      assert.equal((await call('POST', '/api/live/admin/weekly', { admin: 'test-admin-key', body: { track: 'BCS', hour: 99 } })).status, 400);
+      assert.equal((await call('POST', '/api/live/admin/weekly', { admin: 'test-admin-key', body: { track: 'XYZ' } })).status, 400);
     });
 
     await test('admin can reset a password; old sessions stop working', async () => {

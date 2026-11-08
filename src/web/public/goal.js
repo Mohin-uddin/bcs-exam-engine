@@ -59,7 +59,7 @@
     body.has-goal #examTrackPicker, body.has-goal #pastTrackPicker{display:none}
     body.goal-not-bcs #btnSubViewSuperHot, body.goal-not-bcs #btnSuperHotExam{display:none}
     body.goal-not-primary #tab-primary-calc{display:none}
-    body.goal-admission #tab-confusing-hot, body.goal-admission #tab-master-toolkit, body.goal-admission .side-nav a[href="/live"]{display:none}
+    body.goal-admission #tab-confusing-hot, body.goal-admission #tab-master-toolkit{display:none}
   `;
 
   let overlay = null;
@@ -119,6 +119,7 @@
   const remember = t => { try { if (t) localStorage.setItem(GOAL_KEY, t); } catch { /* storage blocked */ } };
   function choose(t, kind) {
     remember(t);
+    if (t === 'ADMISSION') { try { localStorage.setItem('sh_adm_kind', kind === 'medical' ? 'medical' : 'university'); } catch { /* storage blocked */ } }
     if (t === 'ADMISSION' && window.AdmPick) AdmPick.preset(kind || 'university');
     Study.setTrack(t);
     close();
@@ -238,6 +239,9 @@
   // Old admission-page choices: no longer used
   try { ['admissionGoal', 'admissionUnit', 'admissionStep', 'admissionGroup'].forEach(k => localStorage.removeItem(k)); } catch { /* storage blocked */ }
   if (location.pathname.replace(/\/+$/, '').toLowerCase() === '/medical' && window.AdmPick) AdmPick.preset('medical');
+  if (['/medical', '/admission'].includes(location.pathname.replace(/\/+$/, '').toLowerCase())) {
+    try { localStorage.setItem('sh_adm_kind', location.pathname.toLowerCase().startsWith('/medical') ? 'medical' : 'university'); } catch { /* storage blocked */ }
+  }
   // A set opened from a shared link (/?set=...) goes straight to the exam
   const linkedSet = new URLSearchParams(location.search).get('set') || '';
   if (linkedSet.startsWith('ADM_') && window.Study && !Study.data.settings.track) Study.setSetting('track', 'ADMISSION');
@@ -269,6 +273,7 @@
     else if (!linkedSet) welcome();
     // The exam came from the account (logged in on another device): use it, and close a picker opened meanwhile
     let applied = track();
+    remember(applied); // older visitors had the exam only in the progress copy: the live page reads this key
     if (window.Study) Study.onChange(() => {
       const t = track();
       if (!t || t === applied) return;
@@ -291,7 +296,17 @@
     refreshLines();
   }
 
-  window.Goal = { open, close, choose, applyToPages, refreshLines, GOALS, linked: linked || linkedSet || null, isOpen: () => !!overlay && !overlay.hidden };
+  // Which weekly live exam is the user's: job exams by name, admission split into university and medical
+  function liveTrack() {
+    const t = track();
+    if (t !== 'ADMISSION') return t || 'BCS';
+    let kind = null;
+    try { kind = localStorage.getItem('sh_adm_kind'); } catch { /* storage blocked */ }
+    if (!kind && window.AdmPick) { const f = AdmPick.locate(AdmPick.current()); kind = f && f.ent.type === 'medical' ? 'medical' : 'university'; }
+    return kind === 'medical' ? 'ADMISSION_MED' : 'ADMISSION_UNI';
+  }
+
+  window.Goal = { open, close, choose, applyToPages, refreshLines, GOALS, liveTrack, linked: linked || linkedSet || null, isOpen: () => !!overlay && !overlay.hidden };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();

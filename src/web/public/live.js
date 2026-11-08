@@ -7,6 +7,14 @@
   const TZ = 'Asia/Dhaka';
 
   let clockOffsetMs = 0; // serverNow - clientNow
+  // Only the user's own exam type (chosen on the main site's first screen; goal.js keeps it in localStorage)
+  function myLiveTrack() {
+    let t = 'BCS';
+    let kind = null;
+    try { t = localStorage.getItem('sh_goal_v1') || 'BCS'; kind = localStorage.getItem('sh_adm_kind'); } catch { /* storage blocked */ }
+    if (t === 'ADMISSION') return kind === 'medical' ? 'ADMISSION_MED' : 'ADMISSION_UNI';
+    return t;
+  }
   let exams = [];
   let regExamId = null;
   let meritRows = [];
@@ -88,8 +96,11 @@
   // ---------------------------------------------------------------------------
   async function loadExams() {
     try {
-      const data = await api('/api/live/exams');
+      const data = await api(`/api/live/exams?track=${encodeURIComponent(myLiveTrack())}`);
       exams = data.exams;
+      const label = { BCS: 'বিসিএস', PRIMARY: 'প্রাথমিক শিক্ষক', NTRCA: 'শিক্ষক নিবন্ধন', BANK: 'ব্যাংক', MINISTRY: 'মন্ত্রণালয় ও অধিদপ্তর', NON_CADRE: 'নন-ক্যাডার ও দুদক', NURSING: 'নার্সিং', ADMISSION_UNI: 'বিশ্ববিদ্যালয় ভর্তি', ADMISSION_MED: 'মেডিকেল ও ডেন্টাল ভর্তি' }[myLiveTrack()];
+      const title = document.querySelector('.tb-title');
+      if (title && label) title.textContent = `লাইভ পরীক্ষা • ${label}`;
       renderLists();
     } catch (e) {
       ['listLive', 'listUpcoming', 'listEnded'].forEach(id => {
@@ -128,8 +139,6 @@
           <div>⏱️ সময়: <b>${bn(e.durationMin)} মিনিট</b></div>
           <div>📝 প্রশ্ন: <b>${bn(e.totalQuestions)}টি</b></div>
           <div>➖ ভুলে কাটা: <b>${bn(e.negativeMark.toFixed(2))}</b></div>
-          <div>👥 নিবন্ধিত: <b>${bn(e.registeredCount)} জন</b></div>
-          ${phase !== 'UPCOMING' ? `<div>✅ জমা দিয়েছেন: <b>${bn(e.submittedCount)} জন</b></div>` : ''}
         </div>
         ${e.noticeBn ? `<div class="notice">📢 ${esc(e.noticeBn)}</div>` : ''}
         ${reg ? `<div class="reg-note">আপনি নিবন্ধিত • ${esc(reg.name)} • রোল: <b>${bn(reg.roll)}</b></div>` : ''}

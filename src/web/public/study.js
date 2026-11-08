@@ -400,9 +400,11 @@
   // HOME: আজকের পড়া
   // ---------------------------------------------------------------------------
   let liveCache = null;
+  // The user's own weekly live exam (goal.js): BCS, PRIMARY ... ADMISSION_UNI, ADMISSION_MED
+  const liveTrack = () => (window.Goal && Goal.liveTrack ? Goal.liveTrack() : (data.settings.track || 'BCS'));
   async function loadLive() {
     try {
-      const res = await fetch('/api/live/exams');
+      const res = await fetch(`/api/live/exams?track=${encodeURIComponent(liveTrack())}`);
       const out = await res.json();
       liveCache = (out.exams || []).filter(e => e.phase !== 'ENDED');
     } catch {
@@ -438,10 +440,15 @@
 
   async function loadWeekly() {
     try {
-      const res = await fetch('/api/live/weekly', { credentials: 'same-origin', cache: 'no-store' });
+      const res = await fetch(`/api/live/weekly?track=${encodeURIComponent(liveTrack())}`, { credentials: 'same-origin', cache: 'no-store' });
       const out = await res.json();
       if (out.serverNow) weeklyOffset = Date.parse(out.serverNow) - Date.now();
-      if (out.status === 'SUCCESS') weekly = out;
+      if (out.status === 'SUCCESS') {
+        const first = !weekly || weekly.track !== out.track;
+        weekly = out;
+        // The home card names the day and time: draw it again once the schedule is known
+        if (first && document.getElementById('homeWeekly')) return renderHome();
+      }
     } catch { /* keep the last numbers */ }
     renderWeekly();
   }
@@ -490,7 +497,6 @@
       return;
     }
     const phase = weeklyPhase(e);
-    const target = Number(weekly.targetCount) || 0;
     let accessLine = '';
     if (!a.loggedIn) accessLine = `<button type="button" class="link" onclick="Account.openLogin()">লগইন করুন</button>, ফ্রিতে ${bn(a.freeLimit)}টি লাইভ পরীক্ষা দিতে পারবেন।`;
     else if (a.premium) accessLine = '⭐ আপনার প্যাকেজে প্রতি সপ্তাহের লাইভ পরীক্ষা খোলা।';
@@ -500,7 +506,7 @@
       <div class="weekly-head">
         <div>
           <h3 class="panel-title">🏆 সাপ্তাহিক লাইভ পরীক্ষা</h3>
-          <p class="muted">প্রতি ${esc(sc.weekdayBn)} • ${esc(e.title)}</p>
+          <p class="muted">${esc(weekly.trackLabelBn || '')} • প্রতি ${esc(sc.weekdayBn)}</p>
         </div>
         ${phase === 'LIVE' ? '<span class="weekly-live">🔴 এখন চলছে</span>' : ''}
       </div>
@@ -509,11 +515,6 @@
           <span class="muted">${phase === 'LIVE' ? 'শেষ হতে বাকি' : 'শুরু হতে বাকি'}</span>
           <b id="weeklyCountdown" data-phase="${phase}">${cdText(Date.parse(phase === 'LIVE' ? e.endAt : e.startAt) - serverNow())}</b>
           <span class="muted">📅 ${at(e.startAt)} • ${bn(e.durationMin)} মিনিট • ${bn(e.totalQuestions)} প্রশ্ন</span>
-        </div>
-        <div class="weekly-count">
-          <span class="muted">নিবন্ধন করেছেন</span>
-          <b>${bn(e.registeredCount)} জন</b>
-          ${target ? `<div class="goal-bar"><span style="width:${Math.min(100, Math.round((e.registeredCount / target) * 100))}%"></span></div><span class="muted">এই সপ্তাহের লক্ষ্য ${bn(target)} জন</span>` : ''}
         </div>
       </div>
       <p class="muted mt-3">${accessLine}</p>
@@ -545,7 +546,11 @@
     // What other question apps do not have: each card names the problem it solves.
     // Shown first and in their own colours, so they never blend in with ordinary practice.
     const isAdmission = track === 'ADMISSION';
-    const hasLive = !track || track === 'BCS' || (liveCache || []).some(e => e.track === track);
+    // Every exam type has its own weekly live exam (time set by the admin)
+    const hasLive = true;
+    const wk = weekly && weekly.track === liveTrack() && weekly.schedule;
+    const dayPart = h => (h < 5 ? 'রাত' : h < 12 ? 'সকাল' : h < 15 ? 'দুপুর' : h < 18 ? 'বিকাল' : h < 19 ? 'সন্ধ্যা' : 'রাত');
+    const liveWhen = wk ? `প্রতি ${wk.weekdayBn} ${dayPart(wk.hour)} ${bn(`${(wk.hour % 12) || 12}:${String(wk.minute).padStart(2, '0')}`)}টা` : 'প্রতি সপ্তাহে';
     const specials = [
       { ic: '📕', c: 'red', name: 'ভুল খাতা', pain: 'পড়েন, কিন্তু পরীক্ষায় মনে পড়ে না?',
         what: due ? `আজ রিভিশন বাকি ${bn(due)} টি প্রশ্ন` : 'ভুল প্রশ্ন ১ দিন, ৬ দিন পরে নিজে থেকে ফিরে আসে, যতদিন না মনে থাকে',
@@ -554,8 +559,8 @@
       ...(['BCS', 'PRIMARY'].includes(track || 'BCS') ? [{ ic: '🖨️', c: 'blue', name: 'প্রিন্ট করে বাসায় পরীক্ষা', pain: 'হলে গিয়ে ঘাবড়ে যান?',
         what: `হুবহু ${track === 'PRIMARY' ? 'DPE' : 'BPSC'} ফরম্যাটের প্রশ্নপত্র ও OMR শিট। ছবি তুললেই নম্বর`,
         go: `window.open('/print?track=${track || 'BCS'}','_blank')` }] : []),
-      ...(hasLive ? [{ ic: '🏆', c: 'gold', name: 'শুক্রবারের লাইভ পরীক্ষা', pain: 'সারা দেশে আপনি কততম?',
-        what: 'প্রতি শুক্রবার রাত ৯টা, পরীক্ষা শেষেই মেধা তালিকা', go: "location.href='/live'" }] : []),
+      ...(hasLive ? [{ ic: '🏆', c: 'gold', name: 'সাপ্তাহিক লাইভ পরীক্ষা', pain: 'সারা দেশে আপনি কততম?',
+        what: `${liveWhen}, পরীক্ষা শেষেই মেধা তালিকা`, go: "location.href='/live'" }] : []),
       { ic: '📊', c: 'purple', name: 'পাস করবেন কিনা আগেই জানুন', pain: 'কোন বিষয়ে পিছিয়ে আছেন?',
         what: isAdmission ? 'প্রতিটা পরীক্ষার পরে বিষয়ভিত্তিক হিসাব, কোথায় বেশি পড়তে হবে' : 'দুর্বল বিষয় আর গত বছরের কাট-মার্কের সাথে আপনার নম্বরের তুলনা', go: "switchTab('analytics')" },
       // Confusing pairs are job-exam general knowledge: not for admission students
@@ -647,7 +652,7 @@
     renderLiveBox();
     if (!liveCache) loadLive();
     renderWeekly();
-    if (!weekly) loadWeekly();
+    if (!weekly || weekly.track !== liveTrack()) loadWeekly();
     if (searchValue) search(searchValue);
   }
 
