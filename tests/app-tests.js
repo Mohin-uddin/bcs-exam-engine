@@ -249,7 +249,7 @@ async function serverTests() {
       const phone = '01933333333';
       assert.equal((await call('POST', '/api/cod/otp', { body: { phone } })).status, 200);
       const otp = [...getLog().matchAll(/OTP: (\d{6})/g)].pop()[1];
-      const order = { planId: normal.id, name: 'Karim', phone, districtId: 'rajshahi', area: 'Boalia', address: 'House 1, Road 2', geo: { lat: 23.81, lng: 90.41, accuracy: 30 } };
+      const order = { planId: normal.id, exam: 'BCS', name: 'Karim', phone, districtId: 'rajshahi', area: 'Boalia', address: 'House 1, Road 2', geo: { lat: 23.81, lng: 90.41, accuracy: 30 } };
       const bad = await call('POST', '/api/cod/order', { body: { ...order, otp: otp === '000000' ? '111111' : '000000' } });
       assert.equal(bad.json.code, 'BAD_OTP');
       const ok = await call('POST', '/api/cod/order', { body: { ...order, otp } });
@@ -403,9 +403,19 @@ async function noOtpTests() {
       assert.equal(cfg.otpReady, false);
       assert.equal(cfg.noOtp, true);
       const plan = cfg.plans[0];
-      const ok = await call('POST', '/api/cod/order', { body: { planId: plan.id, name: 'Rahim', phone: '01955555555', districtId: 'dhaka', area: 'Mirpur', address: 'House 1', geo: { lat: 23.81, lng: 90.41, accuracy: 30 } } });
+      // The order says which exam's question set: required, one of the listed exams
+      assert.ok(cfg.exams.some(x => x.id === 'ADMISSION_MED') && cfg.exams.some(x => x.id === 'BCS'));
+      const noExam = await call('POST', '/api/cod/order', { body: { planId: plan.id, name: 'Rahim', phone: '01955555555', districtId: 'dhaka', area: 'Mirpur', address: 'House 1' } });
+      assert.equal(noExam.json.code, 'BAD_EXAM');
+      const ok = await call('POST', '/api/cod/order', { body: { planId: plan.id, exam: 'ADMISSION_MED', name: 'Rahim', phone: '01955555555', districtId: 'dhaka', area: 'Mirpur', address: 'House 1', geo: { lat: 23.81, lng: 90.41, accuracy: 30 } } });
       assert.equal(ok.status, 200, JSON.stringify(ok.json));
       assert.ok(ok.json.whatsappUrl.startsWith('https://wa.me/819097261452?text='), ok.json.whatsappUrl);
+      assert.equal(ok.json.order.examBn, 'মেডিকেল ও ডেন্টাল ভর্তি');
+      assert.ok(decodeURIComponent(ok.json.whatsappUrl).includes('মেডিকেল ও ডেন্টাল ভর্তি'));
+      const byExam = await call('GET', '/api/admin/accounts/orders?status=ALL&exam=ADMISSION_MED', { admin: 'test-admin-key' });
+      assert.ok(byExam.json.orders.length && byExam.json.orders.every(x => x.exam === 'ADMISSION_MED'));
+      const otherExam = await call('GET', '/api/admin/accounts/orders?status=ALL&exam=NURSING', { admin: 'test-admin-key' });
+      assert.ok(!otherExam.json.orders.some(x => x.id === ok.json.order.id));
       const pending = await call('GET', '/api/admin/accounts/orders?status=FAR', { admin: 'test-admin-key' });
       const o = pending.json.orders.find(x => x.id === ok.json.order.id);
       assert.ok(o && !o.phoneVerifiedAt && o.verifyBy === 'WHATSAPP');

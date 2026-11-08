@@ -51,11 +51,12 @@
         .map(s => `<button class="btn ${s === filter ? 'primary' : 'ghost'} sm" type="button" data-ofilter="${s}">${STATUS_BN[s]}</button>`).join('')}</div>
       <form id="ordSearchForm" class="row2" style="margin-bottom:8px">
         <label class="field">অর্ডার নম্বর, কোড, নাম বা মোবাইল দিয়ে খুঁজুন<input id="ordSearch" placeholder="যেমন SH1001 বা 017..."></label>
+        <label class="field">কোন পরীক্ষার প্রশ্নসেট<select id="ordExam"><option value="">সব পরীক্ষা</option></select></label>
         <div class="field" style="justify-content:flex-end"><button class="btn ghost" type="submit">খুঁজুন</button></div>
       </form>
       <div class="table-wrap">
         <table class="admin-table">
-          <thead><tr><th>অর্ডার</th><th>গ্রাহক</th><th>ঠিকানা</th><th>লোকেশন</th><th>প্যাকেজ / টাকা</th><th>অ্যাক্সেস কোড</th><th>অবস্থা</th></tr></thead>
+          <thead><tr><th>অর্ডার</th><th>গ্রাহক</th><th>ঠিকানা</th><th>লোকেশন</th><th>প্রশ্নসেট / প্যাকেজ / টাকা</th><th>অ্যাক্সেস কোড</th><th>অবস্থা</th></tr></thead>
           <tbody id="ordRows"></tbody>
         </table>
       </div>
@@ -111,6 +112,13 @@
 
     section.addEventListener('click', onClick);
     $('ordSearchForm').addEventListener('submit', ev => { ev.preventDefault(); load(); });
+    // Exam filter: the list of exams comes from the order form's own config
+    fetch('/api/cod/config').then(r => r.json()).then(cfg => {
+      const sel = $('ordExam');
+      if (!sel || !cfg.exams) return;
+      sel.innerHTML += cfg.exams.map(x => `<option value="${esc(x.id)}">${esc(x.nameBn)}</option>`).join('');
+      sel.addEventListener('change', load);
+    }).catch(() => { /* filter stays "সব পরীক্ষা" */ });
     $('codSettingsForm').addEventListener('submit', saveSettings);
     $('smsForm').addEventListener('submit', async ev => {
       ev.preventDefault();
@@ -155,7 +163,7 @@
         <td><b>${esc(o.name)}</b><br><a href="tel:${esc(o.phone)}">${esc(o.phone)}</a> ${o.phoneVerifiedAt ? `<small title="নম্বর যাচাই করা">✔️ ${o.verifyBy === 'WHATSAPP' ? 'যাচাই' : 'OTP'}</small>` : '<small style="color:#b45309" title="OTP ছাড়া অর্ডার: WhatsApp মেসেজ এসেছে কিনা বা ফোন করে দেখুন">⏳ WhatsApp যাচাই বাকি</small>'}${o.samePhoneOrders ? `<br><small>এই নম্বরে আরও ${bn(o.samePhoneOrders)}টি অর্ডার</small>` : ''}</td>
         <td><b>${esc(o.districtBn)}</b>, ${esc(o.area)}<br><small>${esc(o.address)}</small>${o.noteBn ? `<br><small>📝 ${esc(o.noteBn)}</small>` : ''}</td>
         <td>${locationCell(o)}</td>
-        <td>${esc(TIER_BN[o.tier] || o.planNameBn)}<br><b>৳${bn(o.total)}</b> <small>(${bn(o.price)} + ডেলিভারি ${bn(o.deliveryCharge)})</small></td>
+        <td><b style="font-size:15px;color:#065f46">📘 ${esc(o.examBn || '—')}</b><br>${esc(TIER_BN[o.tier] || o.planNameBn)}<br><b>৳${bn(o.total)}</b> <small>(${bn(o.price)} + ডেলিভারি ${bn(o.deliveryCharge)})</small></td>
         <td><code style="font-size:15px;font-weight:700;letter-spacing:1px">${esc(o.accessCode)}</code><br>
           ${o.redeemedAt ? `<small>✅ চালু হয়েছে ${fmt(o.redeemedAt)}${o.redeemedUser ? ` • ${esc(o.redeemedUser.name)} (${esc(o.redeemedUser.phone)})` : ''}</small>` : `<button class="btn ghost sm" data-slip="${o.id}" style="margin-top:4px">🖨️ কোড স্লিপ</button>`}</td>
         <td><span class="badge" style="background:${STATUS_COLOR[o.status] || '#e2e8f0'}">${STATUS_BN[o.status] || o.status}</span><br>
@@ -169,7 +177,8 @@
   async function load() {
     try {
       const q = $('ordSearch') ? $('ordSearch').value.trim() : '';
-      const data = await api(`/api/admin/accounts/orders?status=${filter}&q=${encodeURIComponent(q)}`);
+      const exam = $('ordExam') ? $('ordExam').value : '';
+      const data = await api(`/api/admin/accounts/orders?status=${filter}&q=${encodeURIComponent(q)}&exam=${encodeURIComponent(exam)}`);
       orders = data.orders;
       document.querySelectorAll('[data-ofilter]').forEach(b => {
         const s = b.dataset.ofilter;
@@ -196,7 +205,7 @@
       h2{margin:0 0 6px;font-size:18px}.code{font:700 30px monospace;letter-spacing:4px;border:2px solid #0f172a;border-radius:8px;padding:8px;text-align:center;margin:10px 0}
       ol{padding-left:18px;margin:6px 0;font-size:14px}small{color:#475569}</style></head><body>
       <div class="slip"><h2>সোনার হরিণ • আপনার অ্যাক্সেস কোড</h2>
-      <small>অর্ডার ${esc(o.orderNo)} • ${esc(o.name)} • ${esc(TIER_BN[o.tier] || o.planNameBn)}</small>
+      <small>অর্ডার ${esc(o.orderNo)} • ${esc(o.name)} • ${o.examBn ? `${esc(o.examBn)} • ` : ''}${esc(TIER_BN[o.tier] || o.planNameBn)}</small>
       <div class="code">${esc(o.accessCode)}</div>
       <ol><li>${esc(site)} ওয়েবসাইটে যান।</li><li>লগইন করুন (অ্যাকাউন্ট না থাকলে মোবাইল নম্বর দিয়ে নতুন অ্যাকাউন্ট খুলুন)।</li>
       <li>উপরে "👤" বাটন চাপুন → "প্রশ্নসেটের সাথে পাওয়া কোড দিন" → কোডটি লিখুন।</li></ol>

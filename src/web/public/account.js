@@ -541,6 +541,15 @@
   const COD_SAVE_KEY = 'sh_cod_last_v1';
   const lastCod = () => { try { return JSON.parse(localStorage.getItem(COD_SAVE_KEY)) || {}; } catch { return {}; } };
 
+  // The exam the user prepares for (chosen on the first screen) is pre-selected on the order form
+  function myExam() {
+    const t = window.Study && Study.data && Study.data.settings.track;
+    if (t !== 'ADMISSION') return t || '';
+    let pick = {};
+    try { pick = JSON.parse(localStorage.getItem('admissionPick') || '{}') || {}; } catch { /* storage blocked */ }
+    return /মেডিকেল|ডেন্টাল|AFMC/i.test(String(pick.uni || '')) ? 'ADMISSION_MED' : 'ADMISSION_UNI';
+  }
+
   async function openCodOrder(planId) {
     if (!me) return openLogin('অর্ডার করতে আগে ফ্রি অ্যাকাউন্ট খুলুন বা লগইন করুন।', () => openCodOrder(planId));
     const cfg = await loadCod();
@@ -556,6 +565,7 @@
           <label class="acc-plan ${p.id === sel.id ? 'on' : ''}"><input type="radio" name="planId" value="${esc(p.id)}" ${p.id === sel.id ? 'checked' : ''}>
             ${esc(p.nameBn)}<b>৳${bn(p.price)}</b></label>`).join('')}
         </div>
+        ${(cfg.exams || []).length ? `<label class="acc-field">কোন পরীক্ষার প্রশ্নসেট চান?<select name="exam" required><option value="">পরীক্ষা বাছাই করুন</option>${cfg.exams.map(x => `<option value="${esc(x.id)}" ${x.id === myExam() ? 'selected' : ''}>${esc(x.nameBn)}</option>`).join('')}</select></label>` : ''}
         <label class="acc-field">আপনার নাম<input name="name" autocomplete="name" maxlength="80" required value="${esc(last.name || (me ? me.name : ''))}"></label>
         <div class="acc-row">
           <label class="acc-field">মোবাইল নম্বর<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX" required value="${esc(last.phone || (me ? me.phone : ''))}"></label>
@@ -624,6 +634,7 @@
       try {
         const data = await api('/api/cod/order', {
           planId: (form.querySelector('input[name=planId]:checked') || {}).value,
+          exam: form.exam ? form.exam.value : '',
           name: form.name.value, phone: form.phone.value, otp: form.otp.value,
           districtId: form.districtId.value, area: form.area.value, address: form.address.value, note: form.note.value,
           geo: loc.geo || null, geoError: loc.error || ''
@@ -636,7 +647,7 @@
         } catch { /* private mode */ }
         const o = data.order;
         const done = modal(`<h3>🎉 অর্ডার নেওয়া হয়েছে</h3>
-          <div class="acc-ok">অর্ডার নম্বর <b>${esc(o.orderNo)}</b> • ${esc(o.planNameBn)} • প্রশ্নসেট হাতে পেয়ে দেবেন <b>৳${bn(o.total)}</b></div>
+          <div class="acc-ok">অর্ডার নম্বর <b>${esc(o.orderNo)}</b> • ${o.examBn ? `${esc(o.examBn)} প্রশ্নসেট • ` : ''}${esc(o.planNameBn)} • প্রশ্নসেট হাতে পেয়ে দেবেন <b>৳${bn(o.total)}</b></div>
           ${data.whatsappUrl ? `<p>আপনার অর্ডার জমা হয়ে গেছে। দ্রুত পাঠাতে চাইলে নিচের বাটনে চাপ দিন, মেসেজ লেখাই থাকবে, শুধু "Send" চাপবেন। না পাঠালেও সমস্যা নেই, আমরা ফোন করে নেব।</p>
           <a class="acc-btn" style="display:block;text-align:center;background:#25d366;text-decoration:none" href="${esc(data.whatsappUrl)}" target="_blank" rel="noopener">📲 WhatsApp এ অর্ডার নিশ্চিত করুন</a>` : '<p>আমরা শিগগির ফোন করে অর্ডার নিশ্চিত করব।</p>'}
           <div class="acc-warn">🔑 <b>আপনার অ্যাক্সেস কোড প্রশ্নসেটের সাথে প্যাকেটে আসবে।</b> প্রশ্নসেট হাতে পেলে এই ওয়েবসাইটে লগইন করে "কোড দিন" এ কোডটি লিখুন, সাথে সাথে অনলাইনে সব সেট খুলে যাবে।</div>
