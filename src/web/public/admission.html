@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি • সোনার হরিণ</title>
+  <meta name="description" content="HSC ২০২৬ পাস শিক্ষার্থীদের জন্য বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি: বিজ্ঞান, মানবিক, ব্যবসায় শিক্ষা ও প্রাইভেট বিশ্ববিদ্যালয়ের মডেল টেস্ট, ব্যাখ্যা ও ভুল খাতা।">
+  <link rel="icon" href="/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/admission.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#004d38">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="সোনার হরিণ">
+  <script src="/native-app.js"></script>
+  <script src="/pwa.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <a href="/admission" class="brand">
+      <img src="/logo.svg" alt="" width="32" height="32">
+      <span><b>সোনার হরিণ</b><small>বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি</small></span>
+    </a>
+    <nav class="top-links">
+      <a href="/" class="ghost-link">চাকরির প্রস্তুতি</a>
+      <span id="accountSlot"></span>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">HSC ২০২৬ পাস করেছ?</p>
+        <h1>এবার বিশ্ববিদ্যালয় ভর্তির প্রস্তুতি শুরু করো</h1>
+        <p class="lead">ঢাবি, জাবি, রাবি, চবি, গুচ্ছ, প্রকৌশল, মেডিকেল, জাতীয় ও প্রাইভেট বিশ্ববিদ্যালয়ের ইউনিট অনুযায়ী মডেল টেস্ট। প্রতিটি প্রশ্নে ব্যাখ্যা, ভুলগুলো জমা হয় ভুল খাতায়।</p>
+        <div class="stats" id="heroStats"></div>
+        <div class="pick">
+          <span>তুমি কোন বিভাগের?</span>
+          <div class="pick-row" id="groupPick"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="notice" id="honestNotice">
+      <b>প্রশ্নগুলো কোথা থেকে?</b>
+      <p>এখানের মডেল টেস্টের প্রশ্নগুলো HSC পাঠ্যসূচি থেকে বানানো <b>অনুশীলন প্রশ্ন</b>। এগুলো কোনো বিশ্ববিদ্যালয়ের বিগত সালের আসল প্রশ্ন নয়, তাই কোথাও "অমুক সালে এসেছে" লেখা নেই। আসল প্রশ্নপত্র মিলিয়ে যাচাই করে যোগ করা হলে সেগুলো <b>✅ আসল প্রশ্ন</b> চিহ্ন ও সাল-ইউনিট সহ আলাদা দেখাবে।</p>
+    </section>
+
+    <section class="block" id="unitSection">
+      <div class="block-head">
+        <h2>ইউনিটভিত্তিক মডেল টেস্ট</h2>
+        <p class="muted">সময় ধরে পরীক্ষা দাও, জমা দিলেই নম্বর, সঠিক উত্তর ও ব্যাখ্যা। ভুলে <span id="negMark">০.২৫</span> নম্বর কাটা যাবে।</p>
+      </div>
+      <div class="tabs" id="unitTabs" role="tablist"></div>
+      <p class="unit-desc muted" id="unitDesc"></p>
+      <div class="cards" id="modelCards"></div>
+    </section>
+
+    <section class="block" id="pastSection" hidden>
+      <div class="block-head">
+        <h2>✅ বিগত সালের আসল প্রশ্ন</h2>
+        <p class="muted">প্রশ্নপত্র মিলিয়ে যাচাই করা। প্রতিটি সেটে উৎস লেখা আছে।</p>
+      </div>
+      <div class="cards" id="pastCards"></div>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <h2>বিষয়ভিত্তিক অনুশীলন</h2>
+        <p class="muted">যে বিষয়ে দুর্বল, সেটির সব প্রশ্ন একসাথে।</p>
+      </div>
+      <div class="cards small" id="drillCards"></div>
+    </section>
+
+    <section class="block" id="uniSection">
+      <div class="block-head">
+        <h2>বিশ্ববিদ্যালয় ও গুচ্ছ</h2>
+        <p class="muted">তোমার লক্ষ্যের বিশ্ববিদ্যালয় খুঁজে তার ইউনিটের মডেল টেস্ট দাও। আসন, তারিখ ও মানবণ্টন প্রতি বছর বদলায়—সবসময় অফিসিয়াল বিজ্ঞপ্তি দেখে নিও।</p>
+      </div>
+      <div class="uni-tools">
+        <input type="search" id="uniSearch" placeholder="বিশ্ববিদ্যালয়ের নাম লিখে খুঁজুন..." aria-label="বিশ্ববিদ্যালয় খুঁজুন">
+        <div class="chips" id="uniGroups"></div>
+      </div>
+      <div class="uni-grid" id="uniList"></div>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <h2>সাথে আরও যা পাবে</h2>
+      </div>
+      <div class="tools">
+        <a class="tool" href="/#mistakes"><span>📕</span><b>ভুল খাতা</b><small>ভুল করা প্রশ্ন জমা থাকে, আবার অনুশীলন করো</small></a>
+        <a class="tool" href="/#flashcards"><span>🧠</span><b>ফ্ল্যাশকার্ড</b><small>নির্দিষ্ট দিন পর পর রিভিশন (SM-2)</small></a>
+        <a class="tool" href="/live"><span>🏆</span><b>লাইভ পরীক্ষা</b><small>সবার সাথে একই সময়ে পরীক্ষা ও মেধাতালিকা</small></a>
+        <a class="tool" href="/#analytics"><span>📊</span><b>ফলাফল ও দুর্বলতা</b><small>কোন বিষয়ে কত পাচ্ছ, এক নজরে</small></a>
+        <a class="tool" href="/#bookmarks"><span>⭐</span><b>বুকমার্ক</b><small>গুরুত্বপূর্ণ প্রশ্ন আলাদা করে রাখো</small></a>
+        <button type="button" class="tool" data-payment onclick="window.Account && Account.openPlans({})"><span>🔓</span><b>সব সেট খুলুন</b><small>প্রিমিয়াম প্ল্যান বা ক্যাশ অন ডেলিভারি</small></button>
+      </div>
+      <p class="app-unlock-note muted">সব সেট খুলতে ওয়েবসাইট থেকে প্ল্যান নিন, তারপর অ্যাপে একই অ্যাকাউন্টে লগইন করুন।</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>সোনার হরিণ • বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি</p>
+    <p><a href="/">চাকরির পরীক্ষার প্রস্তুতি</a> • <a href="/privacy">গোপনীয়তা নীতি</a></p>
+  </footer>
+
+  <script src="/seed-data.js"></script>
+  <script src="/account.js"></script>
+  <script src="/admission.js"></script>
+</body>
+</html>

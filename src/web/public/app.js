@@ -73,9 +73,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   Study.onChange(() => { updateMistakeBadge(); updateBookmarkBadges(); });
 
   // Open the section named in the address bar (e.g. /#past-bank), so refresh and shared links keep their place
-  const startTab = resumed ? 'exam' : location.hash.replace('#', '');
+  // Link from the admission portal (/admission): /?set=<examId>#exam opens that set ready to start
+  const linkedSet = !resumed && openLinkedSet(new URLSearchParams(location.search).get('set'));
+  const startTab = resumed || linkedSet ? 'exam' : location.hash.replace('#', '');
   switchTab(startTab && document.getElementById(`pane-${startTab}`) ? startTab : 'home', { keepScroll: true });
 });
+
+// Opens a set named in the address bar (?set=ADM_SCI_MODEL_1). Locked sets show the unlock dialog instead.
+function openLinkedSet(setId) {
+  if (!setId) return false;
+  history.replaceState(null, '', location.pathname + location.hash);
+  const pack = availableExamPacks.find(p => p.id === setId);
+  if (!pack) return false;
+  selectExamTrack(pack.examTrack || 'BCS');
+  // Locked: the unlock dialog opens over that exam type's free sets
+  if (window.Account && !Account.allow(setId)) return true;
+  const sel = document.getElementById('examCategorySelect');
+  if (!sel || ![...sel.options].some(o => o.value === setId)) return false;
+  sel.value = setId;
+  changeExamCategory();
+  return true;
+}
 
 // Load Questions and Exam Packs
 async function loadDatabase() {
@@ -125,7 +143,7 @@ function selectExamTrack(track) {
   activeExamTrack = track;
 
   // Update Track Switcher button styles across all 7 sectors
-  const tracks = ['BCS', 'PRIMARY', 'NTRCA', 'BANK', 'MINISTRY', 'NON_CADRE', 'NURSING'];
+  const tracks = ['BCS', 'PRIMARY', 'NTRCA', 'BANK', 'MINISTRY', 'NON_CADRE', 'NURSING', 'ADMISSION'];
   tracks.forEach(t => {
     const btn = document.getElementById(`btnTrack${t}`);
     if (!btn) return;
@@ -336,6 +354,19 @@ function selectExamTrack(track) {
         </button>
       `;
     }
+  } else if (track === 'ADMISSION') {
+    if (badge) badge.textContent = 'HSC ২০২৬ পাস শিক্ষার্থীদের জন্য • বিজ্ঞান, মানবিক, ব্যবসায় শিক্ষা ও প্রাইভেট বিশ্ববিদ্যালয়ের মডেল টেস্ট (HSC পাঠ্যসূচিভিত্তিক অনুশীলন প্রশ্ন)';
+    if (heading) heading.textContent = 'বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি — ইউনিটভিত্তিক মডেল টেস্ট';
+    if (dropLabel) dropLabel.textContent = 'ইউনিটভিত্তিক মডেল টেস্ট বা বিষয়ভিত্তিক অনুশীলন সেট নির্বাচন করুন:';
+    if (quickContainer) {
+      quickContainer.innerHTML = `
+        <button onclick="selectQuickPracticeSet('ADM_SCI_MODEL_1')" class="chip">🔬 বিজ্ঞান-১</button>
+        <button onclick="selectQuickPracticeSet('ADM_HUM_MODEL_1')" class="chip">📜 মানবিক-১</button>
+        <button onclick="selectQuickPracticeSet('ADM_BUS_MODEL_1')" class="chip">📊 ব্যবসায় শিক্ষা-১</button>
+        <button onclick="selectQuickPracticeSet('ADM_PVT_MODEL_1')" class="chip">🏢 প্রাইভেট-১</button>
+        <a href="/admission" class="chip">🎓 ভর্তি পোর্টাল</a>
+      `;
+    }
   }
 
   populateExamDropdown();
@@ -446,6 +477,22 @@ function populateExamDropdown() {
       html += nursePast.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
       html += `</optgroup>`;
     }
+  } else if (activeExamTrack === 'ADMISSION') {
+    const adm = availableExamPacks.filter(e => e.examTrack === 'ADMISSION');
+    const groups = [
+      ['✅ বিগত সালের আসল প্রশ্ন (যাচাইকৃত)', adm.filter(e => e.isVerifiedPast)],
+      ['🔬 বিজ্ঞান ইউনিট মডেল টেস্ট', adm.filter(e => /^ADM_SCI_MODEL_/.test(e.id))],
+      ['📜 মানবিক / কলা ইউনিট মডেল টেস্ট', adm.filter(e => /^ADM_HUM_MODEL_/.test(e.id))],
+      ['📊 ব্যবসায় শিক্ষা ইউনিট মডেল টেস্ট', adm.filter(e => /^ADM_BUS_MODEL_/.test(e.id))],
+      ['🏢 প্রাইভেট বিশ্ববিদ্যালয় মডেল টেস্ট', adm.filter(e => /^ADM_PVT_MODEL_/.test(e.id))],
+      ['📘 বিষয়ভিত্তিক অনুশীলন', adm.filter(e => /^ADM_SUBJECT_/.test(e.id))]
+    ];
+    groups.forEach(([label, list]) => {
+      if (!list.length) return;
+      html += `<optgroup label="${label}">`;
+      html += list.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
+      html += `</optgroup>`;
+    });
   }
 
   sel.innerHTML = html;
@@ -705,6 +752,9 @@ function changeExamCategory() {
   } else if (currentCategory === 'NON_CADRE') {
     if (omrAuthHead) omrAuthHead.textContent = 'পিএসসি নন-ক্যাডার ও দুদক নিয়োগ';
     if (omrAuthSub) omrAuthSub.textContent = 'BPSC NON-CADRE ANSWER SHEET • ৯ম ও ১০ম গ্রেড';
+  } else if (currentCategory === 'ADMISSION') {
+    if (omrAuthHead) omrAuthHead.textContent = 'বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি';
+    if (omrAuthSub) omrAuthSub.textContent = 'ADMISSION MODEL TEST • ভুলে −০.২৫';
   } else {
     if (omrAuthHead) omrAuthHead.textContent = 'বাংলাদেশ সরকারি কর্ম কমিশন';
     if (omrAuthSub) omrAuthSub.textContent = 'BPSC ANSWER SHEET • কালো বলপয়েন্ট বৃত্ত ভরাট';
@@ -964,7 +1014,7 @@ function renderExamQuestions() {
       <div class="bpsc-paper-sheet">
         <!-- Official BPSC / DPE Question Booklet Header -->
         <div class="text-center border-b-2 border-slate-900 pb-3 mb-3">
-          <div class="text-xs font-bold tracking-wider text-slate-700">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+          <div class="text-xs font-bold tracking-wider text-slate-700">${activeExamTrack === 'ADMISSION' ? 'মডেল টেস্ট • অনুশীলন প্রশ্ন' : 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার'}</div>
           <h2 class="text-xl sm:text-2xl font-extrabold text-slate-950 mt-0.5">${orgHeaderBn}</h2>
           <h3 class="text-sm sm:text-base font-bold text-[#006a4e] mt-0.5">${currentExamTitleBn}</h3>
 
@@ -1377,6 +1427,7 @@ function getSectorArchiveList(track) {
   if (track === 'MINISTRY') return window.ministryExamsArchive || [];
   if (track === 'NON_CADRE') return window.nonCadreExamsArchive || [];
   if (track === 'NURSING') return window.nursingExamsArchive || [];
+  if (track === 'ADMISSION') return window.admissionExamsArchive || [];
   return [];
 }
 
@@ -1384,7 +1435,7 @@ function setPastBankTrack(track) {
   pastBankTrack = track; // 'BCS' | 'PRIMARY' | 'NTRCA' | 'BANK' | 'MINISTRY' | 'NON_CADRE' | 'NURSING'
   pastBankFilterValue = defaultPastBankFilter();
 
-  const allTracks = ['BCS', 'PRIMARY', 'NTRCA', 'BANK', 'MINISTRY', 'NON_CADRE', 'NURSING'];
+  const allTracks = ['BCS', 'PRIMARY', 'NTRCA', 'BANK', 'MINISTRY', 'NON_CADRE', 'NURSING', 'ADMISSION'];
   allTracks.forEach(t => {
     const btn = document.getElementById(`btnPastTrack${t}`);
     if (btn) {
@@ -1417,6 +1468,10 @@ function setPastBankTrack(track) {
     if (head) head.textContent = '⚖️ পিএসসি নন-ক্যাডার (৯ম-১০ম গ্রেড) ও দুদক (ACC) প্রশ্নব্যাংক';
     if (badge) badge.textContent = 'এটিইও (ATEO) • সাব-রেজিস্ট্রার • তহশিলদার • দুদক (১৪টি পূর্ণাঙ্গ সেট)';
     if (desc) desc.textContent = 'পিএসসি নন-ক্যাডার ৯ম ও ১০ম গ্রেড এবং দুর্নীতি দমন কমিশনের (ACC) প্রশ্নপত্র ২-কলাম বুকলেট ও উত্তরপত্রে সমাধান করুন।';
+  } else if (track === 'ADMISSION') {
+    if (head) head.textContent = '🎓 বিশ্ববিদ্যালয় ভর্তি প্রস্তুতি প্রশ্নব্যাংক (HSC ২০২৬)';
+    if (badge) badge.textContent = 'বিজ্ঞান • মানবিক • ব্যবসায় শিক্ষা • প্রাইভেট বিশ্ববিদ্যালয় • বিষয়ভিত্তিক অনুশীলন';
+    if (desc) desc.textContent = 'এখানের প্রশ্নগুলো HSC পাঠ্যসূচি থেকে বানানো অনুশীলন প্রশ্ন, কোনো বিশ্ববিদ্যালয়ের বিগত সালের আসল প্রশ্ন নয়। আসল প্রশ্ন যাচাই করে যোগ হলে ✅ চিহ্ন দিয়ে আলাদা দেখানো হবে।';
   } else if (track === 'NURSING') {
     if (head) head.textContent = '🩺 বিপিএসসি সিনিয়র স্টাফ নার্স ও মিডওয়াইফারি প্রশ্নব্যাংক (BPSC & DGNM)';
     if (badge) badge.textContent = '১০ম গ্রেড নার্সিং ও মিডওয়াইফারি (১৪টি পূর্ণাঙ্গ সেট • ৪টি বিগত পরীক্ষার ধাঁচে সেট + ১০টি প্রফেশনাল মডেল সেট)';
@@ -1435,7 +1490,12 @@ function launchExamFromPastBank(track, examSetId) {
   if (window.Account && !Account.allow(examSetId)) return;
   selectExamTrack(track);
   const sel = document.getElementById('examCategorySelect');
-  if (sel) sel.value = examSetId;
+  if (sel) {
+    // Archive cards pass '<code>_SET'; model sets are listed under their plain id
+    const has = v => [...sel.options].some(o => o.value === v);
+    const plain = String(examSetId).replace(/_SET$/, '');
+    sel.value = has(examSetId) ? examSetId : has(plain) ? plain : sel.value;
+  }
   changeExamCategory();
   switchTab('exam');
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1466,7 +1526,8 @@ function renderPastBankFilters() {
       NTRCA: '🎓 সকল নিবন্ধন ও মডেল সেটের তালিকা (১২টি সেট)',
       BANK: '🏦 সকল ব্যাংক নিয়োগ ও মডেল সেটের তালিকা (১০টি সেট)',
       MINISTRY: '🏢 সকল মন্ত্রণালয় ও অধিদপ্তরের সেটের তালিকা (১০টি সেট)',
-      NON_CADRE: '⚖️ সকল নন-ক্যাডার ও দুদক সেটের তালিকা (৮টি সেট)'
+      NON_CADRE: '⚖️ সকল নন-ক্যাডার ও দুদক সেটের তালিকা (৮টি সেট)',
+      ADMISSION: '🎓 সকল ভর্তি মডেল টেস্ট ও বিষয়ভিত্তিক সেটের তালিকা'
     }[pastBankTrack] || '📋 সকল সেটের তালিকা';
 
     const allQuestionsLabel = {
@@ -1474,14 +1535,19 @@ function renderPastBankFilters() {
       NTRCA: 'সকল শিক্ষক নিবন্ধন প্রশ্ন (একত্রে)',
       BANK: 'সকল ব্যাংক নিয়োগ প্রশ্ন (একত্রে)',
       MINISTRY: 'সকল মন্ত্রণালয় ও অধিদপ্তর প্রশ্ন (একত্রে)',
-      NON_CADRE: 'সকল নন-ক্যাডার প্রশ্ন (একত্রে)'
+      NON_CADRE: 'সকল নন-ক্যাডার প্রশ্ন (একত্রে)',
+      ADMISSION: 'সকল ভর্তি প্রস্তুতি প্রশ্ন (একত্রে)'
     }[pastBankTrack] || 'সকল প্রশ্ন';
 
     if (pastBankMode === 'YEAR') {
+      // The hard-question lists are made from job-exam questions, so admission does not show them
+      const hotItems = pastBankTrack === 'ADMISSION' ? [] : [
+        { code: 'SUPER_HOT_10', label: '🔥 বাছাই করা কঠিন ২০০ প্রশ্ন' },
+        { code: 'SUPER_HOT_5', label: '🔥 সবচেয়ে কঠিন ১০০ প্রশ্ন' }
+      ];
       const items = [
         { code: 'ARCHIVE_SECTOR', label: archiveOverviewLabel },
-        { code: 'SUPER_HOT_10', label: '🔥 বাছাই করা কঠিন ২০০ প্রশ্ন' },
-        { code: 'SUPER_HOT_5', label: '🔥 সবচেয়ে কঠিন ১০০ প্রশ্ন' },
+        ...hotItems,
         { code: 'ALL', label: allQuestionsLabel },
         ...sectorArchives.map(a => ({
           code: a.code,
@@ -1496,7 +1562,8 @@ function renderPastBankFilters() {
         }">${it.label}</button>
       `).join('');
     } else {
-      const sectorSubjects = [
+      const admissionSubjects = ((window.admissionPortalData && admissionPortalData.subjects) || []).map(x => ({ code: x.code, name: x.nameBn }));
+      const sectorSubjects = pastBankTrack === 'ADMISSION' ? [{ code: 'ALL', name: 'সকল বিষয়' }, ...admissionSubjects] : [
         { code: 'ALL', name: 'সকল বিষয়' },
         { code: 'BANGLA', name: 'বাংলা ব্যাকরণ ও সাহিত্য' },
         { code: 'ENGLISH', name: 'English Language & Grammar' },
@@ -1628,14 +1695,16 @@ function renderPastBank() {
               </div>
               <div class="bg-white p-2 rounded-lg border border-slate-200">
                 <span class="text-slate-500 block text-[10px]">সেফ কাট-মার্ক / পরীক্ষার্থী</span>
-                <span class="text-emerald-700 font-bold">${a.safeScoreTrend}</span>
+                <span class="text-emerald-700 font-bold">${a.safeScoreTrend || `${toBnDigits(a.durationMin || 0)} মিনিট`}</span>
               </div>
             </div>
 
             <p class="text-xs text-slate-700 leading-relaxed">
-              <strong class="text-amber-700">প্রশ্ন প্যাটার্ন: </strong>${a.notablePattern}
+              <strong class="text-amber-700">প্রশ্ন প্যাটার্ন: </strong>${a.notablePattern || a.postLabelBn || ''}
             </p>
-            <p class="text-[11px] text-slate-500">ℹ️ এখানে এই পরীক্ষার ধাঁচে বানানো অনুশীলন প্রশ্ন আছে, আসল প্রশ্নপত্র নয়।</p>
+            <p class="text-[11px] text-slate-500">${a.isVerifiedPast
+              ? `✅ আসল প্রশ্নপত্র • উৎস: ${a.sourceBn || ''}`
+              : 'ℹ️ এখানে এই পরীক্ষার ধাঁচে বানানো অনুশীলন প্রশ্ন আছে, আসল প্রশ্নপত্র নয়।'}</p>
 
             <div class="grid grid-cols-2 gap-2 pt-1">
               <button onclick="filterPastBank('${a.code}')" class="py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs transition">
@@ -1978,7 +2047,7 @@ function renderPastBank() {
         <div class="lg:col-span-8">
           <div class="bpsc-paper-sheet">
             <div class="text-center border-b-2 border-slate-900 pb-3 mb-3">
-              <div class="text-xs font-bold tracking-wider text-slate-700">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+              <div class="text-xs font-bold tracking-wider text-slate-700">${activeExamTrack === 'ADMISSION' ? 'মডেল টেস্ট • অনুশীলন প্রশ্ন' : 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার'}</div>
               <h2 class="text-xl sm:text-2xl font-extrabold text-slate-950 mt-0.5">${orgHeaderBn}</h2>
               <h3 class="text-sm sm:text-base font-bold text-[#006a4e] mt-0.5">${paperTitleBn}</h3>
 
@@ -3484,7 +3553,7 @@ function printFullExamPackage(source = 'LIVE') {
   <!-- PART 1: 2-COLUMN QUESTION BOOKLET -->
   <div class="sheet">
     <div class="head">
-      <div>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+      <div>${activeExamTrack === 'ADMISSION' ? 'মডেল টেস্ট • অনুশীলন প্রশ্ন' : 'গণপ্রজাতন্ত্রী বাংলাদেশ সরকার'}</div>
       <h1>${orgTitle}</h1>
       <h2>${examTitle}</h2>
       <div class="meta">
