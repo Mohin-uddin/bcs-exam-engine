@@ -365,6 +365,29 @@ async function serverTests() {
       fs.rmSync(process.env.LIVE_DATA_FILE, { force: true });
     });
 
+    await test('an older weekly exam of the single "ADMISSION" type stays the university exam (no duplicate, registrations kept)', async () => {
+      const file = path.join(os.tmpdir(), `live-legacy-${Date.now()}.json`);
+      const seed = require('../src/web/seed-data');
+      const set = seed.availableExams.find(e => e.examTrack === 'ADMISSION' && e.questionIds && e.questionIds.length);
+      // Friday 9 PM Dhaka of this week (the default slot)
+      const { createLiveExamEngine } = require('../src/web/live-exam');
+      const probe = createLiveExamEngine({ availableExams: [], sampleQuestions: [] });
+      const startMs = probe.nextWeeklyStart({ weekday: 5, hour: 21, minute: 0 }, Date.now(), 60);
+      const weekKey = new Date(startMs + 6 * 3600000).toISOString().slice(0, 10);
+      const legacy = { id: 'lx_legacy', auto: true, weekKey, title: 'পুরনো', track: 'ADMISSION', weeklyTrack: 'ADMISSION', setId: set.id, setCode: 'ক',
+        questionIds: set.questionIds, startAt: new Date(startMs).toISOString(), durationMin: 60, negativeMark: 0.25, createdAt: new Date().toISOString(),
+        nextRoll: 100002, candidates: [{ roll: 100001, name: 'X', phone: '01700000000', token: 't', registeredAt: new Date().toISOString() }] };
+      const dup = { ...legacy, id: 'lx_dup', track: 'ADMISSION_UNI', weeklyTrack: 'ADMISSION_UNI', candidates: [] };
+      fs.writeFileSync(file, JSON.stringify({ exams: [legacy, dup], weekly: { weekday: 5, hour: 21, minute: 0, track: 'ADMISSION' } }));
+      delete require.cache[require.resolve('../src/web/live-exam')];
+      process.env.LIVE_DATA_FILE = file;
+      const { createLiveExamEngine: fresh } = require('../src/web/live-exam');
+      const engine = fresh({ availableExams: seed.availableExams, sampleQuestions: seed.sampleQuestions });
+      const uni = engine._state().exams.filter(e => e.auto && (e.weeklyTrack === 'ADMISSION_UNI' || e.weeklyTrack === 'ADMISSION') && e.weekKey === weekKey);
+      assert.deepEqual(uni.map(e => e.id), ['lx_legacy'], 'one university exam this week: the one with the registration');
+      fs.rmSync(file, { force: true });
+    });
+
     await test('admin sets each exam type\'s day and time, or moves this week\'s exam; users see the new time', async () => {
       const before = (await call('GET', '/api/live/weekly?track=BCS')).json.exam;
       const r = await call('POST', '/api/live/admin/weekly', { admin: 'test-admin-key', body: { track: 'ADMISSION_MED', weekday: 3, hour: 18, minute: 30, targetCount: 2000 } });
