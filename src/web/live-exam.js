@@ -158,7 +158,11 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
   }
   const slotOf = t => ({ ...DEFAULT_SLOT, ...(slots()[t] || {}) });
   // Weekly exams made before exam types had their own: they were all of their set's track
-  const weeklyTrackOf = e => e.weeklyTrack || e.track;
+  // (a weekly exam of the old single "ADMISSION" type is the university admission one)
+  const weeklyTrackOf = e => {
+    const t = e.weeklyTrack || e.track;
+    return t === 'ADMISSION' ? 'ADMISSION_UNI' : t;
+  };
 
   // Start of this week's slot in Dhaka time, or next week's once this one has ended
   function nextWeeklyStart(cfg, now = Date.now(), durationMin = 60) {
@@ -214,8 +218,16 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
     const startMs = nextWeeklyStart(cfg, Date.now(), durationMin);
     const weekKey = new Date(startMs + DHAKA_OFFSET_MS).toISOString().slice(0, 10);
     // A cancelled weekly exam counts too: admin cancelled this week on purpose
-    const existing = mine.find(e => e.weekKey === weekKey);
-    if (existing) return existing;
+    const same = mine.filter(e => e.weekKey === weekKey);
+    // Two for the same week (an older exam of this type and one made after an update): keep the one people
+    // registered for, else the one made for this type (right size), and drop the other while it is still empty
+    if (same.length > 1) {
+      const keep = same.find(e => e.candidates.length) || same.find(e => e.weeklyTrack === t) || same[0];
+      const drop = same.filter(e => e !== keep && !e.candidates.length && phaseOf(e) === 'UPCOMING');
+      if (drop.length) { state.exams = state.exams.filter(e => !drop.includes(e)); save(); }
+      return keep;
+    }
+    if (same.length) return same[0];
     const paper = pickWeeklyPaper(t, weekKey);
     if (!paper) return null;
     const meta = TRACK_META[t];
