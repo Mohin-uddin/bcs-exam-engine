@@ -19,6 +19,7 @@
   const fmtDate = iso => new Date(iso).toLocaleDateString('bn-BD', { timeZone: 'Asia/Dhaka', day: 'numeric', month: 'long', year: 'numeric' });
 
   let me = null;
+  let loaded = false; // /api/auth/me answered (until then nobody is treated as logged out)
   let config = null;
   let pollId = null;
 
@@ -52,6 +53,12 @@
   .acc-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font:600 13px/1.2 'Noto Sans Bengali',system-ui,sans-serif;cursor:pointer;white-space:nowrap}
   .acc-pill:hover{border-color:#006a4e}
   .acc-pill.premium{background:#fef3c7;border-color:#f59e0b;color:#92400e}
+  .acc-pill.guest{background:#006a4e;border-color:#006a4e;color:#fff;font-weight:700;box-shadow:0 0 0 3px rgba(0,106,78,.18)}
+  .acc-pill.guest:hover{background:#004d38}
+  @media (max-width:440px){.acc-pill.guest .acc-extra{display:none}}
+  .acc-welcome{display:flex;gap:10px;align-items:flex-start;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:13.5px}
+  .acc-welcome b{display:block;font-size:15px}
+  .acc-later{display:block;margin:10px auto 0;background:none;border:0;color:#475569;text-decoration:underline;font:500 13.5px 'Noto Sans Bengali',sans-serif;cursor:pointer}
   .acc-floating{position:fixed;right:14px;bottom:14px;z-index:9000;box-shadow:0 4px 14px rgba(0,0,0,.15)}
   .acc-overlay{position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.55);display:flex;align-items:flex-start;justify-content:center;padding:24px 12px;overflow-y:auto}
   .acc-overlay[hidden]{display:none}
@@ -156,6 +163,7 @@
   // ---------------------------------------------------------------------------
   let overlay = null;
   function modal(html) {
+    overlayCloseHook = null;
     if (!overlay) {
       overlay = document.createElement('div');
       overlay.className = 'acc-overlay';
@@ -168,24 +176,32 @@
     overlay.hidden = false;
     return overlay.querySelector('.acc-modal');
   }
-  function close() { if (overlay) overlay.hidden = true; }
+  let overlayCloseHook = null;
+  function close() {
+    if (overlay) overlay.hidden = true;
+    const hook = overlayCloseHook;
+    overlayCloseHook = null;
+    if (hook) hook();
+  }
 
   // ---------------------------------------------------------------------------
   // Login / register
   // ---------------------------------------------------------------------------
-  function openLogin(reasonBn, then) {
+  function openLogin(reasonBn, then, opts = {}) {
     let mode = 'login';
     const box = modal(`
-      <h3>অ্যাকাউন্ট</h3>
-      <div class="acc-sub">${esc(reasonBn || 'মোবাইল নম্বর ও পাসওয়ার্ড দিয়ে লগইন করুন। ওয়েবসাইট ও অ্যাপে একই অ্যাকাউন্ট চলবে।')}</div>
-      <div class="acc-tabs"><button type="button" data-mode="login" class="on">লগইন</button><button type="button" data-mode="register">নতুন অ্যাকাউন্ট</button></div>
+      <h3>${opts.welcome ? '🦌 সোনার হরিণে স্বাগতম' : 'লগইন / নতুন অ্যাকাউন্ট'}</h3>
+      ${opts.welcome ? `<div class="acc-welcome"><span style="font-size:22px">🎁</span><span><b>ফ্রি অ্যাকাউন্ট খুলুন, ৩০ সেকেন্ড লাগবে</b>পরীক্ষা দিতে, ফলাফল আর ভুল খাতা রাখতে অ্যাকাউন্ট লাগবে। ফোন ও কম্পিউটারে একই অগ্রগতি পাবেন।</span></div>` : ''}
+      ${opts.welcome ? '' : `<div class="acc-sub">${esc(reasonBn || 'মোবাইল নম্বর ও পাসওয়ার্ড দিয়ে লগইন করুন। ওয়েবসাইট ও অ্যাপে একই অ্যাকাউন্ট চলবে।')}</div>`}
+      <div class="acc-tabs"><button type="button" data-mode="register">নতুন অ্যাকাউন্ট</button><button type="button" data-mode="login" class="on">আগে থেকে আছে: লগইন</button></div>
       <form>
         <label class="acc-field" data-only="register" hidden>আপনার নাম<input name="name" autocomplete="name" maxlength="80"></label>
         <label class="acc-field">মোবাইল নম্বর<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX" required></label>
         <label class="acc-field">পাসওয়ার্ড<input name="password" type="password" autocomplete="current-password" minlength="6" required></label>
         <div class="acc-err"></div>
         <button class="acc-btn" type="submit">লগইন করুন</button>
-      </form>`);
+      </form>
+      ${opts.later ? '<button type="button" class="acc-later acc-x" style="position:static">পরে করব, আগে ঘুরে দেখি</button>' : ''}`);
     const form = box.querySelector('form');
     const setMode = m => {
       mode = m;
@@ -196,6 +212,8 @@
       form.querySelector('.acc-btn').textContent = m === 'register' ? 'অ্যাকাউন্ট খুলুন' : 'লগইন করুন';
     };
     box.querySelectorAll('.acc-tabs button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+    setMode(opts.mode || (reasonBn || opts.welcome ? 'register' : 'login'));
+    overlayCloseHook = opts.onClose || null;
     form.addEventListener('submit', async ev => {
       ev.preventDefault();
       const btn = form.querySelector('.acc-btn');
@@ -461,6 +479,7 @@
   }
 
   async function openPlans(opts = {}) {
+    if (!me) return openLogin('প্যাকেজ কিনতে আগে ফ্রি অ্যাকাউন্ট খুলুন বা লগইন করুন।', () => openPlans(opts));
     const exam = opts.examId ? (window.availableExams || []).find(e => e.id === resolve(opts.examId)) : null;
     const box = modal('<h3>আমাদের প্যাকেজ</h3><div class="acc-sub">লোড হচ্ছে...</div>');
     let cfg;
@@ -523,6 +542,7 @@
   const lastCod = () => { try { return JSON.parse(localStorage.getItem(COD_SAVE_KEY)) || {}; } catch { return {}; } };
 
   async function openCodOrder(planId) {
+    if (!me) return openLogin('অর্ডার করতে আগে ফ্রি অ্যাকাউন্ট খুলুন বা লগইন করুন।', () => openCodOrder(planId));
     const cfg = await loadCod();
     const last = lastCod();
     const plans = cfg.plans || [];
@@ -739,7 +759,8 @@
       else { pill.classList.add('acc-floating'); document.body.appendChild(pill); }
     }
     pill.classList.toggle('premium', Boolean(me && me.premium));
-    pill.innerHTML = !me ? '👤 লগইন' : me.premium ? `⭐ ${esc(me.name.split(' ')[0])}` : `👤 ${esc(me.name.split(' ')[0])}`;
+    pill.classList.toggle('guest', !me);
+    pill.innerHTML = !me ? '👤 লগইন<span class="acc-extra"> / নিবন্ধন</span>' : me.premium ? `⭐ ${esc(me.name.split(' ')[0])}` : `👤 ${esc(me.name.split(' ')[0])}`;
   }
 
   // While a payment waits for approval, check every minute so the page can unlock itself
@@ -837,7 +858,14 @@
         <button type="button" class="acc-btn" onclick="Account.allow('${esc(examId)}')">🔓 আনলক করুন</button>
       </div>`;
     },
-    openLogin: () => openLogin(),
+    openLogin: (reason, then, opts) => openLogin(reason, then, opts),
+    // Exams start only for a logged-in user: true when logged in, otherwise the register / login box opens
+    requireLogin(reasonBn, then) {
+      if (me || !loaded) return true;
+      openLogin(reasonBn || 'পরীক্ষা দিতে আগে ফ্রি অ্যাকাউন্ট খুলুন বা লগইন করুন। ফলাফল আর ভুল খাতা আপনার অ্যাকাউন্টে থাকবে।', then);
+      return false;
+    },
+    get loaded() { return loaded; },
     openUnlock: examId => openPlans({ examId }),
     openOnlinePay
   };
@@ -884,8 +912,10 @@
     try {
       const data = await api('/api/auth/me');
       me = data.user;
+      loaded = true;
       renderPill();
       announce();
+      window.dispatchEvent(new CustomEvent('account:ready', { detail: me }));
       applyPrintLock();
       if (gwResult) return showGatewayResult(gwResult);
       if (liveAsk && !me) openLogin('লাইভ পরীক্ষা দিতে লগইন করুন। অ্যাকাউন্ট না থাকলে "নতুন অ্যাকাউন্ট" খুলুন, ফ্রি অ্যাকাউন্টেও লাইভ পরীক্ষা দেওয়া যায়।', () => { location.href = '/live'; });

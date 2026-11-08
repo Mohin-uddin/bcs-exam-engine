@@ -190,7 +190,9 @@
     out.attempts = [...byId.values()];
     out.days = { ...x.days };
     Object.entries(y.days).forEach(([d, n]) => { out.days[d] = Math.max(out.days[d] || 0, n); });
-    out.settings = y.settings.t > x.settings.t ? y.settings : x.settings;
+    out.settings = y.settings.t > x.settings.t ? { ...y.settings } : { ...x.settings };
+    // The newer settings win, but an empty exam choice never wipes a chosen one
+    if (!out.settings.track) out.settings.track = x.settings.track || y.settings.track || '';
     return sanitize(out); // re-applies the size limits
   }
 

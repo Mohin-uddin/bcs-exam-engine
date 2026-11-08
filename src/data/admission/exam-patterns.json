@@ -1,0 +1,492 @@
+[
+ {
+  "university": "DU_7COLLEGE",
+  "unit": "SCIENCE",
+  "orgNameBn": "ঢাবি অধিভুক্ত ৭ সরকারি কলেজ (DU 7 College)",
+  "postLabelBn": "বিজ্ঞান অনুষদভুক্ত স্নাতক ডিগ্রি প্রোগ্রাম (৭ কলেজ)",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ২৫, রসায়ন ২৫, গণিত ২৫ ও জীববিজ্ঞান ২৫।"
+ },
+ {
+  "university": "DU_7COLLEGE",
+  "unit": "ARTS",
+  "orgNameBn": "ঢাবি অধিভুক্ত ৭ সরকারি কলেজ (DU 7 College)",
+  "postLabelBn": "কলা ও সামাজিক বিজ্ঞান অনুষদভুক্ত স্নাতক প্রোগ্রাম",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ২৫, ইংরেজি ২৫ ও সাধারণ জ্ঞান ৫০ (বাংলাদেশ ও আন্তর্জাতিক বিষয়াবলি)।"
+ },
+ {
+  "university": "DU_7COLLEGE",
+  "unit": "COMMERCE",
+  "orgNameBn": "ঢাবি অধিভুক্ত ৭ সরকারি কলেজ (DU 7 College)",
+  "postLabelBn": "ব্যবসায় শিক্ষা অনুষদভুক্ত বিবিএস ও বিবিএ প্রোগ্রাম",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "হিসাববিজ্ঞান ২৫, ব্যবসায় নীতি ২৫, ইংরেজি ২৫ ও বাংলা ২৫।"
+ },
+ {
+  "university": "DU_TECH",
+  "unit": "TECH",
+  "orgNameBn": "ঢাকা বিশ্ববিদ্যালয় প্রযুক্তি ইউনিট (DU Tech)",
+  "postLabelBn": "প্রকৌশল ও প্রযুক্তি অনুষদ অধিভুক্ত ইঞ্জিনিয়ারিং কলেজ",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ৩৫, রসায়ন ৩৫ ও গণিত ৩০ নম্বর।"
+ },
+ {
+  "university": "IBA",
+  "unit": "IBA",
+  "orgNameBn": "আইবিএ ঢাকা বিশ্ববিদ্যালয় (IBA, DU)",
+  "postLabelBn": "ব্যাচেলর অব বিজনেস অ্যাডমিনিস্ট্রেশন (BBA, IBA)",
+  "totalQuestions": 75,
+  "durationMin": 90,
+  "negativeMark": 0.25,
+  "patternBn": "English Language & Comprehension 30, Mathematics 30, Analytical Ability 15."
+ },
+ {
+  "university": "SUST",
+  "unit": "A",
+  "orgNameBn": "শাহজালাল বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (SUST)",
+  "postLabelBn": "মানবিক ও সামাজিক বিজ্ঞান অনুষদভুক্ত ‘A’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "ইংরেজি ৩৫, বাংলা ৩৫ ও সাধারণ জ্ঞান ৩০।"
+ },
+ {
+  "university": "SUST",
+  "unit": "B",
+  "orgNameBn": "শাহজালাল বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (SUST)",
+  "postLabelBn": "বিজ্ঞান ও ফলিত প্রকৌশল অনুষদভুক্ত ‘B’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ২৫, রসায়ন ২৫, গণিত ২৫ ও জীববিজ্ঞান/আইসিটি ২৫।"
+ },
+ {
+  "university": "IU",
+  "unit": "A",
+  "orgNameBn": "ইসলামী বিশ্ববিদ্যালয় (IU)",
+  "postLabelBn": "ফলিত বিজ্ঞান ও প্রযুক্তি অনুষদভুক্ত ‘A’ ইউনিট",
+  "totalQuestions": 80,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "গণিত ২৫, পদার্থবিজ্ঞান ২৫, রসায়ন ২৫ ও ইংরেজি ৫।"
+ },
+ {
+  "university": "IU",
+  "unit": "B",
+  "orgNameBn": "ইসলামী বিশ্ববিদ্যালয় (IU)",
+  "postLabelBn": "কলা, মানবিক ও আইন অনুষদভুক্ত ‘B’ ইউনিট",
+  "totalQuestions": 80,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ২৫, ইংরেজি ২৫ ও সাধারণ জ্ঞান ৩০।"
+ },
+ {
+  "university": "BUTEX",
+  "unit": "ENGG",
+  "orgNameBn": "বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয় (BUTEX)",
+  "postLabelBn": "বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং ডিগ্রি প্রোগ্রাম",
+  "totalQuestions": 100,
+  "durationMin": 80,
+  "negativeMark": 0.5,
+  "patternBn": "গণিত ৩০ প্রশ্ন (৬০ নম্বর), পদার্থবিজ্ঞান ৩০ প্রশ্ন (৬০ নম্বর), রসায়ন ৩০ প্রশ্ন (৬০ নম্বর) ও ইংরেজি ১০ প্রশ্ন (২০ নম্বর)।"
+ },
+ {
+  "university": "MIST",
+  "unit": "A",
+  "orgNameBn": "মিলিটারি ইনস্টিটিউট অব সায়েন্স অ্যান্ড টেকনোলজি (MIST)",
+  "postLabelBn": "ফ্যাকাল্টি অব সিভিল, মেকানিক্যাল, ইইই ও কম্পিউটার সায়েন্স (Unit A)",
+  "totalQuestions": 100,
+  "durationMin": 90,
+  "negativeMark": 0.25,
+  "patternBn": "উচ্চতর গণিত ৪০, পদার্থবিজ্ঞান ৩০, রসায়ন ২০ ও ইংরেজি ১০।"
+ },
+ {
+  "university": "MIST",
+  "unit": "B",
+  "orgNameBn": "মিলিটারি ইনস্টিটিউট অব সায়েন্স অ্যান্ড টেকনোলজি (MIST)",
+  "postLabelBn": "ফ্যাকাল্টি অব আর্কিটেকচার (Unit B)",
+  "totalQuestions": 80,
+  "durationMin": 90,
+  "negativeMark": 0.25,
+  "patternBn": "গণিত ও বিজ্ঞান ৪০ এবং ড্রয়িং ও মুক্তহস্ত অঙ্কন ৬০।"
+ },
+ {
+  "university": "AFMC",
+  "unit": "MBBS",
+  "orgNameBn": "আর্মড ফোর্সেস মেডিকেল কলেজ ও আর্মি মেডিকেল কলেজসমূহ (AFMC & AMC)",
+  "postLabelBn": "এএমসি ক্যাডেট ও আর্মড ফোর্সেস মেডিকেল এমবিবিএস ডিগ্রি প্রোগ্রাম",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "জীববিজ্ঞান ৩০, রসায়ন ২৫, পদার্থবিজ্ঞান ২০, ইংরেজি ১৫ ও সাধারণ জ্ঞান ১০।"
+ },
+ {
+  "university": "BSMRMU",
+  "unit": "FEOS",
+  "orgNameBn": "বঙ্গবন্ধু শেখ মুজিবুর রহমান মেরিটাইম বিশ্ববিদ্যালয় (BSMRMU)",
+  "postLabelBn": "ফ্যাকাল্টি অব আর্থ অ্যান্ড ওশান সায়েন্স ও নেভাল আর্কিটেকচার",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ২৫, রসায়ন ২৫, গণিত ২৫ ও ইংরেজি ২৫।"
+ },
+ {
+  "university": "BSMRAAU",
+  "unit": "ENGG",
+  "orgNameBn": "বঙ্গবন্ধু শেখ মুজিবুর রহমান এভিয়েশন ও অ্যারোস্পেস বিশ্ববিদ্যালয় (BSMRAAU)",
+  "postLabelBn": "অ্যারোনটিক্যাল ও অ্যারোস্পেস ইঞ্জিনিয়ারিং অনুষদ",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "উচ্চতর গণিত ৩৫, পদার্থবিজ্ঞান ৩৫ ও ইংরেজি ৩০।"
+ },
+ {
+  "university": "IUT",
+  "unit": "ENGG",
+  "orgNameBn": "ইসলামিক ইউনিভার্সিটি অব টেকনোলজি (IUT, OIC)",
+  "postLabelBn": "CSE, EEE, Mechanical & Software Engineering",
+  "totalQuestions": 100,
+  "durationMin": 90,
+  "negativeMark": 0.25,
+  "patternBn": "Mathematics 35, Physics 35, Chemistry 15, English 15."
+ },
+ {
+  "university": "JNU",
+  "unit": "A",
+  "orgNameBn": "জগন্নাথ বিশ্ববিদ্যালয় (JnU)",
+  "postLabelBn": "বিজ্ঞান ও লাইফ সায়েন্স অনুষদভুক্ত ‘A’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ২৫, রসায়ন ২৫, গণিত ২৫ ও জীববিজ্ঞান ২৫।"
+ },
+ {
+  "university": "JNU",
+  "unit": "B",
+  "orgNameBn": "জগন্নাথ বিশ্ববিদ্যালয় (JnU)",
+  "postLabelBn": "কলা ও আইন অনুষদভুক্ত ‘B’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ৩৫, ইংরেজি ৩৫ ও সাধারণ জ্ঞান ৩০।"
+ },
+ {
+  "university": "JNU",
+  "unit": "C",
+  "orgNameBn": "জগন্নাথ বিশ্ববিদ্যালয় (JnU)",
+  "postLabelBn": "ব্যবসায় শিক্ষা অনুষদভুক্ত ‘C’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "হিসাববিজ্ঞান ৩০, ব্যবসায় নীতি ৩০, বাংলা ২০ ও ইংরেজি ২০।"
+ },
+ {
+  "university": "JNU",
+  "unit": "D",
+  "orgNameBn": "জগন্নাথ বিশ্ববিদ্যালয় (JnU)",
+  "postLabelBn": "সামাজিক বিজ্ঞান অনুষদ সমন্বিত ‘D’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ২৫, ইংরেজি ২৫ ও সাধারণ জ্ঞান ৫০।"
+ },
+ {
+  "university": "KU",
+  "unit": "A",
+  "orgNameBn": "খুলনা বিশ্ববিদ্যালয় (KU)",
+  "postLabelBn": "বিজ্ঞান, প্রকৌশল ও প্রযুক্তিবিদ্যা অনুষদ ‘A’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "গণিত ২৫, পদার্থবিজ্ঞান ২৫, রসায়ন ২৫ ও ইংরেজি ২৫।"
+ },
+ {
+  "university": "KU",
+  "unit": "B",
+  "orgNameBn": "খুলনা বিশ্ববিদ্যালয় (KU)",
+  "postLabelBn": "কলা ও মানবিক অনুষদভুক্ত ‘B’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ৩০, ইংরেজি ৩০ ও সাধারণ জ্ঞান ৪০।"
+ },
+ {
+  "university": "KU",
+  "unit": "C",
+  "orgNameBn": "খুলনা বিশ্ববিদ্যালয় (KU)",
+  "postLabelBn": "ব্যবস্থাপনা ও ব্যবসায় প্রশাসন অনুষদ ‘C’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "হিসাববিজ্ঞান ৩৫, ব্যবসায় সংগঠন ৩৫ ও ইংরেজি ৩০।"
+ },
+ {
+  "university": "HSTU",
+  "unit": "A",
+  "orgNameBn": "হাজী মোহাম্মদ দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU)",
+  "postLabelBn": "কৃষি, ভেটেরিনারি ও এনিম্যাল সায়েন্স ‘A’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "জীববিজ্ঞান ৩০, রসায়ন ২৫, পদার্থবিজ্ঞান ২৫ ও ইংরেজি ২০।"
+ },
+ {
+  "university": "HSTU",
+  "unit": "B",
+  "orgNameBn": "হাজী মোহাম্মদ দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU)",
+  "postLabelBn": "কম্পিউটার সায়েন্স ও ইঞ্জিনিয়ারিং অনুষদ ‘B’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "গণিত ৩০, পদার্থবিজ্ঞান ৩০, রসায়ন ২৫ ও ইংরেজি ১৫।"
+ },
+ {
+  "university": "HSTU",
+  "unit": "C",
+  "orgNameBn": "হাজী মোহাম্মদ দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU)",
+  "postLabelBn": "ব্যবসায় শিক্ষা অনুষদভুক্ত ‘C’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "হিসাববিজ্ঞান ৩৫, ব্যবসায় নীতি ৩৫, বাংলা ১৫ ও ইংরেজি ১৫।"
+ },
+ {
+  "university": "MBSTU",
+  "unit": "A",
+  "orgNameBn": "মাওলানা ভাসানী বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (MBSTU)",
+  "postLabelBn": "ইঞ্জিনিয়ারিং ও প্রযুক্তি অনুষদ ‘A’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "গণিত ৩৫, পদার্থবিজ্ঞান ৩৫, রসায়ন ২০ ও ইংরেজি ১০।"
+ },
+ {
+  "university": "MBSTU",
+  "unit": "B",
+  "orgNameBn": "মাওলানা ভাসানী বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (MBSTU)",
+  "postLabelBn": "লাইফ সায়েন্স অনুষদভুক্ত ‘B’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "জীববিজ্ঞান ৩৫, রসায়ন ৩৫, পদার্থবিজ্ঞান ২০ ও ইংরেজি ১০।"
+ },
+ {
+  "university": "MBSTU",
+  "unit": "C",
+  "orgNameBn": "মাওলানা ভাসানী বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (MBSTU)",
+  "postLabelBn": "বিজ্ঞান অনুষদভুক্ত ‘C’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ৩০, রসায়ন ৩০, গণিত ২৫ ও ইংরেজি ১৫।"
+ },
+ {
+  "university": "NSTU",
+  "unit": "A",
+  "orgNameBn": "নোয়াখালী বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (NSTU)",
+  "postLabelBn": "বিজ্ঞান ও ইঞ্জিনিয়ারিং অনুষদ ‘A’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ২৫, রসায়ন ২৫, গণিত ২৫ ও জীববিজ্ঞান ২৫।"
+ },
+ {
+  "university": "NSTU",
+  "unit": "B",
+  "orgNameBn": "নোয়াখালী বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (NSTU)",
+  "postLabelBn": "সামাজিক বিজ্ঞান ও মানবিক অনুষদ ‘B’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ৩৫, ইংরেজি ৩৫ ও সাধারণ জ্ঞান ৩০।"
+ },
+ {
+  "university": "NSTU",
+  "unit": "C",
+  "orgNameBn": "নোয়াখালী বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (NSTU)",
+  "postLabelBn": "ব্যবসায় প্রশাসন অনুষদভুক্ত ‘C’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "হিসাববিজ্ঞান ৩৫, ম্যানেজমেন্ট ৩৫, বাংলা ১৫ ও ইংরেজি ১৫।"
+ },
+ {
+  "university": "JUST",
+  "unit": "A",
+  "orgNameBn": "যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (JUST)",
+  "postLabelBn": "প্রকৌশল ও প্রযুক্তি অনুষদ ‘A’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "গণিত ৩৫, পদার্থবিজ্ঞান ৩৫, রসায়ন ২০ ও ইংরেজি ১০।"
+ },
+ {
+  "university": "JUST",
+  "unit": "B",
+  "orgNameBn": "যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (JUST)",
+  "postLabelBn": "বায়োলজিক্যাল সায়েন্স অনুষদ ‘B’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "জীববিজ্ঞান ৩৫, রসায়ন ৩৫, পদার্থবিজ্ঞান ২০ ও ইংরেজি ১০।"
+ },
+ {
+  "university": "JUST",
+  "unit": "C",
+  "orgNameBn": "যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (JUST)",
+  "postLabelBn": "ফলিত বিজ্ঞান ও প্রযুক্তি অনুষদ ‘C’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ৩০, রসায়ন ৩০, গণিত ২৫ ও ইংরেজি ১৫।"
+ },
+ {
+  "university": "COU",
+  "unit": "A",
+  "orgNameBn": "কুমিল্লা বিশ্ববিদ্যালয় (CoU)",
+  "postLabelBn": "বিজ্ঞান ও প্রকৌশল অনুষদভুক্ত ‘A’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ২৫, রসায়ন ২৫, গণিত ২৫ ও জীববিজ্ঞান ২৫।"
+ },
+ {
+  "university": "COU",
+  "unit": "B",
+  "orgNameBn": "কুমিল্লা বিশ্ববিদ্যালয় (CoU)",
+  "postLabelBn": "কলা ও সামাজিক বিজ্ঞান অনুষদভুক্ত ‘B’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ৩৫, ইংরেজি ৩৫ ও সাধারণ জ্ঞান ৩০।"
+ },
+ {
+  "university": "COU",
+  "unit": "C",
+  "orgNameBn": "কুমিল্লা বিশ্ববিদ্যালয় (CoU)",
+  "postLabelBn": "ব্যবসায় শিক্ষা অনুষদভুক্ত ‘C’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "হিসাববিজ্ঞান ৩৫, ব্যবসায় সংগঠন ৩৫, বাংলা ১৫ ও ইংরেজি ১৫।"
+ },
+ {
+  "university": "BRUR",
+  "unit": "A",
+  "orgNameBn": "বেগম রোকেয়া বিশ্ববিদ্যালয়, রংপুর (BRUR)",
+  "postLabelBn": "কলা অনুষদভুক্ত ‘A’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ৪০, ইংরেজি ৪০ ও সাধারণ জ্ঞান ২০।"
+ },
+ {
+  "university": "BRUR",
+  "unit": "B",
+  "orgNameBn": "বেগম রোকেয়া বিশ্ববিদ্যালয়, রংপুর (BRUR)",
+  "postLabelBn": "সামাজিক বিজ্ঞান অনুষদভুক্ত ‘B’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ৩০, ইংরেজি ৩০ ও সাধারণ জ্ঞান ৪০।"
+ },
+ {
+  "university": "BRUR",
+  "unit": "C",
+  "orgNameBn": "বেগম রোকেয়া বিশ্ববিদ্যালয়, রংপুর (BRUR)",
+  "postLabelBn": "ব্যবসায় শিক্ষা অনুষদভুক্ত ‘C’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "হিসাববিজ্ঞান ৩৫, ব্যবসায় নীতি ৩৫, বাংলা ১৫ ও ইংরেজি ১৫।"
+ },
+ {
+  "university": "BRUR",
+  "unit": "D",
+  "orgNameBn": "বেগম রোকেয়া বিশ্ববিদ্যালয়, রংপুর (BRUR)",
+  "postLabelBn": "বিজ্ঞান ও প্রকৌশল অনুষদভুক্ত ‘D’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ২৫, রসায়ন ২৫, গণিত ২৫ ও জীববিজ্ঞান ২৫।"
+ },
+ {
+  "university": "BU",
+  "unit": "KA",
+  "orgNameBn": "বরিশাল বিশ্ববিদ্যালয় (BU)",
+  "postLabelBn": "বিজ্ঞান ও প্রকৌশল অনুষদভুক্ত ‘ক’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "পদার্থবিজ্ঞান ২৫, রসায়ন ২৫, গণিত ২৫ ও জীববিজ্ঞান ২৫।"
+ },
+ {
+  "university": "BU",
+  "unit": "KHA",
+  "orgNameBn": "বরিশাল বিশ্ববিদ্যালয় (BU)",
+  "postLabelBn": "কলা ও মানবিক অনুষদভুক্ত ‘খ’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ৩৫, ইংরেজি ৩৫ ও সাধারণ জ্ঞান ৩০।"
+ },
+ {
+  "university": "BU",
+  "unit": "GA",
+  "orgNameBn": "বরিশাল বিশ্ববিদ্যালয় (BU)",
+  "postLabelBn": "ব্যবসায় শিক্ষা অনুষদভুক্ত ‘গ’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "হিসাববিজ্ঞান ৩৫, ব্যবসায় নীতি ৩৫, বাংলা ১৫ ও ইংরেজি ১৫।"
+ },
+ {
+  "university": "PUST",
+  "unit": "A",
+  "orgNameBn": "পাবনা বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (PUST)",
+  "postLabelBn": "বিজ্ঞান ও প্রকৌশল অনুষদভুক্ত ‘A’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "গণিত ৩৫, পদার্থবিজ্ঞান ৩৫, রসায়ন ২০ ও ইংরেজি ১০।"
+ },
+ {
+  "university": "PUST",
+  "unit": "B",
+  "orgNameBn": "পাবনা বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (PUST)",
+  "postLabelBn": "মানবিক ও ব্যবসায় প্রশাসন অনুষদ ‘B’ ইউনিট",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ৩৫, ইংরেজি ৩৫ ও সাধারণ জ্ঞান ৩০।"
+ },
+ {
+  "university": "NU",
+  "unit": "PROF",
+  "orgNameBn": "জাতীয় বিশ্ববিদ্যালয় (NU)",
+  "postLabelBn": "অনুষদভুক্ত স্নাতক প্রফেশনাল ডিগ্রি প্রোগ্রাম",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "ইংরেজি ৩০, গণিত/অ্যাকাউন্টিং ৩০, সাধারণ জ্ঞান ২০ ও বাংলা ২০।"
+ },
+ {
+  "university": "BOU",
+  "unit": "LLB",
+  "orgNameBn": "বাংলাদেশ উন্মুক্ত বিশ্ববিদ্যালয় (BOU)",
+  "postLabelBn": "সামাজিক বিজ্ঞান ও আইন স্কুল (BOU LLB Honours)",
+  "totalQuestions": 100,
+  "durationMin": 60,
+  "negativeMark": 0.25,
+  "patternBn": "বাংলা ৩০, ইংরেজি ৩০ ও সাধারণ জ্ঞান ও আইন পরিচিতি ৪০।"
+ }
+]

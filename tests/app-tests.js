@@ -343,10 +343,10 @@ async function serverTests() {
       assert.equal(login.status, 200);
     });
 
-    await test('admission portal: page loads, every set has its questions, practice questions never claim a past exam', async () => {
+    await test('admission: /admission opens the main app (with the year dropdowns), every set has its questions, practice questions never claim a past exam', async () => {
       const page = await fetch(base + '/admission');
       assert.equal(page.status, 200);
-      assert.match(await page.text(), /admission\.js/);
+      assert.match(await page.text(), /adm-pick\.js/);
       const seed = require('../src/web/seed-data');
       const ids = new Set(seed.sampleQuestions.map(q => q.id));
       const sets = seed.availableExams.filter(e => e.examTrack === 'ADMISSION');
@@ -359,6 +359,12 @@ async function serverTests() {
       }
       seed.sampleQuestions.filter(q => q.examTrack === 'ADMISSION').forEach(q => {
         if (q.isVerifiedPast) return;
+        // Year-wise sets are shown like the BCS bank ("বিগত পরীক্ষার ধাঁচে"), never as verified real papers
+        if (q.isPastStyle) {
+          assert.match(q.reference, /বিগত পরীক্ষার ধাঁচে/, q.id);
+          assert.ok(!/✅|আসল প্রশ্ন/.test(q.reference), q.id);
+          return;
+        }
         assert.equal(q.previousExams.length, 0, q.id);
         assert.match(q.reference, /আসল প্রশ্ন নয়/, q.id);
       });
