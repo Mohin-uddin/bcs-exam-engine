@@ -105,6 +105,7 @@ async function startServer(extraEnv = {}) {
     ACCOUNTS_DATA_FILE: path.join(dir, 'accounts.json'),
     LIVE_DATA_FILE: path.join(dir, 'live.json'),
     REPORTS_DATA_FILE: path.join(dir, 'reports.json'),
+    FUNNEL_DATA_FILE: path.join(dir, 'funnel.json'),
     PROGRESS_DATA_DIR: path.join(dir, 'progress'),
     // OTP codes are written to the server log instead of being sent by SMS
     SMS_PROVIDER: 'console',
@@ -155,6 +156,51 @@ async function serverTests() {
   try {
     const alice = await signUp('Alice', '01711111111');
     const bob = await signUp('Bob', '01822222222');
+
+    await test('user journey: anonymous events are counted per step; no personal data kept; admin only', async () => {
+      const ev = (vid, e, extra = {}, ua) => call('POST', '/api/ev', { body: { vid, ev: e, ...extra }, headers: ua ? { 'User-Agent': ua } : {} });
+      // Visitor 1: Facebook ad -> picks medical -> signs up -> opens past papers -> starts and submits an exam
+      const a = 'aaaaaaaaaaaa1';
+      assert.equal((await ev(a, 'landing', { src: 'facebook', ref: 'm.facebook.com', track: '' })).status, 204);
+      await ev(a, 'picker_shown');
+      await ev(a, 'track_chosen', { track: 'ADMISSION_MED' });
+      await ev(a, 'signup_prompt_shown', { track: 'ADMISSION_MED', tab: 'welcome' });
+      await ev(a, 'signup_done', { track: 'ADMISSION_MED', phone: '01799999999', name: 'Secret Name' });
+      await ev(a, 'screen', { track: 'ADMISSION_MED', tab: 'past-bank' });
+      await ev(a, 'exam_start', { track: 'ADMISSION_MED', li: 1 });
+      await ev(a, 'exam_submit', { track: 'ADMISSION_MED', li: 1 });
+      // Visitor 2: direct -> picks BCS -> leaves at the sign-up box
+      const b = 'bbbbbbbbbbbb2';
+      await ev(b, 'landing');
+      await ev(b, 'picker_shown');
+      await ev(b, 'track_chosen', { track: 'BCS' });
+      await ev(b, 'signup_prompt_shown', { track: 'BCS' });
+      await ev(b, 'leave', { track: 'BCS', tab: 'home' });
+      // Ignored: a bot, a bad id, an unknown event
+      await ev('cccccccccccc3', 'landing', {}, 'Mozilla/5.0 (compatible; Googlebot/2.1)');
+      await ev('NOT VALID', 'landing');
+      await ev(a, 'hack_the_planet');
+
+      assert.equal((await call('GET', '/api/admin/funnel?days=1')).status, 401, 'admin key needed');
+      const r = await call('GET', '/api/admin/funnel?days=1', { admin: 'test-admin-key' });
+      assert.equal(r.status, 200, JSON.stringify(r.json));
+      const step = k => r.json.steps.find(x => x.key === k).count;
+      assert.equal(r.json.visitors, 2);
+      assert.equal(step('landing'), 2);
+      assert.equal(step('signup_prompt_shown'), 2);
+      assert.equal(step('account'), 1);
+      assert.equal(step('tab_past-bank'), 1);
+      assert.equal(step('exam_submit'), 1);
+      assert.equal(r.json.sources.find(x => x.source === 'facebook').count, 1);
+      assert.equal(r.json.sources.find(x => x.source === 'direct').count, 1);
+      const med = await call('GET', '/api/admin/funnel?days=1&track=ADMISSION_MED', { admin: 'test-admin-key' });
+      assert.equal(med.json.visitors, 1);
+      // What is kept: no phone, name or address of the visitor's connection
+      await new Promise(r2 => setTimeout(r2, 5500)); // saved within 5 s
+      const saved = fs.readFileSync(path.join(dir, 'funnel.json'), 'utf8');
+      assert.ok(!/01799999999|Secret Name|127\.0\.0\.1|::1|facebook\.com/.test(saved), 'no personal data saved');
+      assert.ok(saved.includes(a));
+    });
 
     await test('admin: wrong key refused, right key accepted', async () => {
       assert.equal((await call('GET', '/api/admin/reports', { admin: 'nope' })).status, 401);
