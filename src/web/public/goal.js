@@ -133,18 +133,12 @@
   // ---- First visit only: free account first, then the tour. Never shown again. ----
   const WELCOME_KEY = 'sh_welcome_done_v1';
   const seen = () => { try { return localStorage.getItem(WELCOME_KEY) === '1'; } catch { return true; } };
+  // First visit: straight in, nothing over the page. No sign-up box and no guided tour on arrival
+  // (the visit funnel showed people leaving there); sign-up is asked when they start an exam or buy,
+  // and the small "🧭 গাইড" button stays for anyone who wants the tour.
   function welcome() {
-    if (seen() || !window.Account) return;
-    const go = () => {
-      if (seen()) return;
-      try { localStorage.setItem(WELCOME_KEY, '1'); } catch { /* storage blocked */ }
-      const tour = () => setTimeout(() => window.Tour && Tour.startOnce(), 300);
-      // Already has an account (e.g. logged in on a new phone): not a new user, no box and no tour
-      if (Account.user) return;
-      Account.openLogin(null, null, { welcome: true, later: true, mode: 'register', onClose: tour });
-    };
-    if (Account.loaded) go();
-    else window.addEventListener('account:ready', go, { once: true });
+    if (seen()) return;
+    try { localStorage.setItem(WELCOME_KEY, '1'); } catch { /* storage blocked */ }
   }
 
   // Bars that replace the exam chips on the model-test and question-bank pages
@@ -224,10 +218,17 @@
   }
 
   // A direct link (/bcs, /nursing, ...) sets the exam before anything is drawn
+  // ?track=bcs | primary | ntrca | bank | ministry | non-cadre | nursing | admission | university | medical (for ads and posts)
+  const QUERY_TRACKS = { bcs: 'BCS', primary: 'PRIMARY', ntrca: 'NTRCA', bank: 'BANK', ministry: 'MINISTRY', 'non-cadre': 'NON_CADRE', non_cadre: 'NON_CADRE',
+    nursing: 'NURSING', admission: 'ADMISSION', university: 'ADMISSION', medical: 'ADMISSION' };
+  let linkAdmKind = null; // 'medical' | 'university' when the link says which admission
   function fromPath() {
-    const t = PATHS[location.pathname.replace(/\/+$/, '').toLowerCase()];
+    const path = location.pathname.replace(/\/+$/, '').toLowerCase();
+    const q = String(new URLSearchParams(location.search).get('track') || '').toLowerCase();
+    const t = PATHS[path] || QUERY_TRACKS[q] || null;
+    if (t === 'ADMISSION') linkAdmKind = path === '/medical' || q === 'medical' ? 'medical' : 'university';
     if (t && window.Study && Study.data.settings.track !== t) Study.setSetting('track', t);
-    return t || null;
+    return t;
   }
 
   // Read the link at once: app.js reads the exam as soon as its own start-up runs
@@ -239,10 +240,12 @@
   } catch { /* storage blocked */ }
   // Old admission-page choices: no longer used
   try { ['admissionGoal', 'admissionUnit', 'admissionStep', 'admissionGroup'].forEach(k => localStorage.removeItem(k)); } catch { /* storage blocked */ }
-  if (location.pathname.replace(/\/+$/, '').toLowerCase() === '/medical' && window.AdmPick) AdmPick.preset('medical');
-  if (['/medical', '/admission'].includes(location.pathname.replace(/\/+$/, '').toLowerCase())) {
-    try { localStorage.setItem('sh_adm_kind', location.pathname.toLowerCase().startsWith('/medical') ? 'medical' : 'university'); } catch { /* storage blocked */ }
+  // An admission link says university or medical: the year list and the live exam follow it
+  if (linkAdmKind) {
+    try { localStorage.setItem('sh_adm_kind', linkAdmKind); } catch { /* storage blocked */ }
+    if (linkAdmKind === 'medical' && window.AdmPick) AdmPick.preset('medical');
   }
+  if (linked) remember(linked);
   // A set opened from a shared link (/?set=...) goes straight to the exam
   const linkedSet = new URLSearchParams(location.search).get('set') || '';
   if (linkedSet.startsWith('ADM_') && window.Study && !Study.data.settings.track) Study.setSetting('track', 'ADMISSION');
@@ -269,6 +272,8 @@
   function init() {
     addStyle();
 
+    // Came by a link that names the exam (/bcs, /medical, ?track=...): no picker, straight to that exam's home
+    if (linked && window.Funnel) Funnel.ev('track_from_link');
     if (!linked && !linkedSet && !track()) openWhenNew();
     // Came by a direct link (/bcs, /admission ...) or already had an exam: the free-account box once, then the tour
     else if (!linkedSet) welcome();

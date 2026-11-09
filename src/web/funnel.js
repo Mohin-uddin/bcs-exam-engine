@@ -24,6 +24,7 @@ const MAX_EVENTS_PER_VISITOR_DAY = 400;
 const STEPS = [
   { key: 'landing', labelBn: 'সাইটে এসেছেন', group: 'main' },
   { key: 'picker_shown', labelBn: '"কিসের প্রস্তুতি?" পাতা দেখেছেন (নতুন ব্যবহারকারী)', group: 'main' },
+  { key: 'track_from_link', labelBn: 'পরীক্ষার লিংক থেকে সরাসরি এসেছেন (/bcs, /medical ...)', group: 'other' },
   { key: 'has_track', labelBn: 'পরীক্ষা বাছা আছে', group: 'main' },
   { key: 'signup_prompt_shown', labelBn: 'নিবন্ধন / লগইনের বক্স দেখেছেন', group: 'main' },
   { key: 'account', labelBn: 'নিবন্ধন বা লগইন করেছেন', group: 'main' },
@@ -39,7 +40,7 @@ const STEPS = [
   { key: 'order_placed', labelBn: 'অর্ডার দিয়েছেন', group: 'buy' },
   { key: 'live_register', labelBn: 'লাইভ পরীক্ষায় নিবন্ধন করেছেন', group: 'other' }
 ];
-const EVENTS = new Set(['landing', 'picker_shown', 'track_chosen', 'screen', 'leave', 'past_set_open', 'exam_start', 'exam_submit',
+const EVENTS = new Set(['landing', 'picker_shown', 'track_chosen', 'track_from_link', 'screen', 'leave', 'past_set_open', 'exam_start', 'exam_submit',
   'signup_prompt_shown', 'signup_done', 'login_done', 'locked_click', 'plans_open', 'order_form_open', 'order_placed', 'live_register']);
 const TRACKS = new Set(['BCS', 'PRIMARY', 'NTRCA', 'BANK', 'MINISTRY', 'NON_CADRE', 'NURSING', 'ADMISSION_UNI', 'ADMISSION_MED']);
 const SCREEN_BN = {
@@ -138,6 +139,7 @@ function createFunnelEngine({ store = null, now = () => Date.now() } = {}) {
       v.s.landing = 1;
       if (!v.src) v.src = sourceOf(clean(body.src, /^[a-z0-9._-]{0,40}$/, 40), clean(body.ref, /^[a-z0-9.-]{0,60}$/, 60));
     } else if (ev === 'track_chosen') v.s.has_track = 1;
+    else if (ev === 'track_from_link') { v.s.has_track = 1; v.s.track_from_link = 1; }
     else if (ev === 'signup_done' || ev === 'login_done') v.s.account = 1;
     else if (ev === 'screen' && tab) v.s[`tab_${tab}`] = 1;
     else if (ev !== 'leave') v.s[ev] = 1;
