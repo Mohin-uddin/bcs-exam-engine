@@ -205,6 +205,7 @@
         body: JSON.stringify({ name: document.getElementById('regName').value, phone })
       });
       store(regExamId, data.candidate);
+      if (window.Funnel) Funnel.ev('live_register');
       document.getElementById('regOverlay').hidden = true;
       toast(`নিবন্ধন সম্পন্ন! আপনার রোল নম্বর ${bn(data.candidate.roll)}`);
       if (data.exam.phase === 'ENDED') openMerit(regExamId);

@@ -194,6 +194,7 @@
   // Login / register
   // ---------------------------------------------------------------------------
   function openLogin(reasonBn, then, opts = {}) {
+    if (window.Funnel) Funnel.ev('signup_prompt_shown', { tab: opts.welcome ? 'welcome' : reasonBn ? 'gate' : 'button' });
     let mode = 'login';
     const box = modal(`
       <h3>${opts.welcome ? '🦌 সোনার হরিণে স্বাগতম' : 'লগইন / নতুন অ্যাকাউন্ট'}</h3>
@@ -231,6 +232,7 @@
           name: form.name.value, phone: form.phone.value, password: form.password.value
         });
         me = data.user;
+        if (window.Funnel) Funnel.ev(mode === 'register' ? 'signup_done' : 'login_done');
         renderPill();
         announce();
         applyPrintLock();
@@ -486,6 +488,7 @@
 
   async function openPlans(opts = {}) {
     buyCtx = opts.examId ? ctxFromExam(opts.examId) : null;
+    if (window.Funnel) Funnel.ev('plans_open');
     if (!me) return openLogin('প্যাকেজ কিনতে আগে ফ্রি অ্যাকাউন্ট খুলুন বা লগইন করুন।', () => openPlans(opts));
     const exam = opts.examId ? (window.availableExams || []).find(e => e.id === resolve(opts.examId)) : null;
     const box = modal('<h3>আমাদের প্যাকেজ</h3><div class="acc-sub">লোড হচ্ছে...</div>');
@@ -629,6 +632,7 @@
       </form>`);
     const form = b.querySelector('form');
     const err = form.querySelector('.acc-err');
+    if (window.Funnel) Funnel.ev('order_form_open');
     // What the order is for: from where the user decided to buy; "বদলান" opens the same choices, filled in
     const item = { ...(buyCtx || defaultCtx()) };
     const box = form.querySelector('.acc-item');
@@ -729,6 +733,7 @@
           }));
         } catch { /* private mode */ }
         const o = data.order;
+        if (window.Funnel) Funnel.ev('order_placed');
         const done = modal(`<h3>🎉 অর্ডার নেওয়া হয়েছে</h3>
           <div class="acc-ok">অর্ডার নম্বর <b>${esc(o.orderNo)}</b> • ${o.itemBn ? `${esc(o.itemBn)} • ` : ''}${esc(o.planNameBn)} • প্রশ্নসেট হাতে পেয়ে দেবেন <b>৳${bn(o.total)}</b></div>
           ${data.whatsappUrl ? `<p>আপনার অর্ডার জমা হয়ে গেছে। দ্রুত পাঠাতে চাইলে নিচের বাটনে চাপ দিন, মেসেজ লেখাই থাকবে, শুধু "Send" চাপবেন। না পাঠালেও সমস্যা নেই, আমরা ফোন করে নেব।</p>
@@ -922,6 +927,7 @@
     isLocked,
     allow(examId) {
       if (!isLocked(examId)) return true;
+      if (window.Funnel) Funnel.ev('locked_click');
       openPlans({ examId });
       return false;
     },

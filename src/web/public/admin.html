@@ -34,6 +34,18 @@
     </section>
 
     <div id="adminArea" hidden>
+      <section class="panel" id="funnelArea">
+        <h2>🧭 ইউজার কোথায় থামছে</h2>
+        <p style="color:#475569;font-size:14px;margin-bottom:10px">সাইটে আসা মানুষ কোন ধাপ পর্যন্ত যাচ্ছেন আর কোথায় চলে যাচ্ছেন। কারো নাম, ফোন বা IP রাখা হয় না, শুধু গণনা। গণনা শুরু হয়েছে এই ফিচার চালুর দিন থেকে।</p>
+        <div class="row2" style="margin-bottom:10px">
+          <label class="field">সময়<select id="fDays"><option value="1">আজ</option><option value="7" selected>গত ৭ দিন</option><option value="30">গত ৩০ দিন</option></select></label>
+          <label class="field">পরীক্ষা<select id="fTrack"><option value="">সব পরীক্ষা</option>
+            <option value="BCS">বিসিএস</option><option value="PRIMARY">প্রাথমিক শিক্ষক</option><option value="NTRCA">শিক্ষক নিবন্ধন</option><option value="BANK">ব্যাংক</option>
+            <option value="MINISTRY">মন্ত্রণালয় ও অধিদপ্তর</option><option value="NON_CADRE">নন-ক্যাডার ও দুদক</option><option value="NURSING">নার্সিং</option>
+            <option value="ADMISSION_UNI">বিশ্ববিদ্যালয় ভর্তি</option><option value="ADMISSION_MED">মেডিকেল ও ডেন্টাল ভর্তি</option></select></label>
+        </div>
+        <div id="funnelBody"><p style="color:#64748b">লোড হচ্ছে...</p></div>
+      </section>
       <section class="panel" id="paymentArea">
         <h2>💳 পেমেন্ট (অনলাইন ও বিকাশ / নগদ / রকেট) <span class="badge UPCOMING" id="payPendingBadge"></span></h2>
         <p style="color:#475569;font-size:14px;margin-bottom:10px">অনলাইন গেটওয়ে (SSLCommerz / aamarPay) দিয়ে পেমেন্ট হলে গেটওয়ে থেকে যাচাই করে নিজে থেকেই প্রিমিয়াম চালু হয়, কিছু করতে হবে না। শুধু "নিজে Send Money + TrxID" পেমেন্টগুলো আপনার বিকাশ / নগদ / রকেট স্টেটমেন্টে মিলিয়ে অনুমোদন দিন। ক্যাশ অন ডেলিভারি অর্ডার কুরিয়ার টাকা তুলে দিলে অনুমোদন দিন। প্রিন্ট প্যাকেট কুরিয়ারে দিলে "📦 পাঠানো বাকি" থেকে "পাঠানো হয়েছে" চাপুন।</p>
@@ -227,5 +239,6 @@
   <script src="/admin-orders.js"></script>
   <script src="/admin-reports.js"></script>
   <script src="/admin-weekly.js"></script>
+  <script src="/admin-funnel.js"></script>
 </body>
 </html>

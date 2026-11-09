@@ -122,6 +122,7 @@
     if (t === 'ADMISSION') { try { localStorage.setItem('sh_adm_kind', kind === 'medical' ? 'medical' : 'university'); } catch { /* storage blocked */ } }
     if (t === 'ADMISSION' && window.AdmPick) AdmPick.preset(kind || 'university');
     Study.setTrack(t);
+    if (window.Funnel) Funnel.ev('track_chosen');
     close();
     applyToPages();
     if (typeof setPastBankTrack === 'function' && t === 'ADMISSION') setPastBankTrack('ADMISSION');
@@ -254,7 +255,7 @@
     const decide = () => {
       if (done || track()) return;
       done = true;
-      const show = () => { if (!track()) { autoOpened = true; open(); } };
+      const show = () => { if (!track()) { autoOpened = true; open(); if (window.Funnel) Funnel.ev('picker_shown'); } };
       if (window.Account && Account.user) setTimeout(show, 2500);
       else show();
     };

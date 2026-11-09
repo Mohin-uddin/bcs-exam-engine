@@ -30,6 +30,7 @@ const {
 } = require('./seed-data');
 const { createLiveExamEngine } = require('./live-exam');
 const { createStateStore } = require('./state-store');
+const { createFunnelEngine } = require('./funnel');
 const { createAccountsEngine } = require('./accounts');
 const { createProgressEngine } = require('./progress');
 const { createReportsEngine } = require('./reports');
@@ -57,6 +58,9 @@ const liveExams = createLiveExamEngine({
 
 // Study progress sync (Mistake Vault, bookmarks, flashcards, exam history) per account
 const progress = createProgressEngine({ store: stateStore, currentUser: accounts.currentUser });
+
+// Where users stop (anonymous funnel) -> admin panel
+const funnel = createFunnelEngine({ store: stateStore });
 
 // Question reports (ভুল রিপোর্ট) -> admin panel
 const reports = createReportsEngine({
@@ -165,6 +169,8 @@ const PUBLIC_FILES = {
   '/admin-weekly.js': 'application/javascript; charset=utf-8',
   '/tour.js': 'application/javascript; charset=utf-8',
   '/goal.js': 'application/javascript; charset=utf-8',
+  '/funnel.js': 'application/javascript; charset=utf-8',
+  '/admin-funnel.js': 'application/javascript; charset=utf-8',
   '/math.js': 'application/javascript; charset=utf-8',
   '/native-app.js': 'application/javascript; charset=utf-8',
   '/content-guard.js': 'application/javascript; charset=utf-8',
@@ -243,6 +249,16 @@ const server = http.createServer(async (req, res) => {
     } catch (e) {
       console.error('[accounts]', e);
       return sendJson(res, 500, { status: 'ERROR', messageBn: 'সার্ভারে সমস্যা হয়েছে, আবার চেষ্টা করুন।' });
+    }
+  }
+
+  // 0b2. Anonymous funnel events and the admin's funnel report
+  if (pathname === '/api/ev' || pathname === '/api/admin/funnel') {
+    try {
+      if (await funnel.handle(req, res, pathname, parsedUrl.searchParams)) return;
+    } catch (e) {
+      console.error('[funnel]', e);
+      return sendJson(res, 500, { status: 'ERROR' });
     }
   }
 
@@ -347,7 +363,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 // Start Server (after saved data is loaded from the database, if any)
-Promise.all([liveExams.ready(), accounts.ready(), reports.ready()]).then(() => server.listen(PORT, () => {
+Promise.all([liveExams.ready(), accounts.ready(), reports.ready(), funnel.ready()]).then(() => server.listen(PORT, () => {
   console.log(`================================================================`);
   console.log(`সোনার হরিণ - BCS & BD Competitive Exam Prep`);
   console.log(`Web App running locally at: http://localhost:${PORT}`);
@@ -362,6 +378,6 @@ Promise.all([liveExams.ready(), accounts.ready(), reports.ready()]).then(() => s
 // Hosting stops the server with SIGTERM on every deploy: save pending data first
 for (const sig of ['SIGTERM', 'SIGINT']) {
   process.on(sig, () => {
-    Promise.all([liveExams.flush(), accounts.flush(), reports.flush()]).finally(() => process.exit(0));
+    Promise.all([liveExams.flush(), accounts.flush(), reports.flush(), funnel.flush()]).finally(() => process.exit(0));
   });
 }
