@@ -236,7 +236,11 @@
   // Chosen before on this browser but the progress copy lost it (logout, cleared data): use the saved choice
   try {
     const saved = localStorage.getItem('sh_goal_v1');
-    if (!linked && saved && window.Study && !Study.data.settings.track) Study.setSetting('track', saved);
+    // (a starting exam the visitor never chose themselves stays "soft": their account's choice wins)
+    if (!linked && saved && window.Study && !Study.data.settings.track) {
+      if (localStorage.getItem('sh_track_auto') === '1' && Study.setTrackSoft) Study.setTrackSoft(saved);
+      else Study.setSetting('track', saved);
+    }
   } catch { /* storage blocked */ }
   // Old admission-page choices: no longer used
   try { ['admissionGoal', 'admissionUnit', 'admissionStep', 'admissionGroup'].forEach(k => localStorage.removeItem(k)); } catch { /* storage blocked */ }
@@ -274,7 +278,14 @@
 
     // Came by a link that names the exam (/bcs, /medical, ?track=...): no picker, straight to that exam's home
     if (linked && window.Funnel) Funnel.ev('track_from_link');
-    if (!linked && !linkedSet && !track()) openWhenNew();
+    // No full-screen picker any more: a new visitor starts on BCS (or the exam saved on this browser) and
+    // switches with the chips on the home. Set "softly", so an exam saved in their account still wins.
+    if (!linked && !linkedSet && !track() && window.Study) {
+      let saved = null;
+      try { saved = localStorage.getItem('sh_goal_v1'); } catch { /* storage blocked */ }
+      if (!saved) { try { localStorage.setItem('sh_track_auto', '1'); } catch { /* storage blocked */ } }
+      Study.setTrackSoft(saved || 'BCS');
+    }
     // Came by a direct link (/bcs, /admission ...) or already had an exam: the free-account box once, then the tour
     else if (!linkedSet) welcome();
     // The exam came from the account (logged in on another device): use it, and close a picker opened meanwhile

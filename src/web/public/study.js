@@ -530,159 +530,8 @@
     if (window.Goal) Goal.open();
   }
 
-  // ---------------------------------------------------------------------------
-  // First visit (no exam taken yet): the home opens on what they came for, their exam's past papers,
-  // plus one real question to try. "আজকের পড়া" (streak, daily goal) comes once they have practised.
-  // ---------------------------------------------------------------------------
-  const HERO_TITLE = {
-    BCS: 'বিসিএস প্রিলির বিগত সালের প্রশ্ন', PRIMARY: 'প্রাথমিক শিক্ষক নিয়োগের বিগত প্রশ্ন', NTRCA: 'শিক্ষক নিবন্ধনের প্রশ্নসেট',
-    BANK: 'ব্যাংক নিয়োগের প্রশ্নসেট', MINISTRY: 'মন্ত্রণালয় ও অধিদপ্তরের প্রশ্নসেট', NON_CADRE: 'নন-ক্যাডার ও দুদকের প্রশ্নসেট',
-    NURSING: 'নার্সিং নিয়োগের প্রশ্নসেট', ADMISSION_UNI: 'বিশ্ববিদ্যালয় ভর্তির বিগত সালের প্রশ্ন', ADMISSION_MED: 'মেডিকেল ভর্তির বিগত সালের প্রশ্ন'
-  };
-  const ARCHIVE_OF = { PRIMARY: 'primaryExamsArchive', NTRCA: 'ntrcaExamsArchive', BANK: 'bankExamsArchive', MINISTRY: 'ministryExamsArchive', NON_CADRE: 'nonCadreExamsArchive', NURSING: 'nursingExamsArchive' };
-  const isLockedSet = id => Boolean(window.Account && Account.isLocked && Account.isLocked(id));
-  const examById = id => (window.availableExams || []).find(e => e.id === id || e.id === `${id}_SET`) || null;
-
-  // The exam's sets as cards: { id, title, sub, n }
-  function heroSets(track) {
-    if (track === 'BCS') {
-      return (window.availableExams || []).filter(e => /^BCS_\d+_SET$/.test(e.id))
-        .sort((a, b) => Number(b.id.match(/\d+/)[0]) - Number(a.id.match(/\d+/)[0]))
-        .map(e => {
-          const no = (e.title.match(/^\S+তম/) || [''])[0];
-          const year = (e.title.match(/(২০|১৯)[০-৯]{2}(?=\))/) || [''])[0];
-          return { id: e.id, title: `${no} বিসিএস`, sub: year, n: (e.questionIds || []).length || e.questionCount };
-        });
-    }
-    const list = window[ARCHIVE_OF[track]] || [];
-    return [...list].sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0)).map(a => {
-      const ex = examById(a.code);
-      const phase = String(a.phase || '');
-      // Past papers: "২০২৪ • ৩য় ধাপ" (region below); model sets: a short name ("১৯তম শিক্ষক নিবন্ধন মডেল টেস্ট-১")
-      const title = a.year
-        ? [bn(a.year), phase.split('(')[0].trim()].filter(Boolean).join(' • ')
-        : String(a.title || '').replace(/^[^\u0980-\u09FFA-Za-z0-9]+/, '').split('(')[0].replace(/স্পেশাল\s*|পূর্ণাঙ্গ\s*|বিপিএসসি\s*/g, '').replace(/\s+/g, ' ').trim().slice(0, 44);
-      const where = (phase.match(/\((.+)\)/) || [])[1] || '';
-      return {
-        id: ex ? ex.id : a.code,
-        title,
-        sub: a.year ? where : String(a.setNameBn || ''),
-        n: (a.questionIds || []).length || (ex && (ex.questionIds || []).length) || a.totalQuestions
-      };
-    });
-  }
-
-  // One real question of their exam to try at once (no login)
-  let tryQ = null;
-  let tryPicked = null;
-  let tryStats = { n: 0, right: 0 };
-  function pickTryQuestion(t) {
-    const all = allQuestions();
-    let pool;
-    if (t === 'ADMISSION_MED') {
-      const ids = new Set((window.availableExams || []).filter(e => e.examTrack === 'ADMISSION' && e.admTarget === 'medical').flatMap(e => e.questionIds || []));
-      pool = all.filter(q => ids.has(q.id));
-    } else {
-      const want = String(t).startsWith('ADMISSION') ? 'ADMISSION' : t;
-      const medical = new Set((window.availableExams || []).filter(e => e.admTarget === 'medical').flatMap(e => e.questionIds || []));
-      pool = all.filter(q => (q.examTrack || 'BCS') === want && !(t === 'ADMISSION_UNI' && medical.has(q.id)));
-    }
-    pool = pool.filter(q => q.options && Object.keys(q.options).length === 4 && q.correctOption && q.explanationBn && String(q.stemBn || '').length < 220 && !/\$/.test(q.stemBn || ''));
-    if (!pool.length) return null;
-    return pool[Math.floor(Math.random() * pool.length)];
-  }
-  function tryCardHtml(t) {
-    if (!tryQ || (tryQ._for !== t)) { tryQ = pickTryQuestion(t); if (tryQ) tryQ = { ...tryQ, _for: t }; tryPicked = null; }
-    if (!tryQ) return '';
-    const q = tryQ;
-    const done = tryPicked !== null;
-    const right = done && tryPicked === q.correctOption;
-    return `<div class="try-card panel" id="tryCard">
-      <div class="try-head"><span>🧠 একটা প্রশ্ন দিয়ে দেখুন</span>${tryStats.n ? `<span class="muted">${bn(tryStats.right)}/${bn(tryStats.n)} ঠিক</span>` : ''}</div>
-      <p class="try-q">${esc(q.stemBn)}</p>
-      <div class="try-opts">${Object.entries(q.options).map(([k, v]) => {
-        const cls = !done ? '' : k === q.correctOption ? 'ok' : k === tryPicked ? 'bad' : 'dim';
-        return `<button type="button" class="try-opt ${cls}" ${done ? 'disabled' : ''} onclick="Study.tryAnswer('${esc(k)}')"><b>${esc({ A: 'ক', B: 'খ', C: 'গ', D: 'ঘ' }[k] || k)}</b> ${esc(v)}</button>`;
-      }).join('')}</div>
-      ${done ? `<div class="try-exp ${right ? 'ok' : 'bad'}"><b>${right ? '✅ সঠিক!' : '❌ হয়নি।'}</b> ${esc(String(q.explanationBn).slice(0, 400))}</div>
-        <div class="try-actions"><button type="button" class="btn btn-primary" onclick="Study.tryNext()">আরেকটা প্রশ্ন →</button></div>` : ''}
-    </div>`;
-  }
-  function tryAnswer(k) {
-    if (!tryQ || tryPicked !== null) return;
-    tryPicked = k;
-    tryStats.n += 1;
-    if (k === tryQ.correctOption) tryStats.right += 1;
-    const el = document.getElementById('tryCard');
-    if (el) el.outerHTML = tryCardHtml(tryQ._for);
-  }
-  function tryNext() {
-    tryQ = null;
-    const el = document.getElementById('tryCard');
-    if (el) el.outerHTML = tryCardHtml(liveTrack());
-  }
-
-  // Open a set and start it at once (locked: the package box; not logged in: the sign-up box, then it starts)
-  function startSet(track, id) {
-    if (typeof window.launchExamFromPastBank !== 'function') return;
-    if (isLockedSet(id)) { if (window.Account) Account.allow(id); return; }
-    window.launchExamFromPastBank(track, id);
-    setTimeout(() => { if (typeof window.startExam === 'function') window.startExam(); }, 250);
-  }
-
   // The exam's name as the user picked it (admission: university or medical)
   const trackLabel = track => (track === 'ADMISSION' ? (liveTrack() === 'ADMISSION_MED' ? 'মেডিকেল ও ডেন্টাল ভর্তি' : 'বিশ্ববিদ্যালয় ভর্তি') : TRACK_BN[track] || '');
-
-  function firstHeroHtml(track) {
-    const t = liveTrack();
-    const title = HERO_TITLE[t] || 'বিগত সালের প্রশ্ন';
-    let body = '';
-    let line = '';
-    if (track === 'ADMISSION' && window.AdmPick) {
-      const papers = (window.admissionExamsArchive || []).filter(a => a.isPastStyle && a.admType && !a.isPatternModel).length;
-      const unis = AdmPick.list(false).length + AdmPick.list(true).length;
-      line = `${bn(unis)}টি বিশ্ববিদ্যালয় ও পরীক্ষা • ${bn(papers)}টি সালের প্রশ্নপত্র, উত্তর ও ব্যাখ্যাসহ`;
-      body = `<div id="heroAdmPick">${AdmPick.html(window.AdmPick.current())}</div>`;
-    } else {
-      const sets = heroSets(track);
-      const total = sets.reduce((n, x) => n + (Number(x.n) || 0), 0);
-      line = `${bn(sets.length)}টি প্রশ্নসেট • মোট ${bn(total.toLocaleString('en-US'))} প্রশ্ন, উত্তর ও ব্যাখ্যাসহ`;
-      // Free sets first, so the first tap always works
-      const shown = [...sets.filter(x => !isLockedSet(x.id)), ...sets.filter(x => isLockedSet(x.id))].slice(0, 6);
-      body = `<div class="hero-sets">${shown.map(x => {
-        const free = !isLockedSet(x.id);
-        return `<button type="button" class="hero-set ${free ? 'free' : 'locked'}" onclick="Study.startSet('${esc(track)}','${esc(x.id)}')">
-          <b>${esc(x.title)}</b><span class="muted">${esc([x.sub, x.n ? `${bn(x.n)} প্রশ্ন` : ''].filter(Boolean).join(' • '))}</span>
-          <span class="hero-tag">${free ? 'ফ্রি • এখনই শুরু ▶' : '🔒 প্যাকেজে'}</span></button>`;
-      }).join('')}</div>`;
-    }
-    return `<div class="first-hero panel">
-      <p class="fh-kicker">📌 ${esc(trackLabel(track))} <button type="button" class="link" onclick="Goal.open()">বদলান</button></p>
-      <h2 class="fh-title">${esc(title)}</h2>
-      <p class="fh-sub">${line}</p>
-      ${body}
-      <button type="button" class="fh-all" onclick="switchTab('past-bank')">সব ${track === 'ADMISSION' ? 'বিশ্ববিদ্যালয় ও সাল' : 'প্রশ্নসেট'} দেখুন →</button>
-    </div>`;
-  }
-
-  // After the first-visit home is drawn: the admission dropdowns redraw in place; their start button starts at once
-  function bindFirstHero() {
-    const box = document.getElementById('heroAdmPick');
-    if (!box || !window.AdmPick) return;
-    const draw = code => {
-      box.innerHTML = AdmPick.html(code);
-      AdmPick.bind(box, draw);
-      const btn = box.querySelector('.adm-start');
-      const id = btn && (btn.getAttribute('onclick').match(/'([^']+)'\)$/) || [])[1];
-      if (btn && id) {
-        btn.removeAttribute('onclick');
-        const free = !isLockedSet(id);
-        btn.textContent = free ? '▶ এই সালের পরীক্ষা শুরু করুন (ফ্রি)' : '🔒 এই সাল প্যাকেজে • দেখুন';
-        btn.addEventListener('click', () => startSet('ADMISSION', id));
-      }
-    };
-    draw(AdmPick.current());
-  }
 
   function renderHome() {
     const pane = document.getElementById('homeBody');
@@ -743,8 +592,7 @@
     if (barTitle && (location.hash.replace('#', '') || 'home') === 'home') barTitle.textContent = homeTitle;
     if (isNew) {
       pane.innerHTML = `
-      ${firstHeroHtml(track)}
-      ${tryCardHtml(liveTrack())}
+      ${window.FirstHome ? FirstHome.html() : ''}
       ${!user && window.Account && Account.loaded ? `
       <div class="home-join">
         <span class="home-join-ic">🎁</span>
@@ -765,7 +613,7 @@
       </section>
       ${hasLive ? '<div class="panel weekly-card" id="homeWeekly"></div>' : ''}
       <div id="qSearchResults" class="space-y-3"></div>`;
-      bindFirstHero();
+      if (window.FirstHome) FirstHome.bind();
       renderWeekly();
       if (!weekly || weekly.track !== liveTrack()) loadWeekly();
       return;
@@ -1044,6 +892,13 @@
     applySettings();
   }
 
+  // A starting exam for a new visitor, without a time stamp: a choice saved in their account (newer) wins on sync
+  function setTrackSoft(track) {
+    if (data.settings.track) return;
+    change(d => { d.settings = { ...d.settings, track }; });
+    applySettings();
+  }
+
   function setTrack(track) {
     setSetting('track', track);
     toast(`লক্ষ্য: ${TRACK_BN[track]}`);
@@ -1108,10 +963,9 @@
     isBookmarked, toggleBookmark, bookmarkIds,
     dueReviewIds, buildDeck, rateCard,
     recordAttempt, cutMarkFor, subjectStats, addActivity,
-    tryAnswer, tryNext, startSet,
     pickQuestions, startSmartPractice, practiceSubject, practiceMistakes, practiceBookmarks, dailyQuiz,
     renderHome, renderResults, renderPracticeForm, search, questionCard,
-    openSettings, setSetting, setTrack, toggleHomeTrackPicker, refresh, sync,
+    openSettings, setSetting, setTrack, setTrackSoft, toggleHomeTrackPicker, refresh, sync,
     onChange: fn => listeners.push(fn)
   };
 })();

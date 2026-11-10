@@ -22,25 +22,28 @@ const MAX_EVENTS_PER_VISITOR_DAY = 400;
 
 // The steps, in the order a new visitor normally goes through them
 const STEPS = [
-  { key: 'landing', labelBn: 'সাইটে এসেছেন', group: 'main' },
-  { key: 'picker_shown', labelBn: '"কিসের প্রস্তুতি?" পাতা দেখেছেন (নতুন ব্যবহারকারী)', group: 'main' },
-  { key: 'track_from_link', labelBn: 'পরীক্ষার লিংক থেকে সরাসরি এসেছেন (/bcs, /medical ...)', group: 'other' },
-  { key: 'has_track', labelBn: 'পরীক্ষা বাছা আছে', group: 'main' },
-  { key: 'signup_prompt_shown', labelBn: 'নিবন্ধন / লগইনের বক্স দেখেছেন', group: 'main' },
-  { key: 'account', labelBn: 'নিবন্ধন বা লগইন করেছেন', group: 'main' },
+  { key: 'landing', labelBn: 'সাইটে এসেছেন (পাতা সত্যি দেখেছেন)', group: 'main' },
+  { key: 'home_view', labelBn: 'প্রথম স্ক্রিনে প্রশ্নসেট দেখেছেন', group: 'main' },
+  { key: 'engaged', labelBn: 'কিছু চেপেছেন বা স্ক্রল করেছেন', group: 'main' },
   { key: 'tab_past-bank', labelBn: 'বিগত সালের প্রশ্ন খুলেছেন', group: 'main' },
   { key: 'past_set_open', labelBn: 'কোনো সাল / প্রশ্নসেট বেছেছেন', group: 'main' },
-  { key: 'tab_exam', labelBn: 'মডেল টেস্ট পাতা খুলেছেন', group: 'main' },
+  { key: 'signup_prompt_shown', labelBn: 'নিবন্ধন / লগইনের বক্স দেখেছেন', group: 'main' },
+  { key: 'account', labelBn: 'নিবন্ধন বা লগইন করেছেন', group: 'main' },
   { key: 'exam_start', labelBn: 'পরীক্ষা শুরু করেছেন', group: 'main' },
   { key: 'exam_submit', labelBn: 'পরীক্ষা জমা দিয়েছেন', group: 'main' },
-  { key: 'tab_mistakes', labelBn: 'ভুল খাতা খুলেছেন', group: 'other' },
   { key: 'locked_click', labelBn: 'লক করা সেটে চাপ দিয়েছেন', group: 'buy' },
   { key: 'plans_open', labelBn: 'প্যাকেজ দেখেছেন', group: 'buy' },
   { key: 'order_form_open', labelBn: 'অর্ডার ফর্ম খুলেছেন', group: 'buy' },
   { key: 'order_placed', labelBn: 'অর্ডার দিয়েছেন', group: 'buy' },
-  { key: 'live_register', labelBn: 'লাইভ পরীক্ষায় নিবন্ধন করেছেন', group: 'other' }
+  { key: 'track_chosen', labelBn: 'নিজে পরীক্ষা বেছেছেন / বদলেছেন', group: 'other' },
+  { key: 'track_from_link', labelBn: 'পরীক্ষার লিংক থেকে সরাসরি এসেছেন (/bcs, /medical ...)', group: 'other' },
+  { key: 'try_answer', labelBn: '"একটা প্রশ্ন দিয়ে দেখুন"-এ উত্তর দিয়েছেন', group: 'other' },
+  { key: 'tab_exam', labelBn: 'মডেল টেস্ট পাতা খুলেছেন', group: 'other' },
+  { key: 'tab_mistakes', labelBn: 'ভুল খাতা খুলেছেন', group: 'other' },
+  { key: 'live_register', labelBn: 'লাইভ পরীক্ষায় নিবন্ধন করেছেন', group: 'other' },
+  { key: 'picker_shown', labelBn: '(আগের) "কিসের প্রস্তুতি?" পাতা দেখেছেন', group: 'other' }
 ];
-const EVENTS = new Set(['landing', 'picker_shown', 'track_chosen', 'track_from_link', 'screen', 'leave', 'past_set_open', 'exam_start', 'exam_submit',
+const EVENTS = new Set(['landing', 'home_view', 'engaged', 'try_answer', 'picker_shown', 'track_chosen', 'track_from_link', 'screen', 'leave', 'past_set_open', 'exam_start', 'exam_submit',
   'signup_prompt_shown', 'signup_done', 'login_done', 'locked_click', 'plans_open', 'order_form_open', 'order_placed', 'live_register']);
 const TRACKS = new Set(['BCS', 'PRIMARY', 'NTRCA', 'BANK', 'MINISTRY', 'NON_CADRE', 'NURSING', 'ADMISSION_UNI', 'ADMISSION_MED']);
 const SCREEN_BN = {
@@ -50,7 +53,9 @@ const SCREEN_BN = {
   'exam-hall': 'পরীক্ষার হল', result: 'পরীক্ষার ফলাফল', tour: 'গাইড (ট্যুর)'
 };
 const SOURCE_BN = { facebook: 'Facebook (বিজ্ঞাপন / পোস্ট)', google: 'Google', youtube: 'YouTube', whatsapp: 'WhatsApp', direct: 'সরাসরি / বুকমার্ক', other: 'অন্য সাইট' };
-const BOT_UA = /bot|crawl|spider|slurp|facebookexternalhit|preview|headless|lighthouse|curl|wget|python|axios|node-fetch/i;
+const BOT_UA = /bot|crawl|spider|slurp|facebookexternalhit|facebot|meta-externalagent|facebookcatalog|preview|headless|lighthouse|curl|wget|python|axios|node-fetch/i;
+// Link previews and pages loaded ahead of time are not visits
+const isPrefetch = h => /prefetch|prerender|preview/i.test(`${h.purpose || ''} ${h['sec-purpose'] || ''} ${h['x-purpose'] || ''} ${h['x-moz'] || ''}`);
 
 const dayOf = ms => new Date(ms + DHAKA_OFFSET_MS).toISOString().slice(0, 10);
 const clean = (v, re, max) => {
@@ -114,8 +119,8 @@ function createFunnelEngine({ store = null, now = () => Date.now() } = {}) {
   }
 
   // One event -> the visitor's record for today. Returns false when the event is not accepted.
-  function record(body, ua) {
-    if (BOT_UA.test(String(ua || ''))) return false;
+  function record(body, ua, headers = {}) {
+    if (BOT_UA.test(String(ua || '')) || isPrefetch(headers)) return false;
     const vid = clean(body.vid, /^[a-z0-9]{8,32}$/, 32);
     const ev = String(body.ev || '');
     if (!vid || !EVENTS.has(ev)) return false;
@@ -138,7 +143,7 @@ function createFunnelEngine({ store = null, now = () => Date.now() } = {}) {
     if (ev === 'landing') {
       v.s.landing = 1;
       if (!v.src) v.src = sourceOf(clean(body.src, /^[a-z0-9._-]{0,40}$/, 40), clean(body.ref, /^[a-z0-9.-]{0,60}$/, 60));
-    } else if (ev === 'track_chosen') v.s.has_track = 1;
+    } else if (ev === 'track_chosen') { v.s.has_track = 1; v.s.track_chosen = 1; }
     else if (ev === 'track_from_link') { v.s.has_track = 1; v.s.track_from_link = 1; }
     else if (ev === 'signup_done' || ev === 'login_done') v.s.account = 1;
     else if (ev === 'screen' && tab) v.s[`tab_${tab}`] = 1;
@@ -211,7 +216,7 @@ function createFunnelEngine({ store = null, now = () => Date.now() } = {}) {
       else if (++w[0] > 300) return send(res, 429, { status: 'ERROR' });
       if (perIp.size > 50000) perIp.clear();
       const body = await readBody(req);
-      record(body, req.headers['user-agent']);
+      record(body, req.headers['user-agent'], req.headers);
       // Always 204: the page never waits for or reacts to this
       res.writeHead(204, { 'Cache-Control': 'no-store' });
       res.end();

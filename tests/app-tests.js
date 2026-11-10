@@ -157,6 +157,26 @@ async function serverTests() {
     const alice = await signUp('Alice', '01711111111');
     const bob = await signUp('Bob', '01822222222');
 
+    await test('first screen: /catalog.js is small, lists every exam\'s sets and free sample questions only', async () => {
+      const r = await fetch(base + '/catalog.js', { headers: { 'Accept-Encoding': 'gzip' } });
+      assert.equal(r.status, 200);
+      const text = await r.text();
+      assert.ok(text.length < 600000, `catalog ${text.length} bytes`);
+      const window = {};
+      new Function('window', text)(window);
+      const c = window.HOME_CATALOG;
+      for (const t of ['BCS', 'PRIMARY', 'NTRCA', 'BANK', 'MINISTRY', 'NON_CADRE', 'NURSING', 'ADMISSION_UNI', 'ADMISSION_MED']) assert.ok(c.tries[t].length >= 3, `${t} sample questions`);
+      assert.ok(c.exams.some(e => e.id === 'BCS_46_SET') && c.admission.length > 50 && c.admission.every(a => !a.questionIds));
+      // Sample questions are only ones every visitor already gets in the free question data
+      const freeJs = await (await fetch(base + '/seed-data.js')).text();
+      const w2 = {};
+      new Function('window', freeJs)(w2);
+      const free = new Set(w2.sampleQuestions.map(q => q.id));
+      Object.values(c.tries).flat().forEach(q => assert.ok(free.has(q.id), `${q.id} is in the free data`));
+      const html = await (await fetch(base + '/')).text();
+      assert.ok(html.indexOf('/catalog.js') < html.indexOf('/seed-data.js'), 'catalog loads before the questions');
+    });
+
     await test('user journey: anonymous events are counted per step; no personal data kept; admin only', async () => {
       const ev = (vid, e, extra = {}, ua) => call('POST', '/api/ev', { body: { vid, ev: e, ...extra }, headers: ua ? { 'User-Agent': ua } : {} });
       // Visitor 1: Facebook ad -> picks medical -> signs up -> opens past papers -> starts and submits an exam
@@ -178,6 +198,8 @@ async function serverTests() {
       await ev(b, 'leave', { track: 'BCS', tab: 'home' });
       // Ignored: a bot, a bad id, an unknown event
       await ev('cccccccccccc3', 'landing', {}, 'Mozilla/5.0 (compatible; Googlebot/2.1)');
+      await ev('dddddddddddd4', 'landing', {}, 'facebookexternalhit/1.1');
+      await call('POST', '/api/ev', { body: { vid: 'eeeeeeeeeeee5', ev: 'landing' }, headers: { 'Sec-Purpose': 'prefetch' } });
       await ev('NOT VALID', 'landing');
       await ev(a, 'hack_the_planet');
 
@@ -187,7 +209,7 @@ async function serverTests() {
       const step = k => r.json.steps.find(x => x.key === k).count;
       assert.equal(r.json.visitors, 2);
       assert.equal(step('landing'), 2);
-      assert.equal(step('signup_prompt_shown'), 2);
+      assert.equal(step('signup_prompt_shown'), 2); // the bot and the prefetch were not counted
       assert.equal(step('account'), 1);
       assert.equal(step('tab_past-bank'), 1);
       assert.equal(step('exam_submit'), 1);

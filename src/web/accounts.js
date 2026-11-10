@@ -194,6 +194,61 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
       freeHash: crypto.createHash('sha1').update(free).digest('hex').slice(0, 12),
       freeQuestionIds: freeQ
     };
+    buildCatalog(sentQ);
+  }
+
+  // ---------------------------------------------------------------------------
+  // /catalog.js: the little the first screen needs (each exam's sets, which are free, a few sample
+  // questions), ~1-2% of /seed-data.js. A new visitor sees their exam's papers while the questions load.
+  // ---------------------------------------------------------------------------
+  let catalog = { js: Buffer.from(''), gz: Buffer.from(''), hash: '' };
+  function buildCatalog(sentQ) {
+    const qById = new Map((seed.sampleQuestions || []).map(q => [q.id, q]));
+    const n = e => (e.questionIds || []).length;
+    const ARCH = { PRIMARY: 'primaryExamsArchive', NTRCA: 'ntrcaExamsArchive', BANK: 'bankExamsArchive', MINISTRY: 'ministryExamsArchive', NON_CADRE: 'nonCadreExamsArchive', NURSING: 'nursingExamsArchive' };
+    const out = {
+      locked: [...lockedExamIds],
+      exams: exams.filter(e => /^BCS_\d+_SET$/.test(e.id) || e.examTrack !== 'BCS').map(e => ({ id: e.id, examTrack: e.examTrack, title: e.title, n: n(e), admTarget: e.admTarget || null })),
+      archives: Object.fromEntries(Object.entries(ARCH).map(([t, key]) => [t, (seed[key] || []).map(a => ({ code: a.code, title: a.title, year: a.year || null, phase: a.phase || '', setNameBn: a.setNameBn || '', n: n(a) || a.totalQuestions || 0 }))])),
+      // Admission year papers without their questions (adm-pick.js builds the dropdowns from these)
+      admission: (seed.admissionExamsArchive || []).filter(a => a.isPastStyle && a.admType).map(a => {
+        const { questionIds, ...meta } = a;
+        return { ...meta, totalQuestions: a.totalQuestions || (questionIds || []).length };
+      }),
+      tries: {}
+    };
+    // A few free sample questions per exam, for "একটা প্রশ্ন দিয়ে দেখুন" before everything has loaded
+    const medical = new Set(exams.filter(e => e.admTarget === 'medical').flatMap(e => e.questionIds || []));
+    const good = q => q && sentQ.has(q.id) && q.options && Object.keys(q.options).length === 4 && q.correctOption && q.explanationBn
+      && String(q.stemBn || '').length < 220 && !/\$/.test(q.stemBn || '');
+    const pick = (list, k = 8) => {
+      const pool = list.filter(good);
+      const step = Math.max(1, Math.floor(pool.length / k));
+      return pool.filter((_, i) => i % step === 0).slice(0, k)
+        .map(q => ({ id: q.id, stemBn: q.stemBn, options: q.options, correctOption: q.correctOption, explanationBn: String(q.explanationBn).slice(0, 400) }));
+    };
+    const all = seed.sampleQuestions || [];
+    ['BCS', 'PRIMARY', 'NTRCA', 'BANK', 'MINISTRY', 'NON_CADRE', 'NURSING'].forEach(t => { out.tries[t] = pick(all.filter(q => (q.examTrack || 'BCS') === t)); });
+    out.tries.ADMISSION_MED = pick([...medical].map(id => qById.get(id)));
+    out.tries.ADMISSION_UNI = pick(all.filter(q => q.examTrack === 'ADMISSION' && !medical.has(q.id)));
+    const js = Buffer.from(`window.HOME_CATALOG=${JSON.stringify(out)};`);
+    catalog = { js, gz: zlib.gzipSync(js, { level: 9 }), hash: crypto.createHash('sha1').update(js).digest('hex').slice(0, 12) };
+  }
+
+  function serveCatalog(req, res) {
+    const etag = `"cat-${catalog.hash}"`;
+    const versioned = new URL(req.url, 'http://x').searchParams.get('v') === catalog.hash;
+    const headers = {
+      'Content-Type': 'application/javascript; charset=utf-8',
+      'Cache-Control': versioned ? 'public, max-age=31536000, immutable' : 'no-cache',
+      Vary: 'Accept-Encoding',
+      ETag: etag
+    };
+    if (req.headers['if-none-match'] === etag) { res.writeHead(304, headers); return res.end(); }
+    const gzip = /\bgzip\b/.test(req.headers['accept-encoding'] || '');
+    if (gzip) headers['Content-Encoding'] = 'gzip';
+    res.writeHead(200, headers);
+    res.end(gzip ? catalog.gz : catalog.js);
   }
 
   function seedVersion(req) {
@@ -999,6 +1054,8 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     flush,
     serveSeedBundle,
     seedVersion,
+    serveCatalog,
+    catalogVersion: () => catalog.hash,
     visibleQuestions,
     currentUser,
     isPremium,

@@ -21,8 +21,25 @@
   let screen = '';
   // Boxes that open over a page count as the screen the visitor is on (for "last screen before leaving")
   const OVERLAY = { picker_shown: 'picker', signup_prompt_shown: 'signup-box', plans_open: 'plans', order_form_open: 'order-form', order_placed: 'order-done', exam_submit: 'result' };
+  // Pages loaded ahead of time (Facebook / browser prefetch, a tab opened in the background) are not
+  // visits: events wait until the page has actually been on screen, and are dropped if it never is
+  const onScreen = () => document.visibilityState === 'visible' && !document.prerendering;
+  let seenOnScreen = onScreen();
+  const waiting = [];
+  function flushWaiting() {
+    if (seenOnScreen || !onScreen()) return;
+    seenOnScreen = true;
+    waiting.splice(0).forEach(([n, x]) => send(n, x));
+  }
+  document.addEventListener('visibilitychange', flushWaiting);
+  document.addEventListener('prerenderingchange', flushWaiting);
+
   function ev(name, extra = {}) {
     if (OVERLAY[name]) screen = OVERLAY[name];
+    if (!seenOnScreen) { waiting.push([name, extra]); return; }
+    send(name, extra);
+  }
+  function send(name, extra) {
     try {
       const body = JSON.stringify({ vid, ev: name, track: track(), li: loggedIn() ? 1 : 0, ...extra });
       const blob = new Blob([body], { type: 'application/json' });
@@ -49,6 +66,13 @@
       ev('landing', { src: String(src).toLowerCase().replace(/[^a-z0-9._-]/g, '').slice(0, 40), ref: ref.toLowerCase().slice(0, 60) });
     }
   } catch { /* storage blocked */ }
+
+  // A real person: the first tap, key or scroll
+  const engage = () => {
+    ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(t => window.removeEventListener(t, engage, true));
+    ev('engaged');
+  };
+  ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(t => window.addEventListener(t, engage, { capture: true, passive: true }));
 
   // Which page of the site this is
   const PAGE = { '/live': 'live', '/exam-hall': 'exam-hall' }[location.pathname.replace(/\/+$/, '')];

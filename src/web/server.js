@@ -129,7 +129,7 @@ function servePage(req, res, filePath) {
       return res.end('File Not Found');
     }
     const out = Buffer.from(html.replace(/(src|href)="\/([\w.-]+\.(?:js|css|svg))"/g, (m, attr, name) => {
-      const v = name === 'seed-data.js' ? accounts.seedVersion(req) : PUBLIC_FILES[`/${name}`] && assetVersion(name);
+      const v = name === 'seed-data.js' ? accounts.seedVersion(req) : name === 'catalog.js' ? accounts.catalogVersion() : PUBLIC_FILES[`/${name}`] && assetVersion(name);
       return v ? `${attr}="/${name}?v=${v}"` : m;
     }));
     const etag = `"p-${crypto.createHash('sha1').update(out).digest('hex').slice(0, 16)}"`;
@@ -170,6 +170,7 @@ const PUBLIC_FILES = {
   '/tour.js': 'application/javascript; charset=utf-8',
   '/goal.js': 'application/javascript; charset=utf-8',
   '/funnel.js': 'application/javascript; charset=utf-8',
+  '/first-home.js': 'application/javascript; charset=utf-8',
   '/admin-funnel.js': 'application/javascript; charset=utf-8',
   '/math.js': 'application/javascript; charset=utf-8',
   '/native-app.js': 'application/javascript; charset=utf-8',
@@ -355,6 +356,9 @@ const server = http.createServer(async (req, res) => {
   // Question data: full for premium accounts, free sets only for everyone else
   if (pathname === '/seed-data.js') {
     return accounts.serveSeedBundle(req, res);
+  }
+  if (pathname === '/catalog.js') {
+    return accounts.serveCatalog(req, res);
   }
 
   // Fallback 404

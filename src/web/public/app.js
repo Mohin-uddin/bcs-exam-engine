@@ -79,6 +79,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (window.Goal) Goal.applyToPages({ keepExam: !!(resumed || linkedSet) });
   const startTab = resumed || linkedSet ? 'exam' : location.hash.replace('#', '');
   switchTab(startTab && document.getElementById(`pane-${startTab}`) ? startTab : 'home', { keepScroll: true });
+  // The questions are in: a set tapped on the first screen while loading can open now (first-home.js)
+  window.__appReady = true;
+  window.dispatchEvent(new Event('app:ready'));
 });
 
 // Opens a set named in the address bar (?set=ADM_SCI_MODEL_1). Locked sets show the unlock dialog instead.
