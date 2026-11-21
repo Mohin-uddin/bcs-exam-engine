@@ -146,7 +146,9 @@
       strictOmr = e.target.checked;
     });
 
-    document.getElementById('btnStart').addEventListener('click', () => {
+    document.getElementById('btnStart').addEventListener('click', function onStart() {
+      // No account yet: the free-registration box (with skip) first, then the exam starts
+      if (window.Account && !Account.requireLogin(liveExamId ? 'লাইভ পরীক্ষার রোল আর মেধাতালিকার ফলও আপনার অ্যাকাউন্টে থাকবে।' : null, onStart)) return;
       if (liveExamId) {
         loadLivePaper();
         return;

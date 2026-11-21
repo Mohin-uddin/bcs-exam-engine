@@ -10,12 +10,13 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="/live.css">
   <script src="/native-app.js"></script>
+  <style>[hidden]{display:none!important}</style>
 </head>
 <body>
   <header class="toolbar">
     <div class="tb-left">
       <a href="/" class="btn light sm">← হোম</a>
-      <div class="tb-title">অ্যাডমিন • অর্ডার, পেমেন্ট ও লাইভ পরীক্ষা</div>
+      <div class="tb-title">অ্যাডমিন • ইউজার ও লাইভ পরীক্ষা</div>
     </div>
     <a href="/live" class="btn light sm">শিক্ষার্থীদের পেজ দেখুন →</a>
   </header>
@@ -46,7 +47,8 @@
         </div>
         <div id="funnelBody"><p style="color:#64748b">লোড হচ্ছে...</p></div>
       </section>
-      <section class="panel" id="paymentArea">
+      <!-- The app is free for everyone: payment, payment settings and cash-on-delivery panels are hidden -->
+      <section class="panel" id="paymentArea" hidden>
         <h2>💳 পেমেন্ট (অনলাইন ও বিকাশ / নগদ / রকেট) <span class="badge UPCOMING" id="payPendingBadge"></span></h2>
         <p style="color:#475569;font-size:14px;margin-bottom:10px">অনলাইন গেটওয়ে (SSLCommerz / aamarPay) দিয়ে পেমেন্ট হলে গেটওয়ে থেকে যাচাই করে নিজে থেকেই প্রিমিয়াম চালু হয়, কিছু করতে হবে না। শুধু "নিজে Send Money + TrxID" পেমেন্টগুলো আপনার বিকাশ / নগদ / রকেট স্টেটমেন্টে মিলিয়ে অনুমোদন দিন। ক্যাশ অন ডেলিভারি অর্ডার কুরিয়ার টাকা তুলে দিলে অনুমোদন দিন। প্রিন্ট প্যাকেট কুরিয়ারে দিলে "📦 পাঠানো বাকি" থেকে "পাঠানো হয়েছে" চাপুন।</p>
         <div class="actions" style="margin-bottom:10px">
@@ -65,7 +67,7 @@
       </section>
 
       <section class="panel">
-        <h2>👥 ইউজার ও প্রিমিয়াম</h2>
+        <h2>👥 ইউজার</h2>
         <form id="userSearchForm" class="row2">
           <label class="field">নাম বা মোবাইল নম্বর দিয়ে খুঁজুন
             <input id="userSearch" placeholder="যেমন 017...">
@@ -81,7 +83,7 @@
         </div>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="paySettingsArea" hidden>
         <h2>⚙️ পেমেন্ট সেটিংস</h2>
         <div class="error" id="setWarn" hidden style="margin-bottom:10px">⚠️ পেমেন্ট নম্বর এখনো বসানো হয়নি (01XXXXXXXXX)। আপনার আসল বিকাশ / নগদ / রকেট নম্বর দিয়ে সংরক্ষণ করুন, না হলে ইউজার ভুল নম্বর দেখবে।</div>
         <form id="settingsForm">
@@ -144,7 +146,7 @@
             <div class="field"><button class="btn ghost" type="button" id="wMoveBtn">এই সপ্তাহের পরীক্ষা এই সময়ে নিন</button></div>
           </div>
         </form>
-        <form id="weeklySharedForm" class="row2" style="margin-top:12px;align-items:end">
+        <form id="weeklySharedForm" class="row2" style="margin-top:12px;align-items:end" hidden>
           <label class="field">ফ্রি অ্যাকাউন্টে কয়টি লাইভ পরীক্ষা (সব পরীক্ষা মিলিয়ে)<input id="wFree" type="number" min="0" max="100"></label>
           <div class="field"><button class="btn ghost" type="submit">সংরক্ষণ</button></div>
         </form>
@@ -236,7 +238,6 @@
   <div class="toast" id="toast" hidden></div>
   <script src="/admin.js"></script>
   <script src="/admin-payments.js"></script>
-  <script src="/admin-orders.js"></script>
   <script src="/admin-reports.js"></script>
   <script src="/admin-weekly.js"></script>
   <script src="/admin-funnel.js"></script>

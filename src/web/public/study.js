@@ -498,10 +498,10 @@
     }
     const phase = weeklyPhase(e);
     let accessLine = '';
-    if (!a.loggedIn) accessLine = `<button type="button" class="link" onclick="Account.openLogin()">লগইন করুন</button>, ফ্রিতে ${bn(a.freeLimit)}টি লাইভ পরীক্ষা দিতে পারবেন।`;
-    else if (a.premium) accessLine = '⭐ আপনার প্যাকেজে প্রতি সপ্তাহের লাইভ পরীক্ষা খোলা।';
+    if (!a.loggedIn) accessLine = `<button type="button" class="link" onclick="Account.openLogin()">লগইন করুন</button>, প্রতি সপ্তাহের লাইভ পরীক্ষা সম্পূর্ণ ফ্রি।`;
+    else if (a.premium) accessLine = '🎉 প্রতি সপ্তাহের লাইভ পরীক্ষা সবার জন্য ফ্রি।';
     else if (a.left > 0) accessLine = `ফ্রিতে আর <b>${bn(a.left)}টি</b> লাইভ পরীক্ষা দিতে পারবেন।`;
-    else accessLine = `ফ্রি ${bn(a.freeLimit)}টি লাইভ পরীক্ষা দেওয়া শেষ। <button type="button" class="link" onclick="Account.openUnlock()">প্যাকেজ নিন</button>`;
+    else accessLine = `ফ্রি ${bn(a.freeLimit)}টি লাইভ পরীক্ষা দেওয়া শেষ।`;
     box.innerHTML = `
       <div class="weekly-head">
         <div>

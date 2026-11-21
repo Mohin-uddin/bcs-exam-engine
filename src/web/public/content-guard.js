@@ -7,8 +7,8 @@
  *    recorders, switching apps) and for a moment when PrintScreen / Win / Cmd+Shift
  *    is pressed. PrintScreen also wipes the clipboard.
  *  - Text selection, copy/cut, right-click, long-press menu and drag are blocked.
- *  - Printing / Save as PDF is only for premium members; for everyone else the
- *    printed page is blank and window.print() opens the unlock dialog instead.
+ *  - Printing / Save as PDF is open to everyone while FREE_FOR_ALL is on (the app is free).
+ *    With it off, only premium members could print; everyone else got a blank page.
  *
  * In the Android app screenshots and screen recording are blocked by the OS
  * (FLAG_SECURE in MainActivity).
@@ -49,7 +49,9 @@
   // ---------------------------------------------------------------- helpers
   function account() { return window.Account || null; }
   // PREMIUM plan only (NORMAL plan = view only); Account.canPrint comes from the logged-in account
-  function canPrint() { var a = account(); return Boolean(a && (a.canPrint ? a.canPrint() : a.isPremium && a.isPremium())); }
+  // The app is free for everyone, so printing / Save as PDF is open to all
+  var FREE_FOR_ALL = true;
+  function canPrint() { if (FREE_FOR_ALL) return true; var a = account(); return Boolean(a && (a.canPrint ? a.canPrint() : a.isPremium && a.isPremium())); }
   function inProtected(node) {
     var el = node && (node.nodeType === 1 ? node : node.parentElement);
     return Boolean(el && el.closest && el.closest('.cg-protect'));

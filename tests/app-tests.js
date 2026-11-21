@@ -264,77 +264,54 @@ async function serverTests() {
       assert.ok(!after.json.reports.some(x => x.id === rep.id));
     });
 
-    await test('printed-pack plans need an address and show up in the shipping list', async () => {
-      const cfg = (await call('GET', '/api/payment/config')).json;
-      const print = cfg.plans.find(p => p.printPack);
-      assert.ok(print);
-      // Old one-click cash on delivery is replaced by the OTP order form
-      assert.equal(cfg.codEnabled, false);
-      assert.ok(cfg.cod && cfg.cod.enabled);
-      const old = await call('POST', '/api/payment/cod', { cookie: alice, body: { planId: print.id } });
-      assert.equal(old.json.code, 'USE_COD_ORDER');
-
-      const noAddr = await call('POST', '/api/payment/submit', { cookie: bob, body: { planId: print.id, method: 'bkash', senderNumber: '01822222222', trxId: 'ABC123XYZ' } });
-      assert.equal(noAddr.json.code, 'BAD_ADDRESS');
-      const delivery = { name: 'Alice', phone: '01711111111', district: 'ঢাকা', address: 'বাসা ১২, রোড ৩, মিরপুর' };
-      const ok = await call('POST', '/api/payment/submit', { cookie: alice, body: { planId: print.id, method: 'bkash', senderNumber: '01711111111', trxId: 'PACK12345', delivery } });
-      assert.equal(ok.status, 200, JSON.stringify(ok.json));
-      const id = ok.json.payment.id;
-      await call('POST', `/api/admin/accounts/payments/${id}/approve`, { admin: 'test-admin-key', body: {} });
-      const toShip = await call('GET', '/api/admin/accounts/payments?status=SHIP', { admin: 'test-admin-key' });
-      assert.ok(toShip.json.payments.some(p => p.id === id));
-      assert.equal((await call('POST', `/api/admin/accounts/payments/${id}/shipped`, { admin: 'test-admin-key', body: {} })).status, 200);
-      const after = await call('GET', '/api/admin/accounts/payments?status=SHIP', { admin: 'test-admin-key' });
-      assert.ok(!after.json.payments.some(p => p.id === id));
+    await test('the app is free: everyone gets every question, nothing is locked, everyone may print', async () => {
+      const anon = await fetch(base + '/seed-data.js');
+      const anonBody = await anon.text();
+      assert.equal(anon.status, 200);
+      assert.ok(anonBody.includes('window.APP_ACCESS = {"premium":true'), 'visitors get the full bundle');
+      assert.ok(anonBody.includes('window.APP_ACCESS.lockedExamIds = [];'), 'no locked sets');
+      const mine = await fetch(base + '/seed-data.js', { headers: { Cookie: alice } });
+      assert.equal(mine.headers.get('etag'), anon.headers.get('etag'), 'logged-in users get the same data');
+      const me = await call('GET', '/api/auth/me', { cookie: alice });
+      assert.equal(me.json.user.premium, true);
+      assert.equal(me.json.user.canPrint, true);
+      const q = await call('GET', '/api/exam/questions');
+      if (q.status === 200 && Array.isArray(q.json && q.json.questions)) {
+        const withAcc = await call('GET', '/api/exam/questions', { cookie: alice });
+        assert.equal(q.json.questions.length, withAcc.json.questions.length);
+      }
     });
 
-    await test('cash on delivery: OTP, far-location flag, access code unlocks a view-only plan once', async () => {
-      const cod = (await call('GET', '/api/cod/config')).json;
-      assert.ok(cod.enabled && cod.otpReady);
-      const normal = cod.plans.find(p => p.tier === 'NORMAL');
-      const phone = '01933333333';
-      assert.equal((await call('POST', '/api/cod/otp', { body: { phone } })).status, 200);
-      const otp = [...getLog().matchAll(/OTP: (\d{6})/g)].pop()[1];
-      const order = { planId: normal.id, exam: 'BCS', name: 'Karim', phone, districtId: 'rajshahi', area: 'Boalia', address: 'House 1, Road 2', geo: { lat: 23.81, lng: 90.41, accuracy: 30 } };
-      const bad = await call('POST', '/api/cod/order', { body: { ...order, otp: otp === '000000' ? '111111' : '000000' } });
-      assert.equal(bad.json.code, 'BAD_OTP');
-      const ok = await call('POST', '/api/cod/order', { body: { ...order, otp } });
-      assert.equal(ok.status, 200, JSON.stringify(ok.json));
-      assert.equal(ok.json.order.accessCode, undefined, 'code never goes to the customer');
-      // OTP works once
-      assert.equal((await call('POST', '/api/cod/order', { body: { ...order, otp } })).json.code, 'OTP_EXPIRED');
-
-      const far = await call('GET', '/api/admin/accounts/orders?status=FAR', { admin: 'test-admin-key' });
-      const o = far.json.orders.find(x => x.id === ok.json.order.id);
-      assert.ok(o && o.location.status === 'FAR' && o.location.distanceKm > 100);
-      assert.equal((await call('POST', `/api/admin/accounts/orders/${o.id}/location-ok`, { admin: 'test-admin-key', body: {} })).status, 200);
-
-      assert.equal((await call('POST', '/api/cod/redeem', { body: { code: o.accessCode } })).status, 401);
-      const carol = await signUp('Carol', '01944444444');
-      const wrong = await call('POST', '/api/cod/redeem', { cookie: carol, body: { code: 'AAAA-BBBB' } });
-      assert.equal(wrong.json.code, 'BAD_CODE');
-      const used = await call('POST', '/api/cod/redeem', { cookie: carol, body: { code: o.accessCode.toLowerCase().replace('-', '') } });
-      assert.equal(used.status, 200, JSON.stringify(used.json));
-      assert.equal(used.json.user.tier, 'NORMAL');
-      assert.equal(used.json.user.premium, true);
-      assert.equal(used.json.user.canPrint, false);
-      assert.equal((await call('POST', '/api/cod/redeem', { cookie: carol, body: { code: o.accessCode } })).json.code, 'CODE_USED');
-      const list = await call('GET', '/api/admin/accounts/orders?status=DELIVERED', { admin: 'test-admin-key' });
-      assert.ok(list.json.orders.some(x => x.id === o.id && x.redeemedUser.phone === '01944444444'));
+    await test('the app is free: no plan, payment or cash-on-delivery order can be started', async () => {
+      const posts = [
+        ['/api/payment/initiate', { planId: 'monthly' }],
+        ['/api/payment/submit', { planId: 'monthly', method: 'bkash', senderNumber: '01711111111', trxId: 'ABC123XYZ' }],
+        ['/api/payment/cod', { planId: 'half_year' }],
+        ['/api/cod/otp', { phone: '01933333333' }],
+        ['/api/cod/order', { planId: 'cod_premium', exam: 'BCS', name: 'Karim', phone: '01933333333' }],
+        ['/api/cod/redeem', { code: 'AAAA-BBBB' }]
+      ];
+      for (const [url, body] of posts) {
+        for (const cookie of [undefined, alice]) {
+          const r = await call('POST', url, { cookie, body });
+          assert.equal(r.status, 410, `${url} ${JSON.stringify(r.json)}`);
+          assert.equal(r.json.code, 'FREE_APP', url);
+        }
+      }
     });
 
-    await test('weekly live exam is created by itself; free accounts may sit 2, then need a plan', async () => {
+    await test('weekly live exam is created by itself; every account may sit as many as it likes (free app)', async () => {
       const w = await call('GET', '/api/live/weekly');
       assert.equal(w.status, 200, JSON.stringify(w.json));
       assert.ok(w.json.exam && w.json.exam.weekly, 'weekly exam exists');
       const start = new Date(w.json.exam.startAt);
       assert.equal(start.getUTCDay(), 5); // Friday
       assert.equal(start.getUTCHours(), 15); // 9 PM in Dhaka
-      assert.equal(w.json.access.freeLimit, 2);
+      assert.equal(w.json.access.left, null, 'no limit for visitors');
       // Same exam (same count, same start) for a second visitor
       const w2 = await call('GET', '/api/live/weekly', { cookie: bob });
       assert.equal(w2.json.exam.id, w.json.exam.id);
-      assert.equal(w2.json.access.left, 2);
+      assert.equal(w2.json.access.left, null);
 
       const cat = await call('GET', '/api/live/admin/catalog', { admin: 'test-admin-key' });
       const setId = cat.json.sets[0].id;
@@ -349,20 +326,16 @@ async function serverTests() {
       const carol = await signUp('Carol', '01933333333');
       const ids = [await liveNow(), await liveNow(), await liveNow()];
       const anon = await call('POST', `/api/live/exams/${ids[0]}/register`, { body: { name: 'Anon', phone: '01544444444' } });
-      assert.equal((await call('GET', `/api/live/exams/${ids[0]}/paper?token=${anon.json.candidate.token}`)).json.code, 'LOGIN_REQUIRED');
+      // Free app: a visitor who skipped registration may sit too (the candidate token proves the seat)
+      assert.equal((await call('GET', `/api/live/exams/${ids[0]}/paper?token=${anon.json.candidate.token}`)).status, 200);
+      assert.equal((await call('GET', `/api/live/exams/${ids[0]}/paper?token=wrong`)).status, 401);
       assert.equal((await sit(ids[0], carol, '01933333333')).status, 200);
       assert.equal((await sit(ids[1], carol, '01933333333')).status, 200);
-      const third = await sit(ids[2], carol, '01933333333');
-      assert.equal(third.json.code, 'PREMIUM_REQUIRED');
-      // Opening an exam already started again does not count twice
+      assert.equal((await sit(ids[2], carol, '01933333333')).status, 200, 'third live exam is free too');
       assert.equal((await sit(ids[0], carol, '01933333333')).status, 200);
       const left = await call('GET', '/api/live/weekly', { cookie: carol });
-      assert.equal(left.json.access.left, 0);
-
-      const users = await call('GET', '/api/admin/accounts/users?q=01933333333', { admin: 'test-admin-key' });
-      const u = (users.json.users || []).find(x => x.phone === '01933333333');
-      assert.equal((await call('POST', `/api/admin/accounts/users/${u.id}/grant`, { admin: 'test-admin-key', body: { days: 30 } })).status, 200);
-      assert.equal((await sit(ids[2], carol, '01933333333')).status, 200);
+      assert.equal(left.json.access.premium, true);
+      assert.equal(left.json.access.left, null);
     });
 
     await test('every exam type has its own weekly live exam, sized like the real exam; users never see counts', async () => {
@@ -514,59 +487,9 @@ async function serverTests() {
   }
 }
 
-// No SMS company set: orders are taken without OTP and confirmed on WhatsApp
-async function noOtpTests() {
-  const { base, child, dir } = await startServer({ SMS_PROVIDER: '' });
-  const call = async (method, url, { body, admin } = {}) => {
-    const res = await fetch(base + url, {
-      method,
-      headers: { 'Content-Type': 'application/json', ...(admin ? { 'X-Admin-Key': admin } : {}) },
-      body: body ? JSON.stringify(body) : undefined
-    });
-    return { status: res.status, json: await res.json().catch(() => null) };
-  };
-  try {
-    await test('without SMS, orders skip OTP and are confirmed on WhatsApp', async () => {
-      const set = await call('POST', '/api/admin/accounts/settings', { admin: 'test-admin-key', body: { codWhatsapp: '+81 090 9726 1452' } });
-      assert.equal(set.status, 200, JSON.stringify(set.json));
-      const cfg = (await call('GET', '/api/cod/config')).json;
-      assert.equal(cfg.otpReady, false);
-      assert.equal(cfg.noOtp, true);
-      const plan = cfg.plans[0];
-      // The order says which exam's question set: required, one of the listed exams
-      assert.ok(cfg.exams.some(x => x.id === 'ADMISSION_MED') && cfg.exams.some(x => x.id === 'BCS'));
-      const noExam = await call('POST', '/api/cod/order', { body: { planId: plan.id, name: 'Rahim', phone: '01955555555', districtId: 'dhaka', area: 'Mirpur', address: 'House 1' } });
-      assert.equal(noExam.json.code, 'BAD_EXAM');
-      const ok = await call('POST', '/api/cod/order', { body: { planId: plan.id, exam: 'ADMISSION_UNI', uniBn: 'ঢাকা বিশ্ববিদ্যালয় (ঢাবি)', unitBn: 'বিজ্ঞান • ক ইউনিট', setLabel: '<b>২০২৩-২৪</b>', name: 'Rahim', phone: '01955555555', districtId: 'dhaka', area: 'Mirpur', address: 'House 1', geo: { lat: 23.81, lng: 90.41, accuracy: 30 } } });
-      assert.equal(ok.status, 200, JSON.stringify(ok.json));
-      assert.ok(ok.json.whatsappUrl.startsWith('https://wa.me/819097261452?text='), ok.json.whatsappUrl);
-      const item = 'বিশ্ববিদ্যালয় ভর্তি • ঢাকা বিশ্ববিদ্যালয় (ঢাবি) • বিজ্ঞান • ক ইউনিট • b২০২৩-২৪/b';
-      assert.equal(ok.json.order.itemBn, item, 'what is sent is stored, without markup');
-      assert.ok(decodeURIComponent(ok.json.whatsappUrl).includes(item));
-      const byExam = await call('GET', '/api/admin/accounts/orders?status=ALL&exam=ADMISSION_UNI', { admin: 'test-admin-key' });
-      assert.ok(byExam.json.orders.length && byExam.json.orders.every(x => x.examTrack === 'ADMISSION_UNI' && x.itemBn === item));
-      const otherExam = await call('GET', '/api/admin/accounts/orders?status=ALL&exam=NURSING', { admin: 'test-admin-key' });
-      assert.ok(!otherExam.json.orders.some(x => x.id === ok.json.order.id));
-      const pending = await call('GET', '/api/admin/accounts/orders?status=FAR', { admin: 'test-admin-key' });
-      const o = pending.json.orders.find(x => x.id === ok.json.order.id);
-      assert.ok(o && !o.phoneVerifiedAt && o.verifyBy === 'WHATSAPP');
-      assert.equal((await call('POST', `/api/admin/accounts/orders/${o.id}/location-ok`, { admin: 'test-admin-key', body: {} })).status, 200);
-      const after = await call('GET', '/api/admin/accounts/orders?status=FAR', { admin: 'test-admin-key' });
-      assert.ok(!after.json.orders.some(x => x.id === o.id));
-      // Without a WhatsApp number either, orders stay closed
-      await call('POST', '/api/admin/accounts/settings', { admin: 'test-admin-key', body: { codWhatsapp: '' } });
-      assert.equal((await call('GET', '/api/cod/config')).json.noOtp, false);
-    });
-  } finally {
-    child.kill();
-    fs.rmSync(dir, { recursive: true, force: true });
-  }
-}
-
 (async () => {
   await coreTests();
   await serverTests();
-  await noOtpTests();
   const failed = results.filter(ok => !ok).length;
   console.log(`\n${results.length - failed}/${results.length} app tests passed`);
   if (failed) process.exit(1);

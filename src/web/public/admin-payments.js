@@ -3,6 +3,8 @@
  * Uses the same admin key as the live-exam console (admin.js fires 'admin:login').
  */
 (function () {
+  // The app is free for everyone: no premium status or grant / revoke buttons in the user list
+  const FREE_FOR_ALL = true;
   const bn = n => String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const fmt = iso => iso ? new Date(iso).toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
@@ -86,13 +88,13 @@
     try {
       const q = $('userSearch').value.trim();
       const { users, totalUsers, premiumUsers } = await api(`/api/admin/accounts/users?q=${encodeURIComponent(q)}`);
-      $('userStats').textContent = `মোট ${bn(totalUsers)} জন • প্রিমিয়াম ${bn(premiumUsers)} জন`;
+      $('userStats').textContent = FREE_FOR_ALL ? `মোট ${bn(totalUsers)} জন • অ্যাপটি সবার জন্য সম্পূর্ণ ফ্রি` : `মোট ${bn(totalUsers)} জন • প্রিমিয়াম ${bn(premiumUsers)} জন`;
       $('userRows').innerHTML = users.length ? users.map(u => `
         <tr>
           <td><b>${esc(u.name)}</b><br><small>${esc(u.phone)}</small></td>
           <td>${fmt(u.createdAt)}</td>
-          <td>${u.premium ? `<span class="badge" style="background:#dcfce7;color:#166534">${u.canPrint ? '⭐ প্রিমিয়াম' : 'সাধারণ (প্রিন্ট নেই)'}</span><br><small>${fmt(u.premiumUntil)} পর্যন্ত</small>` : '<span class="badge ENDED">ফ্রি</span>'}</td>
-          <td style="white-space:nowrap">
+          <td>${FREE_FOR_ALL ? '<span class="badge" style="background:#dcfce7;color:#166534">ফ্রি • সব খোলা</span>' : u.premium ? `<span class="badge" style="background:#dcfce7;color:#166534">${u.canPrint ? '⭐ প্রিমিয়াম' : 'সাধারণ (প্রিন্ট নেই)'}</span><br><small>${fmt(u.premiumUntil)} পর্যন্ত</small>` : '<span class="badge ENDED">ফ্রি</span>'}</td>
+          <td style="white-space:nowrap" ${FREE_FOR_ALL ? 'hidden' : ''}>
             <button class="btn ghost sm" data-grant="${u.id}">+ দিন যোগ</button>
             ${u.premium ? `<button class="btn ghost sm" data-revoke="${u.id}">প্রিমিয়াম বন্ধ</button>` : ''}
           </td>

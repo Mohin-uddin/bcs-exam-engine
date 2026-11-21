@@ -130,7 +130,8 @@
     welcome();
   }
 
-  // ---- First visit only: free account first, then the tour. Never shown again. ----
+  // ---- First visit only: the tour. No login box on open: the free-account box comes only
+  //      when an exam starts (Account.requireLogin), and it can be skipped. ----
   const WELCOME_KEY = 'sh_welcome_done_v1';
   const seen = () => { try { return localStorage.getItem(WELCOME_KEY) === '1'; } catch { return true; } };
   function welcome() {
@@ -139,9 +140,9 @@
       if (seen()) return;
       try { localStorage.setItem(WELCOME_KEY, '1'); } catch { /* storage blocked */ }
       const tour = () => setTimeout(() => window.Tour && Tour.startOnce(), 300);
-      // Already has an account (e.g. logged in on a new phone): not a new user, no box and no tour
+      // Already has an account (e.g. logged in on a new phone): not a new user, no tour
       if (Account.user) return;
-      Account.openLogin(null, null, { welcome: true, later: true, mode: 'register', onClose: tour });
+      tour();
     };
     if (Account.loaded) go();
     else window.addEventListener('account:ready', go, { once: true });
