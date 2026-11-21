@@ -34,6 +34,7 @@ const { createFunnelEngine } = require('./funnel');
 const { createAccountsEngine } = require('./accounts');
 const { createProgressEngine } = require('./progress');
 const { createReportsEngine } = require('./reports');
+const { createAdsense } = require('./adsense');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
@@ -61,6 +62,9 @@ const progress = createProgressEngine({ store: stateStore, currentUser: accounts
 
 // Where users stop (anonymous funnel) -> admin panel
 const funnel = createFunnelEngine({ store: stateStore });
+
+// Google AdSense (publisher id + ad unit ids typed in /admin; nothing loads until set)
+const adsense = createAdsense({ store: stateStore });
 
 // Question reports (ভুল রিপোর্ট) -> admin panel
 const reports = createReportsEngine({
@@ -128,10 +132,13 @@ function servePage(req, res, filePath) {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
       return res.end('File Not Found');
     }
-    const out = Buffer.from(html.replace(/(src|href)="\/([\w.-]+\.(?:js|css|svg))"/g, (m, attr, name) => {
+    let page = html.replace(/(src|href)="\/([\w.-]+\.(?:js|css|svg))"/g, (m, attr, name) => {
       const v = name === 'seed-data.js' ? accounts.seedVersion(req) : PUBLIC_FILES[`/${name}`] && assetVersion(name);
       return v ? `${attr}="/${name}?v=${v}"` : m;
-    }));
+    });
+    // Google AdSense script: only on the main app (never the exam hall, live exams, print or admin)
+    if (path.basename(filePath) === 'index.html') page = page.replace('<!--ADSENSE_HEAD-->', adsense.headHtml());
+    const out = Buffer.from(page);
     const etag = `"p-${crypto.createHash('sha1').update(out).digest('hex').slice(0, 16)}"`;
     const headers = {
       'Content-Type': 'text/html; charset=utf-8',
@@ -171,9 +178,11 @@ const PUBLIC_FILES = {
   '/goal.js': 'application/javascript; charset=utf-8',
   '/funnel.js': 'application/javascript; charset=utf-8',
   '/admin-funnel.js': 'application/javascript; charset=utf-8',
+  '/admin-adsense.js': 'application/javascript; charset=utf-8',
   '/math.js': 'application/javascript; charset=utf-8',
   '/native-app.js': 'application/javascript; charset=utf-8',
   '/content-guard.js': 'application/javascript; charset=utf-8',
+  '/ads.js': 'application/javascript; charset=utf-8',
   '/logo.svg': 'image/svg+xml',
   // Install-as-app (PWA) files
   '/pwa.js': 'application/javascript; charset=utf-8',
@@ -262,6 +271,16 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  // 0b3. Google AdSense: ads.txt and the admin's AdSense settings
+  if (pathname === '/ads.txt' || pathname === '/api/admin/adsense') {
+    try {
+      if (await adsense.handle(req, res, pathname)) return;
+    } catch (e) {
+      console.error('[adsense]', e);
+      return sendJson(res, 500, { status: 'ERROR' });
+    }
+  }
+
   // 0c. Study progress sync and question reports
   if (pathname === '/api/progress' || pathname === '/api/reports' || pathname.startsWith('/api/admin/reports')) {
     try {
@@ -342,10 +361,12 @@ const server = http.createServer(async (req, res) => {
     return serveStatic(req, res, path.join(PUBLIC_DIR, pathname.slice(1)), PUBLIC_FILES[pathname]);
   }
 
-  // Privacy policy (needed for the Play Store listing). Contact email comes from CONTACT_EMAIL.
-  if (pathname === '/privacy') {
-    return fs.readFile(path.join(PUBLIC_DIR, 'privacy.html'), 'utf8', (err, html) => {
-      if (err) return sendJson(res, 500, { status: 'ERROR', message: 'Privacy page missing' });
+  // Privacy policy, About and Contact (Play Store listing and Google AdSense review).
+  // Contact email comes from CONTACT_EMAIL.
+  const INFO_PAGES = { '/privacy': 'privacy.html', '/privacy-policy': 'privacy.html', '/about': 'about.html', '/contact': 'contact.html' };
+  if (method === 'GET' && INFO_PAGES[pathname.replace(/\.html$|\/$/, '')]) {
+    return fs.readFile(path.join(PUBLIC_DIR, INFO_PAGES[pathname.replace(/\.html$|\/$/, '')]), 'utf8', (err, html) => {
+      if (err) return sendJson(res, 500, { status: 'ERROR', message: 'Page missing' });
       const email = (process.env.CONTACT_EMAIL || 'support@example.com').replace(/[<>"&]/g, '');
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       res.end(html.replaceAll('{{CONTACT_EMAIL}}', email));
@@ -363,7 +384,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 // Start Server (after saved data is loaded from the database, if any)
-Promise.all([liveExams.ready(), accounts.ready(), reports.ready(), funnel.ready()]).then(() => server.listen(PORT, () => {
+Promise.all([liveExams.ready(), accounts.ready(), reports.ready(), funnel.ready(), adsense.ready()]).then(() => server.listen(PORT, () => {
   console.log(`================================================================`);
   console.log(`সোনার হরিণ - BCS & BD Competitive Exam Prep`);
   console.log(`Web App running locally at: http://localhost:${PORT}`);

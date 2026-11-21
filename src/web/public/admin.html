@@ -47,6 +47,21 @@
         </div>
         <div id="funnelBody"><p style="color:#64748b">লোড হচ্ছে...</p></div>
       </section>
+      <section class="panel" id="adsenseArea">
+        <h2>💰 Google AdSense <span class="badge" id="adsBadge"></span></h2>
+        <p style="color:#475569;font-size:14px;margin-bottom:10px">AdSense থেকে পাওয়া Publisher ID দিলেই সাইটে Google-এর কোড আর <a href="/ads.txt" target="_blank">/ads.txt</a> চালু হয়ে যায় (অনুমোদনের আবেদনের জন্য এটুকুই লাগে)। অনুমোদনের পর AdSense-এ ৩টি Display ad unit বানিয়ে তাদের নম্বর (data-ad-slot) নিচে দিন। বিজ্ঞাপন বসে শুধু হোম পেজে, বিগত প্রশ্নের তালিকার উপরে-নিচে আর মডেল টেস্ট জমা দেওয়ার পর। পরীক্ষা চলার সময়, পরীক্ষার হলে, লাইভ পরীক্ষায় আর Android অ্যাপে কোনো বিজ্ঞাপন দেখায় না। AdSense-এ "Auto ads" বন্ধ রাখুন।</p>
+        <form id="adsForm">
+          <label class="field">Publisher ID<input id="adsClient" autocomplete="off" maxlength="200" placeholder="ca-pub-1234567890123456"></label>
+          <div class="row2">
+            <label class="field">হোম পেজের ad unit নম্বর<input id="adsHome" inputmode="numeric" autocomplete="off" maxlength="40" placeholder="যেমন 1234567890"></label>
+            <label class="field">প্রশ্নের তালিকার ad unit নম্বর<input id="adsList" inputmode="numeric" autocomplete="off" maxlength="40"></label>
+          </div>
+          <div class="row2">
+            <label class="field">পরীক্ষার ফলাফলের পরের ad unit নম্বর<input id="adsResult" inputmode="numeric" autocomplete="off" maxlength="40"></label>
+            <div class="field" style="justify-content:flex-end"><button class="btn primary" type="submit">সংরক্ষণ করুন</button></div>
+          </div>
+        </form>
+      </section>
       <!-- The app is free for everyone: payment, payment settings and cash-on-delivery panels are hidden -->
       <section class="panel" id="paymentArea" hidden>
         <h2>💳 পেমেন্ট (অনলাইন ও বিকাশ / নগদ / রকেট) <span class="badge UPCOMING" id="payPendingBadge"></span></h2>
@@ -241,5 +256,6 @@
   <script src="/admin-reports.js"></script>
   <script src="/admin-weekly.js"></script>
   <script src="/admin-funnel.js"></script>
+  <script src="/admin-adsense.js"></script>
 </body>
 </html>

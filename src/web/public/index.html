@@ -10,6 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Noto+Sans+Bengali:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Noto+Sans+Bengali:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
   <meta name="theme-color" content="#006a4e">
+  <!-- Google AdSense script goes here once a publisher id is saved in /admin (server.js + adsense.js) -->
+  <!--ADSENSE_HEAD-->
   <!-- Tailwind classes are pre-built into app.css (npm run css:build), no CDN at runtime -->
   <link rel="stylesheet" href="/app.css">
   <!-- Math in questions ($\frac{2}{5}MR^2$ and the like): KaTeX, drawn by /math.js -->
@@ -17,6 +19,16 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
   <style>
+    /* Google AdSense spots (ads.js): hidden until an ad is placed, never while an exam is running */
+    .ad-slot { display: block; height: 0; overflow: hidden; }
+    .ad-slot.ad-on { height: auto; overflow: visible; margin: 16px 0; min-height: 100px; text-align: center; }
+    .ad-slot.ad-on::before { content: 'বিজ্ঞাপন'; display: block; font-size: 11px; color: #94a3b8; margin-bottom: 2px; }
+    body.exam-running .ad-slot, body.exam-running ins.adsbygoogle, body.exam-running .google-auto-placed,
+    .is-native-app .ad-slot, .is-native-app ins.adsbygoogle, .is-native-app .google-auto-placed { display: none !important; }
+    body:not(.exam-submitted) .ad-after-exam { display: none !important; }
+    .site-links { display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: center; padding: 28px 12px 96px; font-size: 13px; color: #64748b; }
+    .site-links a { color: #047857; }
+    .site-links a:hover { text-decoration: underline; }
     .flip-card { perspective: 1000px; }
     .flip-card-inner {
       position: relative;
@@ -919,6 +931,7 @@
     <!-- ===================================================================== -->
     <section id="pane-home" class="tab-pane space-y-4">
       <div id="homeBody" class="space-y-4"></div>
+      <div class="ad-slot" data-ad="home"></div>
     </section>
 
     <section id="pane-exam" class="cg-protect tab-pane hidden space-y-4">
@@ -1006,6 +1019,8 @@
           <a href="/exam-hall" class="text-emerald-700 hover:underline font-medium">🏛️ ফুল-স্ক্রিন পরীক্ষার হলে বসুন</a>
         </div>
       </div>
+      <!-- Ad after the result only (never before or during the exam, see ads.js) -->
+      <div class="ad-slot ad-after-exam" data-ad="result"></div>
       <!-- Question Booklet & Authentic BPSC OMR Answer Sheet Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <!-- Left 8 cols: Authentic 2-Column BPSC Question Paper -->
@@ -1148,10 +1163,12 @@
         </div>
       </div>
 
+      <div class="ad-slot" data-ad="list"></div>
       <!-- Past Bank Questions Feed -->
       <div id="pastBankFeed" class="space-y-4">
         <!-- Rendered dynamically -->
       </div>
+      <div class="ad-slot" data-ad="list"></div>
     </section>
 
     <!-- ===================================================================== -->
@@ -1631,6 +1648,12 @@
       <div id="masterToolkitFeed" class="space-y-5"></div>
     </section>
 
+    <footer class="site-links" aria-label="সাইটের তথ্য">
+      <a href="/about">আমাদের সম্পর্কে</a>
+      <a href="/contact">যোগাযোগ</a>
+      <a href="/privacy">প্রাইভেসি পলিসি</a>
+      <span>© সোনার হরিণ</span>
+    </footer>
   </main>
   </div>
 
@@ -1771,6 +1794,7 @@
   <script src="/account.js"></script>
   <script src="/content-guard.js"></script>
   <script src="/app.js"></script>
+  <script src="/ads.js"></script>
   <script src="/adm-pick.js"></script>
   <script src="/goal.js"></script>
   <script src="/math.js"></script>

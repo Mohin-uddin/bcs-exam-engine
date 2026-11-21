@@ -836,6 +836,10 @@ function resetExamClock() {
 
 // Shows "শুরু করুন" before the start, the running clock + submit during, "আবার দিন" after
 function updateExamControls() {
+  // Ads (ads.js) stay hidden while a timed exam is running; the result ad shows only after submitting
+  document.body.classList.toggle('exam-running', examStarted && !examSubmitted);
+  document.body.classList.toggle('exam-submitted', examSubmitted);
+  if (window.ShAds) ShAds.refresh();
   const startBtn = document.getElementById('examStartBtn');
   const submitBtn = document.getElementById('examSubmitBtn');
   const note = document.getElementById('examStateNote');
