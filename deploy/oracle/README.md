@@ -25,3 +25,7 @@ So after this one run from the Mac, merging a pull request is enough to put it l
 Type the app's Username / Password in `/admin` -> "📱 OTP SMS" (no server login needed).
 Or set `SMS_PROVIDER` (bulksmsbd / smsnetbd) in `~/sonarhorin/.env`; that wins over /admin.
 Backup: `docker exec sonarhorin_db pg_dump -U sonarhorin sonarhorin | gzip > ~/backups/sonarhorin-$(date +%F).sql.gz`
+
+**Google AdSense on sonarhorin.dokoikeba.com:** AdSense reads ads.txt only from the root domain,
+so run `bash ~/sonarhorin/deploy/oracle/doko-ads-txt.sh` once. It adds a `/ads.txt` rule to Doko's
+nginx site that passes the request to Sonar Horin (Publisher ID from /admin). Backup kept; rolled back if nginx rejects it.
