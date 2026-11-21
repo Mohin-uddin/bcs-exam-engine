@@ -2,6 +2,9 @@
  * ============================================================================
  * Accounts, Premium Access & Manual bKash / Nagad / Rocket Payments
  * ============================================================================
+ * - FREE_FOR_ALL (on): the app is completely free. Nothing is locked, everyone may print, and
+ *   new payments / orders are refused with 410 FREE_APP. The payment code below stays only so
+ *   old records can still be read in /admin.
  * - Users sign up with phone + password (same API for website and Android app)
  * - Session: random token in an HttpOnly cookie (website) or "Authorization: Bearer" (API)
  * - Payment (manual, phase 1): user sends money to the admin's bKash/Nagad/Rocket number,
@@ -36,6 +39,10 @@ const SESSION_DAYS = 60;
 const DAY = 86400000;
 // The Android app must not take payments for digital content (Play policy)
 const APP_UA = /SonarHorinApp\//;
+// The whole app is free: every set is open to everyone (logged in or not), printing / download
+// included, and no plan, payment or cash-on-delivery order can be started. Accounts stay for
+// login, progress sync and live exams. Old payment records are kept for the admin's history.
+const FREE_FOR_ALL = true;
 
 const DEFAULT_SETTINGS = {
   plans: [
@@ -128,6 +135,7 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
   }
 
   function computeLocked() {
+    if (FREE_FOR_ALL) return new Set();
     const n = Math.max(0, Math.floor(Number(state.settings.freePerGroup) || 0));
     const seen = {};
     const locked = new Set();
@@ -277,10 +285,10 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     return state.users.find(u => u.id === s.userId && !u.disabled) || null;
   }
 
-  const isPremium = user => Boolean(user && user.premiumUntil && Date.parse(user.premiumUntil) > Date.now());
+  const isPremium = user => FREE_FOR_ALL || Boolean(user && user.premiumUntil && Date.parse(user.premiumUntil) > Date.now());
   // Download / print: PREMIUM plan only. Accounts from before the two plans (no printUntil yet)
   // keep printing while their premium lasts.
-  const canPrint = user => isPremium(user)
+  const canPrint = user => FREE_FOR_ALL || isPremium(user)
     && (user.printUntil === undefined || Boolean(user.printUntil && Date.parse(user.printUntil) > Date.now()));
   const tierOf = user => (canPrint(user) ? 'PREMIUM' : isPremium(user) ? 'NORMAL' : 'FREE');
 
@@ -530,6 +538,12 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
       try { body = await readBody(req); } catch { return fail(res, 400, 'BAD_JSON', 'অনুরোধটি সঠিক নয়।'); }
     }
     const user = currentUser(req);
+
+    // ---------------- Free app: no new purchase of any kind ----------------
+    if (FREE_FOR_ALL && method === 'POST' && (
+      ['/api/payment/initiate', '/api/payment/submit', '/api/payment/cod', '/api/cod/otp', '/api/cod/order', '/api/cod/redeem'].includes(pathname))) {
+      return fail(res, 410, 'FREE_APP', 'সোনার হরিণ এখন সম্পূর্ণ ফ্রি। কোনো প্যাকেজ বা পেমেন্ট লাগবে না, সব সেট সবার জন্য খোলা।'), true;
+    }
 
     // ---------------- Cash on Delivery orders ----------------
     if (pathname.startsWith('/api/cod/') || pathname.startsWith('/api/admin/accounts/orders')) {
@@ -1002,6 +1016,7 @@ function createAccountsEngine({ store = null, seed, seedFile }) {
     visibleQuestions,
     currentUser,
     isPremium,
+    freeForAll: FREE_FOR_ALL,
     canPrint,
     resolveExamId,
     activatePayment,

@@ -1,5 +1,8 @@
 /**
- * Account, premium lock & bKash / Nagad / Rocket payment UI (website + Android app)
+ * Account (login / register) UI for the website + Android app
+ * - FREE_FOR_ALL (on): the whole app is free. Nothing is locked, everyone may print / download,
+ *   and every "plans / unlock / pay" entry point only says that everything is free.
+ *   The older premium-lock & payment code below stays dormant behind that flag.
  * - Load after /native-app.js and /seed-data.js (seed-data sets window.APP_ACCESS)
  * - Account.allow(examId): true when the set is free or the user is premium,
  *   otherwise opens the unlock dialog and returns false
@@ -13,7 +16,9 @@
 (function () {
   const bn = n => String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const access = window.APP_ACCESS || { premium: false, lockedExamIds: [] };
+  const FREE_FOR_ALL = true;
+  const access = window.APP_ACCESS || { premium: FREE_FOR_ALL, lockedExamIds: [] };
+  if (FREE_FOR_ALL) { access.premium = true; access.lockedExamIds = []; access.previewPerSet = 0; }
   const locked = new Set(access.lockedExamIds || []);
   const examIds = new Set((window.availableExams || []).map(e => e.id));
   const fmtDate = iso => new Date(iso).toLocaleDateString('bn-BD', { timeZone: 'Asia/Dhaka', day: 'numeric', month: 'long', year: 'numeric' });
@@ -32,7 +37,7 @@
     return null;
   }
 
-  const isLocked = id => !access.premium && locked.has(resolve(id));
+  const isLocked = id => !FREE_FOR_ALL && !access.premium && locked.has(resolve(id));
 
   // Premium questions come with /seed-data.js, so a reload fetches them.
   // Guarded so a page that still gets the free data can never reload in a loop.
@@ -197,9 +202,10 @@
     if (window.Funnel) Funnel.ev('signup_prompt_shown', { tab: opts.welcome ? 'welcome' : reasonBn ? 'gate' : 'button' });
     let mode = 'login';
     const box = modal(`
-      <h3>${opts.welcome ? '🦌 সোনার হরিণে স্বাগতম' : 'লগইন / নতুন অ্যাকাউন্ট'}</h3>
+      <h3>${opts.save ? '💾 আপনার অগ্রগতি সেভ রাখুন' : opts.welcome ? '🦌 সোনার হরিণে স্বাগতম' : 'লগইন / নতুন অ্যাকাউন্ট'}</h3>
+      ${opts.save ? `<div class="acc-welcome"><span style="font-size:22px">🎁</span><span><b>রেজিস্ট্রেশন একদম ফ্রি, ৩০ সেকেন্ড লাগবে</b>ফ্রি অ্যাকাউন্ট খুললে আপনার পরীক্ষার ফলাফল, ভুল খাতা আর অগ্রগতি সেভ থাকবে, ফোন বা কম্পিউটার যেখান থেকেই খুলুন।${reasonBn ? ` ${esc(reasonBn)}` : ''}</span></div>` : ''}
       ${opts.welcome ? `<div class="acc-welcome"><span style="font-size:22px">🎁</span><span><b>ফ্রি অ্যাকাউন্ট খুলুন, ৩০ সেকেন্ড লাগবে</b>পরীক্ষা দিতে, ফলাফল আর ভুল খাতা রাখতে অ্যাকাউন্ট লাগবে। ফোন ও কম্পিউটারে একই অগ্রগতি পাবেন।</span></div>` : ''}
-      ${opts.welcome ? '' : `<div class="acc-sub">${esc(reasonBn || 'মোবাইল নম্বর ও পাসওয়ার্ড দিয়ে লগইন করুন। ওয়েবসাইট ও অ্যাপে একই অ্যাকাউন্ট চলবে।')}</div>`}
+      ${opts.welcome || opts.save ? '' : `<div class="acc-sub">${esc(reasonBn || 'মোবাইল নম্বর ও পাসওয়ার্ড দিয়ে লগইন করুন। ওয়েবসাইট ও অ্যাপে একই অ্যাকাউন্ট চলবে।')}</div>`}
       <div class="acc-tabs"><button type="button" data-mode="register">নতুন অ্যাকাউন্ট</button><button type="button" data-mode="login" class="on">আগে থেকে আছে: লগইন</button></div>
       <form>
         <label class="acc-field" data-only="register" hidden>আপনার নাম<input name="name" autocomplete="name" maxlength="80"></label>
@@ -208,7 +214,7 @@
         <div class="acc-err"></div>
         <button class="acc-btn" type="submit">লগইন করুন</button>
       </form>
-      ${opts.later ? '<button type="button" class="acc-later acc-x" style="position:static">পরে করব, আগে ঘুরে দেখি</button>' : ''}`);
+      ${opts.later ? `<button type="button" class="acc-later acc-x" style="position:static">${opts.save ? 'এখন না, অ্যাকাউন্ট ছাড়াই চালিয়ে যাই →' : 'পরে করব, আগে ঘুরে দেখি'}</button>` : ''}`);
     const form = box.querySelector('form');
     const setMode = m => {
       mode = m;
@@ -238,6 +244,7 @@
         applyPrintLock();
         // Premium content comes with the page data, so reload once to get it
         if (me.premium && !access.premium && reloadForPremium()) return;
+        overlayCloseHook = null; // logged in: not a skip
         close();
         toast(mode === 'register' ? 'অ্যাকাউন্ট খোলা হয়েছে।' : 'লগইন হয়েছে।');
         if (then) then();
@@ -253,6 +260,7 @@
   // Unlock (paywall) + payment form
   // ---------------------------------------------------------------------------
   async function openOnlinePay(examId) {
+    if (FREE_FOR_ALL) return showFreeNotice();
     const exam = (window.availableExams || []).find(e => e.id === resolve(examId));
     if (!me) {
       return openLogin('অনলাইনে পেমেন্ট করতে আগে লগইন বা নতুন অ্যাকাউন্ট খুলুন।', () => openOnlinePay(examId));
@@ -486,7 +494,15 @@
     return Boolean(config.gateway || (config.manualEnabled && realNumber));
   }
 
+  // Every plans / unlock / pay button lands here while the app is free
+  function showFreeNotice() {
+    modal(`<h3>🎉 সোনার হরিণ এখন সম্পূর্ণ ফ্রি</h3>
+      <div class="acc-ok">সব মডেল টেস্ট, বিগত সালের প্রশ্ন, বিষয়ভিত্তিক সেট, লাইভ পরীক্ষা এবং ডাউনলোড / প্রিন্ট সবার জন্য খোলা। কোনো প্যাকেজ বা পেমেন্ট লাগবে না।</div>
+      <button type="button" class="acc-btn acc-x" style="position:static">ঠিক আছে</button>`);
+  }
+
   async function openPlans(opts = {}) {
+    if (FREE_FOR_ALL) return showFreeNotice();
     buyCtx = opts.examId ? ctxFromExam(opts.examId) : null;
     if (window.Funnel) Funnel.ev('plans_open');
     if (!me) return openLogin('প্যাকেজ কিনতে আগে ফ্রি অ্যাকাউন্ট খুলুন বা লগইন করুন।', () => openPlans(opts));
@@ -591,6 +607,7 @@
     .filter(Boolean).filter((x, i, arr) => arr.indexOf(x) === i).join(' • ');
 
   async function openCodOrder(planId) {
+    if (FREE_FOR_ALL) return showFreeNotice();
     if (!me) return openLogin('অর্ডার করতে আগে ফ্রি অ্যাকাউন্ট খুলুন বা লগইন করুন।', () => openCodOrder(planId));
     const cfg = await loadCod();
     const last = lastCod();
@@ -751,6 +768,7 @@
   }
 
   function openRedeem() {
+    if (FREE_FOR_ALL) return showFreeNotice();
     if (!me) return openLogin('প্রশ্নসেটের সাথে পাওয়া কোড দিতে আগে লগইন করুন, অ্যাকাউন্ট না থাকলে "নতুন অ্যাকাউন্ট" খুলুন।', openRedeem);
     const b = modal(`
       <h3>🔑 অ্যাক্সেস কোড দিন</h3>
@@ -787,13 +805,14 @@
   // ---------------------------------------------------------------------------
   // Download / print: PREMIUM only
   // ---------------------------------------------------------------------------
-  const canPrint = () => Boolean(me && me.canPrint);
+  const canPrint = () => FREE_FOR_ALL || Boolean(me && me.canPrint);
   function allowPrint() {
     if (canPrint()) return true;
     showPrintPlans();
     return false;
   }
   function showPrintPlans() {
+    if (FREE_FOR_ALL) return showFreeNotice();
     openPlans({ reasonBn: me && me.premium
       ? 'আপনার সাধারণ প্যাকেজে প্রশ্নসেট দেখা ও পরীক্ষা দেওয়া যায়। ডাউনলোড ও প্রিন্ট করতে প্রিমিয়াম প্যাকেজ নিন।'
       : 'প্রশ্নসেট ডাউনলোড ও প্রিন্ট শুধু প্রিমিয়াম প্যাকেজে পাওয়া যায়।' });
@@ -819,16 +838,18 @@
     const b = modal(`
       <h3>👤 ${esc(me.name)}</h3>
       <div class="acc-sub">${esc(me.phone)}</div>
-      ${me.premium
+      ${FREE_FOR_ALL
+        ? '<div class="acc-ok">🎉 সব সেট, লাইভ পরীক্ষা ও ডাউনলোড / প্রিন্ট সম্পূর্ণ ফ্রি।</div>'
+        : me.premium
         ? `<div class="acc-ok">⭐ ${TIER_BN[tierOfMe()]} চালু আছে — ${fmtDate(me.premiumUntil)} পর্যন্ত।${me.canPrint ? ' ডাউনলোড ও প্রিন্টও খোলা।' : ' (ডাউনলোড / প্রিন্ট প্রিমিয়াম প্যাকেজে)'}</div>`
         : `<div class="acc-warn">ফ্রি অ্যাকাউন্ট। ${bn(locked.size)}টি সেট লক করা আছে।</div>
            <div class="app-unlock-note acc-sub">আনলক করতে ওয়েবসাইটে একই নম্বর দিয়ে লগইন করুন।</div>`}
-      <div data-payment>
+      <div data-payment ${FREE_FOR_ALL ? 'hidden' : ''}>
         ${tierOfMe() !== 'PREMIUM' ? '<button type="button" class="acc-btn" data-act="unlock">📦 প্যাকেজ দেখুন ও অর্ডার করুন</button>' : ''}
         <button type="button" class="acc-btn ghost" data-act="redeem">🔑 প্রশ্নসেটের সাথে পাওয়া কোড দিন</button>
       </div>
       ${window.Tour ? '<button type="button" class="acc-btn ghost" data-act="tour">🧭 ওয়েবসাইট গাইড আবার দেখুন</button>' : ''}
-      ${mine.payments.length ? `<details style="margin-top:12px" data-payment><summary style="cursor:pointer;font-weight:600">আমার পেমেন্ট (${bn(mine.payments.length)})</summary><ul class="acc-list">${mine.payments.map(paymentRow).join('')}</ul></details>` : ''}
+      ${mine.payments.length && !FREE_FOR_ALL ? `<details style="margin-top:12px" data-payment><summary style="cursor:pointer;font-weight:600">আমার পেমেন্ট (${bn(mine.payments.length)})</summary><ul class="acc-list">${mine.payments.map(paymentRow).join('')}</ul></details>` : ''}
       <button type="button" class="acc-btn ghost" data-act="logout" style="margin-top:12px">লগআউট</button>`);
     b.addEventListener('click', async ev => {
       const t = ev.target.closest('[data-act]');
@@ -844,6 +865,10 @@
   }
 
   // Lets other scripts (study progress sync) know who is logged in
+  const SKIP_KEY = 'sh_save_skip';
+  const saveSkipped = () => { try { return sessionStorage.getItem(SKIP_KEY) === '1'; } catch { return false; } };
+  const markSaveSkipped = () => { try { sessionStorage.setItem(SKIP_KEY, '1'); } catch { /* storage blocked */ } };
+
   const announce = () => window.dispatchEvent(new CustomEvent('account:change', { detail: me }));
 
   let pill = null;
@@ -857,9 +882,9 @@
       if (slot) slot.appendChild(pill);
       else { pill.classList.add('acc-floating'); document.body.appendChild(pill); }
     }
-    pill.classList.toggle('premium', Boolean(me && me.premium));
+    pill.classList.toggle('premium', !FREE_FOR_ALL && Boolean(me && me.premium));
     pill.classList.toggle('guest', !me);
-    pill.innerHTML = !me ? '👤 লগইন<span class="acc-extra"> / নিবন্ধন</span>' : me.premium ? `⭐ ${esc(me.name.split(' ')[0])}` : `👤 ${esc(me.name.split(' ')[0])}`;
+    pill.innerHTML = !me ? '👤 লগইন<span class="acc-extra"> / নিবন্ধন</span>' : me.premium && !FREE_FOR_ALL ? `⭐ ${esc(me.name.split(' ')[0])}` : `👤 ${esc(me.name.split(' ')[0])}`;
   }
 
   // While a payment waits for approval, check every minute so the page can unlock itself
@@ -959,10 +984,15 @@
       </div>`;
     },
     openLogin: (reason, then, opts) => openLogin(reason, then, opts),
-    // Exams start only for a logged-in user: true when logged in, otherwise the register / login box opens
+    // When an exam starts without an account: a friendly "free registration keeps your data" box.
+    // Register / login, or skip and go on without an account (asked once per visit).
+    // True = go ahead now; false = the box is open and `then` runs after register, login or skip.
     requireLogin(reasonBn, then) {
-      if (me || !loaded) return true;
-      openLogin(reasonBn || 'পরীক্ষা দিতে আগে ফ্রি অ্যাকাউন্ট খুলুন বা লগইন করুন। ফলাফল আর ভুল খাতা আপনার অ্যাকাউন্টে থাকবে।', then);
+      if (me || !loaded || saveSkipped()) return true;
+      openLogin(reasonBn || null, then, {
+        save: true, later: true, mode: 'register',
+        onClose: () => { markSaveSkipped(); if (then) then(); }
+      });
       return false;
     },
     get loaded() { return loaded; },

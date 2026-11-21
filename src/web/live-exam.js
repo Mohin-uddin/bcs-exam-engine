@@ -11,6 +11,7 @@
  * - Weekly exam: every week (default Friday 9 PM Dhaka) an exam is created by itself from the
  *   least-used question set of the chosen track. Admin can change day, time and track.
  * - Free accounts may take `freeLimit` live exams (default 2); after that a subscription is needed.
+ *   (While the app is free for all, isPremium() is true for everyone, so there is no limit.)
  *   Taking an exam (opening the paper) needs a login so the limit can be counted.
  */
 
@@ -269,7 +270,7 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
 
   function accessOf(user) {
     const cfg = weeklyCfg();
-    if (!user) return { loggedIn: false, premium: false, freeLimit: cfg.freeLimit, used: 0, left: cfg.freeLimit };
+    if (!user) return { loggedIn: false, premium: Boolean(isPremium(null)), freeLimit: cfg.freeLimit, used: 0, left: isPremium(null) ? null : cfg.freeLimit };
     const premium = Boolean(isPremium(user));
     const used = liveExamsTaken(user);
     return { loggedIn: true, premium, freeLimit: cfg.freeLimit, used, left: premium ? null : Math.max(0, cfg.freeLimit - used) };
@@ -686,17 +687,18 @@ function createLiveExamEngine({ availableExams, sampleQuestions, store = null, c
       if (phase === 'ENDED') return fail(res, 410, 'ENDED', 'পরীক্ষার সময় শেষ।', { exam: publicExam(exam) }), true;
       if (candidate.submittedAt) return fail(res, 409, 'ALREADY_SUBMITTED', 'আপনি ইতিমধ্যে উত্তরপত্র জমা দিয়েছেন।', { exam: publicExam(exam) }), true;
       if (!candidate.startedAt) {
-        // Free limit is counted per account, so sitting the exam needs a login
+        // The free limit is counted per account. While the app is free for all (isPremium(null) is true)
+        // a visitor without an account may sit too: the secret candidate token is the proof of the seat.
         const user = currentUser(req);
-        if (!user) return fail(res, 401, 'LOGIN_REQUIRED', 'লাইভ পরীক্ষা দিতে আগে লগইন করুন (অ্যাকাউন্ট না থাকলে ফ্রিতে খুলুন)।', { exam: publicExam(exam) }), true;
-        if (candidate.userId && candidate.userId !== user.id) {
+        if (!user && !isPremium(null)) return fail(res, 401, 'LOGIN_REQUIRED', 'লাইভ পরীক্ষা দিতে আগে লগইন করুন (অ্যাকাউন্ট না থাকলে ফ্রিতে খুলুন)।', { exam: publicExam(exam) }), true;
+        if (user && candidate.userId && candidate.userId !== user.id) {
           return fail(res, 403, 'OTHER_ACCOUNT', 'এই রোল অন্য অ্যাকাউন্টের। যে অ্যাকাউন্ট দিয়ে নিবন্ধন করেছিলেন সেটিতে লগইন করুন।', { exam: publicExam(exam) }), true;
         }
         const limit = weeklyCfg().freeLimit;
         if (!isPremium(user) && liveExamsTaken(user, exam) >= limit) {
           return fail(res, 402, 'PREMIUM_REQUIRED', `ফ্রিতে ${limit}টি লাইভ পরীক্ষা দেওয়া যায়, আপনি সেগুলো দিয়ে ফেলেছেন। প্রতি সপ্তাহের লাইভ পরীক্ষা দিতে প্যাকেজ নিন।`, { exam: publicExam(exam) }), true;
         }
-        candidate.userId = user.id;
+        if (user) candidate.userId = user.id;
         candidate.startedAt = new Date().toISOString();
         save();
       }
