@@ -7,7 +7,8 @@
  * - POST /api/admin/adsense   (X-Admin-Key) { client, slots: { home, list, result } }
  * - headHtml()                             <meta> + <script> tags added to index.html's <head>
  *
- * ADSENSE_CLIENT in .env works too (the /admin value wins when set).
+ * Without a value in /admin the site owner's own publisher id below is used (dokoikeba.com's AdSense
+ * account; the site is its subdomain). ADSENSE_CLIENT in .env replaces it, ADSENSE_CLIENT=off turns it off.
  * Ads never go on the exam hall, live exams, the print page or /admin: only index.html gets the
  * script, and ads.js hides every ad while a timed exam is running.
  */
@@ -18,6 +19,7 @@ const { isAdmin } = require('./admin-auth');
 const STORE_KEY = 'adsense';
 const DATA_FILE = process.env.ADSENSE_DATA_FILE || path.join(__dirname, '..', '..', 'data', 'adsense.json');
 const SLOTS = ['home', 'list', 'result'];
+const OWNER_CLIENT = 'ca-pub-4208565616955474';
 const EMPTY = { client: '', slots: { home: '', list: '', result: '' } };
 
 // "pub-123", "ca-pub-123" or the whole <script ...client=ca-pub-123> line -> "ca-pub-123"
@@ -53,7 +55,8 @@ function createAdsense({ store = null } = {}) {
   }
 
   function config() {
-    const client = state.client || cleanClient(process.env.ADSENSE_CLIENT);
+    const env = process.env.ADSENSE_CLIENT;
+    const client = state.client || (env === 'off' ? '' : cleanClient(env) || OWNER_CLIENT);
     return { client, slots: { ...state.slots } };
   }
 
